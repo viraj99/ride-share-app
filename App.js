@@ -1,11 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import App from './app/index';
 
+<<<<<<< HEAD
 import React, { Component } from 'react';
 import {
   Platform, StyleSheet, Text, View,
@@ -49,3 +44,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+=======
+export default App;
+>>>>>>> a54596b122411fa2c3db6999b9fbdca9dbdcbb42
