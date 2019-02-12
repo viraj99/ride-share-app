@@ -1,24 +1,61 @@
 import React, { Component } from 'react';
 import {
-  Platform, StyleSheet, Text, View,
+  StyleSheet, Text, View, ScrollView,
 } from 'react-native';
 
+import { Header } from '../components/Header';
+import { UpcomingRideCard, RequestedRideCard } from '../components/Card';
+import { CalendarButton } from '../components/Button';
+
 type Props = {};
-export default class MainView extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>MAIN VIEW </Text>
-      </View>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  footer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: '#fff',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    paddingVertical: 20,
   },
 });
+// should I change scrollview for flatlist?
+// I could add a button inside scrollview to show more listings in sep screen
+export default class MainView extends Component<Props> {
+  handlePress = () => {
+    console.log('pressed');
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Header onPress={this.handlePress} />
+        <ScrollView horizontal>
+          <UpcomingRideCard />
+          <UpcomingRideCard />
+          <UpcomingRideCard />
+          <UpcomingRideCard />
+        </ScrollView>
+
+        <ScrollView>
+          <RequestedRideCard />
+          <RequestedRideCard />
+          <RequestedRideCard />
+          <RequestedRideCard />
+        </ScrollView>
+
+        <View style={styles.footer}>
+          <CalendarButton onPress={this.handlePress} title="CALENDAR" />
+        </View>
+      </View>
+    );
+  }
+}
