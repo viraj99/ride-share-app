@@ -8,11 +8,11 @@ import styles from './styles';
 const Header = ({ onPress }) => (
   <View style={styles.headerContainer}>
     <View style={styles.leftContainer}>
-      <Text style={{ color: 'white', fontSize: 22 }}>APP TITLE</Text>
+      <Text style={{ color: 'white', fontSize: 22, fontWeight: '600' }}>RIDE SHARE APP</Text>
     </View>
     <View style={styles.rightContainer}>
       <TouchableOpacity onPress={onPress}>
-        <Icon name="gear" size={30} />
+        <Icon color="white" name="gear" size={30} />
       </TouchableOpacity>
     </View>
   </View>

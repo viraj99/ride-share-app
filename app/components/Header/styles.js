@@ -1,9 +1,15 @@
 import { Platform, StyleSheet } from 'react-native';
 import { getStatusBarHeight } from './StatusBar';
 
+// potential greens
+// #3cc5a2
+// #00b270
+// #3da676
+// #00b576
+
 export default (styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: 'pink',
+    backgroundColor: '#00b576',
     borderBottomColor: '#f2f2f2',
     paddingHorizontal: 10,
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
