@@ -9,6 +9,15 @@ const platformStyle = undefined;
 const isIphoneX = platform === 'ios'
   && (deviceHeight === 812 || deviceWidth === 812 || deviceHeight === 896 || deviceWidth === 896);
 
+// color scheme
+
+// '#000000' - black
+// '#475c67' - dark gray
+// '#b1c1c8' - light gray
+// '#ff8262' - peach
+// '#fcfcf6' - cream background
+// '#1EAA70' - green
+
 export default {
   platformStyle,
   platform,
