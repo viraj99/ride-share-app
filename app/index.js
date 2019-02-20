@@ -9,7 +9,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { MainView } from './views';
+import { MainView, Login, AgendaView } from './views';
 
 type Props = {};
 
@@ -27,4 +27,3 @@ const App = () => (
 );
 
 export default App;
-
