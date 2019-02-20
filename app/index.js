@@ -9,7 +9,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { MainView } from './views/MainView';
+import { MainView } from './views';
 
 type Props = {};
 
