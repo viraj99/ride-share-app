@@ -1,4 +1,4 @@
-// Button styles
+// Calendar Button styles
 import { Platform, StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
@@ -16,7 +16,6 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   wrapper: {
