@@ -9,7 +9,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import MainView from './views/MainView';
+import { MainView, Login, AgendaView } from './views';
 
 type Props = {};
 
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+// will add navigation in here later
 
 const App = () => (
   <View style={styles.container}>
@@ -26,4 +27,3 @@ const App = () => (
 );
 
 export default App;
-

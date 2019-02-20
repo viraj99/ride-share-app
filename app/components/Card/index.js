@@ -1,5 +1,5 @@
-import UpcomingRideCard from './UpcomingRideCard';
-import RequestedRideCard from './RequestedRidesCard';
-import styles from './styles';
+import UpcomingRideCard from './UpcomingRideCard/UpcomingRideCard';
+import RequestedRideCard from './RequestRidesCard/RequestedRidesCard';
+import styles from './UpcomingRideCard/styles';
 
 export { UpcomingRideCard, RequestedRideCard, styles };

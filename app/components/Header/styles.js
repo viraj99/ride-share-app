@@ -1,15 +1,9 @@
 import { Platform, StyleSheet } from 'react-native';
 import { getStatusBarHeight } from './StatusBar';
 
-// potential greens
-// #3cc5a2
-// #00b270
-// #3da676
-// #00b576
-
-export default (styles = StyleSheet.create({
+export default StyleSheet.create({
   headerContainer: {
-    backgroundColor: '#00b576',
+    backgroundColor: '#1EAA70',
     borderBottomColor: '#f2f2f2',
     paddingHorizontal: 10,
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
@@ -17,6 +11,15 @@ export default (styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: (Platform.OS === 'ios' ? 80 : 56) + getStatusBarHeight(),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   centerContainer: {
     flex: 3,
@@ -37,4 +40,9 @@ export default (styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#fff',
   },
-}));
+  titleText: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: '600',
+  },
+});

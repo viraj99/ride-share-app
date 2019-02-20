@@ -1,4 +1,4 @@
-import CalendarButton from './CalendarButton';
-import styles from './styles';
+import CalendarButton from './CalendarButton/CalendarButton';
+import StartButton from './StartButton/StartButton';
 
-export { CalendarButton, styles };
+export { CalendarButton, StartButton };

@@ -8,7 +8,7 @@ function isIphoneX() {
     Platform.OS === 'ios'
     && !Platform.isPad
     && !Platform.isTVOS
-    && (dimen.height === 812 || dimen.width === 812)
+    && (dimen.height === 812 || dimen.width === 812 || (dimen.height === 896 || dimen.width === 896))
   );
 }
 
@@ -29,4 +29,8 @@ export function getStatusBarHeight(skipAndroid = false) {
   }
 
   return StatusBar.currentHeight;
+}
+
+export function getBottomSpace() {
+  return isIphoneX() ? 34 : 0;
 }
