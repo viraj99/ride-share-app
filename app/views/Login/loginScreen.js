@@ -31,7 +31,9 @@ class Login extends Component {
   };
 
   handleSubmit(username, password) {
+    const { navigation } = this.props;
     Alert.alert(`Credentials: ${username} + ${password}`);
+    navigation.navigate('App');
   }
 
   render() {
