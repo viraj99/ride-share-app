@@ -7,6 +7,7 @@ export default (styles = StyleSheet.create({
   cardContainer: {
     flex: 1,
     width: width - 40,
+    paddingVertical: 10,
     marginLeft: 20,
     marginVertical: 20,
     borderWidth: variables.borderWidth,
@@ -34,7 +35,6 @@ export default (styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     alignSelf: 'center',
-    paddingTop: 10,
   },
   locationText: {
     fontSize: 18,
@@ -57,7 +57,7 @@ export default (styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   seperator: {
-    marginVertical: 10,
+    marginVertical: 5,
     borderWidth: 0.5,
     borderColor: 'gray',
     marginHorizontal: 10,

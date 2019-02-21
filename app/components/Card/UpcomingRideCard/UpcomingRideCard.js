@@ -15,7 +15,7 @@ const UpcomingRideCard = ({ onPress }) => (
         <Text style={styles.locationText}>Durham — NC</Text>
       </View>
       <Text style={styles.time}>10:00 AM</Text>
-      <StartButton onPress={() => console.log('pressed')} />
+      <StartButton onPress={onPress} />
     </View>
   </View>
 );
