@@ -9,7 +9,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { MainView, Login, AgendaView } from './views';
+import MainApp from './navigation/routes';
 
 type Props = {};
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 
 const App = () => (
   <View style={styles.container}>
-    <MainView />
+    <MainApp />
   </View>
 );
 
