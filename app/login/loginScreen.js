@@ -37,19 +37,20 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}> Ride Share</Text>
-        </View>
-        <View style={styles.image}>
-          <Image source={logo} />
-        </View>
-        <View />
-        <View styles={styles.formContainer}>
+        <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Sign in</Text>
+            <Text style={styles.title}> Ride Share</Text>
+          </View>
+          <View style={styles.image}>
+            <Image source={logo} />
+          </View>
+        </View>
+
+        <View style={styles.formContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.formTitle}>Sign in</Text>
           </View>
           <View style={styles.sectionContainer}>
-            <Text style={styles.formTitle}>Username: </Text>
             <TextInput
               style={styles.textInput}
               placeholder="Username"
@@ -58,8 +59,6 @@ class Login extends Component {
             />
           </View>
           <View style={styles.sectionContainer}>
-            <Text style={styles.formTitle}>Password:</Text>
-
             <TextInput
               secureTextEntry
               style={styles.textInput}
@@ -68,7 +67,9 @@ class Login extends Component {
               onChangeText={this.handlePassword}
             />
           </View>
-          <View style={styles.sectionContainer}>
+        </View>
+        <View style={styles.buttonContainer}>
+          <View style={styles.submitContainer}>
             <TouchableOpacity
               style={styles.submitButton}
               onPress={() => this.handleSubmit(this.state.username, this.state.password)}
