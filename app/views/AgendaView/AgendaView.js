@@ -90,7 +90,7 @@ export default class AgendaScreen extends Component {
                   date={this.state.date}
                   mode="date"
                   placeholder="Available date"
-                  format="dddd, MMMM Do"
+                  format="h:mm a"
                   minDate="04-12-2018"
                   maxDate="04-12-2021"
                   confirmBtnText="Confirm"
