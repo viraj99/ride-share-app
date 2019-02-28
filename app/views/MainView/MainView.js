@@ -3,6 +3,7 @@ import {
   Text, View, ScrollView, StatusBar, TouchableOpacity,
 } from 'react-native';
 
+
 import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
 import { CalendarButton } from '../../components/Button';
@@ -13,15 +14,16 @@ type Props = {};
 
 export default class MainView extends Component<Props> {
   state = {
-    rideData: [],
+    ridesData: [],
   };
 
   ridesRequests = () => {
     API.getRides()
       .then((res) => {
         this.setState({
-          rideData: res,
+          ridesData: res,
         });
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -63,15 +65,31 @@ export default class MainView extends Component<Props> {
   };
 
   renderRequestedRides = () => {
-    const { rideData } = this.state;
-    const card = rideData.map(item => (
+    const { ridesData } = this.state;
+    const card = ridesData.map(item => (
       <RequestedRideCard
-        key={item.ride_id}
+        key={item.id}
         onPress={this.navigateToDetails}
-        name={item.passenger.first_name}
+        name={item.riderName}
+        date={item.pickupTime}
+        pickupLocation={item.pickupLocation.city}
+        dropoffLocation={item.dropoffLocation.city}
       />
     ));
+    return card;
+  };
 
+  renderUpcomingSchedule = () => {
+    const { ridesData } = this.state;
+    const card = ridesData.map(item => (
+      <UpcomingRideCard
+        key={item.id}
+        onPress={this.navigateToRideView}
+        name={item.riderName}
+        date={item.pickupTime}
+        location={item.pickupLocation.street_address}
+      />
+    ));
     return card;
   };
 
@@ -86,11 +104,7 @@ export default class MainView extends Component<Props> {
             <Text style={styles.subTitle}>Upcoming Schedule</Text>
           </View>
           <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-            <UpcomingRideCard onPress={this.navigateToRideView} />
-            <UpcomingRideCard />
-            <UpcomingRideCard />
-            <UpcomingRideCard />
-
+            {this.renderUpcomingSchedule()}
             <View style={styles.viewMoreContainer}>
               <TouchableOpacity onPress={this.navigateToDriverSchedule}>
                 <Text style={styles.regText}>View More</Text>
