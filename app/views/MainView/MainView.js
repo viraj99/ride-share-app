@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Text, View, ScrollView, StatusBar, TouchableOpacity,
+  Text,
+  View,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-
 
 import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
@@ -13,17 +17,33 @@ import API from '../../api/api';
 type Props = {};
 
 export default class MainView extends Component<Props> {
-  state = {
-    ridesData: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      scheduledRides: [],
+      approvedRides: [],
+      loading: false,
+    };
+  }
 
   ridesRequests = () => {
-    API.getRides()
+    this.setState({ loading: true });
+    API.getScheduledRides()
       .then((res) => {
         this.setState({
-          ridesData: res,
+          scheduledRides: res,
+          loading: false,
         });
-        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    API.getApprovedRides()
+      .then((res) => {
+        this.setState({
+          approvedRides: res,
+          loading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -32,6 +52,109 @@ export default class MainView extends Component<Props> {
 
   componentDidMount = () => {
     this.ridesRequests();
+  };
+
+  renderLoader = () => {
+    const { loading } = this.state;
+    if (!loading) return null;
+
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: '#CED0CE',
+          flex: 2,
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
+
+  renderRequestedRides = () => {
+    const { approvedRides } = this.state;
+    const card = approvedRides.map(item => (
+      <RequestedRideCard
+        key={item.id}
+        onPress={this.navigateToDetails}
+        name={item.riderName}
+        date={item.pickupTime}
+        pickupLocation={item.pickupLocation.city}
+        dropoffLocation={item.dropoffLocation.city}
+      />
+    ));
+    if (approvedRides.length > 0) {
+      return (
+        <View style={{ flex: 2 }}>
+          <View style={styles.titlesContainer}>
+            <View style={{ alignItems: 'flex-start' }}>
+              <Text style={styles.subTitle}>Open Requested Rides</Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <TouchableOpacity onPress={this.navigateToRidesRequested}>
+                <Text style={styles.seeAllText}>See All (5)</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.seperator} />
+          <ScrollView>{card}</ScrollView>
+        </View>
+      );
+    }
+
+    return (
+      <View style={{ flex: 2 }}>
+        <View style={styles.titlesContainer}>
+          <View style={{ alignItems: 'flex-start' }}>
+            <Text style={styles.subTitle}>Open Requested Rides</Text>
+          </View>
+        </View>
+        <View style={styles.seperator} />
+        <View style={{ alignItems: 'center' }}>
+          <Text style={styles.regText}>No found rides at the moment.</Text>
+        </View>
+      </View>
+    );
+  };
+
+  renderUpcomingSchedule = () => {
+    const { scheduledRides } = this.state;
+    const card = scheduledRides.map(item => (
+      <UpcomingRideCard
+        key={item.id}
+        onPress={this.navigateToRideView}
+        name={item.riderName}
+        date={item.pickupTime}
+        location={item.pickupLocation.street_address}
+      />
+    ));
+
+    if (scheduledRides.length > 0) {
+      return (
+        <View style={{ flex: 2 }}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.subTitle}>Upcoming Schedule</Text>
+          </View>
+          <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+            {card}
+            <View style={styles.viewMoreContainer}>
+              <TouchableOpacity onPress={this.navigateToDriverSchedule}>
+                <Text style={styles.regText}>View More</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      );
+    }
+    return (
+      <View style={styles.titleWrapper}>
+        <Text style={styles.subTitle}>Upcoming Schedule</Text>
+        <View style={styles.spacer}>
+          <Text style={styles.regText}>You have no scheduled rides at the moment.</Text>
+        </View>
+      </View>
+    );
   };
 
   navigateToSettings = () => {
@@ -64,70 +187,20 @@ export default class MainView extends Component<Props> {
     navigation.navigate('RequestedRidesDetails');
   };
 
-  renderRequestedRides = () => {
-    const { ridesData } = this.state;
-    const card = ridesData.map(item => (
-      <RequestedRideCard
-        key={item.id}
-        onPress={this.navigateToDetails}
-        name={item.riderName}
-        date={item.pickupTime}
-        pickupLocation={item.pickupLocation.city}
-        dropoffLocation={item.dropoffLocation.city}
-      />
-    ));
-    return card;
-  };
-
-  renderUpcomingSchedule = () => {
-    const { ridesData } = this.state;
-    const card = ridesData.map(item => (
-      <UpcomingRideCard
-        key={item.id}
-        onPress={this.navigateToRideView}
-        name={item.riderName}
-        date={item.pickupTime}
-        location={item.pickupLocation.street_address}
-      />
-    ));
-    return card;
-  };
-
   render() {
+    const { loading } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <Header onPress={this.navigateToSettings} />
-
-        <View style={{ flex: 2 }}>
-          <View style={styles.titleWrapper}>
-            <Text style={styles.subTitle}>Upcoming Schedule</Text>
-          </View>
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+        {loading ? (
+          this.renderLoader()
+        ) : (
+          <View style={{ flex: 1 }}>
             {this.renderUpcomingSchedule()}
-            <View style={styles.viewMoreContainer}>
-              <TouchableOpacity onPress={this.navigateToDriverSchedule}>
-                <Text style={styles.regText}>View More</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
-
-        <View style={{ flex: 2 }}>
-          <View style={styles.titlesContainer}>
-            <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>Open Requested Rides</Text>
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <TouchableOpacity onPress={this.navigateToRidesRequested}>
-                <Text style={styles.seeAllText}>See All (5)</Text>
-              </TouchableOpacity>
-            </View>
+            {this.renderRequestedRides()}
           </View>
-          <View style={styles.seperator} />
-          <ScrollView>{this.renderRequestedRides()}</ScrollView>
-        </View>
-
+        )}
         <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="CALENDAR" />
         </View>
