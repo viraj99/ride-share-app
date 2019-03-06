@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Agenda} from 'react-native-calendars';
-import DatePicker from 'react-native-datepicker';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
 export default class AgendaScreen extends Component {
@@ -22,7 +22,8 @@ export default class AgendaScreen extends Component {
       convertedDate: "",
       initTime: "12:00:00",
       endTime: "12:00:00",
-      date: "02-06-2019"
+      date: "02-06-2019",
+      isDateTimePickerVisible: false,
     };
   }
 
@@ -47,43 +48,9 @@ export default class AgendaScreen extends Component {
           <View style={{marginTop: 22}}>
             <View>
               <Text>Add Available Time</Text>
-              <DatePicker
-                style={{width: 200}}
-                date={this.state.date}
-                mode="date"
-                placeholder="Available date"
-                format="MM-DD-YYYY"
-                minDate="04-12-2018"
-                maxDate="04-12-2021"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={(date) => {this.setState({date: date})
-                                         this.convertDate(date);
-                                         console.log(this.state.date);}}
-              />
-              <DatePicker
-                style={{width: 200}}
-                date={this.state.initTime}
-                mode="time"
-                format="HH:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                minuteInterval={10}
-                onDateChange={(initTime) => {this.setState({initTime: initTime})
-                                             console.log(this.state.initTime)}}
-              />
-              <DatePicker
-                style={{width: 200}}
-                date={this.state.endTime}
-                mode="time"
-                format="HH:mm"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                minuteInterval={10}
-                onDateChange={(endTime) => {this.setState({endTime: endTime})
-                                            console.log(this.state.endTime);}}
-              />
-            
+              
+              
+              
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
@@ -99,6 +66,15 @@ export default class AgendaScreen extends Component {
             </View>
           </View>
         </Modal>
+
+        <TouchableOpacity onPress={this._showDateTimePicker}>
+          <Text>Show DatePicker</Text>
+        </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+        />
        
         <TouchableOpacity
           style={{
