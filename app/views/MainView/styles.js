@@ -54,4 +54,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
   },
+  spacer: {
+    marginVertical: 10,
+  },
 });
