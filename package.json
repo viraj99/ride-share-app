@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "i": "^0.3.6",
+    "moment": "^2.24.0",
     "npm": "^6.8.0",
     "react": "16.6.3",
     "react-native": "0.57.8",
