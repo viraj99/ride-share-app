@@ -1,12 +1,11 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import {
   Text,
   View,
-  StyleSheet,
   TouchableOpacity,
   Modal,
   TouchableHighlight,
-  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Agenda } from 'react-native-calendars';
@@ -24,142 +23,53 @@ export default class AgendaScreen extends Component {
       initTime: '',
       endTime: '',
       date: '',
-      dateTimePickerVisibility: false,
+      datePickerVisibility: false,
+      startTimePickerVisibility: false,
+      endTimePickerVisibility: false,
     };
   }
-
-  componentDidMount() {
-    const today = new Date();
-    this.convertDate(today);
-    this.setState({ date: today });
-  }
-
-  addToAgenda = () => {
-    const {
-      convertedDate, initTime, endTime, items,
-    } = this.state;
-
-    const newEvent = convertedDate;
-    console.log('new event', newEvent);
-    const newAgendaEntry = {
-      name: `Available from ${initTime} until ${endTime}`,
-      height: this.timeDifference() * 20,
-    };
-    console.log('what is being added', newAgendaEntry);
-    const stateCopy = items;
-    stateCopy[newEvent].push(newAgendaEntry);
-    this.setState({ items: stateCopy });
-    console.log('updated items', items);
-    console.log(this.timeDifference());
-  };
-
-  loadItems(day) {
-    const { items } = this.state;
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!items[strTime]) {
-          items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 5);
-          // for (let j = 0; j < numItems; j++) {
-          //   this.state.items[strTime].push({
-          //     name: 'Item for ' + strTime,
-          //     height: Math.max(50, Math.floor(Math.random() * 150))
-          //   });
-        }
-      }
-      console.log(items);
-      const newItems = {};
-      Object.keys(items).forEach((key) => {
-        newItems[key] = items[key];
-      });
-
-      this.setState({
-        items: newItems,
-      });
-      console.log('ayy', items);
-    }, 1000);
-    // console.log(`Load Items for ${day.year}-${day.month}`);
-  }
-
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
-
-  rowHasChanged(r1, r2) {
-    return r1.name !== r2.name;
-  }
-
-  timeToString(time) {
-    const date = new Date(time);
-    return date.toISOString().split('T')[0];
-  }
-
-  renderEmptyDate() {
-    return (
-      <View style={styles.emptyDate}>
-        <Text>You have not scheduled anything for this day yet</Text>
-      </View>
-    );
-  }
-
-  renderItem(item) {
-    return (
-      <View style={[styles.item, { height: item.height }]}>
-        <Text>{item.name}</Text>
-      </View>
-    );
-  }
-
-  convertDate = (date) => {
-    const convertedDate = moment(date).format('YYYY-MM-DD');
-    this.setState({ convertedDate });
-  };
-
-  timeDifference = () => {
-    const { endTime, initTime } = this.state;
-    moment.utc(moment(endTime, 'h:mm a').diff(moment(initTime, 'h:mm a'))).format('H');
-  };
 
   render() {
-    const { items, modalVisible, isDateTimePickerVisible } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <Agenda
-          items={items}
+          items={this.state.items}
           loadItemsForMonth={this.loadItems.bind(this)}
           selected={new Date()}
           renderItem={this.renderItem.bind(this)}
           renderEmptyDate={this.renderEmptyDate.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
-          onDayPress={() => {
-            console.log('hello');
-          }}
+          onDayPress={() => { console.log('hello'); }}
           theme={{
             agendaTodayColor: '#1EAA70',
             agendaKnobColor: '#1EAA70',
             agendaDayNumColor: '#a8dbc5',
             agendaDayTextColor: '#a8dbc5',
+            selectedDayBackgroundColor: '#1EAA70',
+            todayTextColor: '#a8dbc5',
+            dotColor: '#1EAA70',
           }}
         />
-        <Modal animationType="slide" transparent visible={modalVisible}>
+        <Modal
+          animationType="slide"
+          transparent
+          visible={this.state.modalVisible}
+        >
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
               <TouchableHighlight
                 onPress={() => {
-                  this.setModalVisible(!modalVisible);
+                  this.setModalVisible(!this.state.modalVisible);
                 }}
                 style={styles.modalClose}
               >
                 <Icon name="md-close" size={30} color="#475c67" />
               </TouchableHighlight>
-
               <View style={styles.submitButtonContainer}>
                 <TouchableHighlight
                   onPress={() => {
                     this.addToAgenda();
-                    this.setModalVisible(!modalVisible);
+                    this.setModalVisible(!this.state.modalVisible);
                   }}
                 >
                   <View style={styles.modalSubmit}>
@@ -171,35 +81,155 @@ export default class AgendaScreen extends Component {
               </View>
             </View>
 
-            {/* out of the header */}
+            {/* Body */}
             <View style={styles.modalContentContainer}>
               <View style={styles.textContainer}>
-                <Text style={styles.text}>Add Available Date</Text>
+                <Text style={styles.text}>Add Availability</Text>
               </View>
-              <View style={styles.datePickerContainer} />
+              <View style={styles.datePickerContainer}>
+                <TouchableOpacity onPress={this.showDatePicker}>
+                  <Text>Availability Date</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.showStartTimePicker}>
+                  <Text>Availability Start</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.showEndTimePicker}>
+                  <Text>Availability End</Text>
+                </TouchableOpacity>
+              </View>
+              <DateTimePicker
+                isVisible={this.state.datePickerVisibility}
+                onConfirm={this.handleDatePicked}
+                onCancel={this.hideDatePicker}
+                mode="date"
+              />
+              <DateTimePicker
+                isVisible={this.state.startTimePickerVisibility}
+                onConfirm={this.handleStartTimePicked}
+                onCancel={this.hideStartTimePicker}
+                mode="time"
+                is24Hour="false"
+              />
+              <DateTimePicker
+                isVisible={this.state.endTimePickerVisibility}
+                onConfirm={this.handleEndTimePicked}
+                onCancel={this.hideEndTimePicker}
+                mode="time"
+                is24Hour="false"
+              />
             </View>
+            {/* Body */}
+
           </View>
         </Modal>
-
-        <TouchableOpacity onPress={this._showDateTimePicker}>
-          <Text>Show DatePicker</Text>
-        </TouchableOpacity>
-        <DateTimePicker
-          isVisible={isDateTimePickerVisible}
-          onConfirm={this._handleDatePicked}
-          onCancel={this._hideDateTimePicker}
-        />
 
         {/* button that opens modal */}
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => {
-            this.setModalVisible(true);
-          }}
+          onPress={() => { this.setModalVisible(true); }}
         >
           <Icon name="md-add-circle" size={72} color="#ff8262" />
         </TouchableOpacity>
       </View>
     );
+  }
+
+  componentDidMount() {
+    const today = new Date();
+    this.convertDate(today);
+    this.setState({ date: today });
+  }
+
+  showDatePicker = () => this.setState({ datePickerVisibility: true });
+
+  hideDatePicker = () => this.setState({ datePickerVisibility: false });
+
+  handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+
+    this.hideDatePicker();
+  };
+
+  showStartTimePicker = () => this.setState({ timePickerVisibility: true });
+
+  hideStartTimePicker = () => this.setState({ timePickerVisibility: false });
+
+  handleStartTimePicked = (time) => {
+    console.log('A Time has been picked: ', time);
+    this.hideStartTimePicker();
+  };
+
+  handleEndTimePicked = (time) => {
+    console.log('A Time has been picked: ', time);
+    this.hideEndTimePicker();
+  };
+
+
+  loadItems(day) {
+    setTimeout(() => {
+      for (let i = -15; i < 85; i++) {
+        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        const strTime = this.timeToString(time);
+        if (!this.state.items[strTime]) {
+          this.state.items[strTime] = [];
+        }
+      }
+      console.log(this.state.items);
+      const newItems = {};
+      Object.keys(this.state.items).forEach((key) => { newItems[key] = this.state.items[key]; });
+
+      this.setState({
+        items: newItems,
+      });
+      console.log('ayy', this.state.items);
+    }, 1000);
+    // console.log(`Load Items for ${day.year}-${day.month}`);
+  }
+
+  renderItem(item) {
+    return (
+      <View style={[styles.item, { height: item.height }]}><Text>{item.name}</Text></View>
+    );
+  }
+
+  renderEmptyDate() {
+    return (
+      <View style={styles.emptyDate}><Text>You have not scheduled anything for this day yet</Text></View>
+    );
+  }
+
+  rowHasChanged(r1, r2) {
+    return r1.name !== r2.name;
+  }
+
+  timeToString(time) {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+  }
+
+  convertDate = (date) => {
+    const convertedDate = moment(date).format('YYYY-MM-DD');
+    this.setState({ convertedDate });
+  }
+
+  timeDifference = () => moment.utc(moment(this.state.endTime, 'h:mm a').diff(moment(this.state.initTime, 'h:mm a'))).format('H')
+
+  addToAgenda = () => {
+    const newEvent = this.state.convertedDate;
+    console.log('new event', newEvent);
+    const newAgendaEntry = {
+      name: `Available from ${this.state.initTime} until ${this.state.endTime}`,
+      height: this.timeDifference() * 20,
+    };
+    console.log('what is being added', newAgendaEntry);
+    const stateCopy = this.state.items;
+    stateCopy[newEvent].push(newAgendaEntry);
+    this.setState({ items: stateCopy });
+    console.log('updated items', this.state.items);
+    console.log(this.timeDifference());
+  }
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
   }
 }
