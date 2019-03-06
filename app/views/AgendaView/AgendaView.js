@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Agenda} from 'react-native-calendars';
-import DatePicker from 'react-native-datepicker';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import styles from './AgendaStyles.js';
 
@@ -25,6 +25,7 @@ export default class AgendaScreen extends Component {
       endTime: "",
       date: "",
       dateTimePickerVisibility: false,
+
     };
   }
 
@@ -51,8 +52,17 @@ export default class AgendaScreen extends Component {
           transparent={true}
           visible={this.state.modalVisible}
         >
+
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>Add Available Time</Text>
+              
+              
+              
+
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
+
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
@@ -158,6 +168,15 @@ export default class AgendaScreen extends Component {
             </View>
           </View>
         </Modal>
+
+        <TouchableOpacity onPress={this._showDateTimePicker}>
+          <Text>Show DatePicker</Text>
+        </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+        />
        
        {/* button that opens modal */}
         <TouchableOpacity
