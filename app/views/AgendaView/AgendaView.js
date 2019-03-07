@@ -17,7 +17,7 @@ export default class AgendaScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: {} || '',
+      items: {},
       modalVisible: false,
       convertedDate: '',
       initTime: '',
@@ -116,14 +116,14 @@ export default class AgendaScreen extends Component {
                 onConfirm={this.handleStartTimePicked}
                 onCancel={this.hideStartTimePicker}
                 mode="time"
-                is24Hour="false"
+                is24Hour={false}
               />
               <DateTimePicker
                 isVisible={endTimePickerVisibility}
                 onConfirm={this.handleEndTimePicked}
                 onCancel={this.hideEndTimePicker}
                 mode="time"
-                is24Hour="false"
+                is24Hour={false}
               />
             </View>
             {/* Body */}
