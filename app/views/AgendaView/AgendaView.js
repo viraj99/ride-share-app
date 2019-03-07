@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Agenda } from 'react-native-calendars';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import { Checkbox } from 'react-native-elements';
 import styles from './AgendaStyles';
 
 export default class AgendaScreen extends Component {
@@ -26,6 +27,7 @@ export default class AgendaScreen extends Component {
       datePickerVisibility: false,
       startTimePickerVisibility: false,
       endTimePickerVisibility: false,
+      recurringCheck: false,
     };
   }
 
@@ -37,6 +39,7 @@ export default class AgendaScreen extends Component {
       startTimePickerVisibility,
       endTimePickerVisibility,
       date,
+      recurringCheck,
     } = this.state;
     return (
       <View style={{ flex: 1 }}>
@@ -124,6 +127,10 @@ export default class AgendaScreen extends Component {
                 onCancel={this.hideEndTimePicker}
                 mode="time"
                 is24Hour={false}
+              />
+              <Checkbox
+                title="Is this a weekly availability?"
+                checked={recurringCheck}
               />
             </View>
             {/* Body */}
