@@ -59,14 +59,7 @@ export default class MainView extends Component<Props> {
     if (!loading) return null;
 
     return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: '#CED0CE',
-          flex: 2,
-        }}
-      >
+      <View style={styles.loader}>
         <ActivityIndicator animating size="large" />
       </View>
     );
@@ -84,7 +77,10 @@ export default class MainView extends Component<Props> {
         dropoffLocation={item.dropoffLocation.city}
       />
     ));
-    if (approvedRides.length > 0) {
+    const numRides = approvedRides.length;
+    const seeAll = `See All (${numRides})`;
+
+    if (numRides > 0) {
       return (
         <View style={{ flex: 2 }}>
           <View style={styles.titlesContainer}>
@@ -93,7 +89,7 @@ export default class MainView extends Component<Props> {
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               <TouchableOpacity onPress={this.navigateToRidesRequested}>
-                <Text style={styles.seeAllText}>See All (5)</Text>
+                <Text style={styles.seeAllText}>{seeAll}</Text>
               </TouchableOpacity>
             </View>
           </View>

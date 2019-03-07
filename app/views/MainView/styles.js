@@ -57,4 +57,10 @@ export default StyleSheet.create({
   spacer: {
     marginVertical: 10,
   },
+  loader: {
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: '#CED0CE',
+    flex: 2,
+  },
 });
