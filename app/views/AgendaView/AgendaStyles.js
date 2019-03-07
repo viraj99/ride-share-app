@@ -7,7 +7,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginRight: 10,
-    marginTop: 17
+    marginTop: 17,
   },
   emptyDate: {
     backgroundColor: 'white',
@@ -16,11 +16,11 @@ export default StyleSheet.create({
     padding: 10,
     marginRight: 10,
     marginTop: 17,
-    height: 10
+    height: 10,
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "#fcfcf6",
+    backgroundColor: '#fcfcf6',
   },
   modalHeader: {
     flex: 1,
@@ -36,7 +36,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   modalClose: {
     alignSelf: 'flex-start',
@@ -46,27 +46,27 @@ export default StyleSheet.create({
   submitButtonContainer: {
     flexDirection: 'row',
     marginRight: 12,
-    marginBottom: 15
+    marginBottom: 15,
   },
   modalSubmit: {
     width: 80,
     height: 40,
-    backgroundColor: "#ff8262",
-    borderRadius: 30
+    backgroundColor: '#ff8262',
+    borderRadius: 30,
   },
   addButton: {
-    borderWidth:1,
-    borderColor:'rgba(0,0,0,0.2)',
-    alignItems:'center',
-    justifyContent:'center',
-    width:60,
-    height:60,
-    backgroundColor:'#fff',
-    borderRadius:60,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 60,
     alignSelf: 'flex-end',
     position: 'absolute',
     bottom: 35,
-    right: 10,   
+    right: 10,
   },
   submitText: {
     color: 'white',
@@ -76,11 +76,11 @@ export default StyleSheet.create({
   submitTextContainer: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   modalContentContainer: {
     flex: 9,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
   },
   textContainer: {
     marginTop: 15,
@@ -90,10 +90,10 @@ export default StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#475c67'
+    color: '#475c67',
   },
   datePickerContainer: {
-    alignSelf: "center"
-    
-  }
+    alignSelf: 'center',
+
+  },
 });
