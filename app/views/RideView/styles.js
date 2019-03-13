@@ -6,8 +6,8 @@ const { height, width } = Dimensions.get('window');
 export default StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor: '#fcfcf6',
   },
   nameText: {
@@ -19,13 +19,20 @@ export default StyleSheet.create({
   },
   startButton: {
     backgroundColor: '#ff8262',
-    borderRadius: 25,
+    borderRadius: (width - 40) / 2,
     width: width - 40,
     paddingVertical: 15,
   },
   cancelButton: {
     backgroundColor: '#475c67',
-    borderRadius: 25,
+    borderRadius: 40,
     width: width - 100,
+  },
+  statusTitle: {
+    fontSize: 25,
+    fontWeight: '600',
+  },
+  locationText: {
+    fontSize: 22,
   },
 });
