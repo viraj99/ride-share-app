@@ -1,4 +1,4 @@
-/* eslint-disable react/sort-comp */
+
 import React, { Component } from 'react';
 import {
   Text,
@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   Modal,
   TouchableHighlight,
+  TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Agenda } from 'react-native-calendars';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { Checkbox } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import styles from './AgendaStyles';
 
 export default class AgendaScreen extends Component {
@@ -20,17 +22,19 @@ export default class AgendaScreen extends Component {
     this.state = {
       items: {},
       modalVisible: false,
-      convertedDate: '',
+      displayDate: '',
       initTime: '',
       endTime: '',
-      date: '',
+      availableDate: '',
       datePickerVisibility: false,
       startTimePickerVisibility: false,
       endTimePickerVisibility: false,
       recurringCheck: false,
+      userAddress: '',
     };
   }
 
+  // eslint-disable-next-line react/sort-comp
   render() {
     const {
       items,
@@ -38,15 +42,15 @@ export default class AgendaScreen extends Component {
       datePickerVisibility,
       startTimePickerVisibility,
       endTimePickerVisibility,
-      date,
       recurringCheck,
+      userAddress,
     } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <Agenda
           items={items}
           loadItemsForMonth={this.loadItems}
-          selected={date}
+          selected={new Date()}
           renderItem={this.renderItem}
           renderEmptyDate={this.renderEmptyDate}
           rowHasChanged={this.rowHasChanged}
@@ -65,9 +69,11 @@ export default class AgendaScreen extends Component {
           animationType="slide"
           transparent
           visible={modalVisible}
+          onRequestClose={() => { this.setModalVisible(!modalVisible); }}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
+              <View style={styles.smallEmpty} />
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!modalVisible);
@@ -76,6 +82,7 @@ export default class AgendaScreen extends Component {
               >
                 <Icon name="md-close" size={30} color="#475c67" />
               </TouchableHighlight>
+              <View style={styles.emptySpace} />
               <View style={styles.submitButtonContainer}>
                 <TouchableHighlight
                   onPress={() => {
@@ -90,6 +97,7 @@ export default class AgendaScreen extends Component {
                   </View>
                 </TouchableHighlight>
               </View>
+              <View style={styles.smallEmpty} />
             </View>
 
             {/* Body */}
@@ -97,17 +105,59 @@ export default class AgendaScreen extends Component {
               <View style={styles.textContainer}>
                 <Text style={styles.text}>Add Availability</Text>
               </View>
+              {/* Input Field */}
               <View style={styles.datePickerContainer}>
-                <TouchableOpacity onPress={this.showDatePicker}>
-                  <Text>Availability Date</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.showStartTimePicker}>
-                  <Text>Availability Start</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.showEndTimePicker}>
-                  <Text>Availability End</Text>
-                </TouchableOpacity>
+                <View style={styles.inputField}>
+                  <View style={styles.grayColumn}>
+                    <View style={styles.inputRow}>
+                      <Text style={styles.titleText}>Date</Text>
+                    </View>
+                    <View style={styles.inputRow}>
+                      <Text style={styles.titleText}>Start Time</Text>
+                    </View>
+                    <View style={styles.inputRow}>
+                      <Text style={styles.titleText}>End Time</Text>
+                    </View>
+                    <View style={styles.lastRow}>
+                      <Text style={styles.titleText}>Location</Text>
+                    </View>
+                  </View>
+                  <View style={styles.inputColumn}>
+                    <View style={styles.inputRow}>
+                      <TouchableOpacity onPress={this.showDatePicker}>
+                        <Text style={styles.inputText}>{`${this.dateDisplayConditional()}`}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.inputRow}>
+                      <TouchableOpacity onPress={this.showStartTimePicker}>
+                        <Text style={styles.inputText}>{`${this.initTimeDisplay()}`}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.inputRow}>
+                      <TouchableOpacity onPress={this.showEndTimePicker}>
+                        <Text style={styles.inputText}>{`${this.endTimeDisplay()}`}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.lastRow}>
+                      <TextInput
+                        style={styles.inputText}
+                        onChangeText={text => this.setState({ userAddress: text })}
+                        value={userAddress}
+                        placeholder="Input Address"
+                        placeholderTextColor="#D3D3D3"
+                      />
+                    </View>
+                  </View>
+                </View>
+                <CheckBox
+                  center
+                  title="Is this a weekly availability?"
+                  checked={recurringCheck}
+                  onPress={() => this.setState({ recurringCheck: !recurringCheck })}
+                  onIconPress={() => this.setState({ recurringCheck: !recurringCheck })}
+                />
               </View>
+              {/* Date Picker modals  */}
               <DateTimePicker
                 isVisible={datePickerVisibility}
                 onConfirm={this.handleDatePicked}
@@ -128,13 +178,8 @@ export default class AgendaScreen extends Component {
                 mode="time"
                 is24Hour={false}
               />
-              <Checkbox
-                title="Is this a weekly availability?"
-                checked={recurringCheck}
-              />
             </View>
             {/* Body */}
-
           </View>
         </Modal>
 
@@ -150,9 +195,7 @@ export default class AgendaScreen extends Component {
   }
 
   componentDidMount = () => {
-    const today = new Date();
-    this.convertDate(today);
-    this.setState({ date: today });
+    this.generateDisplayDate();
   }
 
   showDatePicker = () => this.setState({ datePickerVisibility: true });
@@ -168,18 +211,20 @@ export default class AgendaScreen extends Component {
   hideEndTimePicker = () => this.setState({ endTimePickerVisibility: false });
 
   handleDatePicked = (date) => {
-    console.log('A date has been picked: ', date);
-
+    const newDate = this.convertDate(date);
+    this.setState({ availableDate: newDate });
     this.hideDatePicker();
   };
 
   handleStartTimePicked = (time) => {
-    console.log('A start time has been picked: ', time);
+    const convertedTime = this.convertTime(time);
+    this.setState({ initTime: convertedTime });
     this.hideStartTimePicker();
   };
 
   handleEndTimePicked = (time) => {
-    console.log('An end time has been picked: ', time);
+    const convertedTime = this.convertTime(time);
+    this.setState({ endTime: convertedTime });
     this.hideEndTimePicker();
   };
 
@@ -193,14 +238,14 @@ export default class AgendaScreen extends Component {
           items[strTime] = [];
         }
       }
-      console.log(items);
+      // console.log(items);
       const newItems = {};
       Object.keys(items).forEach((key) => { newItems[key] = items[key]; });
 
       this.setState({
         items: newItems,
       });
-      console.log('ayy', items);
+      // console.log('ayy', items);
     }, 1000);
     // console.log(`Load Items for ${day.year}-${day.month}`);
   }
@@ -225,8 +270,17 @@ export default class AgendaScreen extends Component {
   }
 
   convertDate = (date) => {
-    const convertedDate = moment(date).format('YYYY-MM-DD');
+    if (date) {
+      const convertedDate = moment(date).format('YYYY-MM-DD');
+      return convertedDate;
+    }
+    const convertedDate = moment().format('YYYY-MM-DD');
     return convertedDate;
+  }
+
+  convertTime = (time) => {
+    const convertedTime = moment(time).format('h:mm a');
+    return convertedTime;
   }
 
   timeDifference = () => {
@@ -236,23 +290,62 @@ export default class AgendaScreen extends Component {
 
   addToAgenda = () => {
     const {
-      convertedDate, initTime, endTime, items,
+      availableDate, initTime, endTime, items, userAddress,
     } = this.state;
-    const newEvent = convertedDate;
+    const newEvent = this.convertDate(availableDate);
     console.log('new event', newEvent);
     const newAgendaEntry = {
-      name: `Available from ${initTime} until ${endTime}`,
+      name: `Start Time: ${initTime} End Time: ${endTime} Location: ${userAddress}`,
       height: this.timeDifference() * 20,
     };
     console.log('what is being added', newAgendaEntry);
-    const stateCopy = items;
-    stateCopy[newEvent].push(newAgendaEntry);
-    this.setState({ items: stateCopy });
-    console.log('updated items', items);
-    console.log(this.timeDifference());
+    items[newEvent].push(newAgendaEntry);
+    this.setState({ items });
+    // console.log('updated items', items);
+    this.stateClear();
   }
 
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
+  }
+
+  checkBox = (checked) => {
+    this.setState({ recurringCheck: !checked });
+  }
+
+  generateDisplayDate = () => {
+    let todaysDate = new Date();
+    todaysDate = moment(todaysDate).format('ddd, MMMM Do, YYYY');
+    this.setState({ displayDate: todaysDate });
+  }
+
+  stateClear = () => {
+    this.setState({
+      availableDate: '',
+      initTime: '',
+      endTime: '',
+      userAddress: '',
+    });
+  }
+
+  dateDisplayConditional = () => {
+    const { displayDate, availableDate } = this.state;
+    if (!availableDate) {
+      return displayDate;
+    } return moment(availableDate).format('ddd, MMMM Do, YYYY');
+  }
+
+  initTimeDisplay = () => {
+    const { initTime } = this.state;
+    if (!initTime) {
+      return moment().format('hh:mm a');
+    } return initTime;
+  }
+
+  endTimeDisplay = () => {
+    const { endTime } = this.state;
+    if (!endTime) {
+      return moment().add(1, 'h').format('hh:mm a');
+    } return endTime;
   }
 }
