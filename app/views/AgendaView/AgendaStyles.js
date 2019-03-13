@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
+
+const { height, width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   item: {
@@ -27,7 +29,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#1EAA70',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     borderBottomColor: '#f2f2f2',
     shadowColor: '#000',
     shadowOffset: {
@@ -39,14 +41,16 @@ export default StyleSheet.create({
     elevation: 5,
   },
   modalClose: {
-    alignSelf: 'flex-start',
-    marginLeft: 15,
-    marginTop: 12,
+    flex: 1,
+  },
+  emptySpace: {
+    flex: 4,
+  },
+  smallEmpty: {
+    flex: 0.5,
   },
   submitButtonContainer: {
-    flexDirection: 'row',
-    marginRight: 12,
-    marginBottom: 15,
+    flex: 1,
   },
   modalSubmit: {
     width: 80,
@@ -94,6 +98,53 @@ export default StyleSheet.create({
   },
   datePickerContainer: {
     alignSelf: 'center',
-
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  inputField: {
+    width: width - 40,
+    height: width / 2,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 20,
+    flexDirection: 'row',
+    backgroundColor: '#D3D3D3',
+  },
+  grayColumn: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  inputColumn: {
+    flex: 2,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 0,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 0,
+    backgroundColor: 'white',
+    flexDirection: 'column',
+  },
+  inputRow: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
+    height: '25%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lastRow: {
+    height: '25%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleText: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'black',
+    justifyContent: 'center',
+  },
+  inputText: {
+    alignSelf: 'center',
+    fontSize: 18,
+    color: 'black',
   },
 });
