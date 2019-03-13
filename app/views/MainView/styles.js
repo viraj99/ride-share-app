@@ -54,4 +54,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
   },
+  spacer: {
+    marginVertical: 10,
+  },
+  loader: {
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: '#CED0CE',
+    flex: 2,
+  },
 });
