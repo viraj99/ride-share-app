@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Text, View, ScrollView, TouchableOpacity,
+  Text, View, TouchableOpacity, Platform,
 } from 'react-native';
 
 import {
-  Avatar, Button, Icon, Divider, Slider,
+  Avatar, Button, Icon, Divider,
 } from 'react-native-elements';
-// MaterialCommunityIcons
 import styles from './styles';
 
 export default class RideView extends Component<Props> {
@@ -42,48 +41,63 @@ export default class RideView extends Component<Props> {
       <View style={styles.container}>
         <View
           style={{
-            flex: 2,
-            borderColor: 'black',
-            borderWidth: 2,
-            justifyContent: 'center',
+            flex: 1,
+            justifyContent: 'space-around',
             alignItems: 'center',
+            marginTop: Platform.OS === 'ios' ? 0 : 10,
           }}
         >
           <Avatar
-            size="xlarge"
+            size="large"
             rounded
             source={{
               uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
             }}
+            containerStyle={{ borderWidth: 3, borderColor: '#475c67' }}
           />
           <Text style={styles.nameText}>John Doe</Text>
           <TouchableOpacity onPress={() => console.log('phone ringing')}>
-            <Icon raised name="phone" size={15} />
+            <Icon raised name="phone" size={15} reverse color="#475c67" />
           </TouchableOpacity>
         </View>
 
         <View
           style={{
             flex: 2,
-            borderColor: 'black',
-            borderWidth: 2,
             flexDirection: 'row',
             flexWrap: 'wrap',
+            backgroundColor: '#fff',
+            marginHorizontal: 16,
+            marginBottom: 16,
+            borderRadius: 25,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 3,
+            },
+            shadowOpacity: 0.27,
+            shadowRadius: 4.65,
+            elevation: 6,
           }}
         >
-          <View style={{ width: '20%', borderColor: 'black', borderWidth: 2 }}>
-            <Icon name="dot-circle-o" type="font-awesome" />
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="circle-small" type="material-community" />
-
-            <Icon name="circle-small" type="material-community" />
-            <Icon name="place" type="material" />
+          <View
+            style={{
+              width: '15%',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Icon name="dot-circle-o" type="font-awesome" color="#475c67" />
+            <Icon name="circle-small" type="material-community" color="#475c67" />
+            <Icon name="circle-small" type="material-community" color="#475c67" />
+            <Icon name="circle-small" type="material-community" color="#475c67" />
+            <Icon name="place" type="material" color="#475c67" />
           </View>
-          <View style={{ width: '80%', borderColor: 'black', borderWidth: 2 }}>
+          <View
+            style={{
+              width: '65%',
+              justifyContent: 'space-around',
+            }}
+          >
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.statusTitle}>Pick up</Text>
             </View>
@@ -95,13 +109,6 @@ export default class RideView extends Component<Props> {
                 alignItems: 'center',
               }}
             >
-              <Icon
-                name="map-pin"
-                type="font-awesome"
-                size={15}
-                color="#517fa4"
-                containerStyle={{ paddingRight: 5 }}
-              />
               <Text style={styles.locationText}>123 Breir St</Text>
             </View>
 
@@ -115,15 +122,31 @@ export default class RideView extends Component<Props> {
                 alignItems: 'center',
               }}
             >
-              <Icon
-                name="map-pin"
-                type="font-awesome"
-                size={15}
-                color="#517fa4"
-                containerStyle={{ paddingRight: 5 }}
-              />
               <Text style={styles.locationText}>123 Breir St</Text>
             </View>
+          </View>
+          <View
+            style={{
+              width: '15%',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Icon
+              name="navigation"
+              raised
+              reverse
+              type="material-community"
+              color="#475c67"
+              size={20}
+            />
+            <Icon
+              name="navigation"
+              raised
+              reverse
+              type="material-community"
+              color="#475c67"
+              size={20}
+            />
           </View>
         </View>
 
@@ -141,6 +164,7 @@ export default class RideView extends Component<Props> {
           titleStyle={{ fontSize: 22, fontWeight: '600' }}
           buttonStyle={styles.cancelButton}
         />
+
         <View style={styles.footer} />
       </View>
     );

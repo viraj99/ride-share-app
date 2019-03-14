@@ -13,9 +13,10 @@ export default StyleSheet.create({
   nameText: {
     fontSize: 16,
     fontWeight: '600',
+    color: '#475c67',
   },
   footer: {
-    paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 10 : 0,
+    paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 10 : 10,
   },
   startButton: {
     backgroundColor: '#ff8262',
@@ -31,8 +32,10 @@ export default StyleSheet.create({
   statusTitle: {
     fontSize: 25,
     fontWeight: '600',
+    color: '#475c67',
   },
   locationText: {
     fontSize: 22,
+    color: '#475c67',
   },
 });
