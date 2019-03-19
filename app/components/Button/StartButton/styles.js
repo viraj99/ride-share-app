@@ -2,6 +2,8 @@
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
+// #ff8262 start base
+// #ff6272 final choice will be this pink use for resume change of state
 
 export default StyleSheet.create({
   buttonContainer: {
