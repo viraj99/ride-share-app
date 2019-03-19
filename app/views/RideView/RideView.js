@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, Platform,
+  Alert, Text, View, TouchableOpacity,
 } from 'react-native';
+import { Avatar, Button, Icon } from 'react-native-elements';
 
-import {
-  Avatar, Button, Icon, Divider,
-} from 'react-native-elements';
+import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import styles from './styles';
 
 export default class RideView extends Component<Props> {
@@ -16,155 +15,120 @@ export default class RideView extends Component<Props> {
     };
   }
 
+  onCancelPress = () => {
+    Alert.alert('Cancel this ride?', '', [
+      { text: "Don't cancel", onPress: () => console.warn("Don't cancel"), style: 'cancel' },
+      { text: 'Yes, cancel this ride', onPress: () => console.warn('Yes, cancel this ride') },
+    ]);
+  };
+
   onPress = () => {
     const { textValue } = this.state;
+    const { navigation } = this.props;
 
     if (textValue === 'Start Ride') {
       this.setState({
         textValue: 'Tap to arrive',
       });
     } else if (textValue === 'Tap to arrive') {
-      this.setState({
-        textValue: 'Pick up',
-      });
+      Alert.alert('Have you arrived?', '', [
+        {
+          text: 'Confirm arrival',
+          onPress: () => {
+            this.setState({
+              textValue: 'Pick up',
+            });
+          },
+        },
+        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+      ]);
     } else if (textValue === 'Pick up') {
-      this.setState({
-        textValue: 'Drop off',
-      });
-      alert('complete!');
+      Alert.alert('Tap to confirm', '', [
+        {
+          text: 'Confirm pick up',
+          onPress: () => {
+            this.setState({
+              textValue: 'Drop off',
+            });
+          },
+        },
+        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+      ]);
+    } else if (textValue === 'Drop off') {
+      Alert.alert('Did you drop-off?', '', [
+        {
+          text: 'Confirm drop-off',
+          onPress: () => {
+            this.setState({
+              textValue: '',
+            });
+            alert('ride complete');
+            navigation.navigate('MainView');
+          },
+        },
+        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+      ]);
     }
+  };
+
+  renderOverview = () => {
+    const { textValue } = this.state;
+    if (textValue === 'Tap to arrive') {
+      return (
+        <RideOverviewCard
+          title="Pick up"
+          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+        />
+      );
+    }
+    if (textValue === 'Drop off') {
+      return (
+        <RideOverviewCard
+          title="Drop off"
+          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+        />
+      );
+    }
+
+    return (
+      <InitOverviewCard
+        pickupAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
+        dropoffAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
+      />
+    );
   };
 
   render() {
     const { textValue } = this.state;
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            marginTop: Platform.OS === 'ios' ? 0 : 10,
-          }}
-        >
+        <View style={styles.profileContainer}>
           <Avatar
             size="large"
             rounded
             source={{
               uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
             }}
-            containerStyle={{ borderWidth: 3, borderColor: '#475c67' }}
+            containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.nameText}>John Doe</Text>
-          <TouchableOpacity onPress={() => console.log('phone ringing')}>
-            <Icon raised name="phone" size={15} reverse color="#475c67" />
+          <Text numberOfLines={3} style={styles.nameText}>
+            Hubert Blaine De la Forencia
+          </Text>
+        </View>
+        {this.renderOverview()}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity onPress={this.onCancelPress}>
+            <Icon name="close" size={20} color="#475c67" reverse raised type="material-community" />
           </TouchableOpacity>
+          <Button
+            title={textValue}
+            containerStyle={styles.startRideContainer}
+            titleStyle={styles.startRideTitle}
+            buttonStyle={styles.startRideButton}
+            onPress={this.onPress}
+            raised
+          />
         </View>
-
-        <View
-          style={{
-            flex: 2,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            backgroundColor: '#fff',
-            marginHorizontal: 16,
-            marginBottom: 16,
-            borderRadius: 25,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.27,
-            shadowRadius: 4.65,
-            elevation: 6,
-          }}
-        >
-          <View
-            style={{
-              width: '15%',
-              justifyContent: 'space-around',
-            }}
-          >
-            <Icon name="dot-circle-o" type="font-awesome" color="#475c67" />
-            <Icon name="circle-small" type="material-community" color="#475c67" />
-            <Icon name="circle-small" type="material-community" color="#475c67" />
-            <Icon name="circle-small" type="material-community" color="#475c67" />
-            <Icon name="place" type="material" color="#475c67" />
-          </View>
-          <View
-            style={{
-              width: '65%',
-              justifyContent: 'space-around',
-            }}
-          >
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.statusTitle}>Pick up</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text style={styles.locationText}>123 Breir St</Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.statusTitle}>Drop off</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text style={styles.locationText}>123 Breir St</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              width: '15%',
-              justifyContent: 'space-around',
-            }}
-          >
-            <Icon
-              name="navigation"
-              raised
-              reverse
-              type="material-community"
-              color="#475c67"
-              size={20}
-            />
-            <Icon
-              name="navigation"
-              raised
-              reverse
-              type="material-community"
-              color="#475c67"
-              size={20}
-            />
-          </View>
-        </View>
-
-        <Button
-          title={textValue}
-          containerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-          titleStyle={{ fontSize: 22, fontWeight: '600' }}
-          buttonStyle={styles.startButton}
-          onPress={this.onPress}
-        />
-        <Divider style={{ height: 5, backgroundColor: '#fcfcf6' }} />
-        <Button
-          title="Cancel"
-          containerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-          titleStyle={{ fontSize: 22, fontWeight: '600' }}
-          buttonStyle={styles.cancelButton}
-        />
-
         <View style={styles.footer} />
       </View>
     );
