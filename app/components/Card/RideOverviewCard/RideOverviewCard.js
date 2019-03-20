@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import {
+  Text, View, TouchableOpacity, Animated,
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 
 // import PropTypes from 'prop-types';
@@ -26,7 +28,7 @@ const RideOverviewCard = ({ onPress, title, address }) => (
       </View>
     </View>
     <View style={styles.overviewRightSection}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <Icon
           name="navigation"
           raised

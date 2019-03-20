@@ -3,6 +3,7 @@ import {
   Alert, Text, View, TouchableOpacity,
 } from 'react-native';
 import { Avatar, Button, Icon } from 'react-native-elements';
+import getDirections from 'react-native-google-maps-directions';
 
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import styles from './styles';
@@ -14,6 +15,55 @@ export default class RideView extends Component<Props> {
       textValue: 'Start Ride',
     };
   }
+
+  handlePickUpDirections = () => {
+    const data = {
+      source: {
+        latitude: 35.995616,
+        longitude: -78.902208,
+      },
+      destination: {
+        latitude: 35.980656,
+        longitude: -78.898274,
+      },
+      params: [
+        {
+          key: 'travelmode',
+          value: 'driving', // may be "walking", "bicycling" or "transit" as well
+        },
+        {
+          key: 'dir_action',
+          value: 'navigate', // this instantly initializes navigation using the given travel mode
+        },
+      ],
+    };
+    getDirections(data);
+  };
+
+  handleDropOffDirections = () => {
+    const data = {
+      source: {
+        latitude: 35.995616,
+        longitude: -78.902208,
+      },
+      destination: {
+        latitude: 35.980656,
+        longitude: -78.898274,
+      },
+      params: [
+        {
+          key: 'travelmode',
+          value: 'driving', // may be "walking", "bicycling" or "transit" as well
+        },
+        {
+          key: 'dir_action',
+          value: 'navigate', // this instantly initializes navigation using the given travel mode
+        },
+      ],
+    };
+
+    getDirections(data);
+  };
 
   onCancelPress = () => {
     Alert.alert('Cancel this ride?', '', [
@@ -78,6 +128,7 @@ export default class RideView extends Component<Props> {
         <RideOverviewCard
           title="Pick up"
           address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          onPress={this.handlePickUpDirections}
         />
       );
     }
@@ -86,6 +137,7 @@ export default class RideView extends Component<Props> {
         <RideOverviewCard
           title="Drop off"
           address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          onPress={this.handleDropOffDirections}
         />
       );
     }
