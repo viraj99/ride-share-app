@@ -3,66 +3,52 @@ import {
   Alert, Text, View, TouchableOpacity,
 } from 'react-native';
 import { Avatar, Button, Icon } from 'react-native-elements';
-import getDirections from 'react-native-google-maps-directions';
+import { Popup } from 'react-native-map-link';
 
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import styles from './styles';
 
+const data = [
+  {
+    pickupLocation: {
+      latitude: 35.980656,
+      longitude: -78.898274,
+    },
+    dropOffLocation: {
+      latitude: 36.00272,
+      longitude: -78.902597,
+    },
+  },
+];
 export default class RideView extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
       textValue: 'Start Ride',
+      isVisible: false,
+      latitude: 0,
+      longitude: 0,
     };
   }
 
   handlePickUpDirections = () => {
-    const data = {
-      source: {
-        latitude: 35.995616,
-        longitude: -78.902208,
-      },
-      destination: {
-        latitude: 35.980656,
-        longitude: -78.898274,
-      },
-      params: [
-        {
-          key: 'travelmode',
-          value: 'driving', // may be "walking", "bicycling" or "transit" as well
-        },
-        {
-          key: 'dir_action',
-          value: 'navigate', // this instantly initializes navigation using the given travel mode
-        },
-      ],
-    };
-    getDirections(data);
+    const latitude = data.map(item => item.pickupLocation.latitude);
+    const longitude = data.map(item => item.pickupLocation.longitude);
+    this.setState({
+      isVisible: true,
+      latitude,
+      longitude,
+    });
   };
 
   handleDropOffDirections = () => {
-    const data = {
-      source: {
-        latitude: 35.995616,
-        longitude: -78.902208,
-      },
-      destination: {
-        latitude: 35.980656,
-        longitude: -78.898274,
-      },
-      params: [
-        {
-          key: 'travelmode',
-          value: 'driving', // may be "walking", "bicycling" or "transit" as well
-        },
-        {
-          key: 'dir_action',
-          value: 'navigate', // this instantly initializes navigation using the given travel mode
-        },
-      ],
-    };
-
-    getDirections(data);
+    const latitude = data.map(item => item.dropOffLocation.latitude);
+    const longitude = data.map(item => item.dropOffLocation.longitude);
+    this.setState({
+      isVisible: true,
+      latitude,
+      longitude,
+    });
   };
 
   onCancelPress = () => {
@@ -151,7 +137,9 @@ export default class RideView extends Component<Props> {
   };
 
   render() {
-    const { textValue } = this.state;
+    const {
+      textValue, isVisible, latitude, longitude,
+    } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.profileContainer}>
@@ -167,6 +155,29 @@ export default class RideView extends Component<Props> {
             Hubert Blaine De la Forencia
           </Text>
         </View>
+        <Popup
+          isVisible={isVisible}
+          onCancelPressed={() => this.setState({ isVisible: false })}
+          onAppPressed={() => this.setState({ isVisible: false })}
+          onBackButtonPressed={() => this.setState({ isVisible: false })}
+          appsWhiteList={[
+            'apple-maps',
+            'google-maps',
+            'citymapper',
+            'transit',
+            'waze',
+            'yandex',
+            'moovit',
+            'yandex-maps',
+          ]}
+          modalProps={{ animationIn: 'slideInUp' }}
+          options={{
+            latitude,
+            longitude,
+            // sourceLatitude: 35.995616, optionally specify starting location for directions
+            // sourceLongitude: -78.902208, not optional if sourceLatitude is specified
+          }}
+        />
         {this.renderOverview()}
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={this.onCancelPress}>
