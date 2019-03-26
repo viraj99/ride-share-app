@@ -155,7 +155,7 @@ export default class MainView extends Component<Props> {
 
   navigateToSettings = () => {
     const { navigation } = this.props;
-    navigation.navigate('RideView');
+    navigation.navigate('Settings');
   };
 
   navigateToCalendar = () => {

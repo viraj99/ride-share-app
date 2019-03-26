@@ -6,6 +6,7 @@ import RideView from './RideView';
 import DriverScheduleView from './DriverScheduleView';
 import RidesRequestedView from './RidesRequestedView';
 import RequestedRidesDetails from './RequestedRidesDetails';
+import Settings from './settings/settingsScreen';
 
 export {
   MainView,
@@ -16,4 +17,5 @@ export {
   DriverScheduleView,
   RidesRequestedView,
   RequestedRidesDetails,
+  Settings,
 };

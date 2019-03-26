@@ -13,6 +13,7 @@ import {
   DriverScheduleView,
   RidesRequestedView,
   RequestedRidesDetails,
+  Settings,
 } from '../views';
 
 const MainViewStack = createStackNavigator(
@@ -30,13 +31,12 @@ const MainViewStack = createStackNavigator(
         headerTitle: 'Calendar',
       },
     },
-    // Add once settings screen is merged
-    // Settings: {
-    //   screen: Settings,
-    //   navigationOptions: {
-    //     headerTitle: "Settings"
-    //   }
-    // }
+    Settings: {
+      screen: Settings,
+      navigationOptions: {
+        headerTitle: 'Settings',
+      },
+    },
     RideView: {
       screen: RideView,
     },
