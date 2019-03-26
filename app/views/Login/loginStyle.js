@@ -4,14 +4,13 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#475c67',
-    paddingTop: 100,
     alignItems: 'center',
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+    paddingBottom: 200,
   },
   header: {
-    padding: 5,
-  },
-  titleContainer: {
-    padding: 5,
+    alignItems: 'center',
   },
   title: {
     fontWeight: 'bold',
@@ -24,10 +23,23 @@ export default StyleSheet.create({
   formContainer: {
     padding: 10,
   },
+  titleContainer: {
+    borderBottomWidth: 3,
+    borderBottomColor: '#ff8262',
+  },
   formTitle: {
     fontWeight: 'bold',
     fontSize: 25,
     color: '#ffffff',
+  },
+  errorContainer: {
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  errorMessage: {
+    color: '#ff8262',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   sectionContainer: {
     backgroundColor: '#ffffff',
@@ -37,15 +49,14 @@ export default StyleSheet.create({
     padding: 10,
     borderWidth: 0.3,
     fontSize: 15,
-    width: 200,
-    color: '#ffffff',
+    color: '#000000',
   },
   default: {
     textAlign: 'left',
     color: '#ffffff',
   },
   buttonContainer: {
-    padding: 10,
+    paddingTop: 10,
   },
   submitContainer: {
     backgroundColor: '#ff8262',
@@ -58,7 +69,7 @@ export default StyleSheet.create({
   submitButtonText: {
     fontSize: 15,
     textAlign: 'center',
-    width: 190,
+    width: 200,
     padding: 5,
     color: '#ffffff',
   },
