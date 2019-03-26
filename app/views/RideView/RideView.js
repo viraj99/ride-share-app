@@ -53,8 +53,8 @@ export default class RideView extends Component<Props> {
 
   onCancelPress = () => {
     Alert.alert('Cancel this ride?', '', [
-      { text: "Don't cancel", onPress: () => console.warn("Don't cancel"), style: 'cancel' },
-      { text: 'Yes, cancel this ride', onPress: () => console.warn('Yes, cancel this ride') },
+      { text: "Don't cancel", style: 'cancel' },
+      { text: 'Yes, cancel this ride', onPress: () => console.warn('ride cancelled') },
     ]);
   };
 
@@ -76,7 +76,7 @@ export default class RideView extends Component<Props> {
             });
           },
         },
-        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+        { text: 'cancel', style: 'cancel' },
       ]);
     } else if (textValue === 'Pick up') {
       Alert.alert('Tap to confirm', '', [
@@ -88,7 +88,7 @@ export default class RideView extends Component<Props> {
             });
           },
         },
-        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+        { text: 'cancel', style: 'cancel' },
       ]);
     } else if (textValue === 'Drop off') {
       Alert.alert('Did you drop-off?', '', [
@@ -102,7 +102,7 @@ export default class RideView extends Component<Props> {
             navigation.navigate('MainView');
           },
         },
-        { text: 'cancel', onPress: () => console.warn('cancel'), style: 'cancel' },
+        { text: 'cancel', style: 'cancel' },
       ]);
     }
   };
