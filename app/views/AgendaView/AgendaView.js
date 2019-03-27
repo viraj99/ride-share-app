@@ -75,7 +75,7 @@ export default class App extends Component {
       const betweenMonth = moment(end);
 
       if (i === 0) {
-        const firstMonth = moment(weekday);
+        const firstMonth = moment(weekday).startOf('month');
         const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
         weeks.push(initialMonth);
       }
@@ -103,6 +103,10 @@ export default class App extends Component {
     this.populateAgenda();
     this.generateDisplayDate();
   }
+
+  // componentDidUpdate = () => {
+
+  // }
 
 
   renderHeader = () => (
@@ -330,12 +334,12 @@ export default class App extends Component {
             {isLoading ? (
               this.renderLoader()
             ) : (
-                <FlatList
+              <FlatList
                   data={scheduleItems}
                   renderItem={this.renderAgenda}
                   keyExtractor={(item, index) => `list-item-${index}`}
                 />
-              )}
+            )}
           </View>
           <Icon
             name="plus-circle"
