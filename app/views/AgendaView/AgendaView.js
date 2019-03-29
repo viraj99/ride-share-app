@@ -334,12 +334,14 @@ export default class App extends Component {
             {isLoading ? (
               this.renderLoader()
             ) : (
-                <FlatList
+              <FlatList
                   data={scheduleItems}
                   renderItem={this.renderAgenda}
+                  extraData={this.state}
                   keyExtractor={(item, index) => `list-item-${index}`}
+
                 />
-              )}
+            )}
           </View>
           <Icon
             name="plus-circle"
