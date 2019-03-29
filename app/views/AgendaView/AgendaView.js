@@ -334,12 +334,12 @@ export default class App extends Component {
             {isLoading ? (
               this.renderLoader()
             ) : (
-              <FlatList
+                <FlatList
                   data={scheduleItems}
                   renderItem={this.renderAgenda}
                   keyExtractor={(item, index) => `list-item-${index}`}
                 />
-            )}
+              )}
           </View>
           <Icon
             name="plus-circle"
@@ -351,65 +351,69 @@ export default class App extends Component {
         </View>
         <Overlay
           isVisible={overlayVisible}
-        >
-          <View>
-            <Button
-              onPress={this.showDatePicker}
-              title="Select Available Date"
-            />
-            <Text>{`${this.dateDisplayConditional()}`}</Text>
-          </View>
-          <View>
-            <Button
-              onPress={this.showStartTimePicker}
-              title="Select Start Time"
-            />
-            <Text>{`${this.initTimeDisplay()}`}</Text>
-          </View>
-          <View>
-            <Button
-              onPress={this.showEndTimePicker}
-              title="Select End Time"
-            />
-            <Text>{`${this.endTimeDisplay()}`}</Text>
-          </View>
-          <Input
-            placeholder="Please input your address"
-            onChangeText={text => this.setState({ userAddress: text })}
-          />
-          <CheckBox
-            center
-            title="Is this a weekly availability?"
-            checked={reoccurringCheck}
-            onPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
-            onIconPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
-          />
-          <Button
-            title="Submit"
-            onPress={this.handleAgendaSubmit}
-          />
-        </Overlay>
-        {/* Date Picker modals  */}
-        <DateTimePicker
-          isVisible={datePickerVisibility}
-          onConfirm={this.handleDatePicked}
-          onCancel={this.hideDatePicker}
-          mode="date"
+          children={(
+            <View>
+              <View>
+                <Button
+                  onPress={this.showDatePicker}
+                  title="Select Available Date"
+                />
+                <Text>{`${this.dateDisplayConditional()}`}</Text>
+              </View>
+              <View>
+                <Button
+                  onPress={this.showStartTimePicker}
+                  title="Select Start Time"
+                />
+                <Text>{`${this.initTimeDisplay()}`}</Text>
+              </View>
+              <View>
+                <Button
+                  onPress={this.showEndTimePicker}
+                  title="Select End Time"
+                />
+                <Text>{`${this.endTimeDisplay()}`}</Text>
+              </View>
+              <Input
+                placeholder="Please input your address"
+                onChangeText={text => this.setState({ userAddress: text })}
+              />
+              <CheckBox
+                center
+                title="Is this a weekly availability?"
+                checked={reoccurringCheck}
+                onPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
+                onIconPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
+              />
+              <Button
+                title="Submit"
+                onPress={this.handleAgendaSubmit}
+              />
+              {/* Date Picker modals  */}
+              <DateTimePicker
+                isVisible={datePickerVisibility}
+                onConfirm={this.handleDatePicked}
+                onCancel={this.hideDatePicker}
+                mode="date"
+              />
+              <DateTimePicker
+                isVisible={startTimePickerVisibility}
+                onConfirm={this.handleStartTimePicked}
+                onCancel={this.hideStartTimePicker}
+                mode="time"
+                is24Hour={false}
+              />
+              <DateTimePicker
+                isVisible={endTimePickerVisibility}
+                onConfirm={this.handleEndTimePicked}
+                onCancel={this.hideEndTimePicker}
+                mode="time"
+                is24Hour={false}
+              />
+            </View>
+          )}
         />
-        <DateTimePicker
-          isVisible={startTimePickerVisibility}
-          onConfirm={this.handleStartTimePicked}
-          onCancel={this.hideStartTimePicker}
-          mode="time"
-          is24Hour={false}
-        />
-        <DateTimePicker
-          isVisible={endTimePickerVisibility}
-          onConfirm={this.handleEndTimePicked}
-          onCancel={this.hideEndTimePicker}
-          mode="time"
-          is24Hour={false}
-        />
+
       </View>
     );
   }
