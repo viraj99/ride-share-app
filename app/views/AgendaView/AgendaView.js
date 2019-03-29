@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import {
-  Text, View, FlatList, ActivityIndicator,
+  Text, View, FlatList,
 } from 'react-native';
 import {
   Header, Overlay, Input, Button, CheckBox,
@@ -40,16 +40,14 @@ export default class App extends Component {
     activeSections: [],
     scheduleItems: [],
     overlayVisible: false,
-    datePickerVisibility: false,
-    startTimePickerVisibility: false,
-    endTimePickerVisibility: false,
+    startPickerVisibility: false,
+    endPickerVisibility: false,
     initTime: '',
     endTime: '',
     availableDate: '',
     displayDate: '',
     userAddress: '',
     reoccurringCheck: false,
-    isLoading: false,
   }
 
 
@@ -76,6 +74,7 @@ export default class App extends Component {
 
       if (i === 0) {
         const firstMonth = moment(weekday).startOf('month');
+        console.log(firstMonth);
         const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
         weeks.push(initialMonth);
       }
@@ -107,16 +106,34 @@ export default class App extends Component {
   // componentDidUpdate = () => {
 
   // }
+  // onAnimationEnd = () => {
+  //   const isCollapsed = this.state;
+  //   console.log('before', isCollapsed);
+  //   this.setState({ isCollapsed: !isCollapsed });
+  //   console.log('after', isCollapsed);
+  // }
 
+  renderHeader = (item, _, isActive) => {
+    if (!isActive) {
+      return (
+        <View style={{
+          backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2,
+        }}
+        >
+          <Icon name="angle-down" color="white" size={20} />
+        </View>
+      );
+    }
+    return (
+      <View style={{
+        backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2,
+      }}
+      >
+        <Icon name="angle-up" color="white" size={20} />
+      </View>
+    );
+  }
 
-  renderHeader = () => (
-    <View style={{
-      backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2, zIndex: 2,
-    }}
-    >
-      <Icon name="angle-down" color="white" size={20} />
-    </View>
-  )
 
   renderContent = () => (
     <View>
@@ -127,11 +144,12 @@ export default class App extends Component {
   )
 
   renderAgenda = ({ item }) => {
+    console.log(item);
     const {
       startDate,
-      startTime,
       endDate,
       endTime,
+      startTime,
     } = item;
 
     if (item.type === 'weekHeader') {
@@ -158,7 +176,7 @@ export default class App extends Component {
           <Text>
             date
             {' '}
-            {moment(startDate, 'X').format('MMM Do')}
+            {moment(startTime, 'X').format('MMM Do')}
           </Text>
           <Text>
             start time
@@ -193,42 +211,38 @@ export default class App extends Component {
     this.setState({ overlayVisible: true });
   }
 
-  showDatePicker = () => this.setState({ datePickerVisibility: true });
+  showStartTimePicker = () => this.setState({ startPickerVisibility: true });
 
-  hideDatePicker = () => this.setState({ datePickerVisibility: false });
+  hideStartTimePicker = () => this.setState({ startPickerVisibility: false });
 
-  showStartTimePicker = () => this.setState({ startTimePickerVisibility: true });
+  showEndTimePicker = () => this.setState({ endPickerVisibility: true });
 
-  hideStartTimePicker = () => this.setState({ startTimePickerVisibility: false });
+  hideEndTimePicker = () => this.setState({ endPickerVisibility: false });
 
-  showEndTimePicker = () => this.setState({ endTimePickerVisibility: true });
+  // handleDatePicked = (date) => {
+  //   const newDate = moment(date).format('X');
+  //   this.setState({ availableDate: newDate });
+  //   this.hideDatePicker();
+  // };
 
-  hideEndTimePicker = () => this.setState({ endTimePickerVisibility: false });
-
-  handleDatePicked = (date) => {
-    const newDate = moment(date).format('X');
-    this.setState({ availableDate: newDate });
-    this.hideDatePicker();
-  };
-
-  handleStartTimePicked = (time) => {
+  handleStartTimePicker = (time) => {
     const convertedTime = moment(time).format('X');
     this.setState({ initTime: convertedTime });
     this.hideStartTimePicker();
   };
 
-  handleEndTimePicked = (time) => {
+  handleEndTimePicker = (time) => {
     const convertedTime = moment(time).format('X');
     this.setState({ endTime: convertedTime });
     this.hideEndTimePicker();
   };
 
-  dateDisplayConditional = () => {
-    const { displayDate, availableDate } = this.state;
-    if (!availableDate) {
-      return displayDate;
-    } return moment(availableDate, 'X').format('ddd, MMMM Do, YYYY');
-  }
+  // dateDisplayConditional = () => {
+  //   const { displayDate, availableDate } = this.state;
+  //   if (!availableDate) {
+  //     return displayDate;
+  //   } return moment(availableDate, 'X').format('ddd, MMMM Do, YYYY');
+  // }
 
   initTimeDisplay = () => {
     const { initTime } = this.state;
@@ -255,8 +269,7 @@ export default class App extends Component {
       overlayVisible,
     } = this.state;
 
-    this.setState({ isLoading: true });
-    const arr = scheduleItems;
+    let arr = scheduleItems;
 
     if (reoccurringCheck) {
       for (let i = 0; i < 12; i++) {
@@ -265,17 +278,17 @@ export default class App extends Component {
         const newEndTime = moment(endTime, 'X').add(i, 'w');
         const repeatingItem = new ScheduleItem('availability', newDate, newEndTime, newTimestamp, newTimestamp, newEndTime, userAddress, reoccurringCheck);
         arr.push(repeatingItem);
-        arr.sort(this.organizeArray);
-      } console.log(arr);
+        arr = arr.sort(this.organizeArray);
+      } console.log('arr', arr);
     } else {
       const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
       arr.push(newAvailability);
-      arr.sort(this.organizeArray);
+      arr = arr.sort(this.organizeArray);
+      console.log('arr', arr);
     }
     this.setState({
       overlayVisible: !overlayVisible,
       scheduleItems: arr,
-      isLoading: false,
       availableDate: '',
       initTime: '',
       endTime: '',
@@ -285,30 +298,17 @@ export default class App extends Component {
   }
 
 
-  organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X')
-
-  renderLoader = () => {
-    const { isLoading } = this.state;
-    if (!isLoading) return null;
-
-    return (
-      <View>
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  }
+  organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X');
 
 
   render() {
     const {
       reoccurringCheck,
-      isLoading,
       activeSections,
       scheduleItems,
       overlayVisible,
-      datePickerVisibility,
-      startTimePickerVisibility,
-      endTimePickerVisibility,
+      startPickerVisibility,
+      endPickerVisibility,
     } = this.state;
     return (
       <View style={{ flex: 1 }}>
@@ -328,20 +328,16 @@ export default class App extends Component {
             renderHeader={this.renderHeader}
             renderContent={this.renderContent}
             onChange={this.updateSections}
+            onAnimationEnd={this.animationEnd}
             expandFromBottom
           />
           <View>
-            {isLoading ? (
-              this.renderLoader()
-            ) : (
-              <FlatList
-                  data={scheduleItems}
-                  renderItem={this.renderAgenda}
-                  extraData={this.state}
-                  keyExtractor={(item, index) => `list-item-${index}`}
-
-                />
-            )}
+            <FlatList
+              data={scheduleItems}
+              renderItem={this.renderAgenda}
+              extraData={this.state}
+              keyExtractor={(item, index) => `list-item-${index}`}
+            />
           </View>
           <Icon
             name="plus-circle"
@@ -357,13 +353,6 @@ export default class App extends Component {
             <View>
               <View>
                 <Button
-                  onPress={this.showDatePicker}
-                  title="Select Available Date"
-                />
-                <Text>{`${this.dateDisplayConditional()}`}</Text>
-              </View>
-              <View>
-                <Button
                   onPress={this.showStartTimePicker}
                   title="Select Start Time"
                 />
@@ -376,6 +365,13 @@ export default class App extends Component {
                 />
                 <Text>{`${this.endTimeDisplay()}`}</Text>
               </View>
+              {/* <View>
+                <Button
+                  onPress={this.showEndTimePicker}
+                  title="Select End Time"
+                />
+                <Text>{}</Text>
+              </View> */}
               <Input
                 placeholder="Please input your address"
                 onChangeText={text => this.setState({ userAddress: text })}
@@ -393,25 +389,26 @@ export default class App extends Component {
               />
               {/* Date Picker modals  */}
               <DateTimePicker
-                isVisible={datePickerVisibility}
-                onConfirm={this.handleDatePicked}
-                onCancel={this.hideDatePicker}
-                mode="date"
-              />
-              <DateTimePicker
-                isVisible={startTimePickerVisibility}
-                onConfirm={this.handleStartTimePicked}
+                isVisible={startPickerVisibility}
+                onConfirm={this.handleStartTimePicker}
                 onCancel={this.hideStartTimePicker}
-                mode="time"
+                mode="datetime"
                 is24Hour={false}
               />
               <DateTimePicker
+                isVisible={endPickerVisibility}
+                onConfirm={this.handleEndTimePicker}
+                onCancel={this.hideEndTimePicker}
+                mode="datetime"
+                is24Hour={false}
+              />
+              {/* <DateTimePicker
                 isVisible={endTimePickerVisibility}
                 onConfirm={this.handleEndTimePicked}
                 onCancel={this.hideEndTimePicker}
                 mode="time"
                 is24Hour={false}
-              />
+              /> */}
             </View>
           )}
         />
