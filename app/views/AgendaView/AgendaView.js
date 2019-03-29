@@ -1,162 +1,395 @@
 
 import React, { Component } from 'react';
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableHighlight,
-  TextInput,
-  KeyboardAvoidingView,
+  Text, View, FlatList, ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Agenda } from 'react-native-calendars';
+import {
+  Header, Overlay, Input, Button, CheckBox,
+} from 'react-native-elements';
+import Accordion from 'react-native-collapsible/Accordion';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { CheckBox } from 'react-native-elements';
+import { Calendar } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './AgendaStyles';
+import Schedule from './Schedule';
 
-export default class AgendaScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: {},
-      modalVisible: false,
-      displayDate: '',
-      initTime: '',
-      endTime: '',
-      availableDate: '',
-      datePickerVisibility: false,
-      startTimePickerVisibility: false,
-      endTimePickerVisibility: false,
-      recurringCheck: false,
-      userAddress: '',
-    };
+
+const SECTIONS = [
+  {
+    title: 'First',
+    content: 'Lorem ipsum...',
+    header: 'header',
+  },
+
+];
+
+class ScheduleItem extends Schedule {
+  constructor(type, startDate, endDate, timestamp, startTime, endTime, location, reoccurring) {
+    super(type, startDate, endDate, timestamp);
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.location = location;
+    this.reoccurring = reoccurring;
+  }
+}
+
+
+export default class App extends Component {
+  state = {
+    activeSections: [],
+    scheduleItems: [],
+    overlayVisible: false,
+    datePickerVisibility: false,
+    startTimePickerVisibility: false,
+    endTimePickerVisibility: false,
+    initTime: '',
+    endTime: '',
+    availableDate: '',
+    displayDate: '',
+    userAddress: '',
+    reoccurringCheck: false,
+    isLoading: false,
   }
 
-  // eslint-disable-next-line react/sort-comp
+
+  displayCurrentMonth = (month) => {
+    let currentMonth = month.dateString;
+    currentMonth = moment(currentMonth).format('MMMM YYYY');
+    return currentMonth;
+  }
+
+  generateDisplayDate = () => {
+    const today = moment().format('ddd, MMMM Do, YYYY');
+    this.setState({ displayDate: today });
+  }
+
+  populateAgenda = () => {
+    const weeks = [];
+
+    for (let i = 0; i <= 30; i++) {
+      const weekday = moment().add(i, 'w');
+      const start = moment(weekday).startOf('week');
+      const end = moment(weekday).endOf('week');
+      const monthEnd = moment(end).add(1, 'd');
+      const betweenMonth = moment(end);
+
+      if (i === 0) {
+        const firstMonth = moment(weekday).startOf('month');
+        const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
+        weeks.push(initialMonth);
+      }
+      if (moment(end).isSame(moment(start).endOf('month'))) {
+        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${monthEnd.format('X')}`, 'none', `${monthEnd.format('X')}`);
+        weeks.push(newWeek);
+        weeks.push(newMonth);
+      } else if (moment(start).month() !== moment(end).month()) {
+        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('X')}`, 'none', `${betweenMonth.format('X')}`);
+        weeks.push(newWeek);
+        weeks.push(newMonth);
+      } else if (moment(start).month() === moment(end).month()) {
+        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
+        weeks.push(newWeek);
+      }
+    }
+    this.setState({
+      scheduleItems: weeks,
+    });
+  }
+
+  componentDidMount = () => {
+    this.populateAgenda();
+    this.generateDisplayDate();
+  }
+
+  // componentDidUpdate = () => {
+
+  // }
+
+
+  renderHeader = () => (
+    <View style={{
+      backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2, zIndex: 2,
+    }}
+    >
+      <Icon name="angle-down" color="white" size={20} />
+    </View>
+  )
+
+  renderContent = () => (
+    <View>
+      <Calendar
+        onMonthChange={(month) => { console.log(month); }}
+      />
+    </View>
+  )
+
+  renderAgenda = ({ item }) => {
+    const {
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+    } = item;
+
+    if (item.type === 'weekHeader') {
+      return (
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text>
+            {moment(startDate, 'X').format('MMM D')}
+            {' '}
+            -
+            {' '}
+            {moment(endDate, 'X').format('MMM D')}
+          </Text>
+        </View>
+      );
+    } if (item.type === 'monthHeader') {
+      return (
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text>{moment(startDate, 'X').format('MMMM')}</Text>
+        </View>
+      );
+    } if (item.type === 'availability') {
+      return (
+        <View style={{ borderWidth: 1, borderColor: 'black' }}>
+          <Text>
+            date
+            {' '}
+            {moment(startDate, 'X').format('MMM Do')}
+          </Text>
+          <Text>
+            start time
+            {' '}
+            {moment(startTime, 'X').format('h:mm a')}
+          </Text>
+          <Text>
+            end time
+            {' '}
+            {moment(endTime, 'X').format('h:mm a')}
+          </Text>
+          <Text>
+            address
+            {' '}
+            {item.location}
+          </Text>
+          <Text>
+            reoccurring?
+            {' '}
+            {item.reoccurring}
+          </Text>
+        </View>
+      );
+    }
+  }
+
+  updateSections = (activeSections) => {
+    this.setState({ activeSections });
+  };
+
+  openForm = () => {
+    this.setState({ overlayVisible: true });
+  }
+
+  showDatePicker = () => this.setState({ datePickerVisibility: true });
+
+  hideDatePicker = () => this.setState({ datePickerVisibility: false });
+
+  showStartTimePicker = () => this.setState({ startTimePickerVisibility: true });
+
+  hideStartTimePicker = () => this.setState({ startTimePickerVisibility: false });
+
+  showEndTimePicker = () => this.setState({ endTimePickerVisibility: true });
+
+  hideEndTimePicker = () => this.setState({ endTimePickerVisibility: false });
+
+  handleDatePicked = (date) => {
+    const newDate = moment(date).format('X');
+    this.setState({ availableDate: newDate });
+    this.hideDatePicker();
+  };
+
+  handleStartTimePicked = (time) => {
+    const convertedTime = moment(time).format('X');
+    this.setState({ initTime: convertedTime });
+    this.hideStartTimePicker();
+  };
+
+  handleEndTimePicked = (time) => {
+    const convertedTime = moment(time).format('X');
+    this.setState({ endTime: convertedTime });
+    this.hideEndTimePicker();
+  };
+
+  dateDisplayConditional = () => {
+    const { displayDate, availableDate } = this.state;
+    if (!availableDate) {
+      return displayDate;
+    } return moment(availableDate, 'X').format('ddd, MMMM Do, YYYY');
+  }
+
+  initTimeDisplay = () => {
+    const { initTime } = this.state;
+    if (!initTime) {
+      return moment().format('h:mm a');
+    } return moment(initTime, 'X').format('h:mm a');
+  }
+
+  endTimeDisplay = () => {
+    const { endTime } = this.state;
+    if (!endTime) {
+      return moment().add(1, 'h').format('h:mm a');
+    } return moment(endTime, 'X').format('h:mm a');
+  }
+
+  handleAgendaSubmit = () => {
+    const {
+      availableDate,
+      initTime,
+      endTime,
+      userAddress,
+      reoccurringCheck,
+      scheduleItems,
+      overlayVisible,
+    } = this.state;
+
+    this.setState({ isLoading: true });
+    const arr = scheduleItems;
+
+    if (reoccurringCheck) {
+      for (let i = 0; i < 12; i++) {
+        const newDate = moment(availableDate, 'X').add(i, 'w');
+        const newTimestamp = moment(initTime, 'X').add(i, 'w');
+        const newEndTime = moment(endTime, 'X').add(i, 'w');
+        const repeatingItem = new ScheduleItem('availability', newDate, newEndTime, newTimestamp, newTimestamp, newEndTime, userAddress, reoccurringCheck);
+        arr.push(repeatingItem);
+        arr.sort(this.organizeArray);
+      } console.log(arr);
+    } else {
+      const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
+      arr.push(newAvailability);
+      arr.sort(this.organizeArray);
+    }
+    this.setState({
+      overlayVisible: !overlayVisible,
+      scheduleItems: arr,
+      isLoading: false,
+      availableDate: '',
+      initTime: '',
+      endTime: '',
+      userAddress: '',
+      reoccurringCheck: undefined,
+    });
+  }
+
+
+  organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X')
+
+  renderLoader = () => {
+    const { isLoading } = this.state;
+    if (!isLoading) return null;
+
+    return (
+      <View>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  }
+
+
   render() {
     const {
-      items,
-      modalVisible,
+      reoccurringCheck,
+      isLoading,
+      activeSections,
+      scheduleItems,
+      overlayVisible,
       datePickerVisibility,
       startTimePickerVisibility,
       endTimePickerVisibility,
-      recurringCheck,
-      userAddress,
     } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        <Agenda
-          items={items}
-          loadItemsForMonth={this.loadItems}
-          selected={new Date()}
-          renderItem={this.renderItem}
-          renderEmptyDate={this.renderEmptyDate}
-          rowHasChanged={this.rowHasChanged}
-          onDayPress={() => { console.log('hello'); }}
-          theme={{
-            agendaTodayColor: '#1EAA70',
-            agendaKnobColor: '#1EAA70',
-            agendaDayNumColor: '#a8dbc5',
-            agendaDayTextColor: '#a8dbc5',
-            selectedDayBackgroundColor: '#1EAA70',
-            todayTextColor: '#a8dbc5',
-            dotColor: '#1EAA70',
+        <Header
+          containerStyle={{
+            flex: 1,
+            backgroundColor: '#1EAA70',
           }}
+          // leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: `${moment().format('MMMM YYYY')}`, style: { color: '#fff', fontSize: 24 } }}
+        // rightComponent={{ icon: 'home', color: '#fff' }}
         />
-        <Modal
-          animationType="slide"
-          transparent
-          visible={modalVisible}
-          onRequestClose={() => { this.setModalVisible(!modalVisible); }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <View style={styles.smallEmpty} />
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!modalVisible);
-                }}
-                style={styles.modalClose}
-              >
-                <Icon name="md-close" size={30} color="#475c67" />
-              </TouchableHighlight>
-              <View style={styles.emptySpace} />
-              <View style={styles.submitButtonContainer}>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.addToAgenda();
-                    this.setModalVisible(!modalVisible);
-                  }}
-                >
-                  <View style={styles.modalSubmit}>
-                    <View style={styles.submitTextContainer}>
-                      <Text style={styles.submitText}>Submit</Text>
-                    </View>
-                  </View>
-                </TouchableHighlight>
-              </View>
-              <View style={styles.smallEmpty} />
-            </View>
-
-            {/* Body */}
-            <View style={styles.modalContentContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>Add Availability</Text>
-              </View>
-              {/* Input Field */}
-              <View style={styles.datePickerContainer}>
-                <View style={styles.inputField}>
-                  <View style={styles.grayColumn}>
-                    <View style={styles.inputRow}>
-                      <Text style={styles.titleText}>Date</Text>
-                    </View>
-                    <View style={styles.inputRow}>
-                      <Text style={styles.titleText}>Start Time</Text>
-                    </View>
-                    <View style={styles.inputRow}>
-                      <Text style={styles.titleText}>End Time</Text>
-                    </View>
-                    <View style={styles.lastRow}>
-                      <Text style={styles.titleText}>Location</Text>
-                    </View>
-                  </View>
-                  <View style={styles.inputColumn}>
-                    <View style={styles.inputRow}>
-                      <TouchableOpacity onPress={this.showDatePicker}>
-                        <Text style={styles.inputText}>{`${this.dateDisplayConditional()}`}</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.inputRow}>
-                      <TouchableOpacity onPress={this.showStartTimePicker}>
-                        <Text style={styles.inputText}>{`${this.initTimeDisplay()}`}</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.inputRow}>
-                      <TouchableOpacity onPress={this.showEndTimePicker}>
-                        <Text style={styles.inputText}>{`${this.endTimeDisplay()}`}</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.lastRow}>
-                      <TextInput
-                        style={styles.inputText}
-                        onChangeText={text => this.setState({ userAddress: text })}
-                        value={userAddress}
-                        placeholder="Input Address"
-                        placeholderTextColor="#D3D3D3"
-                      />
-                    </View>
-                  </View>
-                </View>
-                <CheckBox
-                  center
-                  title="Is this a weekly availability?"
-                  checked={recurringCheck}
-                  onPress={() => this.setState({ recurringCheck: !recurringCheck })}
-                  onIconPress={() => this.setState({ recurringCheck: !recurringCheck })}
+        <View style={{ flex: 10 }}>
+          <Accordion
+            sections={SECTIONS}
+            activeSections={activeSections}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+            onChange={this.updateSections}
+            expandFromBottom
+          />
+          <View>
+            {isLoading ? (
+              this.renderLoader()
+            ) : (
+                <FlatList
+                  data={scheduleItems}
+                  extraData={this.state}
+                  renderItem={this.renderAgenda}
+                  keyExtractor={(item, index) => `list-item-${index}`}
                 />
+              )}
+          </View>
+          <Icon
+            name="plus-circle"
+            onPress={this.openForm}
+            style={styles.addButton}
+            size={72}
+            color="#ff8262"
+          />
+        </View>
+        <Overlay
+          isVisible={overlayVisible}
+          children={(
+            <View>
+              <View>
+                <Button
+                  onPress={this.showDatePicker}
+                  title="Select Available Date"
+                />
+                <Text>{`${this.dateDisplayConditional()}`}</Text>
               </View>
+              <View>
+                <Button
+                  onPress={this.showStartTimePicker}
+                  title="Select Start Time"
+                />
+                <Text>{`${this.initTimeDisplay()}`}</Text>
+              </View>
+              <View>
+                <Button
+                  onPress={this.showEndTimePicker}
+                  title="Select End Time"
+                />
+                <Text>{`${this.endTimeDisplay()}`}</Text>
+              </View>
+              <Input
+                placeholder="Please input your address"
+                onChangeText={text => this.setState({ userAddress: text })}
+              />
+              <CheckBox
+                center
+                title="Is this a weekly availability?"
+                checked={reoccurringCheck}
+                onPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
+                onIconPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
+              />
+              <Button
+                title="Submit"
+                onPress={this.handleAgendaSubmit}
+              />
               {/* Date Picker modals  */}
               <DateTimePicker
                 isVisible={datePickerVisibility}
@@ -179,173 +412,10 @@ export default class AgendaScreen extends Component {
                 is24Hour={false}
               />
             </View>
-            {/* Body */}
-          </View>
-        </Modal>
+          )}
+        />
 
-        {/* button that opens modal */}
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => { this.setModalVisible(true); }}
-        >
-          <Icon name="md-add-circle" size={72} color="#ff8262" />
-        </TouchableOpacity>
       </View>
     );
-  }
-
-  componentDidMount = () => {
-    this.generateDisplayDate();
-  }
-
-  showDatePicker = () => this.setState({ datePickerVisibility: true });
-
-  hideDatePicker = () => this.setState({ datePickerVisibility: false });
-
-  showStartTimePicker = () => this.setState({ startTimePickerVisibility: true });
-
-  hideStartTimePicker = () => this.setState({ startTimePickerVisibility: false });
-
-  showEndTimePicker = () => this.setState({ endTimePickerVisibility: true });
-
-  hideEndTimePicker = () => this.setState({ endTimePickerVisibility: false });
-
-  handleDatePicked = (date) => {
-    const newDate = this.convertDate(date);
-    this.setState({ availableDate: newDate });
-    this.hideDatePicker();
-  };
-
-  handleStartTimePicked = (time) => {
-    const convertedTime = this.convertTime(time);
-    this.setState({ initTime: convertedTime });
-    this.hideStartTimePicker();
-  };
-
-  handleEndTimePicked = (time) => {
-    const convertedTime = this.convertTime(time);
-    this.setState({ endTime: convertedTime });
-    this.hideEndTimePicker();
-  };
-
-  loadItems = (day) => {
-    const { items } = this.state;
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!items[strTime]) {
-          items[strTime] = [];
-        }
-      }
-      // console.log(items);
-      const newItems = {};
-      Object.keys(items).forEach((key) => { newItems[key] = items[key]; });
-
-      this.setState({
-        items: newItems,
-      });
-      // console.log('ayy', items);
-    }, 1000);
-    // console.log(`Load Items for ${day.year}-${day.month}`);
-  }
-
-  renderItem = item => (
-    <View style={[styles.item, { height: item.height }]}>
-      <Text>{item.name}</Text>
-    </View>
-  )
-
-  renderEmptyDate = () => (
-    <View style={styles.emptyDate}>
-      <Text>You have not scheduled anything for this day yet</Text>
-    </View>
-  )
-
-  rowHasChanged = (r1, r2) => r1.name !== r2.name
-
-  timeToString = (time) => {
-    const date = new Date(time);
-    return date.toISOString().split('T')[0];
-  }
-
-  convertDate = (date) => {
-    if (date) {
-      const convertedDate = moment(date).format('YYYY-MM-DD');
-      return convertedDate;
-    }
-    const convertedDate = moment().format('YYYY-MM-DD');
-    return convertedDate;
-  }
-
-  convertTime = (time) => {
-    const convertedTime = moment(time).format('h:mm a');
-    return convertedTime;
-  }
-
-  timeDifference = () => {
-    const { endTime, initTime } = this.state;
-    moment.utc(moment(endTime, 'h:mm a').diff(moment(initTime, 'h:mm a'))).format('H');
-  }
-
-  addToAgenda = () => {
-    const {
-      availableDate, initTime, endTime, items, userAddress,
-    } = this.state;
-    const newEvent = this.convertDate(availableDate);
-    console.log('new event', newEvent);
-    const newAgendaEntry = {
-      name: `Start Time: ${initTime} End Time: ${endTime} Location: ${userAddress}`,
-      height: this.timeDifference() * 20,
-    };
-    console.log('what is being added', newAgendaEntry);
-    items[newEvent].push(newAgendaEntry);
-    this.setState({ items });
-    // console.log('updated items', items);
-    this.stateClear();
-  }
-
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  }
-
-  checkBox = (checked) => {
-    this.setState({ recurringCheck: !checked });
-  }
-
-  generateDisplayDate = () => {
-    let todaysDate = new Date();
-    todaysDate = moment(todaysDate).format('ddd, MMMM Do, YYYY');
-    this.setState({ displayDate: todaysDate });
-  }
-
-  stateClear = () => {
-    this.setState({
-      availableDate: '',
-      initTime: '',
-      endTime: '',
-      userAddress: '',
-    });
-  }
-
-  dateDisplayConditional = () => {
-    const { displayDate, availableDate } = this.state;
-    if (!availableDate) {
-      return displayDate;
-    } return moment(availableDate).format('ddd, MMMM Do, YYYY');
-  }
-
-  initTimeDisplay = () => {
-    const { initTime } = this.state;
-    if (!initTime) {
-      return moment().format('hh:mm a');
-    } return initTime;
-  }
-
-  endTimeDisplay = () => {
-    const { endTime } = this.state;
-    if (!endTime) {
-      return moment().add(1, 'h').format('hh:mm a');
-    } return endTime;
   }
 }
