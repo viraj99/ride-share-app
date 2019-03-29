@@ -336,6 +336,7 @@ export default class App extends Component {
             ) : (
                 <FlatList
                   data={scheduleItems}
+                  extraData={this.state}
                   renderItem={this.renderAgenda}
                   keyExtractor={(item, index) => `list-item-${index}`}
                 />
