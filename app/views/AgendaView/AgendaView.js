@@ -74,7 +74,7 @@ export default class App extends Component {
 
       if (i === 0) {
         const firstMonth = moment(weekday).startOf('month');
-        console.log(firstMonth);
+//         console.log(firstMonth);
         const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
         weeks.push(initialMonth);
       }
@@ -144,7 +144,7 @@ export default class App extends Component {
   )
 
   renderAgenda = ({ item }) => {
-    console.log(item);
+//     console.log(item);
     const {
       startDate,
       endDate,
@@ -279,12 +279,11 @@ export default class App extends Component {
         const repeatingItem = new ScheduleItem('availability', newDate, newEndTime, newTimestamp, newTimestamp, newEndTime, userAddress, reoccurringCheck);
         arr.push(repeatingItem);
         arr = arr.sort(this.organizeArray);
-      } console.log('arr', arr);
+      }
     } else {
       const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
       arr.push(newAvailability);
       arr = arr.sort(this.organizeArray);
-      console.log('arr', arr);
     }
     this.setState({
       overlayVisible: !overlayVisible,
@@ -402,13 +401,6 @@ export default class App extends Component {
                 mode="datetime"
                 is24Hour={false}
               />
-              {/* <DateTimePicker
-                isVisible={endTimePickerVisibility}
-                onConfirm={this.handleEndTimePicked}
-                onCancel={this.hideEndTimePicker}
-                mode="time"
-                is24Hour={false}
-              /> */}
             </View>
           )}
         />
