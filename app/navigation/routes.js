@@ -39,6 +39,13 @@ const MainViewStack = createStackNavigator(
     },
     RideView: {
       screen: RideView,
+      navigationOptions: {
+        headerTitle: 'Ride Overview',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
+      },
     },
     DriverScheduleView: {
       screen: DriverScheduleView,
@@ -53,6 +60,7 @@ const MainViewStack = createStackNavigator(
 
   {
     headerMode: 'screen',
+    headerBackTitleVisible: false,
   },
 );
 
@@ -83,4 +91,4 @@ const AppStackNavigator = createSwitchNavigator(
   },
 );
 
-export default createAppContainer(AppStack);
+export default createAppContainer(AppStackNavigator);
