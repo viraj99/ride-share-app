@@ -1,5 +1,8 @@
 import UpcomingRideCard from './UpcomingRideCard/UpcomingRideCard';
 import RequestedRideCard from './RequestRidesCard/RequestedRidesCard';
-import styles from './UpcomingRideCard/styles';
+import InitOverviewCard from './InitOverviewCard/InitOverviewCard';
+import RideOverviewCard from './RideOverviewCard/RideOverviewCard';
 
-export { UpcomingRideCard, RequestedRideCard, styles };
+export {
+  UpcomingRideCard, RequestedRideCard, RideOverviewCard, InitOverviewCard,
+};

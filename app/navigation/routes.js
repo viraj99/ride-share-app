@@ -39,6 +39,13 @@ const MainViewStack = createStackNavigator(
     },
     RideView: {
       screen: RideView,
+      navigationOptions: {
+        headerTitle: 'Ride Overview',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
+      },
     },
     DriverScheduleView: {
       screen: DriverScheduleView,
@@ -67,6 +74,7 @@ const MainViewStack = createStackNavigator(
 
   {
     headerMode: 'screen',
+    headerBackTitleVisible: false,
   },
 );
 
