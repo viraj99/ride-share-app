@@ -169,13 +169,17 @@ export default class MainView extends Component<Props> {
   };
 
   navigateToDriverSchedule = () => {
+    // takes me to ALL schedules rides
+    const { scheduledRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('DriverScheduleView');
+    navigation.navigate('DriverScheduleView', { scheduledRides });
   };
 
   navigateToRidesRequested = () => {
+    // takes me to ALL approved rides
+    const { approvedRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('RidesRequested');
+    navigation.navigate('RidesRequested', { approvedRides });
   };
 
   navigateToDetails = () => {
@@ -187,7 +191,7 @@ export default class MainView extends Component<Props> {
     const { loading } = this.state;
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
         <Header onPress={this.navigateToSettings} />
         {loading ? (
           this.renderLoader()
