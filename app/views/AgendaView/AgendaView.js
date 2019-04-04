@@ -48,6 +48,8 @@ export default class App extends Component {
     displayDate: '',
     userAddress: '',
     reoccurringCheck: false,
+    temporaryDate: false,
+    tempDateIndex: undefined,
   }
 
 
@@ -72,24 +74,24 @@ export default class App extends Component {
       const monthEnd = moment(end).add(1, 'd');
       const betweenMonth = moment(end);
 
-      if (i === 0) {
-        const firstMonth = moment(weekday).startOf('month');
-//         console.log(firstMonth);
-        const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
-        weeks.push(initialMonth);
-      }
+      // if (i === 0) {
+      //   const firstMonth = moment(weekday).startOf('month');
+      //   //         console.log(firstMonth);
+      //   const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
+      //   weeks.push(initialMonth);
+      // }
       if (moment(end).isSame(moment(start).endOf('month'))) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${monthEnd.format('X')}`, 'none', `${monthEnd.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${monthEnd.format('MMM D')}`, 'none', `${monthEnd.format('X')}`);
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() !== moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('X')}`, 'none', `${betweenMonth.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('MMM D')}`, 'none', `${betweenMonth.format('X')}`);
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() === moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
         weeks.push(newWeek);
       }
     }
@@ -139,12 +141,38 @@ export default class App extends Component {
     <View>
       <Calendar
         onMonthChange={(month) => { console.log(month); }}
+        onDayPress={day => this.dayPressHandler(day)}
       />
     </View>
   )
 
+  dayPressHandler = (day) => {
+    const { scheduleItems } = this.state;
+    const dayClicked = moment(day.dateString).startOf('day').format('MMM D');
+    const emptyDay = new Schedule('emptyDay', dayClicked, undefined, moment(dayClicked).format('X'));
+
+    const arr = scheduleItems;
+    arr.push(emptyDay);
+    arr.sort(this.organizeArray);
+
+    const indexOfDay = this.findDayIndex(arr, 'startDate', dayClicked);
+    this.setState({ temporaryDate: true, tempDateIndex: indexOfDay });
+    this.flatListRef.scrollToIndex({ animated: true, index: indexOfDay });
+  }
+
+  findDayIndex = (arr, attr, value) => {
+    for (let i = 0; i < arr.length; i += 1) {
+      console.log('compared values', arr[i][attr], value);
+      if (moment(arr[i][attr]).isSame(value, 'day')) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+
   renderAgenda = ({ item }) => {
-//     console.log(item);
+    //     console.log(item);
     const {
       startDate,
       endDate,
@@ -156,7 +184,7 @@ export default class App extends Component {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Text>
-            {moment(startDate, 'X').format('MMM D')}
+            {moment(startDate).format('MMM D')}
             {' '}
             -
             {' '}
@@ -167,7 +195,7 @@ export default class App extends Component {
     } if (item.type === 'monthHeader') {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text>{moment(startDate, 'X').format('MMMM')}</Text>
+          <Text>{moment(startDate).format('MMMM')}</Text>
         </View>
       );
     } if (item.type === 'availability') {
@@ -200,6 +228,20 @@ export default class App extends Component {
           </Text>
         </View>
       );
+    } if (item.type === 'emptyDay') {
+      return (
+        <View style={{ borderWidth: 1, borderColor: 'black' }}>
+          <Text>
+            date
+            {' '}
+            {moment(startTime, 'X').format('MMM Do')}
+          </Text>
+          <Text>
+            empty day homie
+          </Text>
+
+        </View>
+      );
     }
   }
 
@@ -219,15 +261,13 @@ export default class App extends Component {
 
   hideEndTimePicker = () => this.setState({ endPickerVisibility: false });
 
-  // handleDatePicked = (date) => {
-  //   const newDate = moment(date).format('X');
-  //   this.setState({ availableDate: newDate });
-  //   this.hideDatePicker();
-  // };
-
   handleStartTimePicker = (time) => {
     const convertedTime = moment(time).format('X');
-    this.setState({ initTime: convertedTime });
+    const date = moment(time).startOf('day').format('X');
+    this.setState({
+      initTime: convertedTime,
+      availableDate: date,
+    });
     this.hideStartTimePicker();
   };
 
@@ -282,6 +322,7 @@ export default class App extends Component {
       }
     } else {
       const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
+      console.log(newAvailability);
       arr.push(newAvailability);
       arr = arr.sort(this.organizeArray);
     }
@@ -333,6 +374,7 @@ export default class App extends Component {
           <View>
             <FlatList
               data={scheduleItems}
+              ref={(ref) => { this.flatListRef = ref; }}
               renderItem={this.renderAgenda}
               extraData={this.state}
               keyExtractor={(item, index) => `list-item-${index}`}

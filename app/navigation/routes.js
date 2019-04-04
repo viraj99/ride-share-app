@@ -91,4 +91,4 @@ const AppStackNavigator = createSwitchNavigator(
   },
 );
 
-export default createAppContainer(AppStackNavigator);
+export default createAppContainer(AppStack);
