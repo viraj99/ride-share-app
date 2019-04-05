@@ -13,6 +13,7 @@ import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './AgendaStyles';
 import Schedule from './Schedule';
+import { MonthHeader, EmptyDay } from '../../components/ScheduleItems';
 
 
 const SECTIONS = [
@@ -21,8 +22,9 @@ const SECTIONS = [
     content: 'Lorem ipsum...',
     header: 'header',
   },
-
 ];
+
+const format = day => moment(day).format('X');
 
 class ScheduleItem extends Schedule {
   constructor(type, startDate, endDate, timestamp, startTime, endTime, location, reoccurring) {
@@ -45,74 +47,143 @@ export default class App extends Component {
     initTime: '',
     endTime: '',
     availableDate: '',
-    displayDate: '',
     userAddress: '',
     reoccurringCheck: false,
+    temporaryDate: false,
+    tempDateIndex: undefined,
+    todayRendered: false,
   }
 
+  componentDidMount = () => {
+    console.log('COMPONENT DID MOUNT');
+    console.log('--------------------');
+    this.populateAgenda();
+  }
 
+  // this function needs integration with Calendar component
   displayCurrentMonth = (month) => {
     let currentMonth = month.dateString;
     currentMonth = moment(currentMonth).format('MMMM YYYY');
     return currentMonth;
   }
 
-  generateDisplayDate = () => {
-    const today = moment().format('ddd, MMMM Do, YYYY');
-    this.setState({ displayDate: today });
-  }
-
+  // creating initial array of elements to appear in flatlist
   populateAgenda = () => {
     const weeks = [];
 
-    for (let i = 0; i <= 30; i++) {
+    for (let i = 0; i <= 30; i += 1) {
       const weekday = moment().add(i, 'w');
       const start = moment(weekday).startOf('week');
       const end = moment(weekday).endOf('week');
-      const monthEnd = moment(end).add(1, 'd');
+      let monthEnd = moment(end).add(1, 'd');
       const betweenMonth = moment(end);
 
-      if (i === 0) {
-        const firstMonth = moment(weekday).startOf('month');
-//         console.log(firstMonth);
-        const initialMonth = new Schedule('monthHeader', `${firstMonth.format('X')}`, 'none', `${firstMonth.format('X')}`);
-        weeks.push(initialMonth);
-      }
+      monthEnd = moment(monthEnd).startOf('month');
+
       if (moment(end).isSame(moment(start).endOf('month'))) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${monthEnd.format('X')}`, 'none', `${monthEnd.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${monthEnd.format('MMMM YYYY')}`, 'none', `${monthEnd.format('X')}`);
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() !== moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('X')}`, 'none', `${betweenMonth.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('MMMM YYYY')}`, 'none', `${betweenMonth.format('X')}`);
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() === moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('X')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
         weeks.push(newWeek);
       }
     }
+
     this.setState({
       scheduleItems: weeks,
+    }, () => {
+      this.initialDayRender();
     });
   }
 
-  componentDidMount = () => {
-    this.populateAgenda();
-    this.generateDisplayDate();
+  // keeping array in chronological order
+  organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X');
+
+  // on first load, today's date is displayed and is at top of view
+  initialDayRender = () => {
+    const { scheduleItems, todayRendered } = this.state;
+    const today = moment().startOf('day');
+
+    if (!todayRendered && scheduleItems) {
+      const initialDay = new Schedule('emptyDay', today, undefined, format(today));
+
+      scheduleItems.push(initialDay);
+      scheduleItems.sort(this.organizeArray);
+
+      this.setState({ scheduleItems });
+
+      const indexOfDay = this.findDayIndex(scheduleItems, 'startDate', today);
+      this.setState({
+        temporaryDate: true,
+        tempDateIndex: indexOfDay,
+      }, () => {
+        // this keeps failing
+        this.flatListRef.scrollToIndex({ animated: false, index: indexOfDay, viewPosition: 0 });
+      });
+
+      this.setState({ todayRendered: true });
+    } else console.log('else hit');
   }
 
-  // componentDidUpdate = () => {
+  // adding temporary day when date in calendar selected
+  dayPressHandler = (day) => {
+    const { scheduleItems, temporaryDate, tempDateIndex } = this.state;
+    const arr = scheduleItems;
+    if (temporaryDate && tempDateIndex > -1) {
+      arr.splice(tempDateIndex, 1);
+      this.setState({
+        temporaryDate: false,
+        tempDateIndex: undefined,
+      });
+    }
+    const dayClicked = moment(day.dateString).startOf('day');
+    console.log(moment(dayClicked));
+    const emptyDay = new Schedule('emptyDay', dayClicked, undefined, moment(dayClicked).format('X'));
+    console.log(emptyDay);
 
-  // }
-  // onAnimationEnd = () => {
-  //   const isCollapsed = this.state;
-  //   console.log('before', isCollapsed);
-  //   this.setState({ isCollapsed: !isCollapsed });
-  //   console.log('after', isCollapsed);
-  // }
+    arr.push(emptyDay);
+    arr.sort(this.organizeArray);
 
+    const indexOfDay = this.findDayIndex(arr, 'startDate', dayClicked);
+    this.setState({
+      temporaryDate: true,
+      tempDateIndex: indexOfDay,
+    });
+    this.flatListRef.scrollToIndex({
+      animated: true,
+      index: indexOfDay,
+      viewPosition: 0.1,
+    });
+  }
+
+  // helper function to remove index of temporary day
+  findDayIndex = (arr, attr, value) => {
+    for (let i = 0; i < arr.length; i += 1) {
+      if (moment(arr[i][attr]).isSame(value, 'day')) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  // what is displayed in accordion
+  renderContent = () => (
+    <View>
+      <Calendar
+        onMonthChange={(month) => { console.log(month); }}
+        onDayPress={day => this.dayPressHandler(day)}
+      />
+    </View>
+  )
+
+  // collapsing tab render for accordion. need to change to ternary operator and export styles
   renderHeader = (item, _, isActive) => {
     if (!isActive) {
       return (
@@ -134,17 +205,13 @@ export default class App extends Component {
     );
   }
 
+  // accordion stuff
+  updateSections = (activeSections) => {
+    this.setState({ activeSections });
+  };
 
-  renderContent = () => (
-    <View>
-      <Calendar
-        onMonthChange={(month) => { console.log(month); }}
-      />
-    </View>
-  )
-
+  // flatlist render function, need to turn these into components
   renderAgenda = ({ item }) => {
-//     console.log(item);
     const {
       startDate,
       endDate,
@@ -156,7 +223,7 @@ export default class App extends Component {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Text>
-            {moment(startDate, 'X').format('MMM D')}
+            {moment(startDate).format('MMM D')}
             {' '}
             -
             {' '}
@@ -166,9 +233,9 @@ export default class App extends Component {
       );
     } if (item.type === 'monthHeader') {
       return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text>{moment(startDate, 'X').format('MMMM')}</Text>
-        </View>
+        <MonthHeader
+          month={startDate}
+        />
       );
     } if (item.type === 'availability') {
       return (
@@ -200,17 +267,22 @@ export default class App extends Component {
           </Text>
         </View>
       );
+    } if (item.type === 'emptyDay') {
+      console.log(startDate);
+      return (
+        <EmptyDay
+          date={startDate}
+        />
+      );
     }
   }
 
-  updateSections = (activeSections) => {
-    this.setState({ activeSections });
-  };
-
+  // Modal open
   openForm = () => {
     this.setState({ overlayVisible: true });
   }
 
+  // following functions handle date picker visibility
   showStartTimePicker = () => this.setState({ startPickerVisibility: true });
 
   hideStartTimePicker = () => this.setState({ startPickerVisibility: false });
@@ -219,15 +291,14 @@ export default class App extends Component {
 
   hideEndTimePicker = () => this.setState({ endPickerVisibility: false });
 
-  // handleDatePicked = (date) => {
-  //   const newDate = moment(date).format('X');
-  //   this.setState({ availableDate: newDate });
-  //   this.hideDatePicker();
-  // };
-
+  // onSubmit handlers
   handleStartTimePicker = (time) => {
     const convertedTime = moment(time).format('X');
-    this.setState({ initTime: convertedTime });
+    const date = moment(time).startOf('day').format('X');
+    this.setState({
+      initTime: convertedTime,
+      availableDate: date,
+    });
     this.hideStartTimePicker();
   };
 
@@ -237,13 +308,7 @@ export default class App extends Component {
     this.hideEndTimePicker();
   };
 
-  // dateDisplayConditional = () => {
-  //   const { displayDate, availableDate } = this.state;
-  //   if (!availableDate) {
-  //     return displayDate;
-  //   } return moment(availableDate, 'X').format('ddd, MMMM Do, YYYY');
-  // }
-
+  // time displayed for user
   initTimeDisplay = () => {
     const { initTime } = this.state;
     if (!initTime) {
@@ -258,6 +323,7 @@ export default class App extends Component {
     } return moment(endTime, 'X').format('h:mm a');
   }
 
+  // adding new schedule items to array
   handleAgendaSubmit = () => {
     const {
       availableDate,
@@ -269,10 +335,15 @@ export default class App extends Component {
       overlayVisible,
     } = this.state;
 
+    // need better handling for this
+    if (!availableDate || !initTime || !endTime || !userAddress) {
+      alert('please finish form');
+    }
+
     let arr = scheduleItems;
 
     if (reoccurringCheck) {
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 12; i += 1) {
         const newDate = moment(availableDate, 'X').add(i, 'w');
         const newTimestamp = moment(initTime, 'X').add(i, 'w');
         const newEndTime = moment(endTime, 'X').add(i, 'w');
@@ -282,6 +353,7 @@ export default class App extends Component {
       }
     } else {
       const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
+      // console.log(newAvailability);
       arr.push(newAvailability);
       arr = arr.sort(this.organizeArray);
     }
@@ -295,10 +367,6 @@ export default class App extends Component {
       reoccurringCheck: undefined,
     });
   }
-
-
-  organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X');
-
 
   render() {
     const {
@@ -332,7 +400,10 @@ export default class App extends Component {
           />
           <View>
             <FlatList
+              onScrollToIndexFailed={() => { console.log('scroll failed'); }}
+              style={styles.flatlistContainer}
               data={scheduleItems}
+              ref={(ref) => { this.flatListRef = ref; }}
               renderItem={this.renderAgenda}
               extraData={this.state}
               keyExtractor={(item, index) => `list-item-${index}`}

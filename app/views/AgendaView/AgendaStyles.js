@@ -13,5 +13,8 @@ export default StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
+  flatlistContainer: {
+    backgroundColor: '#fcfcf6',
+  },
 
 });
