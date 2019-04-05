@@ -65,7 +65,7 @@ const MainViewStack = createStackNavigator(
 );
 
 const AppStack = createStackNavigator(
-  { Home: MainViewStack },
+  { Home: AgendaView },
   {
     headerMode: 'none',
     navigationOptions: {
