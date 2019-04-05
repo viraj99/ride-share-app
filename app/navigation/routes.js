@@ -65,7 +65,7 @@ const MainViewStack = createStackNavigator(
 );
 
 const AppStack = createStackNavigator(
-  { Home: AgendaView },
+  { Home: MainViewStack },
   {
     headerMode: 'none',
     navigationOptions: {
@@ -91,4 +91,4 @@ const AppStackNavigator = createSwitchNavigator(
   },
 );
 
-export default createAppContainer(AppStack);
+export default createAppContainer(AppStackNavigator);
