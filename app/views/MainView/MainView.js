@@ -30,20 +30,34 @@ export default class MainView extends Component<Props> {
     this.setState({ loading: true });
     API.getScheduledRides()
       .then((res) => {
-        this.setState({
-          scheduledRides: res,
-          loading: false,
-        });
+        if (res.ok) {
+          this.setState({
+            scheduledRides: res,
+            loading: false,
+          });
+        } else {
+          this.setState({
+            scheduledRides: [],
+            loading: false,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
       });
     API.getApprovedRides()
       .then((res) => {
-        this.setState({
-          approvedRides: res,
-          loading: false,
-        });
+        if (res.ok) {
+          this.setState({
+            approvedRides: res,
+            loading: false,
+          });
+        } else {
+          this.setState({
+            approvedRides: [],
+            loading: false,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
