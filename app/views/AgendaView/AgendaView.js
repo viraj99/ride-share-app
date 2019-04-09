@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import {
   Text, View, FlatList,
@@ -13,7 +12,7 @@ import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './AgendaStyles';
 import Schedule from './Schedule';
-import { MonthHeader, EmptyDay } from '../../components/ScheduleItems';
+import { MonthHeader, EmptyDay, WeekHeader } from '../../components/ScheduleItems';
 
 
 const SECTIONS = [
@@ -120,13 +119,7 @@ export default class App extends Component {
       this.setState({ scheduleItems });
 
       const indexOfDay = this.findDayIndex(scheduleItems, 'startDate', today);
-      this.setState({
-        temporaryDate: true,
-        tempDateIndex: indexOfDay,
-      }, () => {
-        // this keeps failing
-        this.flatListRef.scrollToIndex({ animated: false, index: indexOfDay, viewPosition: 0 });
-      });
+      this.flatListRef.scrollToIndex({ animated: false, index: indexOfDay, viewPosition: 0 });
 
       this.setState({ todayRendered: true });
     } else console.log('else hit');
@@ -221,15 +214,10 @@ export default class App extends Component {
 
     if (item.type === 'weekHeader') {
       return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text>
-            {moment(startDate).format('MMM D')}
-            {' '}
-            -
-            {' '}
-            {moment(endDate, 'X').format('MMM D')}
-          </Text>
-        </View>
+        <WeekHeader
+          start={startDate}
+          end={endDate}
+        />
       );
     } if (item.type === 'monthHeader') {
       return (
