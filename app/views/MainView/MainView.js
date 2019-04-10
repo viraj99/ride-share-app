@@ -187,14 +187,14 @@ export default class MainView extends Component<Props> {
     // takes me to ALL schedules rides
     const { scheduledRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('DriverScheduleView', { scheduledRides });
+    navigation.navigate('DriverScheduleView', { CustomRidesData });
   };
 
   navigateToRidesRequested = () => {
     // takes me to ALL approved rides
     const { approvedRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('RidesRequested', { approvedRides });
+    navigation.navigate('RidesRequested', { CustomRidesData });
   };
 
   navigateToDetails = () => {

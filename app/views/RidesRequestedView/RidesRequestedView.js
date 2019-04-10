@@ -4,7 +4,7 @@ import { RideListItem } from '../../components/RideListItem';
 
 const RidesRequestedView = (props) => {
   const { navigation } = props;
-  const approvedRides = navigation.getParam('approvedRides');
+  const approvedRides = navigation.getParam('CustomRidesData');
 
   keyExtractor = item => item.id.toString();
 

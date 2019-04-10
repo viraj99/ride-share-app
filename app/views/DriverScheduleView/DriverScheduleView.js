@@ -4,7 +4,7 @@ import { RideListItem } from '../../components/RideListItem';
 
 const DriverScheduleView = (props) => {
   const { navigation } = props;
-  const scheduledRides = navigation.getParam('scheduledRides');
+  const scheduledRides = navigation.getParam('CustomRidesData');
 
   keyExtractor = item => item.id.toString();
 
