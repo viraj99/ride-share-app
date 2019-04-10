@@ -69,6 +69,13 @@ const MainViewStack = createStackNavigator(
     },
     RequestedRidesDetails: {
       screen: RequestedRidesDetails,
+      navigationOptions: {
+        headerTitle: 'Requested Rides Details',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
+      },
     },
   },
 
