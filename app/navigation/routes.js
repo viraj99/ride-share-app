@@ -29,6 +29,10 @@ const MainViewStack = createStackNavigator(
 
       navigationOptions: {
         headerTitle: 'Calendar',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
       },
     },
     Settings: {
