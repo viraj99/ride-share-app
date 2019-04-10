@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "pickupTime": "2019-02-07 18:00",
+    "riderName": "John Smith",
+    "riderPhone": "919-123-4567",
+    "state": "approved",
+    "pickupLocation": {
+      "street_address": "123 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    },
+    "dropoffLocation": {
+      "street_address": "124 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    }
+  },
+  {
+    "id": 2,
+    "pickupTime": "2019-02-07 18:00",
+    "riderName": "Amy Smith",
+    "riderPhone": "919-123-4568",
+    "state": "approved",
+    "pickupLocation": {
+      "street_address": "124 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    },
+    "dropoffLocation": {
+      "street_address": "123 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    }
+  },
+  {
+    "id": 3,
+    "pickupTime": "2019-02-07 18:00",
+    "riderName": "Nicholas Snow",
+    "riderPhone": "919-124-4568",
+    "state": "pending",
+    "pickupLocation": {
+      "street_address": "124 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    },
+    "dropoffLocation": {
+      "street_address": "123 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    }
+  },
+  {
+    "id": 4,
+    "pickupTime": "2019-02-07 18:00",
+    "riderName": "Flor Snow",
+    "riderPhone": "919-124-4568",
+    "state": "scheduled",
+    "pickupLocation": {
+      "street_address": "124 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    },
+    "dropoffLocation": {
+      "street_address": "123 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    }
+  },
+  {
+    "id": 5,
+    "pickupTime": "2019-02-07 18:00",
+    "riderName": "Bob Snow",
+    "riderPhone": "919-124-4568",
+    "state": "scheduled",
+    "pickupLocation": {
+      "street_address": "124 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    },
+    "dropoffLocation": {
+      "street_address": "123 Pine St.",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27609"
+    }
+  }
+]

@@ -13,6 +13,7 @@ import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
 import { CalendarButton } from '../../components/Button';
 import styles from './styles';
 import API from '../../api/api';
+import CustomRidesData from '../../api/customData.json';
 
 type Props = {};
 
@@ -81,7 +82,7 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
-    const card = approvedRides.map(item => (
+    const card = CustomRidesData.map(item => (
       <RequestedRideCard
         key={item.id}
         onPress={this.navigateToDetails}
@@ -91,7 +92,7 @@ export default class MainView extends Component<Props> {
         dropoffLocation={item.dropoffLocation.city}
       />
     ));
-    const numRides = approvedRides.length;
+    const numRides = CustomRidesData.length;
     const seeAll = `See All (${numRides})`;
 
     if (numRides > 0) {
@@ -130,7 +131,7 @@ export default class MainView extends Component<Props> {
 
   renderUpcomingSchedule = () => {
     const { scheduledRides } = this.state;
-    const card = scheduledRides.map(item => (
+    const card = CustomRidesData.map(item => (
       <UpcomingRideCard
         key={item.id}
         onPress={this.navigateToRideView}
@@ -140,7 +141,7 @@ export default class MainView extends Component<Props> {
       />
     ));
 
-    if (scheduledRides.length > 0) {
+    if (CustomRidesData.length > 0) {
       return (
         <View style={{ flex: 2 }}>
           <View style={styles.titleWrapper}>
