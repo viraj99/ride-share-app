@@ -256,7 +256,6 @@ export default class App extends Component {
         </View>
       );
     } if (item.type === 'emptyDay') {
-      console.log(startDate);
       return (
         <EmptyDay
           date={startDate}
@@ -266,8 +265,15 @@ export default class App extends Component {
   }
 
   // Modal open
-  openForm = () => {
-    this.setState({ overlayVisible: true });
+  toggleForm = () => {
+    const overlayVisible = this.state;
+    if (overlayVisible === true) {
+      console.log('hi');
+      this.setState({ overlayVisible: false });
+    } else {
+      console.log('sup');
+      this.setState({ overlayVisible: true });
+    }
   }
 
   // following functions handle date picker visibility
@@ -325,7 +331,7 @@ export default class App extends Component {
 
     // need better handling for this
     if (!availableDate || !initTime || !endTime || !userAddress) {
-      alert('please finish form');
+      console.log('form not completed, do something before you delete this log');
     }
 
     let arr = scheduleItems;
@@ -399,7 +405,7 @@ export default class App extends Component {
           </View>
           <Icon
             name="plus-circle"
-            onPress={this.openForm}
+            onPress={this.toggleForm}
             style={styles.addButton}
             size={72}
             color="#ff8262"
@@ -407,6 +413,7 @@ export default class App extends Component {
         </View>
         <Overlay
           isVisible={overlayVisible}
+          onBackdropPress={() => { this.setState({ overlayVisible: false }); }}
           children={(
             <View>
               <View>

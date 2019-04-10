@@ -9,14 +9,6 @@ export default StyleSheet.create({
     // padding: 10,
     justifyContent: 'space-between',
   },
-  dateContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginVertical: 5,
-    marginLeft: 12,
-
-  },
   contentContainer: {
     flex: 8,
     marginHorizontal: 10,
@@ -32,14 +24,6 @@ export default StyleSheet.create({
     // shadowOpacity: 0.23,
     // shadowRadius: 2.62,
     // elevation: 4,
-  },
-  dateAbbrev: {
-    color: '#808080',
-    fontSize: 16,
-  },
-  dateNumber: {
-    marginTop: 3,
-    fontSize: 20,
   },
   emptyText: {
     color: '#808080',
