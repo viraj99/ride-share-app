@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     marginVertical: 5,
-    marginLeft: 12,
+    marginLeft: 9,
   },
   dateAbbrev: {
     color: '#808080',
@@ -15,5 +15,6 @@ export default StyleSheet.create({
   dateNumber: {
     marginTop: 3,
     fontSize: 20,
+    color: 'black',
   },
 });

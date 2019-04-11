@@ -26,9 +26,8 @@ const MainViewStack = createStackNavigator(
     },
     AgendaView: {
       screen: AgendaView,
-
       navigationOptions: {
-        headerTitle: 'Calendar',
+        header: () => null,
       },
     },
     Settings: {
