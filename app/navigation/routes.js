@@ -104,4 +104,4 @@ const AppStackNavigator = createSwitchNavigator(
   },
 );
 
-export default createAppContainer(AppStack);
+export default createAppContainer(AppStackNavigator);
