@@ -12,7 +12,9 @@ import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './AgendaStyles';
 import Schedule from './Schedule';
-import { MonthHeader, EmptyDay, WeekHeader } from '../../components/ScheduleItems';
+import {
+  MonthHeader, EmptyDay, WeekHeader, HeaderArrow, Availability,
+} from '../../components/ScheduleItems';
 
 
 const SECTIONS = [
@@ -36,26 +38,30 @@ class ScheduleItem extends Schedule {
 }
 
 
-export default class App extends Component {
-  state = {
-    activeSections: [],
-    scheduleItems: [],
-    overlayVisible: false,
-    startPickerVisibility: false,
-    endPickerVisibility: false,
-    initTime: '',
-    endTime: '',
-    availableDate: '',
-    userAddress: '',
-    reoccurringCheck: false,
-    temporaryDate: false,
-    tempDateIndex: undefined,
-    todayRendered: false,
+export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSections: [],
+      scheduleItems: [],
+      overlayVisible: false,
+      startPickerVisibility: false,
+      endPickerVisibility: false,
+      initTime: '',
+      endTime: '',
+      availableDate: '',
+      userAddress: '',
+      reoccurringCheck: false,
+      temporaryDate: false,
+      tempDateIndex: undefined,
+      todayRendered: false,
+    };
   }
 
   componentDidMount = () => {
     console.log('COMPONENT DID MOUNT');
     console.log('--------------------');
+    console.log(this.props);
     this.populateAgenda();
   }
 
@@ -70,13 +76,14 @@ export default class App extends Component {
   populateAgenda = () => {
     const weeks = [];
 
-    for (let i = 0; i <= 30; i += 1) {
+    for (let i = -5; i <= 30; i += 1) {
       const weekday = moment().add(i, 'w');
       const start = moment(weekday).startOf('week');
       const end = moment(weekday).endOf('week');
       let monthEnd = moment(end).add(1, 'd');
-      const betweenMonth = moment(end);
+      let betweenMonth = moment(end);
 
+      betweenMonth = moment(betweenMonth).startOf('month');
       monthEnd = moment(monthEnd).startOf('month');
 
       if (moment(end).isSame(moment(start).endOf('month'))) {
@@ -181,7 +188,18 @@ export default class App extends Component {
     if (!isActive) {
       return (
         <View style={{
-          backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2,
+          backgroundColor: '#1EAA70',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: -2,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         }}
         >
           <Icon name="angle-down" color="white" size={20} />
@@ -190,7 +208,18 @@ export default class App extends Component {
     }
     return (
       <View style={{
-        backgroundColor: '#1EAA70', alignItems: 'center', justifyContent: 'center', marginTop: -2,
+        backgroundColor: '#1EAA70',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: -2,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
       }}
       >
         <Icon name="angle-up" color="white" size={20} />
@@ -210,6 +239,8 @@ export default class App extends Component {
       endDate,
       endTime,
       startTime,
+      location,
+      reoccurring,
     } = item;
 
     if (item.type === 'weekHeader') {
@@ -227,38 +258,19 @@ export default class App extends Component {
       );
     } if (item.type === 'availability') {
       return (
-        <View style={{ borderWidth: 1, borderColor: 'black' }}>
-          <Text>
-            date
-            {' '}
-            {moment(startTime, 'X').format('MMM Do')}
-          </Text>
-          <Text>
-            start time
-            {' '}
-            {moment(startTime, 'X').format('h:mm a')}
-          </Text>
-          <Text>
-            end time
-            {' '}
-            {moment(endTime, 'X').format('h:mm a')}
-          </Text>
-          <Text>
-            address
-            {' '}
-            {item.location}
-          </Text>
-          <Text>
-            reoccurring?
-            {' '}
-            {item.reoccurring}
-          </Text>
-        </View>
+        <Availability
+          date={startDate}
+          initTime={startTime}
+          endTime={endTime}
+          location={location}
+          reoccurring={reoccurring}
+        />
       );
     } if (item.type === 'emptyDay') {
       return (
         <EmptyDay
           date={startDate}
+          onPress={this.toggleForm}
         />
       );
     }
@@ -362,6 +374,12 @@ export default class App extends Component {
     });
   }
 
+  navigateBack = () => {
+    const { navigation } = this.props;
+    console.log(navigation);
+    navigation.navigate('MainView');
+  }
+
   render() {
     const {
       reoccurringCheck,
@@ -378,8 +396,8 @@ export default class App extends Component {
             flex: 1,
             backgroundColor: '#1EAA70',
           }}
-          // leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: `${moment().format('MMMM YYYY')}`, style: { color: '#fff', fontSize: 24 } }}
+          leftComponent={<HeaderArrow onPress={this.navigateBack} />}
+          centerComponent={{ text: 'Agenda', style: { color: '#fff', fontSize: 24, fontWeight: 'bold' } }}
         // rightComponent={{ icon: 'home', color: '#fff' }}
         />
         <View style={{ flex: 10 }}>
@@ -408,40 +426,38 @@ export default class App extends Component {
             onPress={this.toggleForm}
             style={styles.addButton}
             size={72}
-            color="#ff8262"
+            color="#1EAA70"
           />
         </View>
         <Overlay
+          height={280}
           isVisible={overlayVisible}
           onBackdropPress={() => { this.setState({ overlayVisible: false }); }}
           children={(
-            <View>
-              <View>
+            <View style={styles.overlayContainer}>
+              <View style={styles.inputRow}>
                 <Button
                   onPress={this.showStartTimePicker}
                   title="Select Start Time"
+                  buttonStyle={styles.formButton}
                 />
-                <Text>{`${this.initTimeDisplay()}`}</Text>
+                <Text style={styles.timeText}>{`${this.initTimeDisplay()}`}</Text>
               </View>
-              <View>
+              <View style={styles.inputRow}>
                 <Button
                   onPress={this.showEndTimePicker}
                   title="Select End Time"
+                  buttonStyle={styles.formButton}
                 />
-                <Text>{`${this.endTimeDisplay()}`}</Text>
+                <Text style={styles.timeText}>{`${this.endTimeDisplay()}`}</Text>
               </View>
-              {/* <View>
-                <Button
-                  onPress={this.showEndTimePicker}
-                  title="Select End Time"
-                />
-                <Text>{}</Text>
-              </View> */}
               <Input
+                style={{ margin: 5 }}
                 placeholder="Please input your address"
                 onChangeText={text => this.setState({ userAddress: text })}
               />
               <CheckBox
+                style={{ margin: 5 }}
                 center
                 title="Is this a weekly availability?"
                 checked={reoccurringCheck}
@@ -451,6 +467,8 @@ export default class App extends Component {
               <Button
                 title="Submit"
                 onPress={this.handleAgendaSubmit}
+                buttonStyle={styles.formButton}
+                style={{ margin: 5 }}
               />
               {/* Date Picker modals  */}
               <DateTimePicker
