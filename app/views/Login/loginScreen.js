@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import styles from './loginStyle.js';
 import logo from './route.png';
+import API from '../../api/api';
 
 class Login extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class Login extends Component {
     this.inputs = {};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateUsername = this.validateUsername.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   handleUsername = (text) => {
@@ -48,32 +50,25 @@ class Login extends Component {
     });
   }
 
-  handleSubmit(user, pass) {
+  handleSubmit() {
+    const { user, pass } = this.state;
     const { navigation } = this.props;
-    const LOGIN = `https://b199aed0-ba7a-4eaa-89b1-6842bd35b436.mock.pstmn.io/driver/token?username=${user}&password=${pass}`;
-    return fetch(LOGIN, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((myJSON) => {
-        console.log(JSON.stringify(myJSON));
+    const body = `email=${user}&password=${pass}`;
+    const credentials = body;
+
+    API.getLogin(credentials)
+      .then((res) => {
         const obj = {
-          token: myJSON.token,
+          token: res.json.auth_token,
         };
+
         if (obj.token === undefined) {
           this.setState({
             errorMessage: 'Invalid username or password.',
           });
         } else {
           AsyncStorage.setItem('token', JSON.stringify(obj));
-          navigation.navigate('App');
+          navigation.navigate('Settings');
         }
       })
       .catch((err) => {
@@ -81,6 +76,10 @@ class Login extends Component {
           errorMessage: 'Invalid username or password.',
         });
       });
+  }
+
+  handleSignUp() {
+    console.log('sign up function hit');
   }
 
   render() {
@@ -105,6 +104,7 @@ class Login extends Component {
           <View style={styles.sectionContainer}>
             <TextInput
               autoCapitalize="none"
+              keyboardType="email-address"
               blurOnSubmit={false}
               style={styles.textInput}
               placeholder="Username"
@@ -125,7 +125,7 @@ class Login extends Component {
               value={this.state.password}
               onChangeText={this.handlePassword}
               onSubmitEditing={() => {
-                this.handleSubmit(this.state.user, this.state.pass);
+                this.handleSubmit();
               }}
               ref={(input) => {
                 this.inputs.two = input;
@@ -134,14 +134,16 @@ class Login extends Component {
           </View>
           <View style={styles.buttonContainer}>
             <View style={styles.submitContainer}>
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={() => this.handleSubmit(this.state.user, this.state.pass)}
-              >
+              <TouchableOpacity style={styles.submitButton} onPress={() => this.handleSubmit()}>
                 <Text style={styles.submitButtonText}>Log in</Text>
               </TouchableOpacity>
             </View>
           </View>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.signUpButton} onPress={() => this.handleSignUp()}>
+            <Text style={styles.signUpButtonText}>Sign up</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

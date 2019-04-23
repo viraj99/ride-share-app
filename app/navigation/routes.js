@@ -33,9 +33,6 @@ const MainViewStack = createStackNavigator(
     },
     Settings: {
       screen: Settings,
-      navigationOptions: {
-        headerTitle: 'Settings',
-      },
     },
     RideView: {
       screen: RideView,
