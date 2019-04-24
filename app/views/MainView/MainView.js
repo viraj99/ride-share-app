@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 
 import { Header } from '../../components/Header';
@@ -13,7 +14,6 @@ import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
 import { CalendarButton } from '../../components/Button';
 import styles from './styles';
 import API from '../../api/api';
-import CustomRidesData from '../../api/customData.json';
 
 type Props = {};
 
@@ -27,38 +27,31 @@ export default class MainView extends Component<Props> {
     };
   }
 
-  ridesRequests = () => {
-    this.setState({ loading: true });
-    API.getScheduledRides()
+  ridesRequests = async () => {
+    // this is just a fix untill I can figure out a better way to pass the token with state
+    const value = await AsyncStorage.getItem('token');
+    const parsedToken = JSON.parse(value);
+    const realToken = parsedToken.token;
+
+    this.setState({ loading: true, token: realToken });
+    API.getRides(realToken) // currently just using method to GET all the rides w/o status
       .then((res) => {
-        if (res.ok) {
-          this.setState({
-            scheduledRides: res,
-            loading: false,
-          });
-        } else {
-          this.setState({
-            scheduledRides: [],
-            loading: false,
-          });
-        }
+        console.log('refactored promise', res);
+        this.setState({
+          scheduledRides: res,
+          loading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-    API.getApprovedRides()
+    API.getRides(realToken)
       .then((res) => {
-        if (res.ok) {
-          this.setState({
-            approvedRides: res,
-            loading: false,
-          });
-        } else {
-          this.setState({
-            approvedRides: [],
-            loading: false,
-          });
-        }
+        console.log('refactored promise 2', res);
+        this.setState({
+          approvedRides: res,
+          loading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -82,17 +75,17 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
-    const card = CustomRidesData.map(item => (
+    const card = approvedRides.map(item => (
       <RequestedRideCard
-        key={item.id}
+        key={item.driver_id}
         onPress={this.navigateToDetails}
         name={item.riderName}
-        date={item.pickupTime}
-        pickupLocation={item.pickupLocation.city}
-        dropoffLocation={item.dropoffLocation.city}
+        date={item.pick_up_time}
+        pickupLocation={item.start_location.city}
+        dropoffLocation={item.end_location.city}
       />
     ));
-    const numRides = CustomRidesData.length;
+    const numRides = approvedRides.length;
     const seeAll = `See All (${numRides})`;
 
     if (numRides > 0) {
@@ -131,17 +124,17 @@ export default class MainView extends Component<Props> {
 
   renderUpcomingSchedule = () => {
     const { scheduledRides } = this.state;
-    const card = CustomRidesData.map(item => (
+    const card = scheduledRides.map(item => (
       <UpcomingRideCard
-        key={item.id}
+        key={item.driver_id}
         onPress={this.navigateToRideView}
         name={item.riderName}
-        date={item.pickupTime}
-        location={item.pickupLocation.street_address}
+        date={item.pick_up_time}
+        location={item.start_location.street}
       />
     ));
 
-    if (CustomRidesData.length > 0) {
+    if (scheduledRides.length > 0) {
       return (
         <View style={{ flex: 2 }}>
           <View style={styles.titleWrapper}>
@@ -187,14 +180,14 @@ export default class MainView extends Component<Props> {
     // takes me to ALL schedules rides
     const { scheduledRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('DriverScheduleView', { CustomRidesData });
+    navigation.navigate('DriverScheduleView', { scheduledRides });
   };
 
   navigateToRidesRequested = () => {
     // takes me to ALL approved rides
     const { approvedRides } = this.state;
     const { navigation } = this.props;
-    navigation.navigate('RidesRequested', { CustomRidesData });
+    navigation.navigate('RidesRequested', { approvedRides });
   };
 
   navigateToDetails = () => {
@@ -203,11 +196,11 @@ export default class MainView extends Component<Props> {
   };
 
   render() {
-    const { loading } = this.state;
+    const { loading, token } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
-        <Header onPress={this.navigateToSettings} />
+        <Header onPress={this.navigateToSettings} token={token} />
         {loading ? (
           this.renderLoader()
         ) : (
