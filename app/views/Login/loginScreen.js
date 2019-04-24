@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import styles from './loginStyle.js';
 import logo from './route.png';
+import API from '../../api/api';
 
 class Login extends Component {
   constructor(props) {
@@ -50,22 +51,12 @@ class Login extends Component {
 
   handleSubmit(user, pass) {
     const { navigation } = this.props;
-    const LOGIN = `https://b199aed0-ba7a-4eaa-89b1-6842bd35b436.mock.pstmn.io/driver/token?username=${user}&password=${pass}`;
-    return fetch(LOGIN, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
+    // ex using method with the api wrapper
+    API.login(user, pass)
       .then((myJSON) => {
         console.log(JSON.stringify(myJSON));
         const obj = {
-          token: myJSON.token,
+          token: myJSON.json.auth_token,
         };
         if (obj.token === undefined) {
           this.setState({

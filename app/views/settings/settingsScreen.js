@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Switch,
+  Text, TextInput, View, TouchableOpacity, Switch, AsyncStorage,
 } from 'react-native';
 import styles from './settingsStyle.js';
 
@@ -66,6 +66,11 @@ class Settings extends Component {
     this.setState({
       notifications: value,
     });
+  };
+
+  handleLogout = async () => {
+    await AsyncStorage.removeItem('token');
+    this.props.navigation.navigate('Auth');
   };
 
   render() {
@@ -148,7 +153,7 @@ class Settings extends Component {
         </View>
 
         <View style={styles.buttonSection}>
-          <TouchableOpacity style={styles.logoutButton}>
+          <TouchableOpacity style={styles.logoutButton} onPress={this.handleLogout}>
             <Text style={styles.buttonTitle}>Log out</Text>
           </TouchableOpacity>
         </View>
