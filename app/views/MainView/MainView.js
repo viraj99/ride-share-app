@@ -23,34 +23,41 @@ export default class MainView extends Component<Props> {
     this.state = {
       scheduledRides: [],
       approvedRides: [],
-      loading: false,
+      isLoading: true,
+      token: '',
     };
   }
 
-  ridesRequests = async () => {
-    // this is just a fix untill I can figure out a better way to pass the token with state
+  handleToken = async () => {
     const value = await AsyncStorage.getItem('token');
-    const parsedToken = JSON.parse(value);
-    const realToken = parsedToken.token;
+    const parsedValue = JSON.parse(value);
+    const realToken = parsedValue.token;
+    this.setState({
+      token: realToken,
+    });
+    this.ridesRequests();
+  };
 
-    this.setState({ loading: true, token: realToken });
-    API.getRides(realToken) // currently just using method to GET all the rides w/o status
+  ridesRequests = () => {
+    const { token } = this.state;
+    this.setState({ isLoading: true });
+    API.getRides(token) // currently just using method to GET all the rides w/o status
       .then((res) => {
-        console.log('refactored promise', res);
+        console.log('scheduled rides', res);
         this.setState({
           scheduledRides: res,
-          loading: false,
+          isLoading: false,
         });
       })
       .catch((err) => {
         console.log(err);
       });
-    API.getRides(realToken)
+    API.getRides(token) // this method will be changed
       .then((res) => {
-        console.log('refactored promise 2', res);
+        console.log('requested rides', res);
         this.setState({
           approvedRides: res,
-          loading: false,
+          isLoading: false,
         });
       })
       .catch((err) => {
@@ -59,12 +66,12 @@ export default class MainView extends Component<Props> {
   };
 
   componentDidMount = () => {
-    this.ridesRequests();
+    this.handleToken();
   };
 
   renderLoader = () => {
-    const { loading } = this.state;
-    if (!loading) return null;
+    const { isLoading } = this.state;
+    if (!isLoading) return null;
 
     return (
       <View style={styles.loader}>
@@ -196,12 +203,13 @@ export default class MainView extends Component<Props> {
   };
 
   render() {
-    const { loading, token } = this.state;
+    const { isLoading } = this.state;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
-        <Header onPress={this.navigateToSettings} token={token} />
-        {loading ? (
+        <Header onPress={this.navigateToSettings} />
+        {isLoading ? (
           this.renderLoader()
         ) : (
           <View style={{ flex: 1 }}>
