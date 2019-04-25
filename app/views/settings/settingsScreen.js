@@ -56,12 +56,11 @@ class Settings extends Component {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
       const tokenValue = obj.token;
-      console.log(tokenValue);
       API.logout(tokenValue).then((res) => {
         const loggedOut = res.json.Success;
-        console.log(loggedOut);
         if (loggedOut == 'Logged Out') {
-          this.props.navigation.navigate('Login');
+          AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
         } else {
           console.log('no working');
         }
