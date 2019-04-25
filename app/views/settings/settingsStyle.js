@@ -3,17 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
     backgroundColor: '#fcfcf6',
-  },
-  headerContainer: {
-    padding: 20,
-    backgroundColor: '#1EAA70',
-  },
-  header: {
-    fontWeight: 'bold',
-    fontSize: 25,
-    color: '#ffffff',
   },
   settingSection: {
     padding: 10,
@@ -52,6 +42,15 @@ export default StyleSheet.create({
   input: {
     fontSize: 20,
     color: '#475c67',
+  },
+  userFirstLastName: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  bottomBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ff8262',
   },
   buttonSection: {
     padding: 5,
