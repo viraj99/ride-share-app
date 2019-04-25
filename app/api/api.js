@@ -1,5 +1,12 @@
 import {
-  LOGIN, RIDES, SCHEDULEDRIDES, APPROVEDRIDES, driverRides,
+  LOGIN,
+  RIDES,
+  SCHEDULEDRIDES,
+  APPROVEDRIDES,
+  LOGIN,
+  SETTINGS,
+  LOGOUT,
+  driverRides,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 
@@ -24,5 +31,46 @@ export default {
   },
   getApprovedRides() {
     return fetch(APPROVEDRIDES).then(response => response.json());
+  },
+  getLogin(credentials) {
+    const url = `${LOGIN}${credentials}`;
+    return fetch(url, {
+      method: 'POST',
+      headers: HEADERS,
+    }).then((response) => {
+      console.log(response);
+      return response.json();
+    });
+  },
+  logout(tokenValue) {
+    return fetch(LOGOUT, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        token: tokenValue,
+      },
+    }).then(response => response.json());
+  },
+  getSettingInfo(tokenValue) {
+    return fetch(SETTINGS, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        token: tokenValue,
+      },
+    }).then(response => response.json());
+  },
+  updateSettingsInfo(tokenValue, data) {
+    const updatedData = JSON.stringify(data);
+    return fetch(SETTINGS, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        token: tokenValue,
+      },
+      body: updatedData,
+    }).then(response => response.json());
   },
 };
