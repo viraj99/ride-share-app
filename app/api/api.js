@@ -3,7 +3,6 @@ import {
   RIDES,
   SCHEDULEDRIDES,
   APPROVEDRIDES,
-  LOGIN,
   SETTINGS,
   LOGOUT,
   driverRides,
