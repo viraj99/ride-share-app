@@ -54,10 +54,7 @@ class Login extends Component {
     const { user, pass } = this.state;
     const { navigation } = this.props;
 
-    const body = `email=${user}&password=${pass}`;
-    const credentials = body;
-
-    API.getLogin(credentials)
+    API.login(user, pass)
       .then((res) => {
         const obj = {
           token: res.json.auth_token,
