@@ -53,6 +53,7 @@ class Login extends Component {
   handleSubmit() {
     const { user, pass } = this.state;
     const { navigation } = this.props;
+
     const body = `email=${user}&password=${pass}`;
     const credentials = body;
 

@@ -6,7 +6,7 @@ const RidesRequestedView = (props) => {
   const { navigation } = props;
   const approvedRides = navigation.getParam('approvedRides');
 
-  keyExtractor = item => item.id.toString();
+  keyExtractor = item => item.driver_id.toString();
 
   navigateToDetails = () => {
     navigation.navigate('RequestedRidesDetails');
@@ -14,10 +14,10 @@ const RidesRequestedView = (props) => {
 
   renderRideList = ({ item, index }) => {
     const name = item.riderName;
-    const date = item.pickupTime;
-    const time = item.pickupTime;
-    const pickupLocation = item.pickupLocation.city;
-    const dropoffLocation = item.dropoffLocation.city;
+    const date = item.pick_up_time;
+    const time = item.pick_up_time;
+    const pickupLocation = item.start_location.city;
+    const dropoffLocation = item.end_location.city;
 
     const underlayColor = '#FFF';
     return (

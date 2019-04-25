@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 
 import { Header } from '../../components/Header';
@@ -22,42 +23,42 @@ export default class MainView extends Component<Props> {
     this.state = {
       scheduledRides: [],
       approvedRides: [],
-      loading: false,
+      isLoading: true,
+      token: '',
     };
   }
 
+  handleToken = async () => {
+    const value = await AsyncStorage.getItem('token');
+    const parsedValue = JSON.parse(value);
+    const realToken = parsedValue.token;
+    this.setState({
+      token: realToken,
+    });
+    this.ridesRequests();
+  };
+
   ridesRequests = () => {
-    this.setState({ loading: true });
-    API.getScheduledRides()
+    const { token } = this.state;
+    this.setState({ isLoading: true });
+    API.getRides(token) // currently just using method to GET all the rides w/o status
       .then((res) => {
-        if (res.ok) {
-          this.setState({
-            scheduledRides: res,
-            loading: false,
-          });
-        } else {
-          this.setState({
-            scheduledRides: [],
-            loading: false,
-          });
-        }
+        console.log('scheduled rides', res);
+        this.setState({
+          scheduledRides: res,
+          isLoading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-    API.getApprovedRides()
+    API.getRides(token) // this method will be changed
       .then((res) => {
-        if (res.ok) {
-          this.setState({
-            approvedRides: res,
-            loading: false,
-          });
-        } else {
-          this.setState({
-            approvedRides: [],
-            loading: false,
-          });
-        }
+        console.log('requested rides', res);
+        this.setState({
+          approvedRides: res,
+          isLoading: false,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -65,12 +66,12 @@ export default class MainView extends Component<Props> {
   };
 
   componentDidMount = () => {
-    this.ridesRequests();
+    this.handleToken();
   };
 
   renderLoader = () => {
-    const { loading } = this.state;
-    if (!loading) return null;
+    const { isLoading } = this.state;
+    if (!isLoading) return null;
 
     return (
       <View style={styles.loader}>
@@ -83,12 +84,12 @@ export default class MainView extends Component<Props> {
     const { approvedRides } = this.state;
     const card = approvedRides.map(item => (
       <RequestedRideCard
-        key={item.id}
+        key={item.driver_id}
         onPress={this.navigateToDetails}
         name={item.riderName}
-        date={item.pickupTime}
-        pickupLocation={item.pickupLocation.city}
-        dropoffLocation={item.dropoffLocation.city}
+        date={item.pick_up_time}
+        pickupLocation={item.start_location.city}
+        dropoffLocation={item.end_location.city}
       />
     ));
     const numRides = approvedRides.length;
@@ -132,11 +133,11 @@ export default class MainView extends Component<Props> {
     const { scheduledRides } = this.state;
     const card = scheduledRides.map(item => (
       <UpcomingRideCard
-        key={item.id}
+        key={item.driver_id}
         onPress={this.navigateToRideView}
         name={item.riderName}
-        date={item.pickupTime}
-        location={item.pickupLocation.street_address}
+        date={item.pick_up_time}
+        location={item.start_location.street}
       />
     ));
 
@@ -202,12 +203,13 @@ export default class MainView extends Component<Props> {
   };
 
   render() {
-    const { loading } = this.state;
+    const { isLoading } = this.state;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
         <Header onPress={this.navigateToSettings} />
-        {loading ? (
+        {isLoading ? (
           this.renderLoader()
         ) : (
           <View style={{ flex: 1 }}>

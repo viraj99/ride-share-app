@@ -1,11 +1,14 @@
-export const LOGIN = 'https://carma-ctd.herokuapp.com/api/v1/login?';
+export const apiBaseUrl = 'https://carma-ctd.herokuapp.com/api/v1/';
+// paths
+export const LOGIN = 'login';
+export const RIDES = 'rides';
+// params
+export const driverRides = '?driver_specific=true';
+
+// these need to be updated
 export const LOGOUT = 'https://carma-ctd.herokuapp.com/api/v1/logout';
 export const SETTINGS = 'https://carma-ctd.herokuapp.com/api/v1/drivers/';
-export const RIDES = 'https://8a8fd4a9-859b-42f0-a8cc-1ef4da828d9a.mock.pstmn.io/v1/rides';
-export const SCHEDULEDRIDES = 'https://8a8fd4a9-859b-42f0-a8cc-1ef4da828d9a.mock.pstmn.io/v1/rides?state=scheduled';
-export const APPROVEDRIDES = 'https://8a8fd4a9-859b-42f0-a8cc-1ef4da828d9a.mock.pstmn.io/v1/rides?state=approved';
 
-export const HEADERS = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+// these don't work yet, status names are incorrect & params do not filter
+export const SCHEDULEDRIDES = 'rides?status=matched';
+export const APPROVEDRIDES = 'rides?status=approved';
