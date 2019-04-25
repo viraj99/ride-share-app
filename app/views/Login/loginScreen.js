@@ -68,7 +68,7 @@ class Login extends Component {
           });
         } else {
           AsyncStorage.setItem('token', JSON.stringify(obj));
-          navigation.navigate('Settings');
+          navigation.navigate('MainView');
         }
       })
       .catch((err) => {
