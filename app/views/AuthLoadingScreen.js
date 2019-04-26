@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  ActivityIndicator, AsyncStorage, StatusBar, StyleSheet, View,
+  ActivityIndicator, StatusBar, StyleSheet, View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
   container: {

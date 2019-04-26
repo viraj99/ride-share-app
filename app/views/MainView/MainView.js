@@ -6,8 +6,8 @@ import {
   StatusBar,
   TouchableOpacity,
   ActivityIndicator,
-  AsyncStorage,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
