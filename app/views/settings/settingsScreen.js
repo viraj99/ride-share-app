@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Switch, AsyncStorage,
+  Text, TextInput, View, TouchableOpacity, Switch,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';

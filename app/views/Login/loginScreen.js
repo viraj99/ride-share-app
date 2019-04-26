@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, AsyncStorage, Image,
+  Text, TextInput, View, TouchableOpacity, Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import styles from './loginStyle.js';
 import logo from './route.png';
 import API from '../../api/api';
