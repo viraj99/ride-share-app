@@ -11,17 +11,17 @@
     "i": "^0.3.6",
     "jsc-android": "241213.x.x",
     "moment": "^2.24.0",
-    "npm": "^6.8.0",
+    "npm": "^6.9.0",
     "react": "16.8.3",
     "react-native": "0.59.5",
     "react-native-calendars": "^1.22.0",
     "react-native-collapsible": "^1.4.0",
     "react-native-elements": "^1.1.0",
-    "react-native-gesture-handler": "^1.0.15",
+    "react-native-gesture-handler": "^1.1.0",
     "react-native-map-link": "^2.4.0",
-    "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-vector-icons": "^6.2.0",
-    "react-navigation": "^3.3.0"
+    "react-navigation": "^3.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
