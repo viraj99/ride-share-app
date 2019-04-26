@@ -58,15 +58,19 @@ class Settings extends Component {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
       const tokenValue = obj.token;
-      API.logout(tokenValue).then((res) => {
-        const loggedOut = res.json.Success;
-        if (loggedOut == 'Logged Out') {
+      API.logout(tokenValue)
+        .then((res) => {
+          const loggedOut = res.json.Success;
+          if (loggedOut === 'Logged Out') {
+            AsyncStorage.removeItem('token');
+            this.props.navigation.navigate('Auth');
+          }
+        })
+        .catch((err) => {
+          console.log('error for logout', err);
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
-        } else {
-          console.log('no working');
-        }
-      });
+        });
     });
   }
 
