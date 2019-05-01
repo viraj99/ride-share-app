@@ -1,4 +1,6 @@
-import { RIDES, SCHEDULEDRIDES, APPROVEDRIDES } from '../utils/urls';
+import {
+  RIDES, SCHEDULEDRIDES, APPROVEDRIDES, AVAILABILITIES,
+} from '../utils/urls';
 
 export default {
   getRides() {
@@ -9,5 +11,14 @@ export default {
   },
   getApprovedRides() {
     return fetch(APPROVEDRIDES).then(response => response.json());
+  },
+  getAvailabilities() {
+    return fetch(AVAILABILITIES, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        token: '0ae2ccdc8765540021d8ec8d67c95f66',
+      },
+    }).then(response => response.json());
   },
 };

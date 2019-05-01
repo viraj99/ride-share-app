@@ -4,7 +4,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    height: 60,
     justifyContent: 'space-between',
     marginTop: 5,
     marginBottom: 20,

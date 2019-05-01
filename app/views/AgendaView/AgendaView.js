@@ -10,11 +10,13 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import _ from 'lodash';
 import styles from './AgendaStyles';
 import Schedule from './Schedule';
 import {
-  MonthHeader, EmptyDay, WeekHeader, HeaderArrow, Availability,
+  MonthHeader, Day, WeekHeader, HeaderArrow, Availability,
 } from '../../components/ScheduleItems';
+import API from '../../api/api';
 
 
 const SECTIONS = [
@@ -25,15 +27,36 @@ const SECTIONS = [
   },
 ];
 
-const format = day => moment(day).format('X');
+const unix = day => moment(day).format('X');
+const utc = day => moment(day).utc();
+
 
 class ScheduleItem extends Schedule {
-  constructor(type, startDate, endDate, timestamp, startTime, endTime, location, reoccurring) {
+  constructor(
+    type,
+    startDate,
+    endDate,
+    timestamp,
+    startTime,
+    endTime,
+    location,
+    reoccurring,
+  ) {
     super(type, startDate, endDate, timestamp);
+
     this.startTime = startTime;
     this.endTime = endTime;
     this.location = location;
     this.reoccurring = reoccurring;
+  }
+}
+
+class DayObj {
+  constructor(type, date, timestamp, availability) {
+    this.type = type;
+    this.date = date;
+    this.timestamp = unix(timestamp);
+    this.availability = availability;
   }
 }
 
@@ -55,14 +78,61 @@ export default class App extends Component<Props> {
       temporaryDate: false,
       tempDateIndex: undefined,
       todayRendered: false,
+      loadedSchedule: [],
     };
+  }
+
+  requestAvailabilities = () => {
+    // this.setState({ loading: true })
+    API.getAvailabilities()
+      .then((res) => {
+        console.log(res);
+        this.parseAPI(res);
+        this.populateAgenda();
+      }).catch((err) => {
+        console.log(err);
+        this.populateAgenda();
+      });
+  }
+
+  parseAPI = (res) => {
+    const results = res.json;
+    const avails = [];
+
+    const obj = _.groupBy(results, o => o.startDate);
+    _.forIn(obj, (v, k) => {
+      const formatDate = moment(k).format('MMM D');
+      // startOfDay = moment(startOfDay).startOf('day');
+      const dayToRender = new DayObj(
+        'date',
+        formatDate,
+        k,
+        v,
+      );
+      avails.push(dayToRender);
+    });
+    console.log(avails);
+
+    // results.forEach((item) => {
+    //   const importedSchedule = new ScheduleItem(
+    //     'availability',
+    //     `${moment(item.startDate).unix()}`,
+    //     `${moment(item.endDate).unix()}`,
+    //     `${moment(item.startDate).unix()}`,
+    //     `${moment(item.startTime).unix()}`,
+    //     `${moment(item.endTime).unix()}`,
+    //     this.parseLocation(item.location),
+    //     item.isRecurring,
+    //   );
+    //   avails.push(importedSchedule);
+    // });
+    this.setState({ loadedSchedule: avails });
   }
 
   componentDidMount = () => {
     console.log('COMPONENT DID MOUNT');
     console.log('--------------------');
-    console.log(this.props);
-    this.populateAgenda();
+    this.requestAvailabilities();
   }
 
   // this function needs integration with Calendar component
@@ -74,6 +144,8 @@ export default class App extends Component<Props> {
 
   // creating initial array of elements to appear in flatlist
   populateAgenda = () => {
+    const { loadedSchedule } = this.state;
+
     const weeks = [];
 
     for (let i = -5; i <= 30; i += 1) {
@@ -102,8 +174,12 @@ export default class App extends Component<Props> {
       }
     }
 
+    let newArr = weeks.concat(loadedSchedule);
+    newArr = newArr.sort(this.organizeArray);
+    console.log(newArr);
+
     this.setState({
-      scheduleItems: weeks,
+      scheduleItems: newArr,
     }, () => {
       this.initialDayRender();
     });
@@ -118,7 +194,7 @@ export default class App extends Component<Props> {
     const today = moment().startOf('day');
 
     if (!todayRendered && scheduleItems) {
-      const initialDay = new Schedule('emptyDay', today, undefined, format(today));
+      const initialDay = new Schedule('emptyDay', today, undefined, unix(today));
 
       scheduleItems.push(initialDay);
       scheduleItems.sort(this.organizeArray);
@@ -144,9 +220,7 @@ export default class App extends Component<Props> {
       });
     }
     const dayClicked = moment(day.dateString).startOf('day');
-    console.log(moment(dayClicked));
     const emptyDay = new Schedule('emptyDay', dayClicked, undefined, moment(dayClicked).format('X'));
-    console.log(emptyDay);
 
     arr.push(emptyDay);
     arr.sort(this.organizeArray);
@@ -177,14 +251,20 @@ export default class App extends Component<Props> {
   renderContent = () => (
     <View>
       <Calendar
-        onMonthChange={(month) => { console.log(month); }}
+        // onMonthChange={(month) => { console.log(month); }}
         onDayPress={day => this.dayPressHandler(day)}
+        theme={{
+          calendarBackground: '#fcfcf6',
+          todayTextColor: '#1EAA70',
+          dotColor: '#ff8262',
+          arrowColor: '#1EAA70',
+        }}
       />
     </View>
   )
 
   // collapsing tab render for accordion. need to change to ternary operator and export styles
-  renderHeader = (item, _, isActive) => {
+  renderHeader = (item, isActive) => {
     if (!isActive) {
       return (
         <View style={{
@@ -237,39 +317,41 @@ export default class App extends Component<Props> {
     const {
       startDate,
       endDate,
-      endTime,
-      startTime,
-      location,
-      reoccurring,
+      // endTime,
+      // startTime,
+      // location,
+      // reoccurring,
+      // date,
+      // availability,
+      // timestamp,
+      type,
     } = item;
 
-    if (item.type === 'weekHeader') {
+    if (type === 'weekHeader') {
       return (
         <WeekHeader
           start={startDate}
           end={endDate}
         />
       );
-    } if (item.type === 'monthHeader') {
+    } if (type === 'monthHeader') {
       return (
         <MonthHeader
           month={startDate}
         />
       );
-    } if (item.type === 'availability') {
+    }
+    // if (type === 'date') {
+    //   return (
+    //    <Day
+    //      date={}
+    //    />
+    //   );
+    // }
+    if (type === 'date') {
       return (
-        <Availability
-          date={startDate}
-          initTime={startTime}
-          endTime={endTime}
-          location={location}
-          reoccurring={reoccurring}
-        />
-      );
-    } if (item.type === 'emptyDay') {
-      return (
-        <EmptyDay
-          date={startDate}
+        <Day
+          data={item}
           onPress={this.toggleForm}
         />
       );
@@ -280,10 +362,8 @@ export default class App extends Component<Props> {
   toggleForm = () => {
     const overlayVisible = this.state;
     if (overlayVisible === true) {
-      console.log('hi');
       this.setState({ overlayVisible: false });
     } else {
-      console.log('sup');
       this.setState({ overlayVisible: true });
     }
   }
@@ -339,6 +419,7 @@ export default class App extends Component<Props> {
       reoccurringCheck,
       scheduleItems,
       overlayVisible,
+      loadedSchedule,
     } = this.state;
 
     // need better handling for this
@@ -359,10 +440,13 @@ export default class App extends Component<Props> {
       }
     } else {
       const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
-      // console.log(newAvailability);
+      console.log(newAvailability);
       arr.push(newAvailability);
       arr = arr.sort(this.organizeArray);
     }
+
+
+    arr = arr.sort(this.organizeArray);
     this.setState({
       overlayVisible: !overlayVisible,
       scheduleItems: arr,
@@ -376,7 +460,6 @@ export default class App extends Component<Props> {
 
   navigateBack = () => {
     const { navigation } = this.props;
-    console.log(navigation);
     navigation.navigate('MainView');
   }
 
@@ -427,6 +510,7 @@ export default class App extends Component<Props> {
             style={styles.addButton}
             size={72}
             color="#1EAA70"
+            containerStyle={styles.background}
           />
         </View>
         <Overlay
