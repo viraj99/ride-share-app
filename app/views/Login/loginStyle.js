@@ -73,4 +73,13 @@ export default StyleSheet.create({
     padding: 5,
     color: '#ffffff',
   },
+  signUpButton: {
+    borderBottomWidth: 3,
+    borderBottomColor: '#ffffff',
+  },
+  signUpButtonText: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#ffffff',
+  },
 });

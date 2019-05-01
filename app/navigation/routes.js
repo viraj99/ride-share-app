@@ -32,9 +32,6 @@ const MainViewStack = createStackNavigator(
     },
     Settings: {
       screen: Settings,
-      navigationOptions: {
-        headerTitle: 'Settings',
-      },
     },
     RideView: {
       screen: RideView,
@@ -68,6 +65,13 @@ const MainViewStack = createStackNavigator(
     },
     RequestedRidesDetails: {
       screen: RequestedRidesDetails,
+      navigationOptions: {
+        headerTitle: 'Requested Rides Details',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
+      },
     },
   },
 
