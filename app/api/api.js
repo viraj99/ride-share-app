@@ -5,6 +5,7 @@ import {
   APPROVEDRIDES,
   SETTINGS,
   LOGOUT,
+  AVAILABILITIES,
   driverRides,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
@@ -31,6 +32,18 @@ export default {
   getApprovedRides() {
     return fetch(APPROVEDRIDES).then(response => response.json());
   },
+
+  getAvailabilities() {
+    // change this with the api wrapper
+    return fetch(AVAILABILITIES, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        token: '',
+      },
+    });
+  },
+
   getLogin(credentials) {
     const url = `${LOGIN}${credentials}`;
     return fetch(url, {
