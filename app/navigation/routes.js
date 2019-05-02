@@ -11,7 +11,6 @@ import {
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,
-  RidesRequestedView,
   RequestedRidesDetails,
   Settings,
 } from '../views';
@@ -47,16 +46,6 @@ const MainViewStack = createStackNavigator(
       screen: DriverScheduleView,
       navigationOptions: {
         headerTitle: 'Scheduled Rides',
-        headerStyle: {
-          backgroundColor: '#1EAA70',
-        },
-        headerTintColor: '#fff',
-      },
-    },
-    RidesRequested: {
-      screen: RidesRequestedView,
-      navigationOptions: {
-        headerTitle: 'Requested Rides',
         headerStyle: {
           backgroundColor: '#1EAA70',
         },

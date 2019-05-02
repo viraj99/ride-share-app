@@ -3,27 +3,21 @@ import variables from '../../../utils/variables';
 
 const { height, width } = Dimensions.get('window');
 
-export default (styles = StyleSheet.create({
+export default StyleSheet.create({
   cardContainer: {
-    width: width - 40,
-    marginLeft: 20,
-    marginVertical: 15,
-    borderWidth: variables.borderWidth,
-    borderRadius: variables.cardBorderRadius,
-    borderColor: variables.cardBorderColor,
+    width: width - variables.sizes.padding * 2,
+    marginHorizontal: variables.sizes.margin,
+    marginVertical: 20,
+    marginBottom: variables.sizes.base,
+    paddingHorizontal: variables.sizes.padding,
+    paddingVertical: variables.sizes.padding * 0.66,
+    borderRadius: variables.sizes.border,
     backgroundColor: variables.cardDefaultBg,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
-  },
-  wrapper: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    shadowOpacity: 0.11,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 13,
+    elevation: Platform.OS === 'ios' ? 0 : 5,
   },
   name: {
     fontSize: 16,
@@ -31,11 +25,12 @@ export default (styles = StyleSheet.create({
     fontWeight: '600',
   },
   date: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#000',
   },
   location: {
-    color: '#b1c1c8',
-    fontWeight: '600',
+    color: '#BDBFC7',
+    fontWeight: Platform.OS === 'ios' ? '500' : '400',
   },
-}));
+});

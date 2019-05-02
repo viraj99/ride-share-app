@@ -3,63 +3,50 @@ import variables from '../../../utils/variables';
 
 const { height, width } = Dimensions.get('window');
 
-export default (styles = StyleSheet.create({
-  cardContainer: {
-    flex: 1,
-    width: width - 40,
-    paddingVertical: 10,
-    marginLeft: 20,
-    marginVertical: 20,
-    borderWidth: variables.borderWidth,
-    borderRadius: variables.cardBorderRadius,
-    borderColor: variables.cardBorderColor,
+export default StyleSheet.create({
+  card: {
+    borderRadius: variables.sizes.border,
+    marginBottom: variables.sizes.base,
     backgroundColor: variables.cardDefaultBg,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
+    width: width - variables.sizes.padding * 2,
+    marginHorizontal: variables.sizes.margin,
+    marginVertical: 20,
+    paddingHorizontal: variables.sizes.padding,
+    paddingVertical: variables.sizes.padding * 0.66,
   },
-  wrapper: {
-    marginVertical: 10,
-    marginHorizontal: 10,
+  shadow: {
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 13,
+    elevation: Platform.OS === 'ios' ? 0 : 5,
   },
   text: {
     color: '#475c67',
   },
   date: {
-    color: '#475c67',
-    fontSize: 18,
-    fontWeight: '600',
-    alignSelf: 'center',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000',
   },
-  locationText: {
-    fontSize: 18,
-    color: '#b1c1c8',
-    fontWeight: '600',
+  location: {
+    color: '#BDBFC7',
+    fontWeight: Platform.OS === 'ios' ? '500' : '400',
   },
-  locationWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  colon: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#BDBFC7',
   },
-  time: {
-    fontSize: 18,
-    fontWeight: '600',
-    alignSelf: 'center',
+  // horizontal line
+  hLine: {
+    marginVertical: 8 * 2,
+    marginHorizontal: variables.sizes.base * 2,
+    height: 1,
   },
-
-  aligner: {
-    flex: 1,
-    justifyContent: 'space-around',
+  // vertical line
+  vLine: {
+    marginVertical: variables.sizes.base / 2,
+    width: 1,
   },
-  seperator: {
-    marginVertical: 5,
-    borderWidth: 0.5,
-    borderColor: 'gray',
-    marginHorizontal: 10,
-  },
-}));
+});
