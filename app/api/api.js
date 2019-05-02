@@ -44,45 +44,25 @@ export default {
     });
   },
 
-  getLogin(credentials) {
-    const url = `${LOGIN}${credentials}`;
-    return fetch(url, {
+  logout(token) {
+    return apiWrapper({
+      path: LOGOUT,
       method: 'POST',
-      headers: HEADERS,
-    }).then((response) => {
-      console.log(response);
-      return response.json();
-    });
+      headers: { token },
+    }).then(res => res.json());
   },
-  logout(tokenValue) {
-    return fetch(LOGOUT, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: tokenValue,
-      },
-    }).then(response => response.json());
+  getSettingInfo(token) {
+    return apiWrapper({
+      path: SETTINGS,
+      headers: { token },
+    }).then(res => res.json());
   },
-  getSettingInfo(tokenValue) {
-    return fetch(SETTINGS, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: tokenValue,
-      },
-    }).then(response => response.json());
-  },
-  updateSettingsInfo(tokenValue, data) {
-    const updatedData = JSON.stringify(data);
-    return fetch(SETTINGS, {
+  updateSettingsInfo(data, token) {
+    return apiWrapper({
+      path: SETTINGS,
+      headers: { token },
+      body: data,
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        token: tokenValue,
-      },
-      body: updatedData,
-    }).then(response => response.json());
+    }).then(res => res.json());
   },
 };

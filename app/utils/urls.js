@@ -8,8 +8,8 @@ export const AVAILABILITIES = 'availabilities';
 export const driverRides = '?driver_specific=true';
 
 // these need to be updated
-export const LOGOUT = 'https://carma-ctd.herokuapp.com/api/v1/logout';
-export const SETTINGS = 'https://carma-ctd.herokuapp.com/api/v1/drivers/';
+export const LOGOUT = 'logout';
+export const SETTINGS = 'drivers';
 
 // these don't work yet, status names are incorrect & params do not filter
 export const SCHEDULEDRIDES = 'rides?status=matched';

@@ -47,7 +47,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-
+  radiusTitle: {
+    fontSize: 13,
+    color: '#475c67',
+  },
   bottomBorder: {
     borderBottomWidth: 1,
     borderBottomColor: '#ff8262',
