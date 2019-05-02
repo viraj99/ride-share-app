@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, AsyncStorage, Image,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+  Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import styles from './loginStyle.js';
 import logo from './route.png';
@@ -42,7 +49,7 @@ class Login extends Component {
 
   validateUsername() {
     const { user } = this.state;
-    if (user.includes('@') && user.includes('.com')) {
+    if (user.includes('@') && user.includes('.')) {
       return null;
     }
     this.setState({
@@ -82,68 +89,70 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}> Ride Share</Text>
-          </View>
-          <View style={styles.image}>
-            <Image source={logo} />
-          </View>
-        </View>
-
-        <View style={styles.formContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.formTitle}>Sign in</Text>
-          </View>
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-          </View>
-          <View style={styles.sectionContainer}>
-            <TextInput
-              autoCapitalize="none"
-              keyboardType="email-address"
-              blurOnSubmit={false}
-              style={styles.textInput}
-              placeholder="Username"
-              value={this.state.username}
-              onChangeText={this.handleUsername}
-              onSubmitEditing={() => {
-                this.validateUsername();
-                this.focusNextField('two');
-              }}
-            />
-          </View>
-          <View style={styles.sectionContainer}>
-            <TextInput
-              secureTextEntry
-              style={styles.textInput}
-              blurOnSubmit={false}
-              placeholder="Password"
-              value={this.state.password}
-              onChangeText={this.handlePassword}
-              onSubmitEditing={() => {
-                this.handleSubmit();
-              }}
-              ref={(input) => {
-                this.inputs.two = input;
-              }}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <View style={styles.submitContainer}>
-              <TouchableOpacity style={styles.submitButton} onPress={() => this.handleSubmit()}>
-                <Text style={styles.submitButtonText}>Log in</Text>
-              </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}> Ride Share</Text>
+            </View>
+            <View style={styles.image}>
+              <Image source={logo} />
             </View>
           </View>
+
+          <View style={styles.formContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.formTitle}>Sign in</Text>
+            </View>
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <TextInput
+                autoCapitalize="none"
+                keyboardType="email-address"
+                blurOnSubmit={false}
+                style={styles.textInput}
+                placeholder="Username"
+                value={this.state.username}
+                onChangeText={this.handleUsername}
+                onSubmitEditing={() => {
+                  this.validateUsername();
+                  this.focusNextField('two');
+                }}
+              />
+            </View>
+            <View style={styles.sectionContainer}>
+              <TextInput
+                secureTextEntry
+                style={styles.textInput}
+                blurOnSubmit={false}
+                placeholder="Password"
+                value={this.state.password}
+                onChangeText={this.handlePassword}
+                onSubmitEditing={() => {
+                  this.handleSubmit();
+                }}
+                ref={(input) => {
+                  this.inputs.two = input;
+                }}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <View style={styles.submitContainer}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.handleSubmit()}>
+                  <Text style={styles.submitButtonText}>Log in</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View>
+            <TouchableOpacity style={styles.signUpButton} onPress={() => this.handleSignUp()}>
+              <Text style={styles.signUpButtonText}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View>
-          <TouchableOpacity style={styles.signUpButton} onPress={() => this.handleSignUp()}>
-            <Text style={styles.signUpButtonText}>Sign up</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

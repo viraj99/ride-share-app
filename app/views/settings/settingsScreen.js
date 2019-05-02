@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Switch, AsyncStorage,
+  Text, TextInput, View, TouchableOpacity, Switch, AsyncStorage, Alert,
 } from 'react-native';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
 import Notifications from 'react-native-vector-icons/MaterialIcons';
 import User from 'react-native-vector-icons/SimpleLineIcons';
+import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
 import styles from './settingsStyle.js';
 import API from '../../api/api';
@@ -33,7 +34,6 @@ class Settings extends Component {
       lastName: '',
       organization_id: '',
     };
-
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePhoneNumber = this.handlePhoneNumber.bind(this);
@@ -55,16 +55,21 @@ class Settings extends Component {
   handleLogout() {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const tokenValue = obj.token;
-      API.logout(tokenValue).then((res) => {
-        const loggedOut = res.json.Success;
-        if (loggedOut == 'Logged Out') {
+      const token = obj.token;
+      API.logout(token)
+        .then((res) => {
+          const loggedOut = res.json.Success;
+          if (loggedOut == 'Logged Out') {
+            AsyncStorage.removeItem('token');
+            this.props.navigation.navigate('Auth');
+          } else {
+            Alert.alert('Unable to Logout', 'Please try again.');
+          }
+        })
+        .catch((error) => {
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
-        } else {
-          console.log('no working');
-        }
-      });
+        });
     });
   }
 
@@ -88,8 +93,8 @@ class Settings extends Component {
       };
       AsyncStorage.getItem('token', (err, result) => {
         const obj = JSON.parse(result);
-        const tokenValue = obj.token;
-        API.updateSettingsInfo(tokenValue, data);
+        const token = obj.token;
+        API.updateSettingsInfo(data, token);
       });
     } else {
       null;
@@ -153,167 +158,173 @@ class Settings extends Component {
   componentWillMount() {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const tokenValue = obj.token;
-      console.log(tokenValue);
-      API.getSettingInfo(tokenValue).then((res) => {
-        this.setState({
-          firstName: res.first_name,
-          lastName: res.last_name,
-          email: res.email,
-          phoneNumber: res.phone,
-          radius: JSON.stringify(res.radius),
-          notifications: res.is_active,
-          make: res.car_make,
-          model: res.car_model,
-          color: res.car_color,
-          organization_id: res.organization_id,
+      const token = obj.token;
+      API.getSettingInfo(token)
+        .then((res) => {
+          this.setState({
+            firstName: res.first_name,
+            lastName: res.last_name,
+            email: res.email,
+            phoneNumber: res.phone,
+            radius: JSON.stringify(res.radius),
+            notifications: res.is_active,
+            make: res.car_make,
+            model: res.car_model,
+            color: res.car_color,
+            organization_id: res.organization_id,
+          });
+        })
+        .catch((err) => {
+          AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
         });
-      });
     });
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <SettingHeader onPress={this.handleBackButton} />
-        <View style={styles.settingSection}>
-          <View style={styles.section}>
-            <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitle}>Account</Text>
-            </View>
-            <View style={styles.inputContainer}>
-              <User name="user" size={30} color="#475c67" />
-              <View style={styles.userFirstLastName}>
-                <View style={{ paddingRight: 8 }}>
-                  <View style={styles.bottomBorder}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="John"
-                      value={this.state.firstName}
-                      onChangeText={this.handleFirstName}
-                      editable={this.state.editable}
-                    />
+      <ScrollView>
+        <View style={styles.container}>
+          <SettingHeader onPress={this.handleBackButton} />
+          <View style={styles.settingSection}>
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Account</Text>
+              </View>
+              <View style={styles.inputContainer}>
+                <User name="user" size={30} color="#475c67" />
+                <View style={styles.userFirstLastName}>
+                  <View style={{ paddingRight: 8 }}>
+                    <View style={styles.bottomBorder}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="First"
+                        value={this.state.firstName}
+                        onChangeText={this.handleFirstName}
+                        editable={this.state.editable}
+                      />
+                    </View>
+                  </View>
+                  <View>
+                    <View style={styles.bottomBorder}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Last"
+                        value={this.state.lastName}
+                        onChangeText={this.handleLastName}
+                        editable={this.state.editable}
+                      />
+                    </View>
                   </View>
                 </View>
-                <View>
-                  <View style={styles.bottomBorder}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Doe"
-                      value={this.state.lastName}
-                      onChangeText={this.handleLastName}
-                      editable={this.state.editable}
-                    />
-                  </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Email name="email-outline" size={30} color="#475c67" />
+                <View style={styles.bottomBorder}>
+                  <TextInput
+                    keyboardType="email-address"
+                    style={styles.input}
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChangeText={this.handleEmail}
+                    editable={this.state.editable}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Phone name="phone" size={30} color="#475c67" />
+                <View style={styles.bottomBorder}>
+                  <TextInput
+                    keyboardType="number-pad"
+                    style={styles.input}
+                    placeholder="999-999-9999"
+                    dataDetectorTypes="phoneNumber"
+                    value={this.state.phoneNumber}
+                    onChangeText={this.handlePhoneNumber}
+                    editable={this.state.editable}
+                    keyboardType="phone-pad"
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Radius name="radius-outline" size={30} color="#475c67" />
+
+                <View style={styles.bottomBorder}>
+                  <Text style={styles.radiusTitle}>Radius</Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    style={styles.input}
+                    placeholder="5"
+                    value={this.state.radius}
+                    onChangeText={this.handleRadius}
+                    editable={this.state.editable}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Notifications name="notifications-none" size={30} color="#475c67" />
+                <Switch
+                  disabled={this.state.editable}
+                  onValueChange={this.handleSwitch}
+                  value={this.state.notifications}
+                />
+              </View>
+            </View>
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Car</Text>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTitle}>Make</Text>
+                <View style={styles.bottomBorder}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Ford"
+                    value={this.state.make}
+                    editable={this.state.editable}
+                    onChangeText={this.handleMake}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTitle}>Model</Text>
+                <View style={styles.bottomBorder}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Civic"
+                    value={this.state.model}
+                    editable={this.state.editable}
+                    onChangeText={this.handleModel}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTitle}>Color</Text>
+                <View style={styles.bottomBorder}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Blue"
+                    value={this.state.color}
+                    editable={this.state.editable}
+                    onChangeText={this.handleColor}
+                  />
                 </View>
               </View>
             </View>
-
-            <View style={styles.inputContainer}>
-              <Email name="email-outline" size={30} color="#475c67" />
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  keyboardType="email-address"
-                  style={styles.input}
-                  placeholder="Example@domain.com"
-                  value={this.state.email}
-                  onChangeText={this.handleEmail}
-                  editable={this.state.editable}
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Phone name="phone" size={30} color="#475c67" />
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  keyboardType="number-pad"
-                  style={styles.input}
-                  placeholder="999-999-9999"
-                  dataDetectorTypes="phoneNumber"
-                  value={this.state.phoneNumber}
-                  onChangeText={this.handlePhoneNumber}
-                  editable={this.state.editable}
-                  keyboardType="phone-pad"
-                />
-              </View>
-            </View>
-            <View style={styles.inputContainer}>
-              <Radius name="radius-outline" size={30} color="#475c67" />
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  keyboardType="numeric"
-                  style={styles.input}
-                  placeholder="10 miles"
-                  value={this.state.radius}
-                  onChangeText={this.handleRadius}
-                  editable={this.state.editable}
-                />
-              </View>
-            </View>
-            <View style={styles.inputContainer}>
-              <Notifications name="notifications-none" size={30} color="#475c67" />
-              <Switch
-                disabled={this.state.editable}
-                onValueChange={this.handleSwitch}
-                value={this.state.notifications}
-              />
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitle}>Car</Text>
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTitle}>Make</Text>
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Ford"
-                  value={this.state.make}
-                  editable={this.state.editable}
-                  onChangeText={this.handleMake}
-                />
-              </View>
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTitle}>Model</Text>
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Civic"
-                  value={this.state.model}
-                  editable={this.state.editable}
-                  onChangeText={this.handleModel}
-                />
-              </View>
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTitle}>Color</Text>
-              <View style={styles.bottomBorder}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Blue"
-                  value={this.state.color}
-                  editable={this.state.editable}
-                  onChangeText={this.handleColor}
-                />
-              </View>
+            <View style={styles.buttonSection}>
+              <TouchableOpacity style={styles.editButton} onPress={this.handleEdit}>
+                <Text style={styles.buttonTitle}>{this.state.buttonTitle ? 'Update' : 'Edit'}</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.buttonSection}>
-            <TouchableOpacity style={styles.editButton} onPress={this.handleEdit}>
-              <Text style={styles.buttonTitle}>{this.state.buttonTitle ? 'Update' : 'Edit'}</Text>
+            <TouchableOpacity style={styles.logoutButton} onPress={this.handleLogout}>
+              <Text style={styles.buttonTitle}>Log out</Text>
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.buttonSection}>
-          <TouchableOpacity style={styles.logoutButton} onPress={this.handleLogout}>
-            <Text style={styles.buttonTitle}>Log out</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     );
   }
 }
