@@ -23,14 +23,32 @@ export default {
     return apiWrapper({
       path: RIDES,
       params: driverRides,
-      headers: { token },
+      token,
     }).then(res => res.json());
   },
-  getScheduledRides() {
-    return fetch(SCHEDULEDRIDES).then(response => response.json());
+  acceptRide(id, token) {
+    return apiWrapper({
+      path: RIDES,
+      params: `/${id}/accept`,
+      method: 'POST',
+      token,
+    }).then(res => res.json());
   },
-  getApprovedRides() {
-    return fetch(APPROVEDRIDES).then(response => response.json());
+  completeRide(id, token) {
+    return apiWrapper({
+      path: RIDES,
+      params: `/${id}/complete`,
+      method: 'POST',
+      token,
+    }).then(res => res.json());
+  },
+  cancelRide(id, token) {
+    return apiWrapper({
+      path: RIDES,
+      params: `/${id}/cancel`,
+      method: 'POST',
+      token,
+    }).then(res => res.json());
   },
 
   getAvailabilities() {
