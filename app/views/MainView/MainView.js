@@ -86,6 +86,11 @@ export default class MainView extends Component<Props> {
   };
 
   upcomingScheduledRide = (item) => {
+    const { token } = this.state;
+    const { navigation } = this.props;
+    const id = item.rider_id;
+    const date = item.pick_up_time;
+    const name = item.riderName;
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
@@ -95,7 +100,16 @@ export default class MainView extends Component<Props> {
     return (
       <UpcomingRideCard
         key={item.driver_id}
-        onPress={this.navigateToRideOverView}
+        onPress={() => {
+          navigation.navigate('RideView', {
+            id,
+            token,
+            startLocation,
+            endLocation,
+            date,
+            name,
+          });
+        }}
         name={item.riderName}
         date={item.pick_up_time}
         pickupLocation={startLocation.join(', ')}
@@ -165,18 +179,32 @@ export default class MainView extends Component<Props> {
   };
 
   requestedRide = (item) => {
+    const { token } = this.state;
+    const { navigation } = this.props;
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
       item.start_location.state,
     ];
     const endLocation = [item.end_location.street, item.end_location.city, item.end_location.state];
+    const id = item.rider_id;
+    const date = item.pick_up_time;
+    const name = item.riderName;
     return (
       <RequestedRideCard
         key={item.driver_id}
-        onPress={this.navigateToDetails}
-        name={item.riderName}
-        date={item.pick_up_time}
+        onPress={() => {
+          navigation.navigate('RequestedRidesDetails', {
+            id,
+            token,
+            startLocation,
+            endLocation,
+            date,
+            name,
+          });
+        }}
+        name={name}
+        date={date}
         pickupLocation={startLocation.join(', ')}
         dropoffLocation={endLocation.join(', ')}
       />
@@ -221,21 +249,11 @@ export default class MainView extends Component<Props> {
     navigation.navigate('AgendaView');
   };
 
-  navigateToRideOverView = () => {
-    const { navigation } = this.props;
-    navigation.navigate('RideView');
-  };
-
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
     const { scheduledRides } = this.state;
     const { navigation } = this.props;
     navigation.navigate('DriverScheduleView', { scheduledRides });
-  };
-
-  navigateToDetails = () => {
-    const { navigation } = this.props;
-    navigation.navigate('RequestedRidesDetails');
   };
 
   render() {

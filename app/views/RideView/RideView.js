@@ -109,11 +109,14 @@ export default class RideView extends Component<Props> {
 
   renderOverview = () => {
     const { textValue } = this.state;
+    const { navigation } = this.props;
+    const startLocation = navigation.getParam('startLocation');
+    const endLocation = navigation.getParam('endLocation');
     if (textValue === 'Tap to arrive') {
       return (
         <RideOverviewCard
           title="Pick up"
-          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          address={startLocation.join(', ')}
           onPress={this.handlePickUpDirections}
         />
       );
@@ -122,7 +125,7 @@ export default class RideView extends Component<Props> {
       return (
         <RideOverviewCard
           title="Drop off"
-          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          address={endLocation.join(', ')}
           onPress={this.handleDropOffDirections}
         />
       );
@@ -130,8 +133,8 @@ export default class RideView extends Component<Props> {
 
     return (
       <InitOverviewCard
-        pickupAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
-        dropoffAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
+        pickupAddress={startLocation.join(', ')}
+        dropoffAddress={endLocation.join(', ')}
       />
     );
   };
@@ -140,6 +143,8 @@ export default class RideView extends Component<Props> {
     const {
       textValue, isVisible, latitude, longitude,
     } = this.state;
+    const { navigation } = this.props;
+    const name = navigation.getParam('name');
     return (
       <View style={styles.container}>
         <View style={styles.profileContainer}>
@@ -152,7 +157,7 @@ export default class RideView extends Component<Props> {
             containerStyle={styles.avatarContainer}
           />
           <Text numberOfLines={3} style={styles.nameText}>
-            Hubert Blaine De la Forencia
+            name
           </Text>
         </View>
         <Popup
