@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Switch, AsyncStorage, Alert,
+  Text, TextInput, View, TouchableOpacity, Switch, Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 

@@ -4,7 +4,6 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  AsyncStorage,
   Image,
   TouchableWithoutFeedback,
   Keyboard,
