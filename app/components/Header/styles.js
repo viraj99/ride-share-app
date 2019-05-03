@@ -9,14 +9,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: (Platform.OS === 'ios' ? 80 : 56) + getStatusBarHeight(),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   centerContainer: {
     flex: 3,

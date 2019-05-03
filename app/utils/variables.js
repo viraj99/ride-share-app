@@ -23,17 +23,16 @@ const colors = {
   primary: '#1EAA70',
   secondary: '#ff8262',
   tertiary: '#fcfcf6',
-  accent: '#FF4957',
+  active: '#FF4957',
   black: '#2F2F2F',
   white: '#FFFFFF',
   gray: '#BDBFC7',
   gray2: '#D8D8D8',
   gray3: '#F0F0F0',
   gray4: '#F7F8FA',
+  darkgray: '#475c67',
+  lightgray: '#b1c1c8',
 };
-
-// '#475c67' - dark gray
-// '#b1c1c8' - light gray
 
 export default {
   platformStyle,
