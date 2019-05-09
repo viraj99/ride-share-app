@@ -3,7 +3,6 @@ import {
   Text, TextInput, View, TouchableOpacity, Switch, Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
@@ -23,8 +22,10 @@ class Settings extends Component {
     super(props);
     this.state = {
       editable: false,
-      notifications: true,
+      active: true,
       buttonTitle: false,
+      allowEmailNotification: false,
+      allowPhoneNotification: false,
       email: '',
       phoneNumber: '',
       radius: '',
@@ -42,7 +43,9 @@ class Settings extends Component {
     this.handleRadius = this.handleRadius.bind(this);
     this.handleMake = this.handleMake.bind(this);
     this.handleColor = this.handleColor.bind(this);
-    this.handleSwitch = this.handleSwitch.bind(this);
+    this.handleActive = this.handleActive.bind(this);
+    this.handleEmailNotification = this.handleEmailNotification.bind(this);
+    this.handlePhoneNotification = this.handlePhoneNotification.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
     this.handleFirstName = this.handleFirstName.bind(this);
     this.handleLastName = this.handleLastName.bind(this);
@@ -57,7 +60,7 @@ class Settings extends Component {
   handleLogout() {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const token = obj.token;
+      const { token } = obj;
       API.logout(token)
         .then((res) => {
           const loggedOut = res.json.Success;
@@ -88,14 +91,14 @@ class Settings extends Component {
         email: this.state.email,
         phone: this.state.phoneNumber,
         radius: this.state.radius,
-        is_active: this.state.notifications,
+        is_active: this.state.active,
         car_make: this.state.make,
         car_model: this.state.model,
         car_color: this.state.color,
       };
       AsyncStorage.getItem('token', (err, result) => {
         const obj = JSON.parse(result);
-        const token = obj.token;
+        const { token } = obj;
         API.updateSettingsInfo(data, token);
       });
     } else {
@@ -151,17 +154,30 @@ class Settings extends Component {
     });
   };
 
-  handleSwitch = (value) => {
+  handleActive() {
     this.setState({
-      notifications: value,
+      active: !this.state.active,
     });
-  };
+  }
 
-  componentWillMount() {
-    AsyncStorage.getItem('token', (err, result) => {
+  handleEmailNotification() {
+    this.setState({
+      allowEmailNotification: !this.state.allowEmailNotification,
+    });
+  }
+
+  handlePhoneNotification() {
+    this.setState({
+      allowPhoneNotification: !this.state.allowPhoneNotification,
+    });
+  }
+
+  async componentDidMount() {
+    await AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const token = obj.token;
-      API.getSettingInfo(token)
+      const tokenValue = obj.token;
+
+      API.getSettingInfo(tokenValue)
         .then((res) => {
           this.setState({
             firstName: res.first_name,
@@ -169,14 +185,14 @@ class Settings extends Component {
             email: res.email,
             phoneNumber: res.phone,
             radius: JSON.stringify(res.radius),
-            notifications: res.is_active,
+            active: res.is_active,
             make: res.car_make,
             model: res.car_model,
             color: res.car_color,
             organization_id: res.organization_id,
           });
         })
-        .catch((err) => {
+        .catch((error) => {
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
         });
@@ -250,7 +266,7 @@ class Settings extends Component {
                 </View>
               </View>
               <View style={styles.inputContainer}>
-                <Radius name="radius-outline" size={30} color="#475c67" />
+                <Radius name="map-marker-radius" size={30} color="#475c67" />
 
                 <View style={styles.bottomBorder}>
                   <Text style={styles.radiusTitle}>Radius</Text>
@@ -264,15 +280,56 @@ class Settings extends Component {
                   />
                 </View>
               </View>
+            </View>
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Notifications</Text>
+              </View>
               <View style={styles.inputContainer}>
-                <Notifications name="notifications-none" size={30} color="#475c67" />
-                <Switch
-                  disabled={this.state.editable}
-                  onValueChange={this.handleSwitch}
-                  value={this.state.notifications}
-                />
+                <View>
+                  <Text style={styles.inputTitle}>Active </Text>
+                  <Text style={styles.notificationDescription}>Turn off/on Active Status</Text>
+                </View>
+                <View style={styles.switchStyle}>
+                  <Switch
+                    disabled={!this.state.editable}
+                    onValueChange={this.handleActive}
+                    value={this.state.active}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <View>
+                  <Text style={styles.inputTitle}>Email</Text>
+                  <Text style={styles.notificationDescription}>
+                    Turn off/on email notifications
+                  </Text>
+                </View>
+                <View style={styles.switchStyle}>
+                  <Switch
+                    disabled={!this.state.editable}
+                    onValueChange={this.handleEmailNotification}
+                    value={this.state.allowEmailNotification}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <View>
+                  <Text style={styles.inputTitle}>Phone </Text>
+                  <Text style={styles.notificationDescription}>
+                    Turn off/on phone notifications
+                  </Text>
+                </View>
+                <View style={styles.switchStyle}>
+                  <Switch
+                    disabled={!this.state.editable}
+                    onValueChange={this.handlePhoneNotification}
+                    value={this.state.allowPhoneNotification}
+                  />
+                </View>
               </View>
             </View>
+
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Car</Text>

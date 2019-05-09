@@ -39,6 +39,14 @@ export default StyleSheet.create({
     fontSize: 20,
     color: '#475c67',
   },
+  notificationDescription: {
+    fontSize: 12,
+    color: '#475c67',
+    paddingLeft: 5,
+  },
+  switchStyle: {
+    paddingTop: 15,
+  },
   input: {
     fontSize: 20,
     color: '#475c67',
