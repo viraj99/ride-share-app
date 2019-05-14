@@ -55,7 +55,7 @@ const MainViewStack = createStackNavigator(
     RequestedRidesDetails: {
       screen: RequestedRidesDetails,
       navigationOptions: {
-        headerTitle: 'Requested Rides Details',
+        headerTitle: 'Requested Ride Details',
         headerStyle: {
           backgroundColor: '#1EAA70',
         },

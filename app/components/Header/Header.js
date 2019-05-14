@@ -12,7 +12,7 @@ const Header = ({ onPress }) => (
   <LinearGradient
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 0 }}
-    colors={Platform.OS === 'ios' ? ['#45bb92', '#15a76a', '#11a461'] : ['#1EAA70', '#1EAA70']}
+    colors={Platform.OS === 'ios' ? ['#15a76a', '#15a76a', '#11a461'] : ['#1EAA70', '#1EAA70']}
     style={styles.headerContainer}
   >
     <View style={styles.leftContainer}>

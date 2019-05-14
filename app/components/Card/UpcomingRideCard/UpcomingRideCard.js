@@ -37,7 +37,7 @@ const UpcomingRideCard = ({
       </Text>
     </Block>
     <Block row center style={{ marginTop: 16 }}>
-      <StartButton onPress={onPress} />
+      <StartButton onPress={onPress} title="Start" />
     </Block>
   </View>
 );

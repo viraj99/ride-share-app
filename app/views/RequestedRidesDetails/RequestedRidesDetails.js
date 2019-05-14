@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import moment from 'moment';
 
-import { NavigationEvents } from 'react-navigation';
 import { InitOverviewCard } from '../../components/Card';
 import styles from './styles';
-import Badge from '../../components/Badge';
-import Block from '../../components/Block';
-import API from '../../api/api';
 
 export default class RequestedRidesDetails extends Component<Props> {
   constructor(props) {
@@ -47,19 +42,21 @@ export default class RequestedRidesDetails extends Component<Props> {
       <View style={styles.container}>
         <View style={styles.profileContainer}>
           <Text numberOfLines={3} style={styles.nameText}>
+            Picking up:
+          </Text>
+          <Text numberOfLines={3} style={styles.nameText}>
             Name
           </Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-            <Text style={styles.dateText}>{moment(date).format('MMM D')}</Text>
-            <Text style={styles.dateText}>pick up at</Text>
-            <Text style={styles.dateText}>{moment(date).format('h:mm A')}</Text>
-          </View>
         </View>
 
-        <InitOverviewCard
-          pickupAddress={startLocation.join(', ')}
-          dropoffAddress={endLocation.join(', ')}
-        />
+        <View style={styles.cardContainer}>
+          <InitOverviewCard
+            pickupAddress={startLocation.join(', ')}
+            dropoffAddress={endLocation.join(', ')}
+            date={date}
+          />
+        </View>
+
         <View style={styles.buttonsContainer}>
           <Button
             title={textValue}

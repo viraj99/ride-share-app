@@ -17,7 +17,7 @@ const StartButton = ({ title, onPress }) => (
   >
     <View style={styles.buttonWrapper}>
       <View style={styles.startTextContainer}>
-        <Text style={styles.buttonText}>Start</Text>
+        <Text style={styles.buttonText}>{title}</Text>
       </View>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.circleButtonContainer}>

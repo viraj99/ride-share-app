@@ -8,15 +8,12 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fcfcf6',
   },
-  avatarContainer: {
-    borderWidth: 3,
-    borderColor: '#475c67',
-  },
   nameText: {
     fontSize: 16,
     fontWeight: '500',
     color: '#475c67',
     alignSelf: 'center',
+    lineHeight: 28,
   },
   footer: {
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 10 : 10,
@@ -40,20 +37,17 @@ export default StyleSheet.create({
     borderRadius: 40,
     width: width - 100,
   },
+  cardContainer: {
+    flex: 3,
+  },
   profileContainer: {
     flex: 1,
-    justifyContent: 'space-evenly',
-    // alignItems: 'center',
-    // marginTop: Platform.OS === 'ios' ? 0 : 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  dateText: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#475c67',
   },
 });
