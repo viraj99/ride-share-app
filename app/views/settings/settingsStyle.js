@@ -39,6 +39,14 @@ export default StyleSheet.create({
     fontSize: 20,
     color: '#475c67',
   },
+  notificationDescription: {
+    fontSize: 12,
+    color: '#475c67',
+    paddingLeft: 5,
+  },
+  switchStyle: {
+    paddingTop: 15,
+  },
   input: {
     fontSize: 20,
     color: '#475c67',
@@ -47,7 +55,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-
+  radiusTitle: {
+    fontSize: 13,
+    color: '#475c67',
+  },
   bottomBorder: {
     borderBottomWidth: 1,
     borderBottomColor: '#ff8262',

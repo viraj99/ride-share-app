@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Image,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import Mail from 'react-native-vector-icons/AntDesign';
+import Lock from 'react-native-vector-icons/AntDesign';
 import styles from './loginStyle.js';
 import logo from './route.png';
 import API from '../../api/api';
@@ -23,7 +30,6 @@ class Login extends Component {
     this.inputs = {};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateUsername = this.validateUsername.bind(this);
-    this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   handleUsername = (text) => {
@@ -44,7 +50,7 @@ class Login extends Component {
 
   validateUsername() {
     const { user } = this.state;
-    if (user.includes('@') && user.includes('.com')) {
+    if (user.includes('@') && user.includes('.')) {
       return null;
     }
     this.setState({
@@ -78,74 +84,79 @@ class Login extends Component {
       });
   }
 
-  handleSignUp() {
-    console.log('sign up function hit');
-  }
-
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}> Ride Share</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}> Ride Share</Text>
+            </View>
+            <View style={styles.image}>
+              <Image source={logo} />
+              {/* Icon made by Map & Navigation from www.flaticon.com */}
+            </View>
           </View>
-          <View style={styles.image}>
-            <Image source={logo} />
-          </View>
-        </View>
 
-        <View style={styles.formContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.formTitle}>Sign in</Text>
-          </View>
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-          </View>
-          <View style={styles.sectionContainer}>
-            <TextInput
-              autoCapitalize="none"
-              keyboardType="email-address"
-              blurOnSubmit={false}
-              style={styles.textInput}
-              placeholder="Username"
-              value={this.state.username}
-              onChangeText={this.handleUsername}
-              onSubmitEditing={() => {
-                this.validateUsername();
-                this.focusNextField('two');
-              }}
-            />
-          </View>
-          <View style={styles.sectionContainer}>
-            <TextInput
-              secureTextEntry
-              style={styles.textInput}
-              blurOnSubmit={false}
-              placeholder="Password"
-              value={this.state.password}
-              onChangeText={this.handlePassword}
-              onSubmitEditing={() => {
-                this.handleSubmit();
-              }}
-              ref={(input) => {
-                this.inputs.two = input;
-              }}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <View style={styles.submitContainer}>
-              <TouchableOpacity style={styles.submitButton} onPress={() => this.handleSubmit()}>
-                <Text style={styles.submitButtonText}>Log in</Text>
-              </TouchableOpacity>
+          <View style={styles.formContainer}>
+            <View style={styles.formTitleContainer}>
+              <Text style={styles.formTitle}>Sign in</Text>
+            </View>
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.sectionContainer}>
+                <View style={styles.icon}>
+                  <Mail name="mail" size={20} color="#b1c1c8" />
+                </View>
+                <TextInput
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  blurOnSubmit={false}
+                  style={styles.textInput}
+                  placeholder="Username"
+                  value={this.state.username}
+                  onChangeText={this.handleUsername}
+                  onSubmitEditing={() => {
+                    this.validateUsername();
+                    this.focusNextField('two');
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.sectionContainer}>
+                <View style={styles.icon}>
+                  <Lock name="lock" size={24} color="#b1c1c8" />
+                </View>
+                <TextInput
+                  secureTextEntry
+                  style={styles.textInput}
+                  blurOnSubmit={false}
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChangeText={this.handlePassword}
+                  onSubmitEditing={() => {
+                    this.handleSubmit();
+                  }}
+                  ref={(input) => {
+                    this.inputs.two = input;
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <View style={styles.submitContainer}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => this.handleSubmit()}>
+                  <Text style={styles.submitButtonText}>LOGIN</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-        <View>
-          <TouchableOpacity style={styles.signUpButton} onPress={() => this.handleSignUp()}>
-            <Text style={styles.signUpButtonText}>Sign up</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
