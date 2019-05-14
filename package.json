@@ -46,6 +46,7 @@
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|react-navigation-header-buttons|react-navigation-stack|@react-navigation)"
     ],
     "setupFiles": [
+      "./node_modules/react-native-gesture-handler/jestSetup.js",
       "./jestSetupFile.js"
     ]
   }
