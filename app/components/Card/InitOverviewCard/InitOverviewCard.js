@@ -4,12 +4,16 @@ import {
 } from 'react-native';
 
 import moment from 'moment';
+import { createOpenLink } from 'react-native-open-maps';
 
 import Badge from '../../Badge';
 import Block from '../../Block';
 // import PropTypes from 'prop-types';
 import styles from './styles';
 
+// vars below will be used to open maps to check direction but does not start navigation
+// const handlePickup = { latitude: pickupLat, longitude: pickupLong, query: 'Pickup Spot' };
+// const openYosemite = createOpenLink(handlePickup);
 const InitOverviewCard = ({
   onPress, pickupAddress, dropoffAddress, date, note,
 }) => (
@@ -41,7 +45,6 @@ const InitOverviewCard = ({
         </TouchableOpacity>
       </Block>
     </Block>
-
     <View style={[styles.cardContainer, styles.noteContainer, styles.shadow]}>
       <Block style={styles.noteCard}>
         <ScrollView>
@@ -54,5 +57,4 @@ const InitOverviewCard = ({
     </View>
   </Block>
 );
-
 export default InitOverviewCard;
