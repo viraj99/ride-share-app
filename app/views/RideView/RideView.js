@@ -6,6 +6,7 @@ import { Avatar, Button, Icon } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
 
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
+import Block from '../../components/Block';
 import styles from './styles';
 
 const data = [
@@ -24,7 +25,7 @@ export default class RideView extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      textValue: 'Start Ride',
+      textValue: 'Go to pickup',
       isVisible: false,
       latitude: 0,
       longitude: 0,
@@ -62,7 +63,7 @@ export default class RideView extends Component<Props> {
     const { textValue } = this.state;
     const { navigation } = this.props;
 
-    if (textValue === 'Start Ride') {
+    if (textValue === 'Go to pickup') {
       this.setState({
         textValue: 'Tap to arrive',
       });
@@ -109,11 +110,15 @@ export default class RideView extends Component<Props> {
 
   renderOverview = () => {
     const { textValue } = this.state;
+    const { navigation } = this.props;
+    const startLocation = navigation.getParam('startLocation');
+    const endLocation = navigation.getParam('endLocation');
+    const date = navigation.getParam('date');
     if (textValue === 'Tap to arrive') {
       return (
         <RideOverviewCard
           title="Pick up"
-          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          address={startLocation.join(', ')}
           onPress={this.handlePickUpDirections}
         />
       );
@@ -122,7 +127,7 @@ export default class RideView extends Component<Props> {
       return (
         <RideOverviewCard
           title="Drop off"
-          address="12399 SE Really Long Street Name for Test Purposes Trwy NW Unit 1, Cairo, GA 30000"
+          address={endLocation.join(', ')}
           onPress={this.handleDropOffDirections}
         />
       );
@@ -130,8 +135,9 @@ export default class RideView extends Component<Props> {
 
     return (
       <InitOverviewCard
-        pickupAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
-        dropoffAddress="12399 SE Really Long Street Name for Test Purposes Frwy NW Unit 1, Cairo, GA 30000"
+        pickupAddress={startLocation.join(', ')}
+        dropoffAddress={endLocation.join(', ')}
+        date={date}
       />
     );
   };
@@ -140,45 +146,54 @@ export default class RideView extends Component<Props> {
     const {
       textValue, isVisible, latitude, longitude,
     } = this.state;
+    const { navigation } = this.props;
+    const name = navigation.getParam('name');
+
     return (
       <View style={styles.container}>
-        <View style={styles.profileContainer}>
-          <Avatar
-            size="large"
-            rounded
-            source={{
-              uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-            }}
-            containerStyle={styles.avatarContainer}
-          />
-          <Text numberOfLines={3} style={styles.nameText}>
-            Hubert Blaine De la Forencia
-          </Text>
+        <View style={{ flex: 1 }}>
+          <Block center style={{ marginTop: 10 }}>
+            <Avatar
+              size="large"
+              rounded
+              source={{
+                uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+              }}
+              containerStyle={styles.avatarContainer}
+            />
+          </Block>
+          <Block center space="evenly">
+            <Text numberOfLines={3} style={styles.nameText}>
+              James Wilkinson
+            </Text>
+          </Block>
         </View>
-        <Popup
-          isVisible={isVisible}
-          onCancelPressed={() => this.setState({ isVisible: false })}
-          onAppPressed={() => this.setState({ isVisible: false })}
-          onBackButtonPressed={() => this.setState({ isVisible: false })}
-          appsWhiteList={[
-            'apple-maps',
-            'google-maps',
-            'citymapper',
-            'transit',
-            'waze',
-            'yandex',
-            'moovit',
-            'yandex-maps',
-          ]}
-          modalProps={{ animationIn: 'slideInUp' }}
-          options={{
-            latitude,
-            longitude,
-            // sourceLatitude: 35.995616, optionally specify starting location for directions
-            // sourceLongitude: -78.902208, not optional if sourceLatitude is specified
-          }}
-        />
-        {this.renderOverview()}
+        <View style={{ flex: 3 }}>
+          <Popup
+            isVisible={isVisible}
+            onCancelPressed={() => this.setState({ isVisible: false })}
+            onAppPressed={() => this.setState({ isVisible: false })}
+            onBackButtonPressed={() => this.setState({ isVisible: false })}
+            appsWhiteList={[
+              'apple-maps',
+              'google-maps',
+              'citymapper',
+              'transit',
+              'waze',
+              'yandex',
+              'moovit',
+              'yandex-maps',
+            ]}
+            modalProps={{ animationIn: 'slideInUp' }}
+            options={{
+              latitude,
+              longitude,
+              // sourceLatitude: 35.995616, optionally specify starting location for directions
+              // sourceLongitude: -78.902208, not optional if sourceLatitude is specified
+            }}
+          />
+          {this.renderOverview()}
+        </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={this.onCancelPress}>
             <Icon name="close" size={20} color="#475c67" reverse raised type="material-community" />

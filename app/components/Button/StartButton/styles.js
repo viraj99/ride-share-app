@@ -6,8 +6,7 @@ const { height, width } = Dimensions.get('window');
 // #ff6272 final choice will be this pink use for resume change of state
 
 export default StyleSheet.create({
-  buttonContainer: {
-    backgroundColor: '#ff8262',
+  linearGradient: {
     borderRadius: 30,
     marginHorizontal: 10,
     height: 50,

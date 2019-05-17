@@ -4,7 +4,6 @@ import AgendaView from './AgendaView/AgendaView';
 import AuthLoadingScreen from './AuthLoadingScreen';
 import RideView from './RideView/RideView';
 import DriverScheduleView from './DriverScheduleView/DriverScheduleView';
-import RidesRequestedView from './RidesRequestedView/RidesRequestedView';
 import RequestedRidesDetails from './RequestedRidesDetails/RequestedRidesDetails';
 import Settings from './settings/settingsScreen';
 
@@ -15,7 +14,6 @@ export {
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,
-  RidesRequestedView,
   RequestedRidesDetails,
   Settings,
 };

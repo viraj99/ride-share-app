@@ -34,17 +34,6 @@ export default StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
   },
-  cancelButton: {
-    backgroundColor: '#475c67',
-    borderRadius: 40,
-    width: width - 100,
-  },
-  profileContainer: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    marginTop: Platform.OS === 'ios' ? 0 : 10,
-  },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

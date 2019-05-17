@@ -1,51 +1,41 @@
 import { Platform, StyleSheet, Dimensions } from 'react-native';
+import variables from '../../../utils/variables';
+
+const { height, width } = Dimensions.get('window');
 
 export default StyleSheet.create({
-  overviewContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: '#fff',
-    marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 25,
+  cardContainer: {
+    borderRadius: variables.sizes.border,
+    backgroundColor: variables.cardDefaultBg,
+    width: width - variables.sizes.padding * 2,
+    marginHorizontal: variables.sizes.margin,
+    paddingHorizontal: variables.sizes.padding,
+    paddingVertical: variables.sizes.padding * 0.66,
+  },
+  shadow: {
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 13,
+    elevation: Platform.OS === 'ios' ? 0 : 5,
   },
-  overviewLeftSection: {
-    width: '15%',
-    justifyContent: 'space-evenly',
+  title: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#2F2F2F',
   },
-  overviewCenterSection: {
-    width: '65%',
-    justifyContent: 'center',
+  noteText: {
+    fontSize: 14,
+    lineHeight: 28,
   },
-  initialCenter: {
-    width: '65%',
-    justifyContent: 'space-evenly',
+  location: {
+    color: '#2F2F2F',
+    fontWeight: Platform.OS === 'ios' ? '500' : '400',
   },
-  overviewRightSection: {
-    width: '15%',
-    justifyContent: 'space-around',
-  },
-  alignment: {
-    flexDirection: 'row',
+  noteContainer: {
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  statusTitle: {
-    fontSize: 25,
-    fontWeight: '600',
-    color: '#475c67',
-  },
-  locationText: {
-    fontSize: 22,
-    color: '#475c67',
+    marginVertical: 25,
   },
 });

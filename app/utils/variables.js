@@ -9,18 +9,36 @@ const platformStyle = undefined;
 const isIphoneX = platform === 'ios'
   && (deviceHeight === 812 || deviceWidth === 812 || deviceHeight === 896 || deviceWidth === 896);
 
-// color scheme
+const sizes = {
+  base: 16,
+  font: 14,
+  padding: 36,
+  margin: 36,
+  title: 24,
+  border: 16,
+  radius: 12,
+};
 
-// '#000000' - black
-// '#475c67' - dark gray
-// '#b1c1c8' - light gray
-// '#ff8262' - peach
-// '#fcfcf6' - cream background
-// '#1EAA70' - green
+const colors = {
+  primary: '#1EAA70',
+  secondary: '#ff8262',
+  tertiary: '#fcfcf6',
+  active: '#FF4957',
+  black: '#2F2F2F',
+  white: '#FFFFFF',
+  gray: '#BDBFC7',
+  gray2: '#D8D8D8',
+  gray3: '#F0F0F0',
+  gray4: '#F7F8FA',
+  darkgray: '#475c67',
+  lightgray: '#b1c1c8',
+};
 
 export default {
   platformStyle,
   platform,
+  sizes,
+  colors,
 
   // Card
   cardDefaultBg: '#fff',
