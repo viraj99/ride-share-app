@@ -1,6 +1,7 @@
 import Welcome from './Welcome/Welcome';
 import Login from './Login/loginScreen';
 import Register from './Register/Register';
+import RegisterVehicle from './Register/RegisterVehicle';
 import ForgotPassword from './ForgotPassword/ForgotPassword';
 import MainView from './MainView/MainView';
 import AgendaView from './AgendaView/AgendaView';
@@ -15,6 +16,7 @@ export {
   MainView,
   Login,
   Register,
+  RegisterVehicle,
   ForgotPassword,
   AgendaView,
   AuthLoadingScreen,

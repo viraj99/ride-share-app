@@ -9,6 +9,7 @@ import {
   RequestedRidesDetails,
   Settings,
   Register,
+  RegisterVehicle,
   ForgotPassword,
   Welcome,
 } from '../views';
@@ -78,6 +79,28 @@ const AppStack = createStackNavigator(
   },
 );
 
+const RegisterStack = createStackNavigator(
+  {
+    RegisterUserInfo: {
+      screen: Register,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+    RegisterVehicle: {
+      screen: RegisterVehicle,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+  },
+  {
+    headerBackTitleVisible: false,
+  },
+);
+
 const AuthStack = createStackNavigator(
   {
     Welcome: {
@@ -93,18 +116,17 @@ const AuthStack = createStackNavigator(
         headerTintColor: '#C5CCD6',
       },
     },
-    Register: {
-      screen: Register,
-      navigationOptions: {
-        headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
-    },
     ForgotPassword: {
       screen: ForgotPassword,
       navigationOptions: {
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
+      },
+    },
+    Register: {
+      screen: RegisterStack,
+      navigationOptions: {
+        header: () => null,
       },
     },
   },
