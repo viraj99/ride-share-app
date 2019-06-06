@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.3.3",
-    "i": "^0.3.6",
-    "jsc-android": "241213.x.x",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "npm": "^6.9.0",
@@ -24,8 +22,7 @@
     "react-native-modal-datetime-picker": "^7.4.0",
     "react-native-open-maps": "^0.3.3",
     "react-native-vector-icons": "^6.2.0",
-    "react-navigation": "^3.9.1",
-    "yarn": "^1.15.2"
+    "react-navigation": "^3.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
