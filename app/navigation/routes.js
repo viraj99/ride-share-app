@@ -1,9 +1,4 @@
-import {
-  createStackNavigator,
-  createSwitchNavigator,
-  createAppContainer,
-  createDrawerNavigator,
-} from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import {
   MainView,
   Login,
@@ -13,6 +8,10 @@ import {
   DriverScheduleView,
   RequestedRidesDetails,
   Settings,
+  Register,
+  RegisterVehicle,
+  ForgotPassword,
+  Welcome,
 } from '../views';
 
 const MainViewStack = createStackNavigator(
@@ -79,10 +78,60 @@ const AppStack = createStackNavigator(
     },
   },
 );
-const AuthStack = createStackNavigator(
-  { SignIn: Login },
+
+const RegisterStack = createStackNavigator(
   {
-    headerMode: 'none',
+    RegisterUserInfo: {
+      screen: Register,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+    RegisterVehicle: {
+      screen: RegisterVehicle,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+  },
+  {
+    headerBackTitleVisible: false,
+  },
+);
+
+const AuthStack = createStackNavigator(
+  {
+    Welcome: {
+      screen: Welcome,
+      navigationOptions: {
+        header: () => null,
+      },
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+    ForgotPassword: {
+      screen: ForgotPassword,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+    Register: {
+      screen: RegisterStack,
+      navigationOptions: {
+        header: () => null,
+      },
+    },
+  },
+  {
+    headerBackTitleVisible: false,
   },
 );
 
