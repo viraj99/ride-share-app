@@ -48,7 +48,7 @@ export default class MainView extends Component<Props> {
     this.setState({isLoading: true});
     API.getRides(token) // currently just using method to GET all the rides w/o status
       .then(res => {
-        console.log('scheduled rides', res);
+        // console.log('scheduled rides', res);
         this.setState({
           scheduledRides: res.rides,
           isLoading: false,
@@ -59,7 +59,7 @@ export default class MainView extends Component<Props> {
       });
     API.getRides(token) // this method will be changed
       .then(res => {
-        console.log('requested rides', res);
+        // console.log('requested rides', res);
         this.setState({
           approvedRides: res.rides,
           isLoading: false,
