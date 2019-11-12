@@ -1,4 +1,4 @@
-export const apiBaseUrl = 'https://carma-ctd.herokuapp.com/api/v1/';
+export const apiBaseUrl = 'https://ctd-rideshare.herokuapp.com/api/v1/';
 // paths
 export const LOGIN = 'login';
 export const RIDES = 'rides';

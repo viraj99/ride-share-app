@@ -1,10 +1,10 @@
-import { apiBaseUrl } from '../utils/urls';
+import {apiBaseUrl} from '../utils/urls';
 
 const buildHeaders = (additionalHeaders, token) => {
   const authHeaders = token
     ? {
-      token: `${token}`,
-    }
+        token: `${token}`,
+      }
     : {};
   return {
     Accept: 'application/json',
@@ -20,7 +20,7 @@ const buildUrl = (path, params) => {
   return url;
 };
 
-const apiWrapper = async (request) => {
+const apiWrapper = async request => {
   const {
     path,
     params,

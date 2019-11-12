@@ -4,5 +4,8 @@ import InitOverviewCard from './InitOverviewCard/InitOverviewCard';
 import RideOverviewCard from './RideOverviewCard/RideOverviewCard';
 
 export {
-  UpcomingRideCard, RequestedRideCard, RideOverviewCard, InitOverviewCard,
+  UpcomingRideCard,
+  RequestedRideCard,
+  RideOverviewCard,
+  InitOverviewCard,
 };

@@ -1,7 +1,7 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import {StyleSheet, Platform, Dimensions} from 'react-native';
 import variables from '../../utils/variables';
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 export default StyleSheet.create({
   button: {},
   container: {

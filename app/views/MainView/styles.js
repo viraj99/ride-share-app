@@ -1,5 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
-import { getBottomSpace } from '../../components/Header/StatusBar';
+import {Platform, StyleSheet} from 'react-native';
+import {getBottomSpace} from '../../components/Header/StatusBar';
 import variables from '../../utils/variables';
 
 export default StyleSheet.create({

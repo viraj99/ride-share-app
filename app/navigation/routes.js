@@ -1,4 +1,7 @@
-import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
+// import React from 'react';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+
 import {
   MainView,
   Login,
@@ -70,7 +73,7 @@ const MainViewStack = createStackNavigator(
 );
 
 const AppStack = createStackNavigator(
-  { Home: MainViewStack },
+  {Home: MainViewStack},
   {
     headerMode: 'none',
     navigationOptions: {

@@ -1,6 +1,6 @@
-import { Component, createRef } from 'react';
+import {Component, createRef} from 'react';
 
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 
 export default class BaseInput extends Component {
   constructor(props, context) {
@@ -79,7 +79,7 @@ export default class BaseInput extends Component {
   }
 
   _toggle(isActive) {
-    const { animationDuration, easing, useNativeDriver } = this.props;
+    const {animationDuration, easing, useNativeDriver} = this.props;
     this.isActive = isActive;
     Animated.timing(this.state.focusedAnim, {
       toValue: isActive ? 1 : 0,

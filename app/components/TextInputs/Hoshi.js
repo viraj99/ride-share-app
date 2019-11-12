@@ -62,7 +62,7 @@ export default class Hoshi extends BaseInput {
       inputPadding,
       height: inputHeight,
     } = this.props;
-    const { width, focusedAnim, value } = this.state;
+    const {width, focusedAnim, value} = this.state;
     const flatStyles = StyleSheet.flatten(containerStyle) || {};
     const containerWidth = flatStyles.width || width;
 
@@ -76,8 +76,7 @@ export default class Hoshi extends BaseInput {
             width: containerWidth,
           },
         ]}
-        onLayout={this._onLayout}
-      >
+        onLayout={this._onLayout}>
         <TextInput
           ref={this.input}
           {...this.props}
@@ -113,8 +112,7 @@ export default class Hoshi extends BaseInput {
                   outputRange: [0, 0, 0, 0], // reset to zero to match container
                 }),
               },
-            ]}
-          >
+            ]}>
             <Text style={[styles.label, labelStyle]}>{label}</Text>
           </Animated.View>
         </TouchableWithoutFeedback>

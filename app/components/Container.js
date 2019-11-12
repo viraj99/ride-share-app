@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  StyleSheet, View, TouchableWithoutFeedback, Keyboard,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -9,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Container = ({ children }) => (
+const Container = ({children}) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>{children}</View>
   </TouchableWithoutFeedback>

@@ -1,4 +1,4 @@
 import RideListItem from './RideListItem';
 import styles from './styles';
 
-export { RideListItem, styles };
+export {RideListItem, styles};

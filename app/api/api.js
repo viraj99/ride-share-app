@@ -15,7 +15,7 @@ export default {
   login(email, password) {
     return apiWrapper({
       path: LOGIN,
-      body: { email, password },
+      body: {email, password},
       method: 'POST',
     }).then(res => res.json());
   },
@@ -66,19 +66,19 @@ export default {
     return apiWrapper({
       path: LOGOUT,
       method: 'POST',
-      headers: { token },
+      headers: {token},
     }).then(res => res.json());
   },
   getSettingInfo(token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: { token },
+      headers: {token},
     }).then(res => res.json());
   },
   updateSettingsInfo(data, token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: { token },
+      headers: {token},
       body: data,
       method: 'PUT',
     }).then(res => res.json());

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { View, TextInput, Text } from 'react-native';
+import React, {Component} from 'react';
+import {View, TextInput, Text} from 'react-native';
 import styles from './styles';
-import { CalendarButton } from '../../components/Button';
+import {CalendarButton} from '../../components/Button';
 
 class ForgotPassword extends Component {
   state = {
@@ -10,7 +10,7 @@ class ForgotPassword extends Component {
   };
 
   render() {
-    const { email } = this.state;
+    const {email} = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -29,7 +29,10 @@ class ForgotPassword extends Component {
             defaultValue={email}
           />
           <View style={styles.padding}>
-            <CalendarButton onPress={() => console.log('reset pass')} title="Reset Password" />
+            <CalendarButton
+              onPress={() => console.log('reset pass')}
+              title="Reset Password"
+            />
           </View>
         </View>
       </View>

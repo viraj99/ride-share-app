@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 // import variables from '../../utils/variables';
 // import { getStatusBarHeight, getBottomSpace } from '../../components/Header/StatusBar';
 

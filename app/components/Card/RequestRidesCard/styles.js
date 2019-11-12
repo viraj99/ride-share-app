@@ -1,7 +1,7 @@
-import { Platform, StyleSheet, Dimensions } from 'react-native';
+import {Platform, StyleSheet, Dimensions} from 'react-native';
 import variables from '../../../utils/variables';
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   cardContainer: {
@@ -15,7 +15,7 @@ export default StyleSheet.create({
     backgroundColor: variables.cardDefaultBg,
     shadowColor: '#000',
     shadowOpacity: 0.11,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 13,
     elevation: Platform.OS === 'ios' ? 0 : 5,
   },

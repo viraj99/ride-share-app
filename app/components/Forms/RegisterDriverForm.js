@@ -1,14 +1,18 @@
 import React from 'react';
-import { Text, ScrollView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {Text, ScrollView} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
-import { CalendarButton } from '../Button';
-import { Sae } from '../TextInputs';
+import {CalendarButton} from '../Button';
+import {Sae} from '../TextInputs';
 
-const RegisterDriverForm = (props) => {
+const RegisterDriverForm = props => {
   const {
-    subTitle, navigation, handleChange, innerRef, handleSubmitEditing,
+    subTitle,
+    navigation,
+    handleChange,
+    innerRef,
+    handleSubmitEditing,
   } = props;
   return (
     <ScrollView>

@@ -1,5 +1,8 @@
-import { StyleSheet, Platform } from 'react-native';
-import { getStatusBarHeight, getBottomSpace } from '../../components/Header/StatusBar';
+import {StyleSheet, Platform} from 'react-native';
+import {
+  getStatusBarHeight,
+  getBottomSpace,
+} from '../../components/Header/StatusBar';
 
 export default StyleSheet.create({
   signup: {

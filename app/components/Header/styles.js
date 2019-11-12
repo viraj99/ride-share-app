@@ -1,5 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
-import { getStatusBarHeight } from './StatusBar';
+import {Platform, StyleSheet} from 'react-native';
+import {getStatusBarHeight} from './StatusBar';
 
 export default StyleSheet.create({
   headerContainer: {

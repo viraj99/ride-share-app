@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -23,13 +27,13 @@ class Login extends Component {
     this.validateUsername = this.validateUsername.bind(this);
   }
 
-  handleUsername = (text) => {
+  handleUsername = text => {
     this.setState({
       user: text,
     });
   };
 
-  handlePassword = (text) => {
+  handlePassword = text => {
     this.setState({
       pass: text,
     });
@@ -40,7 +44,7 @@ class Login extends Component {
   }
 
   validateUsername() {
-    const { user } = this.state;
+    const {user} = this.state;
     if (user.includes('@') && user.includes('.')) {
       return null;
     }
@@ -50,11 +54,11 @@ class Login extends Component {
   }
 
   handleSubmit() {
-    const { user, pass } = this.state;
-    const { navigation } = this.props;
+    const {user, pass} = this.state;
+    const {navigation} = this.props;
 
     API.login(user, pass)
-      .then((res) => {
+      .then(res => {
         const obj = {
           token: res.json.auth_token,
         };
@@ -68,7 +72,7 @@ class Login extends Component {
           navigation.navigate('MainView');
         }
       })
-      .catch((err) => {
+      .catch(err => {
         this.setState({
           errorMessage: 'Invalid username or password.',
         });
@@ -76,7 +80,7 @@ class Login extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     return (
       <Container>
         <KeyboardAvoidingView style={styles.container} enabled>
@@ -86,7 +90,9 @@ class Login extends Component {
                 <Text style={styles.formTitle}>Sign in</Text>
               </View>
               <View style={styles.errorContainer}>
-                <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+                <Text style={styles.errorMessage}>
+                  {this.state.errorMessage}
+                </Text>
               </View>
 
               <View style={styles.inputContainer}>
@@ -124,7 +130,7 @@ class Login extends Component {
                     onSubmitEditing={() => {
                       this.handleSubmit();
                     }}
-                    ref={(input) => {
+                    ref={input => {
                       this.inputs.two = input;
                     }}
                   />
@@ -132,17 +138,22 @@ class Login extends Component {
               </View>
               <View style={styles.buttonContainer}>
                 <View style={styles.submitContainer}>
-                  <TouchableOpacity style={styles.submitButton} onPress={this.handleSubmit}>
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.handleSubmit}>
                     <Text style={styles.submitButtonText}>LOGIN</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{ paddingTop: 10 }}>
+              <View style={{paddingTop: 10}}>
                 <TouchableOpacity
                   style={styles.errorMessage}
-                  onPress={() => navigation.navigate('ForgotPassword')}
-                >
-                  <Text style={{ textAlign: 'center', textDecorationLine: 'underline' }}>
+                  onPress={() => navigation.navigate('ForgotPassword')}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      textDecorationLine: 'underline',
+                    }}>
                     Forgot password?
                   </Text>
                 </TouchableOpacity>

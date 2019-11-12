@@ -1,6 +1,6 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import variables from '../../utils/variables';
-import { getBottomSpace } from '../Header/StatusBar';
+import {getBottomSpace} from '../Header/StatusBar';
 
 export default StyleSheet.create({
   scrollContainer: {

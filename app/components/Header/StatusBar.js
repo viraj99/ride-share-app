@@ -1,14 +1,16 @@
-import { Dimensions, Platform, StatusBar } from 'react-native';
+import {Dimensions, Platform, StatusBar} from 'react-native';
 
 // Borrowed from https://github.com/ptelad/react-native-iphone-x-helper
 // when finished merging add to config file
 function isIphoneX() {
   const dimen = Dimensions.get('window');
   return (
-    Platform.OS === 'ios'
-    && !Platform.isPad
-    && !Platform.isTVOS
-    && (dimen.height === 812 || dimen.width === 812 || (dimen.height === 896 || dimen.width === 896))
+    Platform.OS === 'ios' &&
+    !Platform.isPad &&
+    !Platform.isTVOS &&
+    (dimen.height === 812 ||
+      dimen.width === 812 ||
+      (dimen.height === 896 || dimen.width === 896))
   );
 }
 

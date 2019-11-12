@@ -1,21 +1,17 @@
 import React from 'react';
-import {
-  Text, View, TouchableOpacity,
-} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import DateDisplay from '../DateDisplay/DateDisplay';
 import styles from './styles';
-import { Availability } from '..';
+import {Availability} from '..';
 
-
-const Day = ({ data, onPress }) => {
-  parseLocation = (loc) => {
+const Day = ({data, onPress}) => {
+  parseLocation = loc => {
     const locationStr = `${loc.street} ${loc.city}, ${loc.state} ${loc.zip}`;
     return locationStr;
   };
 
-  renderAvailabilities = (item) => {
+  renderAvailabilities = item => {
     const avails = item.availability;
-
 
     return avails.map((i, index) => {
       console.log(i);
@@ -45,21 +41,19 @@ const Day = ({ data, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <DateDisplay
-        date={data.timestamp}
-      />
+      <DateDisplay date={data.timestamp} />
       <View style={styles.contentContainer}>
         {data.availability ? (
-          renderAvailabilities(data)) : (
-            <TouchableOpacity onPress={onPress}>
-              <View style={styles.textContainer}>
-                <Text style={styles.emptyText}>
-                  Nothing scheduled yet. Tap to add availability.
-                </Text>
-              </View>
-            </TouchableOpacity>
-        )
-        }
+          renderAvailabilities(data)
+        ) : (
+          <TouchableOpacity onPress={onPress}>
+            <View style={styles.textContainer}>
+              <Text style={styles.emptyText}>
+                Nothing scheduled yet. Tap to add availability.
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

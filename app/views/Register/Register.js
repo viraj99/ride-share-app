@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Container from '../../components/Container';
-import { RegisterHeader } from '../../components/Header';
-import { RegisterDriverForm } from '../../components/Forms';
+import {RegisterHeader} from '../../components/Header';
+import {RegisterDriverForm} from '../../components/Forms';
 
 class Register extends Component {
   constructor(props) {
@@ -19,10 +19,10 @@ class Register extends Component {
   }
 
   handleChange = (text, name) => {
-    this.setState({ [name]: text });
+    this.setState({[name]: text});
   };
 
-  handleSubmitEditing = (id) => {
+  handleSubmitEditing = id => {
     this.inputs[id].focus();
   };
 
@@ -31,12 +31,15 @@ class Register extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     const subTitle = "Let's start by creating an account";
 
     return (
       <Container>
-        <RegisterHeader onPress={() => navigation.navigate('Welcome')} iconColor="#475c67" />
+        <RegisterHeader
+          onPress={() => navigation.navigate('Welcome')}
+          iconColor="#475c67"
+        />
         <RegisterDriverForm
           subTitle={subTitle}
           navigation={navigation}

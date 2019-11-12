@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Alert, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import React, {Component} from 'react';
+import {Alert, Text, View} from 'react-native';
+import {Button} from 'react-native-elements';
 
-import { InitOverviewCard } from '../../components/Card';
+import {InitOverviewCard} from '../../components/Card';
 import styles from './styles';
 
 export default class RequestedRidesDetails extends Component<Props> {
@@ -14,12 +14,12 @@ export default class RequestedRidesDetails extends Component<Props> {
   }
 
   onPress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     const token = navigation.getParam('token');
     const id = navigation.getParam('id');
 
     Alert.alert('Want to accept this ride?', '', [
-      { text: 'cancel', style: 'cancel' },
+      {text: 'cancel', style: 'cancel'},
       {
         text: 'Confirm',
         onPress: () => {
@@ -32,8 +32,8 @@ export default class RequestedRidesDetails extends Component<Props> {
   };
 
   render() {
-    const { textValue } = this.state;
-    const { navigation } = this.props;
+    const {textValue} = this.state;
+    const {navigation} = this.props;
     const startLocation = navigation.getParam('startLocation');
     const endLocation = navigation.getParam('endLocation');
     const date = navigation.getParam('date');

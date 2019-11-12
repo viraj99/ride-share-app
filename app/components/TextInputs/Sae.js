@@ -1,6 +1,10 @@
 import React from 'react';
 import {
-  Animated, TextInput, TouchableWithoutFeedback, View, StyleSheet,
+  Animated,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+  StyleSheet,
 } from 'react-native';
 
 import BaseInput from './BaseInput';
@@ -45,7 +49,7 @@ export default class Sae extends BaseInput {
       labelStyle,
       borderColor,
     } = this.props;
-    const { width, focusedAnim, value } = this.state;
+    const {width, focusedAnim, value} = this.state;
 
     return (
       <View
@@ -56,8 +60,7 @@ export default class Sae extends BaseInput {
             height: inputHeight + inputPadding,
           },
         ]}
-        onLayout={this._onLayout}
-      >
+        onLayout={this._onLayout}>
         <TouchableWithoutFeedback onPress={this.focus}>
           <Animated.View
             style={{
@@ -66,8 +69,7 @@ export default class Sae extends BaseInput {
                 inputRange: [0, 1],
                 outputRange: [0, labelHeight + inputPadding],
               }),
-            }}
-          >
+            }}>
             <Animated.Text
               style={[
                 styles.label,
@@ -78,8 +80,7 @@ export default class Sae extends BaseInput {
                     outputRange: [18, 12],
                   }),
                 },
-              ]}
-            >
+              ]}>
               {label}
             </Animated.Text>
           </Animated.View>

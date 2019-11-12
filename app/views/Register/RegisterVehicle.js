@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
-import { RegisterVehicleForm } from '../../components/Forms';
+import {RegisterVehicleForm} from '../../components/Forms';
 
 class RegisterVehicle extends Component {
   constructor(props) {
@@ -24,10 +24,10 @@ class RegisterVehicle extends Component {
   };
 
   handleChange = (text, name) => {
-    this.setState({ [name]: text });
+    this.setState({[name]: text});
   };
 
-  handleSubmitEditing = (id) => {
+  handleSubmitEditing = id => {
     this.inputs[id].focus();
   };
 
