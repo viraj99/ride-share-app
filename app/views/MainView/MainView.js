@@ -50,7 +50,7 @@ export default class MainView extends Component<Props> {
       .then(res => {
         console.log('scheduled rides', res);
         this.setState({
-          scheduledRides: res,
+          scheduledRides: res.rides,
           isLoading: false,
         });
       })
@@ -61,7 +61,7 @@ export default class MainView extends Component<Props> {
       .then(res => {
         console.log('requested rides', res);
         this.setState({
-          approvedRides: res,
+          approvedRides: res.rides,
           isLoading: false,
         });
       })
@@ -129,7 +129,7 @@ export default class MainView extends Component<Props> {
     const dotPosition = Animated.divide(this.scrollX, variables.deviceWidth);
     return (
       <View style={styles.dotContainer}>
-        {scheduledRides.map((item, index) => {
+        {scheduledRides.slice(0, 3).map((item, index) => {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
