@@ -5,11 +5,20 @@ import {RideListItem} from '../../components/RideListItem';
 const DriverScheduleView = props => {
   const {navigation} = props;
   const scheduledRides = navigation.getParam('scheduledRides');
-
-  keyExtractor = item => item.driver_id.toString();
+  keyExtractor = item => item.id.toString();
 
   navigateToRideView = () => {
-    navigation.navigate('RideView');
+    // this is currently just dummy data to show
+    // how you can pass in the data to the ride view
+    const date = 'hard coded time';
+    const startLocation = ['street', 'city', 'state'];
+    const endLocation = ['street', 'city', 'state'];
+
+    navigation.navigate('RideView', {
+      startLocation,
+      endLocation,
+      date,
+    });
   };
 
   renderRideList = ({item, index}) => {
