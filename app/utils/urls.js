@@ -3,6 +3,7 @@ export const apiBaseUrl = 'https://ctd-rideshare.herokuapp.com/api/v1/';
 export const LOGIN = 'login';
 export const RIDES = 'rides';
 export const AVAILABILITIES = 'availabilities';
+export const ORGANIZATIONS = 'organizations';
 
 // params
 export const driverRides = '?driver_specific=true';
