@@ -12,10 +12,14 @@ class RegisterDriverForm extends React.Component {
     super(props);
     this.state = {
       orgs: [],
+      organization: '',
     };
   };
 
   componentDidMount() {
+    this.setState({
+      orgs: [],
+    })
     this.getOrganizations();
   }
 
@@ -31,30 +35,12 @@ class RegisterDriverForm extends React.Component {
         this.setState({
           orgs: orgArray
         })
-          // return <Picker.Item label={res.organization[i],name} value={res.organization.id} />
-        // }
-        // this.setState({ 
-        //   orgs: res.organization, 
-        // },
-        // ( () => {
-        // console.warn("does org fetch work?", this.state.orgs)
-        // })
-        // )
       })
       .catch(error => {
         console.log('There has been a problem with your fetch operation: ' + error.message);
         throw error;
       })
   };
-
-  createPickerItems = (orgsArray) => {
-      let count = orgsArray.length;
-      let item;
-      for (var n=0; n < count; n++) {
-        item = <Picker.Item label={orgsArray[n]} value={orgsArray[n]} />
-      }
-      return item;
-  }
   
   render() {
     // const {
@@ -64,6 +50,11 @@ class RegisterDriverForm extends React.Component {
     //   innerRef,
     //   handleSubmitEditing,
     // } = props;
+
+    const orgsList = this.state.orgs.map((eachOrg) =>       
+        <Picker.Item label={eachOrg} value={eachOrg} />
+    );
+
     return (
       <ScrollView>
         <Block middle>
@@ -72,25 +63,21 @@ class RegisterDriverForm extends React.Component {
               <Text style={styles.title}>Sign Up</Text>
               <Text style={styles.subTitle}>{this.props.subTitle}</Text>
             </Block>
-            <Text>Select the organization you are volunteering with:</Text>
+            <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Volunteering for:</Text>
             <Picker
               label="Organization Name"
-              labelStyle={styles.labelStyle}
+              // style={}
               inputPadding={16}
               labelHeight={24}
-              // active border height
               borderHeight={2}
               borderColor="#475c67"
-              // TextInput props
-              // returnKeyType="next"
-              // style={[styles.saeInput]}
-              // inputStyle={styles.saeText}
-              // onChangeText={text => this.props.handleChange(text, 'firstName')}
-              // ref={input => this.props.innerRef(input, 'FirstName')}
-              // onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
               blurOnSubmit={false}
+              selectedValue={this.state.organization}
+              onValueChange={(itemValue) =>
+                  this.setState({organization: itemValue})
+              }
             >
-              {this.createPickerItems(this.state.orgs)}
+              {orgsList}
             </Picker>
             <Sae
               label="First Name"
