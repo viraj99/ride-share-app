@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
+import { Keyboard } from 'react-native';
 import Container from '../../components/Container';
 import {RegisterHeader} from '../../components/Header';
 import {RegisterDriverForm} from '../../components/Forms';
+import API from '../../api/api';
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
+      organization_id: '',
+      first_name: '',
+      last_name: '',
+      phone: '',
       email: '',
+      radius: '',
+      is_active: '',
+      application_state: '',
+
+      data: {},
+      radius: '',
+      
       password: '',
-      phoneNumber: null,
       city: '',
       errors: [],
     };
@@ -23,12 +33,33 @@ class Register extends Component {
   };
 
   handleSubmitEditing = id => {
-    this.inputs[id].focus();
+    if (id === 'OrgName') {
+      Keyboard.dismiss();
+    } else {
+      this.inputs[id].focus();
+    }
+    const registerInfo = {
+      organization_id: this.state.organization_id,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      phone: this.state.phone,
+      email: this.state.email,
+      password: this.state.password,
+      radius: this.state.radius,
+    }
+    // console.warn("data?", registerInfo);
+    this.setState({data: registerInfo});
   };
 
   handleInnerRef = (input, id) => {
     this.inputs[id] = input;
+    // console.warn("what is this? ", this.inputs);
   };
+
+  handleUserEntries() {
+    // console.warn("data?", this.state.data);
+    API.createDriver(this.state.data);
+  }
 
   render() {
     const {navigation} = this.props;
@@ -47,6 +78,8 @@ class Register extends Component {
           handleChange={this.handleChange}
           innerRef={this.handleInnerRef}
           handleSubmitEditing={this.handleSubmitEditing}
+          handleUserEntries={this.handleUserEntries}
+          data={this.state.data}
         />
       </Container>
     );

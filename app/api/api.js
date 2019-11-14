@@ -7,7 +7,7 @@ import {
   LOGOUT,
   AVAILABILITIES,
   driverRides,
-  ORGANIZATIONS,
+  REGISTER
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 
@@ -86,13 +86,24 @@ export default {
   },
 
   getOrgs() {
-    // change this with the api wrapper
     return fetch('https://ctd-rideshare.herokuapp.com/api/v1/organizations', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         token: '',
       },
+    }).then(res => res.json());
+  },
+
+  createDriver(data) {
+    return apiWrapper({
+      path: REGISTER,
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        token: '',
+      },
+      driver: data,
     }).then(res => res.json());
   },
 };
