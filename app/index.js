@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   },
 });
 
+
 const App = () => (
   <View style={styles.container}>
     <MainApp />

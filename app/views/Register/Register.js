@@ -39,14 +39,18 @@ class Register extends Component {
       this.inputs[id].focus();
     }
     const registerInfo = {
-      organization_id: this.state.organization_id,
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      phone: this.state.phone,
-      email: this.state.email,
-      password: this.state.password,
-      radius: this.state.radius,
-    }
+      "driver":{
+            "organization_id": "1",	
+            "email": this.state.email,
+            "password": this.state.password,
+              "first_name": this.state.first_name,
+              "last_name": this.state.last_name,
+              "phone" : this.state.phone,
+              "is_active" : true,
+              "radius": this.state.radius,
+              }
+          
+      }
     // console.warn("data?", registerInfo);
     this.setState({data: registerInfo});
   };
@@ -56,10 +60,10 @@ class Register extends Component {
     // console.warn("what is this? ", this.inputs);
   };
 
-  handleUserEntries() {
-    // console.warn("data?", this.state.data);
-    API.createDriver(this.state.data);
-  }
+  // handleUserEntries() {
+  //   // console.warn("data?", this.state.data);
+  //   API.createDriver(this.state.data);
+  // }
 
   render() {
     const {navigation} = this.props;
@@ -78,7 +82,7 @@ class Register extends Component {
           handleChange={this.handleChange}
           innerRef={this.handleInnerRef}
           handleSubmitEditing={this.handleSubmitEditing}
-          handleUserEntries={this.handleUserEntries}
+          // handleUserEntries={this.handleUserEntries}
           data={this.state.data}
         />
       </Container>

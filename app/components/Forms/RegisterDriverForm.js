@@ -48,9 +48,14 @@ class RegisterDriverForm extends React.Component {
   };
 
   testingSomething = (userEntries, nav) => {
-      console.warn("maybe?", userEntries);
-      API.createDriver(userEntries);
-      nav.navigate('RegisterVehicle');
+      console.log("data before API call:", userEntries);
+      API.createDriver(userEntries)
+      // .then(nav.navigate('RegisterVehicle'))
+      //if error performing API fetch for posting driver, show error
+      .catch(error => {
+        console.warn('There has been a problem with your operation: ' + error.message);
+        throw error;
+      });
   }
   
   render() {
@@ -180,7 +185,7 @@ class RegisterDriverForm extends React.Component {
               borderColor="#475c67"
               blurOnSubmit={false}
               selectedValue={this.state.organization_id}
-              onValueChange={(itemValue) =>
+              onValueChange={(itemValue, itemIndex) =>
                   this.setState({organization_id: itemValue})
               }
             >

@@ -96,14 +96,36 @@ export default {
   },
 
   createDriver(data) {
+    // const driver = JSON.stringify(data)
+
+    const driver = {
+      "driver":{
+        "organization_id": "1",	
+	      "email": "email1984@gmail.com",
+	      "password":"stuff111",
+        "first_name": "first name",
+        "last_name": "last name",
+        "phone" : "3362555557",
+        "is_active" : true,
+        "radius" : 55
+      }
+    }
+    console.log(
+      'from api', driver
+    )
     return apiWrapper({
       path: REGISTER,
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        token: '',
+        'Accept': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      driver: data,
-    }).then(res => res.json());
+      body:driver,
+    })
+    .then(res => {
+      console.log('heyo', res.json())
+      return res.json()
+    }
+    )
   },
 };
