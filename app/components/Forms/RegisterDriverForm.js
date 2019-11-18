@@ -12,6 +12,9 @@ class RegisterDriverForm extends React.Component {
     super(props);
     this.state = {
       orgs: [],
+      radius: '',
+      orgNum: 0,
+      data: {},
     };
   };
 
@@ -33,7 +36,8 @@ class RegisterDriverForm extends React.Component {
         //loop through orgs list and push each org name into orgArray
         for (var i=0; i < res.organization.length; i++) {
           // console.warn("an org is: ", res.organization[i].id, res.organization[i].name);
-          orgArray.push(res.organization[i].name);
+          let index = res.organization[i].id;
+          orgArray.push(res.organization[i].name+","+index);
         }
         //store full list of all orgs in local state
         this.setState({
@@ -47,9 +51,11 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  testingSomething = (userEntries) => {
+  handleUserInput = (userEntries, nav, radius, orgID) => {
       console.log("data before API call:", userEntries);
-      API.createDriver(userEntries)
+      console.log("radius on continue submit: ", radius);
+      console.log("org Item index? ", orgID);
+      API.createDriver(userEntries, radius, orgID)
       // .then(nav.navigate('RegisterVehicle'))
       //if error performing API fetch for posting driver, show error
       .catch(error => {
@@ -64,9 +70,9 @@ class RegisterDriverForm extends React.Component {
     //name be both label and value of each item.
     const orgsList = this.state.orgs.map((eachOrg) =>       
         <Picker.Item 
-          label={eachOrg} 
-          value={eachOrg} 
-          ref={input => this.props.innerRef(input, 'OrgName')}
+          label={eachOrg.split(",")[0]} 
+          value={eachOrg.split(",")[1]} 
+          // ref={input => this.props.innerRef(input, 'OrgName')}
         />
     );
 
@@ -178,15 +184,14 @@ class RegisterDriverForm extends React.Component {
             <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Volunteering for:</Text>
             <Picker
               label="OrgName"
-              // style={}
               inputPadding={16}
               labelHeight={24}
               borderHeight={2}
               borderColor="#475c67"
               blurOnSubmit={false}
-              selectedValue={this.state.organization_id}
-              onValueChange={(itemValue, itemIndex) =>
-                  this.setState({organization_id: itemValue})
+              selectedValue={this.state.orgNum}
+              onValueChange={(itemValue) =>
+                  this.setState({orgNum: itemValue})
               }
             >
               {orgsList}
@@ -195,7 +200,6 @@ class RegisterDriverForm extends React.Component {
             <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Distance available to drive:</Text>
             <Picker
               label="Radius"
-              // style={}
               inputPadding={16}
               labelHeight={24}
               borderHeight={2}
@@ -203,7 +207,7 @@ class RegisterDriverForm extends React.Component {
               blurOnSubmit={false}
               selectedValue={this.state.radius}
               onValueChange={(itemValue) =>
-                  this.setState({radius: itemValue})
+                this.setState({radius: itemValue})
               }
             >
               <Picker.Item label="10 miles" value="10"/>
@@ -215,10 +219,7 @@ class RegisterDriverForm extends React.Component {
               <CalendarButton
                 title="Continue"
                 onPress={() => 
-                  this.testingSomething(this.props.data, this.props.navigation)}
-                  // API.createDriver(this.props.data)}
-                  // this.props.handleUserEntries()}
-                  // this.props.navigation.navigate('RegisterVehicle')}
+                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum)}
               />
             </Block>
           </KeyboardAwareScrollView>

@@ -9,20 +9,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      organization_id: '',
-      first_name: '',
-      last_name: '',
-      phone: '',
-      email: '',
-      radius: '',
-      is_active: '',
-      application_state: '',
-
       data: {},
-      radius: '',
-      
-      password: '',
-      city: '',
       errors: [],
     };
     this.inputs = {};

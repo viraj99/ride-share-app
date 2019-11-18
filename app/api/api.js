@@ -95,17 +95,17 @@ export default {
     }).then(res => res.json());
   },
 
-  createDriver(data) {
+  createDriver(data, radius, orgID) {
     const driver = {
       "driver":{
-        "organization_id": parseInt(data.driver.organization_id),	
+        "organization_id": parseInt(orgID),	
 	      "email": data.driver.email,
 	      "password": data.driver.password,
         "first_name": data.driver.first_name,
         "last_name": data.driver.last_name,
-        "phone" : data.driver.phone,
-        "is_active" : true,
-        "radius" : parseInt(data.driver.radius),
+        "phone": data.driver.phone,
+        "is_active": true,
+        "radius": parseInt(radius),
       }
     }
     return apiWrapper({
@@ -118,7 +118,6 @@ export default {
       body:driver,
     })
     .then(res => {
-      console.log('heyo', res.json())
       return res.json()
     }
     )
