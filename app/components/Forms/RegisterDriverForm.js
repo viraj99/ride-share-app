@@ -47,7 +47,7 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  testingSomething = (userEntries, nav) => {
+  testingSomething = (userEntries) => {
       console.log("data before API call:", userEntries);
       API.createDriver(userEntries)
       // .then(nav.navigate('RegisterVehicle'))

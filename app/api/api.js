@@ -96,23 +96,18 @@ export default {
   },
 
   createDriver(data) {
-    // const driver = JSON.stringify(data)
-
     const driver = {
       "driver":{
-        "organization_id": "1",	
-	      "email": "email1984@gmail.com",
-	      "password":"stuff111",
-        "first_name": "first name",
-        "last_name": "last name",
-        "phone" : "3362555557",
+        "organization_id": parseInt(data.driver.organization_id),	
+	      "email": data.driver.email,
+	      "password": data.driver.password,
+        "first_name": data.driver.first_name,
+        "last_name": data.driver.last_name,
+        "phone" : data.driver.phone,
         "is_active" : true,
-        "radius" : 55
+        "radius" : parseInt(data.driver.radius),
       }
     }
-    console.log(
-      'from api', driver
-    )
     return apiWrapper({
       path: REGISTER,
       method: 'POST',
