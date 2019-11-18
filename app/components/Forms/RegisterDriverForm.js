@@ -51,12 +51,9 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserInput = (userEntries, nav, radius, orgID) => {
-      console.log("data before API call:", userEntries);
-      console.log("radius on continue submit: ", radius);
-      console.log("org Item index? ", orgID);
-      API.createDriver(userEntries, radius, orgID)
-      // .then(nav.navigate('RegisterVehicle'))
+  handleUserInput = (userEntries, nav, radius, orgID, email) => {
+      API.createDriver(userEntries, radius, orgID, email)
+      .then(nav.navigate('RegisterVehicle'))
       //if error performing API fetch for posting driver, show error
       .catch(error => {
         console.warn('There has been a problem with your operation: ' + error.message);
@@ -219,7 +216,7 @@ class RegisterDriverForm extends React.Component {
               <CalendarButton
                 title="Continue"
                 onPress={() => 
-                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum)}
+                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum, this.state.data.driver.email)}
               />
             </Block>
           </KeyboardAwareScrollView>

@@ -3,23 +3,21 @@ import {View} from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
 import {RegisterVehicleForm} from '../../components/Forms';
+import API from '../../api/api';
 
 class RegisterVehicle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      carMake: '',
-      carModel: '',
-      carColor: '',
-      seatBelts: '',
-      carYear: '',
       errors: [],
+      carData: {},
+      token: '',
     };
     this.inputs = {};
   }
 
   handleSubmit = () => {
-    alert('Thank you for registering');
+    alert('Thank you for registering! You will receive an email regarding next steps within _ business days.');
     this.props.navigation.navigate('Welcome');
   };
 

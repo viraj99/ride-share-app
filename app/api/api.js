@@ -7,7 +7,8 @@ import {
   LOGOUT,
   AVAILABILITIES,
   driverRides,
-  REGISTER
+  REGISTER,
+  VEHICLE,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 
@@ -95,7 +96,7 @@ export default {
     }).then(res => res.json());
   },
 
-  createDriver(data, radius, orgID) {
+  createDriver(data, radius, orgID, email) {
     const driver = {
       "driver":{
         "organization_id": parseInt(orgID),	
@@ -108,18 +109,17 @@ export default {
         "radius": parseInt(radius),
       }
     }
+    console.log("data to API: ", driver)
     return apiWrapper({
       path: REGISTER,
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body:driver,
     })
     .then(res => {
       return res.json()
-    }
-    )
+    })
   },
 };
