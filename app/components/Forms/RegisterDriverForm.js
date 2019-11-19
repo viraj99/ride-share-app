@@ -15,6 +15,7 @@ class RegisterDriverForm extends React.Component {
       radius: '',
       orgNum: 0,
       data: {},
+
     };
   };
 
@@ -216,7 +217,7 @@ class RegisterDriverForm extends React.Component {
               <CalendarButton
                 title="Continue"
                 onPress={() => 
-                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum, this.state.data.driver.email)}
+                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum)}
               />
             </Block>
           </KeyboardAwareScrollView>
