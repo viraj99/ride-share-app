@@ -6,6 +6,7 @@ import Block from '../Block';
 import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
 import API from '../../api/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterDriverForm extends React.Component {
   constructor(props){
@@ -15,7 +16,6 @@ class RegisterDriverForm extends React.Component {
       radius: '',
       orgNum: 0,
       data: {},
-
     };
   };
 
@@ -52,9 +52,30 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserInput = (userEntries, nav, radius, orgID, email) => {
-      API.createDriver(userEntries, radius, orgID, email)
-      .then(nav.navigate('RegisterVehicle'))
+  handleUserInput = (userEntries, nav, radius, orgID) => {
+    API.createDriver(userEntries, radius, orgID)
+      .then(API.login(userEntries.driver.email, userEntries.driver.password)
+          .then(res => {
+            const obj = {
+              token: res.json.auth_token,
+            }
+
+            if (obj.token === undefined) {
+              this.setState({
+                errorMessage: 'Invalid username or password.',
+              });
+            } else {
+              AsyncStorage.setItem('token', JSON.stringify(obj));
+              nav.navigate('RegisterVehicle');
+            }
+          })
+          .catch(err => {
+            this.setState({
+              errorMessage: 'Invalid username or password.',
+            });
+          }),
+          this.setState({token: AsyncStorage.getItem('token')})
+      )  
       //if error performing API fetch for posting driver, show error
       .catch(error => {
         console.warn('There has been a problem with your operation: ' + error.message);

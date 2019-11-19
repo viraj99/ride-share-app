@@ -96,7 +96,7 @@ export default {
     }).then(res => res.json());
   },
 
-  createDriver(data, radius, orgID, email) {
+  createDriver(data, radius, orgID) {
     const driver = {
       "driver":{
         "organization_id": parseInt(orgID),	
@@ -109,6 +109,20 @@ export default {
         "radius": parseInt(radius),
       }
     }
+
+    const driver1 = {
+      "driver":{
+        "organization_id": 0,	
+	      "email": "d@gmail.com",
+	      "password": "",
+        "first_name": "",
+        "last_name": "",
+        "phone": "",
+        "is_active": true,
+        "radius": 0,
+      }
+    }
+
     console.log("data to API: ", driver)
     return apiWrapper({
       path: REGISTER,
@@ -116,7 +130,35 @@ export default {
       headers: {
         'Accept': 'application/json',
       },
-      body:driver,
+      body:driver1,
+    })
+    .then(res => {
+      return res.json()
+    })
+  },
+
+  createVehicle(vehicleData) {
+    const vehicle = {    
+        "vehicle":{
+          "car_make": vehicleData.vehicle.car_make,
+          "car_model": vehicleData.vehicle.car_model,
+          "car_year": parseInt(vehicleData.vehicle.car_year),
+          "car_color": vehicleData.vehicle.car_color,
+          "car_plate": vehicleData.vehicle.car_plate,
+          "seat_belt_num": parseInt(vehicleData.vehicle.seat_belt_num),
+          "insurance_provider": "testing",
+          "insurance_start": new Date(),
+          "insurance_stop": new Date(),
+        }
+    }
+    console.log("data to API: ", vehicle)
+    return apiWrapper({
+      path: REGISTER,
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
+      body:vehicle,
     })
     .then(res => {
       return res.json()

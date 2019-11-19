@@ -77,6 +77,7 @@ class Login extends Component {
           errorMessage: 'Invalid username or password.',
         });
       });
+      console.log("login token: ", AsyncStorage.getItem('token'))
   }
 
   render() {

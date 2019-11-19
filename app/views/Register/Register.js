@@ -25,32 +25,26 @@ class Register extends Component {
     } else {
       this.inputs[id].focus();
     }
+    
     const registerInfo = {
       "driver":{
-            "organization_id": "1",	
-            "email": this.state.email,
-            "password": this.state.password,
-              "first_name": this.state.first_name,
-              "last_name": this.state.last_name,
-              "phone" : this.state.phone,
-              "is_active" : true,
-              "radius": this.state.radius,
-              }
-          
+          "organization_id": "1",	
+          "email": this.state.email,
+          "password": this.state.password,
+          "first_name": this.state.first_name,
+          "last_name": this.state.last_name,
+          "phone" : this.state.phone,
+          "is_active" : true,
+          "radius": this.state.radius,
       }
-    // console.warn("data?", registerInfo);
+    }
+    console.log("data input is: ", registerInfo);
     this.setState({data: registerInfo});
   };
 
   handleInnerRef = (input, id) => {
     this.inputs[id] = input;
-    // console.warn("what is this? ", this.inputs);
   };
-
-  // handleUserEntries() {
-  //   // console.warn("data?", this.state.data);
-  //   API.createDriver(this.state.data);
-  // }
 
   render() {
     const {navigation} = this.props;
