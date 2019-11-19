@@ -5,25 +5,28 @@ import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props){
       super(props);
       this.state = {
         carData: {},
-        token,
       }
   }
 
-  handleUserInput = (userEntries, nav, token) => {
-    API.createVehicle(token, userEntries)
-      .then(nav.navigate('MainView'))
-          
-      //if error performing API fetch for posting driver, show error
-      .catch(error => {
-        console.warn('There has been a problem with your operation: ' + error.message);
-        throw error;
-      });
+  handleUserSubmit = (userEntries, nav) => {
+    let token = AsyncStorage.getItem('token');
+    //use API file, createVehicle fx to send user inputs to database
+    API.createVehicle(userEntries, token)
+    .then(alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
+          nav.navigate('Welcome')
+    )
+    //if error performing API fetch for posting driver, show error
+    .catch(error => {
+      console.warn('There has been a problem with your operation: ' + error.message);
+      throw error;
+    })
   }
 
   render(){
@@ -139,7 +142,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit
             />
             <Block style={styles.footer}>
-              <CalendarButton title="Submit" onPress={() => this.handleUserInput(this.props.carData, this.props.navigation, this.state.token)} />
+              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(this.props.userEntries, this.props.navigation)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>

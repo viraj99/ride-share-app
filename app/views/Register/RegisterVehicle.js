@@ -11,14 +11,10 @@ class RegisterVehicle extends Component {
     this.state = {
       errors: [],
       carData: {},
+      token: AsyncStorage.getItem('token'),
     };
     this.inputs = {};
   }
-
-  handleSubmit = () => {
-    alert('Thank you for registering! You will receive an email regarding next steps within _ business days.');
-    this.props.navigation.navigate('Welcome');
-  };
 
   handleChange = (text, name) => {
     this.setState({[name]: text});
@@ -28,15 +24,18 @@ class RegisterVehicle extends Component {
     this.inputs[id].focus();
 
     const vehicleInfo = {
-      "vehicle":{
-        "car_make": this.state.car_make,
-        "car_model": this.state.car_model,
-        "car_year": this.state.car_year,
-        "car_color": this.state.car_color,
-        "car_plate": this.state.car_plate,
-        "seat_belt_num": this.state.seat_belt_num,
-
-      }
+        "vehicle":{
+            "car_make": this.state.car_make,
+            "car_model": this.state.car_model,
+            "car_year": this.state.car_year,
+            "car_color": this.state.car_color,
+            "car_plate": this.state.car_plate,
+            "seat_belt_num": this.state.seat_belt_num,
+            //placeholder for additional data not requested of user
+            "insurance_provider": "",
+            "insurance_start": new Date(),
+            "insurance_stop": new Date(),
+        }
     }
     console.log("data input is: ", vehicleInfo)
     this.setState({carData: vehicleInfo});
@@ -52,11 +51,12 @@ class RegisterVehicle extends Component {
       <Container>
         <View style={[styles.signup, styles.headerPadding]}>
           <RegisterVehicleForm
-            handleSubmit={this.handleSubmit}
+            navigation={this.props.navigation}
+            // handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
-            token={this.state.token}
+            userEntries={this.state.carData}
           />
         </View>
       </Container>

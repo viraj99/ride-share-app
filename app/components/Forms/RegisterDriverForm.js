@@ -36,8 +36,9 @@ class RegisterDriverForm extends React.Component {
         let orgArray = [];
         //loop through orgs list and push each org name into orgArray
         for (var i=0; i < res.organization.length; i++) {
-          // console.warn("an org is: ", res.organization[i].id, res.organization[i].name);
+          //create index variable to hold org_id number
           let index = res.organization[i].id;
+          //push org name and id number, as one item into array list
           orgArray.push(res.organization[i].name+","+index);
         }
         //store full list of all orgs in local state
@@ -53,45 +54,50 @@ class RegisterDriverForm extends React.Component {
   };
 
   handleUserInput = (userEntries, nav, radius, orgID) => {
+    //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries, radius, orgID)
-      .then(API.login(userEntries.driver.email, userEntries.driver.password)
-          .then(res => {
-            const obj = {
-              token: res.json.auth_token,
-            }
+    .then(this.autoLogin(userEntries, nav))
+    //if error performing API fetch for posting driver, show error
+    .catch(error => {
+      console.warn('There has been a problem with your operation: ' + error.message);
+      throw error;
+    });
+  };
 
-            if (obj.token === undefined) {
-              this.setState({
-                errorMessage: 'Invalid username or password.',
-              });
-            } else {
-              AsyncStorage.setItem('token', JSON.stringify(obj));
-              nav.navigate('RegisterVehicle');
-            }
-          })
-          .catch(err => {
-            this.setState({
-              errorMessage: 'Invalid username or password.',
-            });
-          }),
-          this.setState({token: AsyncStorage.getItem('token')})
-      )  
-      //if error performing API fetch for posting driver, show error
-      .catch(error => {
-        console.warn('There has been a problem with your operation: ' + error.message);
-        throw error;
-      });
-  }
+  autoLogin = (userEntries, nav) => {
+    //use API file, login fx to create a token in order to add vehicle data to driver
+              //login fx requries email and password as params
+    API.login(userEntries.driver.email, userEntries.driver.password)
+    //after sending email and pword, get auth_token
+    .then(res => {
+      const obj = {
+        token: res.json.auth_token,
+      }
+
+//HERE IS WHERE ITS BREAKING! ???   
+      console.log("do we get the token? ", obj)
+      if (obj.token === undefined) {
+        this.setState({
+          errorMessage: 'Invalid username or password.',
+        });
+      } else {
+        //if API call for autologin upon driver data submit, store auth_token in local storage
+        AsyncStorage.setItem('token', JSON.stringify(obj));
+        //redirect to vehicle registration
+        nav.navigate('RegisterVehicle');
+      }
+      console.log("in autLogin: ", AsyncStorage.getItem('token'));
+    })
+  }  
   
   render() {
-    //take array of org names list retrieved from API call on did mount then 
-    //map through each org name in list and create a Picker Item, let org
-    //name be both label and value of each item.
+    //take array of org names list retrieved from API call getOrgs function that was performed on did mount 
+    //then map through each org name in list, create a Picker Item, use split to show only org name as label
+    //and store id number of corresponding org in the value
     const orgsList = this.state.orgs.map((eachOrg) =>       
         <Picker.Item 
           label={eachOrg.split(",")[0]} 
           value={eachOrg.split(",")[1]} 
-          // ref={input => this.props.innerRef(input, 'OrgName')}
         />
     );
 
@@ -106,6 +112,7 @@ class RegisterDriverForm extends React.Component {
             
             {/* Input for Volunteer Driver's First Name */}
             <Sae
+              //displays label for input field
               label="First Name"
               labelStyle={styles.labelStyle}
               inputPadding={16}
@@ -125,6 +132,8 @@ class RegisterDriverForm extends React.Component {
               onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
               blurOnSubmit={false}
             />
+
+            {/* Input for Volunteer Driver's Last Name */}
             <Sae
               label="Last Name"
               labelStyle={styles.labelStyle}
@@ -142,6 +151,8 @@ class RegisterDriverForm extends React.Component {
               onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
               blurOnSubmit={false}
             />
+
+            {/* Input for Volunteer Driver's Phone Number */}
             <Sae
               label="Phone Number"
               labelStyle={styles.labelStyle}
@@ -160,6 +171,9 @@ class RegisterDriverForm extends React.Component {
               onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
               blurOnSubmit={false}
             />
+
+            {/* Input for Volunteer Driver's Email Address; 
+            NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
             <Sae
               label="Email Address"
               labelStyle={styles.labelStyle}
@@ -180,6 +194,8 @@ class RegisterDriverForm extends React.Component {
               onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
               blurOnSubmit={false}
             />
+
+            {/* Input for Volunteer Driver's Password */}
             <Sae
               label="Password"
               labelStyle={styles.labelStyle}
@@ -191,6 +207,7 @@ class RegisterDriverForm extends React.Component {
               // TextInput props
               style={[styles.saeInput]}
               inputStyle={styles.saeText}
+              //this code shows asterisks in place of characters in field as user types
               secureTextEntry
               returnKeyType="next"
               autoCapitalize="none"
@@ -201,6 +218,8 @@ class RegisterDriverForm extends React.Component {
             />
 
             <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Volunteering for:</Text>
+
+            {/* Picker selector for org volunteer works with */}
             <Picker
               label="OrgName"
               inputPadding={16}
@@ -208,11 +227,16 @@ class RegisterDriverForm extends React.Component {
               borderHeight={2}
               borderColor="#475c67"
               blurOnSubmit={false}
+              //shows which item in list user has selected
               selectedValue={this.state.orgNum}
+              //set the item value (which will be the org_id number) to state so it can be passed to API post
               onValueChange={(itemValue) =>
                   this.setState({orgNum: itemValue})
               }
             >
+              {/* default to instruct user what to do */}
+              <Picker.Item label="Select an organization" value="0" />
+              {/* uses the orgsList const at beginning of render to display a picker item for each org*/}
               {orgsList}
             </Picker>
 
@@ -225,10 +249,13 @@ class RegisterDriverForm extends React.Component {
               borderColor="#475c67"
               blurOnSubmit={false}
               selectedValue={this.state.radius}
+              //set the item value (which will be the radius mileage) to state so it can be passed to API post
               onValueChange={(itemValue) =>
                 this.setState({radius: itemValue})
               }
             >
+              {/* default to instruct user what to do */}
+              <Picker.Item label="Select a mileage" value="0"/>
               <Picker.Item label="10 miles" value="10"/>
               <Picker.Item label="25 miles" value="25"/>
               <Picker.Item label="50 miles" value="50"/>
@@ -238,6 +265,7 @@ class RegisterDriverForm extends React.Component {
               <CalendarButton
                 title="Continue"
                 onPress={() => 
+                  //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
                   this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum)}
               />
             </Block>

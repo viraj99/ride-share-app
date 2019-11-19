@@ -8,7 +8,7 @@ import {
   AVAILABILITIES,
   driverRides,
   REGISTER,
-  VEHICLE,
+  VEHICLES,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 
@@ -91,7 +91,6 @@ export default {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        token: '',
       },
     }).then(res => res.json());
   },
@@ -137,7 +136,7 @@ export default {
     })
   },
 
-  createVehicle(vehicleData) {
+  createVehicle(vehicleData, token) {
     const vehicle = {    
         "vehicle":{
           "car_make": vehicleData.vehicle.car_make,
@@ -153,11 +152,9 @@ export default {
     }
     console.log("data to API: ", vehicle)
     return apiWrapper({
-      path: REGISTER,
+      path: VEHICLES,
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-      },
+      headers: {token},
       body:vehicle,
     })
     .then(res => {
