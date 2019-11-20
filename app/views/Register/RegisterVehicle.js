@@ -4,6 +4,7 @@ import styles from './styles';
 import Container from '../../components/Container';
 import {RegisterVehicleForm} from '../../components/Forms';
 import API from '../../api/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterVehicle extends Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class RegisterVehicle extends Component {
             "insurance_stop": new Date(),
         }
     }
-    console.log("data input is: ", vehicleInfo)
+    console.log("car data input is: ", vehicleInfo)
     this.setState({carData: vehicleInfo});
   };
 

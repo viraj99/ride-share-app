@@ -15,12 +15,15 @@ import apiWrapper from './apiWrapper';
 export default {
   // ex. of how the post and etc. requests can be written
   login(email, password) {
+    console.log("data within api login: ", email)
+    console.log("data within api login: ", password)
     return apiWrapper({
       path: LOGIN,
       body: {email, password},
       method: 'POST',
-    }).then(res => res.json());
+    }).then(res => {return res.json()});
   },
+
   getRides(token) {
     return apiWrapper({
       path: RIDES,
@@ -109,18 +112,18 @@ export default {
       }
     }
 
-    const driver1 = {
-      "driver":{
-        "organization_id": 0,	
-	      "email": "d@gmail.com",
-	      "password": "",
-        "first_name": "",
-        "last_name": "",
-        "phone": "",
-        "is_active": true,
-        "radius": 0,
-      }
-    }
+    // const driver1 = {
+    //   "driver":{
+    //     "organization_id": 0,	
+	  //     "email": "d@gmail.com",
+	  //     "password": "",
+    //     "first_name": "",
+    //     "last_name": "",
+    //     "phone": "",
+    //     "is_active": true,
+    //     "radius": 0,
+    //   }
+    // }
 
     console.log("data to API: ", driver)
     return apiWrapper({
@@ -129,11 +132,9 @@ export default {
       headers: {
         'Accept': 'application/json',
       },
-      body:driver1,
+      body:driver,
     })
-    .then(res => {
-      return res.json()
-    })
+    .then(res => res.json())
   },
 
   createVehicle(vehicleData, token) {

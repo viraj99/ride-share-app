@@ -65,29 +65,37 @@ class RegisterDriverForm extends React.Component {
   };
 
   autoLogin = (userEntries, nav) => {
+    console.log("reaching autoLogin fx, with proper data: ", userEntries);
     //use API file, login fx to create a token in order to add vehicle data to driver
               //login fx requries email and password as params
     API.login(userEntries.driver.email, userEntries.driver.password)
-    //after sending email and pword, get auth_token
-    .then(res => {
-      const obj = {
-        token: res.json.auth_token,
-      }
+      //after sending email and pword, get auth_token
+      .then(res => {
+        console.log("testing: ", res)
+        //HERE IS WHERE ITS BREAKING! ???  
 
-//HERE IS WHERE ITS BREAKING! ???   
-      console.log("do we get the token? ", obj)
-      if (obj.token === undefined) {
+        const obj = {
+          token: res.json.auth_token,
+        };
+        console.log("response in component: ", obj);
+        console.log("token is: ", obj.token);
+        if (obj.token === undefined) {
+          this.setState({
+            errorMessage: 'Invalid username or password.',
+          });
+        } else {
+          //if API call for autologin upon driver data submit, store auth_token in local storage
+          AsyncStorage.setItem('token', JSON.stringify(obj));
+          console.log("in autoLogin: ", AsyncStorage.getItem('token'));
+          //redirect to vehicle registration
+          nav.navigate('RegisterVehicle');
+        }
+      })
+      .catch(err => {
         this.setState({
           errorMessage: 'Invalid username or password.',
         });
-      } else {
-        //if API call for autologin upon driver data submit, store auth_token in local storage
-        AsyncStorage.setItem('token', JSON.stringify(obj));
-        //redirect to vehicle registration
-        nav.navigate('RegisterVehicle');
-      }
-      console.log("in autLogin: ", AsyncStorage.getItem('token'));
-    })
+      })
   }  
   
   render() {

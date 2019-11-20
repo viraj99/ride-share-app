@@ -71,6 +71,7 @@ class Login extends Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           navigation.navigate('MainView');
         }
+
       })
       .catch(err => {
         this.setState({
