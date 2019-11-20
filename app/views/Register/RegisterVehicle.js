@@ -47,12 +47,14 @@ class RegisterVehicle extends Component {
   };
 
   render() {
+    const {navigation} = this.props;
     console.log("did token make it to vehicle reg page? ", this.props.token);
+    
     return (
       <Container>
         <View style={[styles.signup, styles.headerPadding]}>
           <RegisterVehicleForm
-            navigation={this.props.navigation}
+            navigation={navigation}
             // handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             innerRef={this.handleInnerRef}

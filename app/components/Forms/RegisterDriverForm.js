@@ -31,19 +31,10 @@ class RegisterDriverForm extends React.Component {
   getOrganizations() {
     //using API file, getOrgs function, which fetches list of orgs
     API.getOrgs()
-      .then(res => {
-        //create an empty array that will hold all org names
-        let orgArray = [];
-        //loop through orgs list and push each org name into orgArray
-        for (var i=0; i < res.organization.length; i++) {
-          //create index variable to hold org_id number
-          let index = res.organization[i].id;
-          //push org name and id number, as one item into array list
-          orgArray.push(res.organization[i].name+","+index);
-        }
+      .then(res => {              
         //store full list of all orgs in local state
         this.setState({
-          orgs: orgArray
+          orgs: res.organization
         })
       })
       //if error performing API fetch for getting orgs, show error
@@ -53,10 +44,10 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserInput = (userEntries, nav, radius, orgID) => {
+  handleUserInput = (userEntries, radius, orgID) => {
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries, radius, orgID)
-    .then(this.autoLogin(userEntries, nav))
+    .then(this.autoLogin(userEntries))
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -64,16 +55,14 @@ class RegisterDriverForm extends React.Component {
     });
   };
 
-  autoLogin = (userEntries, nav) => {
+  autoLogin = (userEntries) => {
+    const {navigation} = this.props;
     console.log("reaching autoLogin fx, with proper data: ", userEntries);
     //use API file, login fx to create a token in order to add vehicle data to driver
               //login fx requries email and password as params
     API.login(userEntries.driver.email, userEntries.driver.password)
       //after sending email and pword, get auth_token
       .then(res => {
-        console.log("testing: ", res)
-        //HERE IS WHERE ITS BREAKING! ???  
-
         const obj = {
           token: res.json.auth_token,
         };
@@ -88,7 +77,8 @@ class RegisterDriverForm extends React.Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log("in autoLogin: ", AsyncStorage.getItem('token'));
           //redirect to vehicle registration
-          nav.navigate('RegisterVehicle');
+          console.log("NAVIGATION: ", navigation.navigate('RegisterVehicle'));
+          navigation.navigate('RegisterVehicle')
         }
       })
       .catch(err => {
@@ -104,10 +94,12 @@ class RegisterDriverForm extends React.Component {
     //and store id number of corresponding org in the value
     const orgsList = this.state.orgs.map((eachOrg) =>       
         <Picker.Item 
-          label={eachOrg.split(",")[0]} 
-          value={eachOrg.split(",")[1]} 
+          label={eachOrg.name} 
+          value={eachOrg.id} 
+          key={eachOrg}
         />
     );
+    let mileage;
 
     return (
       <ScrollView>
@@ -230,6 +222,7 @@ class RegisterDriverForm extends React.Component {
             {/* Picker selector for org volunteer works with */}
             <Picker
               label="OrgName"
+              key={orgsList}
               inputPadding={16}
               labelHeight={24}
               borderHeight={2}
@@ -251,6 +244,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Distance available to drive:</Text>
             <Picker
               label="Radius"
+              key={mileage}
               inputPadding={16}
               labelHeight={24}
               borderHeight={2}
@@ -274,7 +268,7 @@ class RegisterDriverForm extends React.Component {
                 title="Continue"
                 onPress={() => 
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
-                  this.handleUserInput(this.props.data, this.props.navigation, this.state.radius, this.state.orgNum)}
+                  this.handleUserInput(this.props.data, this.state.radius, this.state.orgNum)}
               />
             </Block>
           </KeyboardAwareScrollView>
