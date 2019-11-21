@@ -1,10 +1,11 @@
-import {apiBaseUrl} from '../utils/urls';
+import { apiBaseUrl } from '../utils/urls';
+
 
 const buildHeaders = (additionalHeaders, token) => {
   const authHeaders = token
     ? {
-        token: `${token}`,
-      }
+      token: `${token}`,
+    }
     : {};
   return {
     Accept: 'application/json',
@@ -40,6 +41,9 @@ const apiWrapper = async request => {
     body: JSON.stringify(body),
   };
   const response = await fetch(url, fetchConfig);
+  console.log('url:', url);
+  console.log('fetchconfig:', fetchConfig);
+  console.log('response:', response);
   if (response.ok) {
     return response;
   }

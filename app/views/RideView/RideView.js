@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-import {Alert, Text, View, TouchableOpacity} from 'react-native';
-import {Avatar, Button, Icon} from 'react-native-elements';
-import {Popup} from 'react-native-map-link';
+import React, { Component } from 'react';
+import { Alert, Text, View, TouchableOpacity } from 'react-native';
+import { Avatar, Button, Icon } from 'react-native-elements';
+import { Popup } from 'react-native-map-link';
 
-import {InitOverviewCard, RideOverviewCard} from '../../components/Card';
+import API from '../../api/api';
+import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
 import styles from './styles';
 
@@ -27,7 +28,28 @@ export default class RideView extends Component<Props> {
       isVisible: false,
       latitude: 0,
       longitude: 0,
+      isLoading: true,
     };
+  }
+  componentDidMount = () => {
+    this.requestRider();
+  }
+
+  requestRider = () => {
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const id = navigation.getParam('id');
+    // console.log('Props token', token);
+    // console.log('Props id', id);
+    API.getRider(id, token)
+      .then(response => {
+        //console.log('response', response);
+        this.setState({
+          first: response.json.rider.first_name,
+          last: response.json.rider.last_name,
+          isLoading: false,
+        })
+      })
   }
 
   handlePickUpDirections = () => {
@@ -52,7 +74,7 @@ export default class RideView extends Component<Props> {
 
   onCancelPress = () => {
     Alert.alert('Cancel this ride?', '', [
-      {text: "Don't cancel", style: 'cancel'},
+      { text: "Don't cancel", style: 'cancel' },
       {
         text: 'Yes, cancel this ride',
         onPress: () => console.warn('ride cancelled'),
@@ -61,8 +83,8 @@ export default class RideView extends Component<Props> {
   };
 
   onPress = () => {
-    const {textValue} = this.state;
-    const {navigation} = this.props;
+    const { textValue } = this.state;
+    const { navigation } = this.props;
 
     if (textValue === 'Go to pickup') {
       this.setState({
@@ -78,7 +100,7 @@ export default class RideView extends Component<Props> {
             });
           },
         },
-        {text: 'cancel', style: 'cancel'},
+        { text: 'cancel', style: 'cancel' },
       ]);
     } else if (textValue === 'Pick up') {
       Alert.alert('Tap to confirm', '', [
@@ -90,7 +112,7 @@ export default class RideView extends Component<Props> {
             });
           },
         },
-        {text: 'cancel', style: 'cancel'},
+        { text: 'cancel', style: 'cancel' },
       ]);
     } else if (textValue === 'Drop off') {
       Alert.alert('Did you drop-off?', '', [
@@ -104,17 +126,19 @@ export default class RideView extends Component<Props> {
             navigation.navigate('MainView');
           },
         },
-        {text: 'cancel', style: 'cancel'},
+        { text: 'cancel', style: 'cancel' },
       ]);
     }
   };
 
   renderOverview = () => {
-    const {textValue} = this.state;
-    const {navigation} = this.props;
+    const { textValue } = this.state;
+    const { navigation } = this.props;
     const startLocation = navigation.getParam('startLocation');
     const endLocation = navigation.getParam('endLocation');
     const date = navigation.getParam('date');
+    const reason = navigation.getParam('reason');
+
     if (textValue === 'Tap to arrive') {
       return (
         <RideOverviewCard
@@ -139,19 +163,20 @@ export default class RideView extends Component<Props> {
         pickupAddress={startLocation.join(', ')}
         dropoffAddress={endLocation.join(', ')}
         date={date}
+        note={reason}
       />
     );
   };
 
   render() {
-    const {textValue, isVisible, latitude, longitude} = this.state;
-    const {navigation} = this.props;
+    const { textValue, isVisible, latitude, longitude } = this.state;
+    const { navigation } = this.props;
     const name = navigation.getParam('name');
 
     return (
       <View style={styles.container}>
-        <View style={{flex: 1}}>
-          <Block center style={{marginTop: 10}}>
+        <View style={{ flex: 1 }}>
+          <Block center style={{ marginTop: 10 }}>
             <Avatar
               size="large"
               rounded
@@ -164,16 +189,16 @@ export default class RideView extends Component<Props> {
           </Block>
           <Block center space="evenly">
             <Text numberOfLines={3} style={styles.nameText}>
-              James Wilkinson
+              {this.state.first} {this.state.last}
             </Text>
           </Block>
         </View>
-        <View style={{flex: 3}}>
+        <View style={{ flex: 3 }}>
           <Popup
             isVisible={isVisible}
-            onCancelPressed={() => this.setState({isVisible: false})}
-            onAppPressed={() => this.setState({isVisible: false})}
-            onBackButtonPressed={() => this.setState({isVisible: false})}
+            onCancelPressed={() => this.setState({ isVisible: false })}
+            onAppPressed={() => this.setState({ isVisible: false })}
+            onBackButtonPressed={() => this.setState({ isVisible: false })}
             appsWhiteList={[
               'apple-maps',
               'google-maps',
@@ -184,7 +209,7 @@ export default class RideView extends Component<Props> {
               'moovit',
               'yandex-maps',
             ]}
-            modalProps={{animationIn: 'slideInUp'}}
+            modalProps={{ animationIn: 'slideInUp' }}
             options={{
               latitude,
               longitude,

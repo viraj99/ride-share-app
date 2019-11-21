@@ -7,25 +7,36 @@ import {
   LOGOUT,
   AVAILABILITIES,
   driverRides,
+  RIDER,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
+
 
 export default {
   // ex. of how the post and etc. requests can be written
   login(email, password) {
     return apiWrapper({
       path: LOGIN,
-      body: {email, password},
+      body: { email, password },
       method: 'POST',
     }).then(res => res.json());
   },
   getRides(token) {
     return apiWrapper({
       path: RIDES,
-      params: driverRides,
+      // params: driverRides,
       token,
     }).then(res => res.json());
   },
+  //////////////////////////////////
+  getRider(id, token) {
+    return apiWrapper({
+      path: RIDER,
+      params: `/${id}`,
+      token,
+    }).then(res => res.json());
+  },
+  //////////////////////////////////
   acceptRide(id, token) {
     return apiWrapper({
       path: RIDES,
@@ -50,7 +61,17 @@ export default {
       token,
     }).then(res => res.json());
   },
-
+  //////////////////
+  // getRider() {
+  //   return fetch(RIDER, {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       token: '',
+  //     },
+  //   });
+  // },
+  // ////////////////////
   getAvailabilities() {
     // change this with the api wrapper
     return fetch(AVAILABILITIES, {
@@ -66,19 +87,19 @@ export default {
     return apiWrapper({
       path: LOGOUT,
       method: 'POST',
-      headers: {token},
+      headers: { token },
     }).then(res => res.json());
   },
   getSettingInfo(token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: {token},
+      headers: { token },
     }).then(res => res.json());
   },
   updateSettingsInfo(data, token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: {token},
+      headers: { token },
       body: data,
       method: 'PUT',
     }).then(res => res.json());
