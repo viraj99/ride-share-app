@@ -3,7 +3,6 @@ import { Keyboard } from 'react-native';
 import Container from '../../components/Container';
 import {RegisterHeader} from '../../components/Header';
 import {RegisterDriverForm} from '../../components/Forms';
-import API from '../../api/api';
 
 class Register extends Component {
   constructor(props) {

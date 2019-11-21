@@ -112,19 +112,6 @@ export default {
       }
     }
 
-    // const driver1 = {
-    //   "driver":{
-    //     "organization_id": 0,	
-	  //     "email": "d@gmail.com",
-	  //     "password": "",
-    //     "first_name": "",
-    //     "last_name": "",
-    //     "phone": "",
-    //     "is_active": true,
-    //     "radius": 0,
-    //   }
-    // }
-
     console.log("data to API: ", driver)
     return apiWrapper({
       path: REGISTER,
@@ -146,20 +133,20 @@ export default {
           "car_color": vehicleData.vehicle.car_color,
           "car_plate": vehicleData.vehicle.car_plate,
           "seat_belt_num": parseInt(vehicleData.vehicle.seat_belt_num),
-          "insurance_provider": "testing",
-          "insurance_start": new Date(),
-          "insurance_stop": new Date(),
+          "insurance_provider": vehicleData.vehicle.insurance_provider,
+          "insurance_start": vehicleData.vehicle.insurance_start,
+          "insurance_stop": vehicleData.vehicle.insurance_stop,
         }
     }
-    console.log("data to API: ", vehicle)
+    console.log("data to carReg API: ", vehicle)
     return apiWrapper({
       path: VEHICLES,
       method: 'POST',
-      headers: {token},
+      headers: {
+        'Accept': 'application/json',
+        token,
+      },
       body:vehicle,
-    })
-    .then(res => {
-      return res.json()
-    })
+    }).then(res => res.json());
   },
 };
