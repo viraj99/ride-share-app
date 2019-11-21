@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Keyboard} from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
 import {RegisterVehicleForm} from '../../components/Forms';
-import API from '../../api/api';
-import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterVehicle extends Component {
   constructor(props) {
@@ -12,7 +10,7 @@ class RegisterVehicle extends Component {
     this.state = {
       errors: [],
       carData: {},
-      token: AsyncStorage.getItem('token'),
+      // token: AsyncStorage.getItem('token'),
     };
     this.inputs = {};
   }
@@ -33,9 +31,9 @@ class RegisterVehicle extends Component {
             "car_plate": this.state.car_plate,
             "seat_belt_num": this.state.seat_belt_num,
             //placeholder for additional data not requested of user
-            "insurance_provider": "",
-            "insurance_start": new Date(),
-            "insurance_stop": new Date(),
+            "insurance_provider": "Testing",
+            "insurance_start": "2020-02-20",
+            "insurance_stop": "2021-02-20",
         }
     }
     console.log("car data input is: ", vehicleInfo)
@@ -48,7 +46,6 @@ class RegisterVehicle extends Component {
 
   render() {
     const {navigation} = this.props;
-    console.log("did token make it to vehicle reg page? ", this.props.token);
     
     return (
       <Container>

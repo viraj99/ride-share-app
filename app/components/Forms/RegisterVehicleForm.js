@@ -5,6 +5,7 @@ import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
+import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterVehicleForm extends React.Component {
@@ -15,12 +16,32 @@ class RegisterVehicleForm extends React.Component {
       }
   }
 
+  componentDidMount() {
+    console.log("we made it to vehicle registration!!!!", AsyncStorage.getItem('token'));
+  }
+
   handleUserSubmit = (userEntries, nav) => {
-    let token = AsyncStorage.getItem('token');
+    let token = AsyncStorage.getItem('token')
+    console.log("do we have a token for API post in regCar? ", token)
     //use API file, createVehicle fx to send user inputs to database
     API.createVehicle(userEntries, token)
-    .then(alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
-          nav.navigate('Welcome')
+    .then(res => console.log(res))
+    .then(
+        alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
+        API.logout(token)
+        .then(res => {
+          const loggedOut = res.json.Success;
+          if (loggedOut == 'Logged Out') {
+            AsyncStorage.removeItem('token');
+            nav.navigate('Welcome');
+          } else {
+            Alert.alert('Unable to Logout', 'Please try again.');
+          }
+        })
+        .catch(error => {
+          AsyncStorage.removeItem('token');
+          nav.navigate('Welcome');
+        })
     )
     //if error performing API fetch for posting driver, show error
     .catch(error => {
@@ -30,6 +51,7 @@ class RegisterVehicleForm extends React.Component {
   }
 
   render(){
+    const {navigation, userEntries} = this.props;
     return (
       <ScrollView>
         <KeyboardAwareScrollView>
@@ -50,9 +72,9 @@ class RegisterVehicleForm extends React.Component {
               inputStyle={styles.saeText}
               // TextInput props
               returnKeyType="next"
-              onChangeText={text => handleChange(text, 'car_make')}
-              ref={input => innerRef(input, 'Make')}
-              onSubmitEditing={() => handleSubmitEditing('Model')}
+              onChangeText={text => this.props.handleChange(text, 'car_make')}
+              ref={input => this.props.innerRef(input, 'Make')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Model')}
               blurOnSubmit={false}
             />
             <Sae
@@ -67,9 +89,9 @@ class RegisterVehicleForm extends React.Component {
               inputStyle={styles.saeText}
               // TextInput props
               returnKeyType="next"
-              onChangeText={text => handleChange(text, 'car_model')}
-              ref={input => innerRef(input, 'Model')}
-              onSubmitEditing={() => handleSubmitEditing('Year')}
+              onChangeText={text => this.props.handleChange(text, 'car_model')}
+              ref={input => this.props.innerRef(input, 'Model')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Year')}
               blurOnSubmit={false}
             />
             <Sae
@@ -85,9 +107,9 @@ class RegisterVehicleForm extends React.Component {
               // TextInput props
               keyboardType="numeric"
               returnKeyType="next"
-              onChangeText={number => handleChange(number, 'car_year')}
-              ref={input => innerRef(input, 'Year')}
-              onSubmitEditing={() => handleSubmitEditing('SeatBelts')}
+              onChangeText={number => this.props.handleChange(number, 'car_year')}
+              ref={input => this.props.innerRef(input, 'Year')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('SeatBelts')}
               blurOnSubmit={false}
             />
             <Sae
@@ -103,9 +125,9 @@ class RegisterVehicleForm extends React.Component {
               // TextInput props
               keyboardType="numeric"
               returnKeyType="next"
-              onChangeText={number => handleChange(number, 'seat_belt_num')}
-              ref={input => innerRef(input, 'SeatBelts')}
-              onSubmitEditing={() => handleSubmitEditing('Color')}
+              onChangeText={number => this.props.handleChange(number, 'seat_belt_num')}
+              ref={input => this.props.innerRef(input, 'SeatBelts')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Color')}
               blurOnSubmit={false}
             />
             <Sae
@@ -119,10 +141,10 @@ class RegisterVehicleForm extends React.Component {
               style={[styles.saeInput]}
               inputStyle={styles.saeText}
               // TextInput props
-              returnKeyType="done"
-              onChangeText={text => handleChange(text, 'car_color')}
-              ref={input => innerRef(input, 'Color')}
-              onSubmitEditing={() => handleSubmitEditing('Plate')}
+              returnKeyType="next"
+              onChangeText={text => this.props.handleChange(text, 'car_color')}
+              ref={input => this.props.innerRef(input, 'Color')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Plate')}
               blurOnSubmit={false}
             />
             <Sae
@@ -137,12 +159,13 @@ class RegisterVehicleForm extends React.Component {
               inputStyle={styles.saeText}
               // TextInput props
               returnKeyType="done"
-              onChangeText={text => handleChange(text, 'car_plate')}
-              ref={input => innerRef(input, 'Plate')}
-              blurOnSubmit
+              onChangeText={text => this.props.handleChange(text, 'car_plate')}
+              ref={input => this.props.innerRef(input, 'Plate')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Plate')}
+              // blurOnSubmit
             />
             <Block style={styles.footer}>
-              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(this.props.userEntries, this.props.navigation)} />
+              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>
