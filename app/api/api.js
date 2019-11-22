@@ -139,14 +139,12 @@ export default {
         }
     }
     console.log("data to carReg API: ", vehicle)
+    console.log("token to carReg API: ", token)
     return apiWrapper({
       path: VEHICLES,
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        token,
-      },
+      token,
       body:vehicle,
-    }).then(res => res.json());
+      method: 'POST',
+    }).then(res => console.log(res.json()));
   },
 };

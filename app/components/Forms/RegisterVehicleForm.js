@@ -1,6 +1,8 @@
 import React from 'react';
 import {Text, ScrollView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
@@ -13,22 +15,24 @@ class RegisterVehicleForm extends React.Component {
       super(props);
       this.state = {
         carData: {},
+        startPickerVisibility: false,
       }
   }
 
   componentDidMount() {
-    console.log("we made it to vehicle registration!!!!", AsyncStorage.getItem('token'));
   }
 
-  handleUserSubmit = (userEntries, nav) => {
-    let token = AsyncStorage.getItem('token')
-    console.log("do we have a token for API post in regCar? ", token)
-    //use API file, createVehicle fx to send user inputs to database
-    API.createVehicle(userEntries, token)
-    .then(res => console.log(res))
+  //async await needed for proper Promise handling during submit function
+  handleUserSubmit = async (userEntries, nav) => {
+    let token = await AsyncStorage.getItem('token')
+    //parse just the token from the token object in async storage
+    token = JSON.parse(token)
+    //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
+    API.createVehicle(userEntries, token.token)
     .then(
         alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
-        API.logout(token)
+        //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
+        API.logout(token.token)
         .then(res => {
           const loggedOut = res.json.Success;
           if (loggedOut == 'Logged Out') {
@@ -49,6 +53,20 @@ class RegisterVehicleForm extends React.Component {
       throw error;
     })
   }
+
+  // handleStartTimePicker = time => {
+  //   const convertedTime = moment(time).format('X');
+  //   const date = moment(time)
+  //     .startOf('day')
+  //     .format('X');
+  //   this.setState({
+  //     initTime: convertedTime,
+  //     availableDate: date,
+  //   });
+  //   this.hideStartTimePicker();
+  // };
+
+  // hideStartTimePicker = () => this.setState({startPickerVisibility: false});
 
   render(){
     const {navigation, userEntries} = this.props;
@@ -158,12 +176,39 @@ class RegisterVehicleForm extends React.Component {
               style={[styles.saeInput]}
               inputStyle={styles.saeText}
               // TextInput props
-              returnKeyType="done"
+              returnKeyType="next"
               onChangeText={text => this.props.handleChange(text, 'car_plate')}
               ref={input => this.props.innerRef(input, 'Plate')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Plate')}
-              // blurOnSubmit
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insurance')}
+              blurOnSubmit={false}
             />
+            <Sae
+              label="Insurance Provider"
+              labelStyle={styles.labelStyle}
+              inputPadding={16}
+              labelHeight={24}
+              // active border height
+              borderHeight={2}
+              borderColor="#475c67"
+              style={[styles.saeInput]}
+              inputStyle={styles.saeText}
+              // TextInput props
+              returnKeyType="next"
+              onChangeText={text => this.props.handleChange(text, 'insurance_provider')}
+              ref={input => this.props.innerRef(input, 'Insurance')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insurance')}
+              // blurOnSubmit={false}
+            />
+
+            {/* <DateTimePicker
+              ref={input => this.props.innerRef(input, 'Insurance')}
+              isVisible={this.state.startPickerVisibility}
+              onConfirm={this.handleStartTimePicker}
+              onCancel={this.hideStartTimePicker}
+              mode="datetime"
+              is24Hour={false}
+            /> */}
+
             <Block style={styles.footer}>
               <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
             </Block>
