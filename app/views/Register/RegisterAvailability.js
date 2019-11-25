@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { View } from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
-import {Availability} from '../../components/ScheduleItems/Availability';
+import {RegisterAvailabilityForm} from '../../components/Forms/RegisterAvailabilityForm';
 
 class RegisterAvailability extends Component {
   constructor(props) {

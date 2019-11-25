@@ -7,7 +7,6 @@ import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import constants from 'jest-haste-map/build/constants';
 
 class RegisterAvailabilityForm extends React.Component {
   constructor(props){

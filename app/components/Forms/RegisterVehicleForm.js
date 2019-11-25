@@ -219,7 +219,7 @@ class RegisterVehicleForm extends React.Component {
             /> */}
 
             <Block style={styles.footer}>
-              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
+              <CalendarButton title="Continue to Availability" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>

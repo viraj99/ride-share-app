@@ -44,10 +44,10 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserInput = (userEntries, radius, orgID, navigation) => {
+  handleUserInput = (userEntries, radius, orgID, nav) => {
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries, radius, orgID)
-    .then(this.autoLogin(userEntries, navigation))
+    .then(this.autoLogin(userEntries, nav))
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -55,7 +55,7 @@ class RegisterDriverForm extends React.Component {
     });
   };
 
-  autoLogin = (userEntries, navigation) => {
+  autoLogin = (userEntries, nav) => {
     //use API file, login fx to create a token in order to add vehicle data to driver
               //login fx requries email and password as params
     API.login(userEntries.driver.email, userEntries.driver.password)
@@ -72,13 +72,10 @@ class RegisterDriverForm extends React.Component {
           //if API call for autologin upon driver data submit successful, store auth_token in local storage
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log("in autoLogin: ", AsyncStorage.getItem('token'));
-          //redirect to vehicle registration
-          console.log("NAVIGATION: ", navigation.navigate('RegisterVehicle'));
-          navigation.navigate('RegisterVehicle');
-          console.log("NAVIGATION without .navigate: ", navigation('RegisterVehicle'));
-          navigation('RegisterVehicle');
         }
-      })
+      },
+      nav.navigate('RegisterVehicle')
+      )
       .catch(err => {
         this.setState({
           errorMessage: 'Invalid username or password.',
@@ -98,7 +95,7 @@ class RegisterDriverForm extends React.Component {
         />
     );
     let mileage;
-    const {navigation} = this.props;
+    const navigation = this.props.navigation;
 
     return (
       <ScrollView>
@@ -264,7 +261,7 @@ class RegisterDriverForm extends React.Component {
 
             <Block style={styles.footer}>
               <CalendarButton
-                title="Continue"
+                title="Continue to Vehicle"
                 onPress={() => 
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
                   this.handleUserInput(this.props.data, this.state.radius, this.state.orgNum, navigation)}
