@@ -30,10 +30,9 @@ class RegisterVehicle extends Component {
             "car_color": this.state.car_color,
             "car_plate": this.state.car_plate,
             "seat_belt_num": this.state.seat_belt_num,
-            //placeholder for additional data not requested of user
-            "insurance_provider": "Testing",
-            "insurance_start": "2020-02-20",
-            "insurance_stop": "2021-02-20",
+            "insurance_provider": this.state.insurance_provider,
+            "insurance_start": this.state.insurance_start,
+            "insurance_stop": this.state.insurance_stop,
         }
     }
     console.log("car data input is: ", vehicleInfo)
