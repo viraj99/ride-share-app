@@ -54,20 +54,6 @@ class RegisterVehicleForm extends React.Component {
     })
   }
 
-  // handleStartTimePicker = time => {
-  //   const convertedTime = moment(time).format('X');
-  //   const date = moment(time)
-  //     .startOf('day')
-  //     .format('X');
-  //   this.setState({
-  //     initTime: convertedTime,
-  //     availableDate: date,
-  //   });
-  //   this.hideStartTimePicker();
-  // };
-
-  // hideStartTimePicker = () => this.setState({startPickerVisibility: false});
-
   render(){
     const {navigation, userEntries} = this.props;
     return (
@@ -196,7 +182,46 @@ class RegisterVehicleForm extends React.Component {
               returnKeyType="next"
               onChangeText={text => this.props.handleChange(text, 'insurance_provider')}
               ref={input => this.props.innerRef(input, 'Insurance')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Insurance')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insur Start')}
+              blurOnSubmit={false}
+            />
+
+            <Sae
+              label="Insurance Coverage Start Date"
+              labelStyle={styles.labelStyle}
+              inputPadding={16}
+              labelHeight={24}
+              // active border height
+              borderHeight={2}
+              borderColor="#475c67"
+              style={[styles.saeInput]}
+              inputStyle={styles.saeText}
+              // TextInput props
+              returnKeyType="next"
+              placeholder="YYYY-MM-DD"
+              onChangeText={text => this.props.handleChange(text, 'insurance_start')}
+              ref={input => this.props.innerRef(input, 'Insur Start')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insur End')}
+              blurOnSubmit={false}
+            />
+
+            <Sae
+              label="Insurance Coverage End Date"
+              labelStyle={styles.labelStyle}
+              inputPadding={16}
+              labelHeight={24}
+              // active border height
+              borderHeight={2}
+              borderColor="#475c67"
+              style={[styles.saeInput]}
+              inputStyle={styles.saeText}
+              // TextInput props
+              keyboardType="numeric"
+              returnKeyType="done"
+              placeholder="YYYY-MM-DD"
+              onChangeText={text => this.props.handleChange(text, 'insurance_stop')}
+              ref={input => this.props.innerRef(input, 'Insur End')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insur End')}
               // blurOnSubmit={false}
             />
 

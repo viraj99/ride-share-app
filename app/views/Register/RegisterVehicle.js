@@ -20,11 +20,7 @@ class RegisterVehicle extends Component {
   };
 
   handleSubmitEditing = id => {
-    if (id === 'Insurance') {
-      Keyboard.dismiss();
-    } else {      
-      this.inputs[id].focus();
-    }
+    this.inputs[id].focus();
 
     const vehicleInfo = {
         "vehicle":{
@@ -35,9 +31,8 @@ class RegisterVehicle extends Component {
             "car_plate": this.state.car_plate,
             "seat_belt_num": this.state.seat_belt_num,
             "insurance_provider": this.state.insurance_provider,
-            //placeholder for additional data not requested of user
-            "insurance_start": "2020-02-20",
-            "insurance_stop": "2021-02-20",
+            "insurance_start": this.state.insurance_start,
+            "insurance_stop": this.state.insurance_stop,
         }
     }
     console.log("car data input is: ", vehicleInfo)
