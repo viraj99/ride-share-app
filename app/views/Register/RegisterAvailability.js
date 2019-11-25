@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import { View } from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
-import {RegisterVehicleForm} from '../../components/Forms';
+import {Availability} from '../../components/ScheduleItems/Availability';
 
-class RegisterVehicle extends Component {
+class RegisterAvailability extends Component {
   constructor(props) {
     super(props);
     this.state = {
       errors: [],
-      carData: {},
+      availData: {},
     };
     this.inputs = {};
   }
@@ -21,21 +21,13 @@ class RegisterVehicle extends Component {
   handleSubmitEditing = id => {
     this.inputs[id].focus();
 
-    const vehicleInfo = {
-        "vehicle":{
-            "car_make": this.state.car_make,
-            "car_model": this.state.car_model,
-            "car_year": this.state.car_year,
-            "car_color": this.state.car_color,
-            "car_plate": this.state.car_plate,
-            "seat_belt_num": this.state.seat_belt_num,
-            "insurance_provider": this.state.insurance_provider,
-            "insurance_start": this.state.insurance_start,
-            "insurance_stop": this.state.insurance_stop,
-        }
+    const availInfo = {
+        "startTime": "2019-11-22 08:00",
+        "endTime": "2019-11-22 10:00",
+        "isRecurring": false, 
     }
-    console.log("car data input is: ", vehicleInfo)
-    this.setState({carData: vehicleInfo});
+    console.log("avail data input is: ", availInfo)
+    this.setState({availData: availInfo});
   };
 
   handleInnerRef = (input, id) => {
@@ -48,13 +40,13 @@ class RegisterVehicle extends Component {
     return (
       <Container>
         <View style={[styles.signup, styles.headerPadding]}>
-          <RegisterVehicleForm
+          <Availability
             navigation={navigation}
             // handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
-            userEntries={this.state.carData}
+            userEntries={this.state.availData}
           />
         </View>
       </Container>
@@ -62,4 +54,4 @@ class RegisterVehicle extends Component {
   }
 }
 
-export default RegisterVehicle;
+export default RegisterAvailability;

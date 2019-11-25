@@ -30,22 +30,7 @@ class RegisterVehicleForm extends React.Component {
     //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
     API.createVehicle(userEntries, token.token)
     .then(
-        alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
-        //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
-        API.logout(token.token)
-        .then(res => {
-          const loggedOut = res.json.Success;
-          if (loggedOut == 'Logged Out') {
-            AsyncStorage.removeItem('token');
-            nav.navigate('Welcome');
-          } else {
-            Alert.alert('Unable to Logout', 'Please try again.');
-          }
-        })
-        .catch(error => {
-          AsyncStorage.removeItem('token');
-          nav.navigate('Welcome');
-        })
+        nav.navigate('Availability')
     )
     //if error performing API fetch for posting driver, show error
     .catch(error => {
@@ -245,3 +230,21 @@ class RegisterVehicleForm extends React.Component {
 };
 
 export default RegisterVehicleForm;
+
+
+// alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
+//         //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
+//         API.logout(token.token)
+//         .then(res => {
+//           const loggedOut = res.json.Success;
+//           if (loggedOut == 'Logged Out') {
+//             AsyncStorage.removeItem('token');
+//             nav.navigate('Welcome');
+//           } else {
+//             Alert.alert('Unable to Logout', 'Please try again.');
+//           }
+//         })
+//         .catch(error => {
+//           AsyncStorage.removeItem('token');
+//           nav.navigate('Welcome');
+//         })
