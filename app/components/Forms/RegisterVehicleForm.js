@@ -15,7 +15,6 @@ class RegisterVehicleForm extends React.Component {
       super(props);
       this.state = {
         carData: {},
-        startPickerVisibility: false,
       }
   }
 
@@ -30,7 +29,7 @@ class RegisterVehicleForm extends React.Component {
     //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
     API.createVehicle(userEntries, token.token)
     .then(
-        nav.navigate('Availability')
+        nav.navigate('RegisterAvailability')
     )
     //if error performing API fetch for posting driver, show error
     .catch(error => {

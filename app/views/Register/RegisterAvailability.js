@@ -22,9 +22,10 @@ class RegisterAvailability extends Component {
     this.inputs[id].focus();
 
     const availInfo = {
-        "startTime": "2019-11-22 08:00",
-        "endTime": "2019-11-22 10:00",
-        "isRecurring": false, 
+        "start_time": "2019-11-22 08:00",
+        "end_time": "2019-11-22 10:00",
+        "is_recurring": false, 
+        "location_id": 8,
     }
     console.log("avail data input is: ", availInfo)
     this.setState({availData: availInfo});
@@ -40,7 +41,7 @@ class RegisterAvailability extends Component {
     return (
       <Container>
         <View style={[styles.signup, styles.headerPadding]}>
-          <Availability
+          <RegisterAvailabilityForm
             navigation={navigation}
             // handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
