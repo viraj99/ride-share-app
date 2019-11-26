@@ -1,8 +1,6 @@
 import React from 'react';
 import {Text, ScrollView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import moment from 'moment';
 import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
@@ -22,15 +20,15 @@ class RegisterVehicleForm extends React.Component {
   }
 
   //async await needed for proper Promise handling during submit function
-  handleUserSubmit = async (userEntries, nav) => {
+  handleUserSubmit = async (userEntries) => {
+    console.log("testing in vehicle form: ", this.props.navigation);
     let token = await AsyncStorage.getItem('token')
     //parse just the token from the token object in async storage
     token = JSON.parse(token)
     //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
     API.createVehicle(userEntries, token.token)
     .then(
-        nav.navigate('RegisterAvailability')
-    )
+      this.props.navigation.navigate('RegisterAvailability'))
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -219,7 +217,7 @@ class RegisterVehicleForm extends React.Component {
             /> */}
 
             <Block style={styles.footer}>
-              <CalendarButton title="Continue to Availability" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
+              <CalendarButton title="Continue" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>

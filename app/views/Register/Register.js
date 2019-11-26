@@ -62,7 +62,6 @@ class Register extends Component {
           handleChange={this.handleChange}
           innerRef={this.handleInnerRef}
           handleSubmitEditing={this.handleSubmitEditing}
-          // handleUserEntries={this.handleUserEntries}
           data={this.state.data}
         />
       </Container>

@@ -92,14 +92,14 @@ const RegisterStack = createStackNavigator(
         headerTintColor: '#C5CCD6',
       },
     },
-    RegisterVehicleInfo: {
+    RegisterVehicle: {
       screen: RegisterVehicle,
       navigationOptions: {
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
       },
     },
-    RegisterAvailabilityInfo: {
+    RegisterAvailability: {
       screen: RegisterAvailability,
       navigationOptions: {
         headerTransparent: true,

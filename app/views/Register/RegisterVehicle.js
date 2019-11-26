@@ -50,7 +50,6 @@ class RegisterVehicle extends Component {
         <View style={[styles.signup, styles.headerPadding]}>
           <RegisterVehicleForm
             navigation={navigation}
-            // handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}

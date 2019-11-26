@@ -2,7 +2,7 @@ import Welcome from './Welcome/Welcome';
 import Login from './Login/loginScreen';
 import Register from './Register/Register';
 import RegisterVehicle from './Register/RegisterVehicle';
-import RegisterAvailability from '../views/Register/RegisterAvailability';
+import RegisterAvailability from './Register/RegisterAvailability';
 import ForgotPassword from './ForgotPassword/ForgotPassword';
 import MainView from './MainView/MainView';
 import AgendaView from './AgendaView/AgendaView';

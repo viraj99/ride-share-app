@@ -147,4 +147,21 @@ export default {
       method: 'POST',
     }).then(res => console.log(res.json()));
   },
+
+  createAvailability(availData, token) {
+    const availability = {
+      "start_time": availData.start_time,
+      "end_time": availData.end_time,
+      "is_recurring": availData.is_recurring, 
+      "location_id": availData.location_id,
+    }
+    console.log("data to availReg API: ", availability)
+    console.log("token to availReg API: ", token)
+    return apiWrapper({
+      path: AVAILABILITIES,
+      token,
+      body:availability,
+      method: 'POST',
+    }).then(res => console.log(res.json()));
+  }
 };

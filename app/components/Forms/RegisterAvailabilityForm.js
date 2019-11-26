@@ -20,38 +20,45 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   //async await needed for proper Promise handling during submit function
-  handleUserSubmit = async (userEntries, nav) => {
+  handleUserSubmit = async (userEntries) => {
     alert('Thank you for registering! You will receive an email regarding next steps within _ business days.')
     let token = await AsyncStorage.getItem('token')
-    //parse just the token from the token object in async storage
     token = JSON.parse(token)
-    console.log("avail entries: ", userEntries);
-    console.log("avail nav: ", nav);
-    //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
-    API.logout(token.token)
-    .then(res => {
-        const loggedOut = res.json.Success;
-        if (loggedOut == 'Logged Out') {
-        AsyncStorage.removeItem('token');
-        nav.navigate('Welcome');
-        } else {
-        Alert.alert('Unable to Logout', 'Please try again.');
-        }
-    })
-    .catch(error => {
-        AsyncStorage.removeItem('token');
-        nav.navigate('Welcome');
+    //use API file, createAvailability fx to send user's availability to database; token required
+    API.createAvailability(userEntries, token.token)
+    .then(
+        //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
+        API.logout(token.token)
+        .then(res => {
+            const loggedOut = res.json.Success;
+            if (loggedOut == 'Logged Out') {
+            AsyncStorage.removeItem('token');
+            this.props.navigation.navigate('Welcome');
+            } else {
+            Alert.alert('Unable to Logout', 'Please try again.');
+            }
+        })
+        .catch(error => {
+            AsyncStorage.removeItem('token');
+            this.props.navigation.navigate('Welcome');
+        })
+    )
+    .catch(err => {
+      this.setState({
+        errorMessage: 'Invalid username or password.',
+      });
     })
   }
 
-  render(){
-    const {navigation, userEntries} = this.props;
+  render() {
+    const {userEntries} = this.props
+    
     return (
       <ScrollView>
         <KeyboardAwareScrollView>
           <Block style={styles.scrollContainer}>
             <Text style={styles.title}>Availability Info</Text>
-            <Text style={styles.subTitle}>Continue with vehicle information</Text>
+            <Text style={styles.subTitle}>Continue with availability information</Text>
           </Block>
           <Block middle>
             <Sae
@@ -90,7 +97,7 @@ class RegisterAvailabilityForm extends React.Component {
             />
 
             <Block style={styles.footer}>
-              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
+              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>
