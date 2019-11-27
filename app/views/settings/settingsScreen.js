@@ -51,14 +51,14 @@ class Settings extends Component {
     this.handleActive = this.handleActive.bind(this);
     this.handleEmailNotification = this.handleEmailNotification.bind(this);
     this.handlePhoneNotification = this.handlePhoneNotification.bind(this);
-    this.handleBackButton = this.handleBackButton.bind(this);
+    // this.handleBackButton = this.handleBackButton.bind(this);
     this.handleFirstName = this.handleFirstName.bind(this);
     this.handleLastName = this.handleLastName.bind(this);
     this.handleModel = this.handleModel.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  handleBackButton() {
+  handleBackButton = () => {
     this.props.navigation.navigate('MainView');
   }
 

@@ -13,6 +13,7 @@ import {
   Settings,
   Register,
   RegisterVehicle,
+  RegisterAvailability,
   ForgotPassword,
   Welcome,
 } from '../views';
@@ -93,6 +94,13 @@ const RegisterStack = createStackNavigator(
     },
     RegisterVehicle: {
       screen: RegisterVehicle,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+      },
+    },
+    RegisterAvailability: {
+      screen: RegisterAvailability,
       navigationOptions: {
         headerTransparent: true,
         headerTintColor: '#C5CCD6',

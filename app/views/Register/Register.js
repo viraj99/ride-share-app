@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Keyboard } from 'react-native';
 import Container from '../../components/Container';
 import {RegisterHeader} from '../../components/Header';
 import {RegisterDriverForm} from '../../components/Forms';
@@ -7,13 +8,8 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      phoneNumber: null,
-      city: '',
       errors: [],
+      data: {},
     };
     this.inputs = {};
   }
@@ -23,7 +19,26 @@ class Register extends Component {
   };
 
   handleSubmitEditing = id => {
-    this.inputs[id].focus();
+    if (id === 'OrgName') {
+      Keyboard.dismiss();
+    } else {
+      this.inputs[id].focus();
+    }
+    
+    const registerInfo = {
+      "driver":{
+          "organization_id": "1",	
+          "email": this.state.email,
+          "password": this.state.password,
+          "first_name": this.state.first_name,
+          "last_name": this.state.last_name,
+          "phone" : this.state.phone,
+          "is_active" : true,
+          "radius": this.state.radius,
+      }
+    }
+    console.log("data input is: ", registerInfo);
+    this.setState({data: registerInfo});
   };
 
   handleInnerRef = (input, id) => {
@@ -47,6 +62,7 @@ class Register extends Component {
           handleChange={this.handleChange}
           innerRef={this.handleInnerRef}
           handleSubmitEditing={this.handleSubmitEditing}
+          data={this.state.data}
         />
       </Container>
     );
