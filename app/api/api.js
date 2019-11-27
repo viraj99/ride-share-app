@@ -1,16 +1,19 @@
+/* eslint-disable prettier/prettier */
 import {
   LOGIN,
   RIDES,
-  SCHEDULEDRIDES,
-  APPROVEDRIDES,
+  //? SCHEDULEDRIDES,
+  //? APPROVEDRIDES,
   SETTINGS,
   LOGOUT,
+  RIDER,
   AVAILABILITIES,
-  driverRides,
+  // ?driverRides,
   REGISTER,
   VEHICLES,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
+//TODO get the ride id not the rider id from the API to accept the correct response
 
 export default {
   // ex. of how the post and etc. requests can be written
@@ -19,18 +22,27 @@ export default {
     console.log("data within api login: ", password)
     return apiWrapper({
       path: LOGIN,
-      body: {email, password},
+      body: { email, password },
       method: 'POST',
-    }).then(res => {return res.json()});
+    }).then(res => { return res.json() });
   },
 
   getRides(token) {
     return apiWrapper({
       path: RIDES,
-      params: driverRides,
+      // params: driverRides,
       token,
     }).then(res => res.json());
   },
+  //////////////////////////////////
+  getRider(id, token) {
+    return apiWrapper({
+      path: RIDER,
+      params: `/${id}`,
+      token,
+    }).then(res => res.json());
+  },
+  //////////////////////////////////
   acceptRide(id, token) {
     return apiWrapper({
       path: RIDES,
@@ -47,6 +59,7 @@ export default {
       token,
     }).then(res => res.json());
   },
+
   cancelRide(id, token) {
     return apiWrapper({
       path: RIDES,
@@ -71,19 +84,19 @@ export default {
     return apiWrapper({
       path: LOGOUT,
       method: 'POST',
-      headers: {token},
+      headers: { token },
     }).then(res => res.json());
   },
   getSettingInfo(token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: {token},
+      headers: { token },
     }).then(res => res.json());
   },
   updateSettingsInfo(data, token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: {token},
+      headers: { token },
       body: data,
       method: 'PUT',
     }).then(res => res.json());
@@ -100,10 +113,10 @@ export default {
 
   createDriver(data, radius, orgID) {
     const driver = {
-      "driver":{
-        "organization_id": parseInt(orgID),	
-	      "email": data.driver.email,
-	      "password": data.driver.password,
+      "driver": {
+        "organization_id": parseInt(orgID),
+        "email": data.driver.email,
+        "password": data.driver.password,
         "first_name": data.driver.first_name,
         "last_name": data.driver.last_name,
         "phone": data.driver.phone,
@@ -119,31 +132,31 @@ export default {
       headers: {
         'Accept': 'application/json',
       },
-      body:driver,
+      body: driver,
     })
-    .then(res => res.json())
+      .then(res => res.json())
   },
 
   createVehicle(vehicleData, token) {
-    const vehicle = {    
-        "vehicle":{
-          "car_make": vehicleData.vehicle.car_make,
-          "car_model": vehicleData.vehicle.car_model,
-          "car_year": parseInt(vehicleData.vehicle.car_year),
-          "car_color": vehicleData.vehicle.car_color,
-          "car_plate": vehicleData.vehicle.car_plate,
-          "seat_belt_num": parseInt(vehicleData.vehicle.seat_belt_num),
-          "insurance_provider": vehicleData.vehicle.insurance_provider,
-          "insurance_start": vehicleData.vehicle.insurance_start,
-          "insurance_stop": vehicleData.vehicle.insurance_stop,
-        }
+    const vehicle = {
+      "vehicle": {
+        "car_make": vehicleData.vehicle.car_make,
+        "car_model": vehicleData.vehicle.car_model,
+        "car_year": parseInt(vehicleData.vehicle.car_year),
+        "car_color": vehicleData.vehicle.car_color,
+        "car_plate": vehicleData.vehicle.car_plate,
+        "seat_belt_num": parseInt(vehicleData.vehicle.seat_belt_num),
+        "insurance_provider": vehicleData.vehicle.insurance_provider,
+        "insurance_start": vehicleData.vehicle.insurance_start,
+        "insurance_stop": vehicleData.vehicle.insurance_stop,
+      }
     }
     console.log("data to carReg API: ", vehicle)
     console.log("token to carReg API: ", token)
     return apiWrapper({
       path: VEHICLES,
       token,
-      body:vehicle,
+      body: vehicle,
       method: 'POST',
     }).then(res => console.log(res.json()));
   },
@@ -158,36 +171,36 @@ export default {
     if (recurring === 'true') {
       let startDateArray = availData.start_time.split(" ")
       let startDate = startDateArray[0]
-     
+
       const availability = {
-        "start_date": startDate,   
+        "start_date": startDate,
         "end_date": endDate,
         "start_time": availData.start_time,
         "end_time": availData.end_time,
-        "is_recurring": recurringParsed, 
+        "is_recurring": recurringParsed,
         "location_id": availData.location_id,
       }
-    
+
       console.log("data to availReg API: ", availability)
       console.log("token to availReg API: ", token)
       return apiWrapper({
         path: AVAILABILITIES,
         token,
-        body:availability,
+        body: availability,
         method: 'POST',
       }).then(res => console.log(res.json()));
     } else {
       const availability = {
         "start_time": availData.start_time,
         "end_time": availData.end_time,
-        "is_recurring": recurringParsed, 
+        "is_recurring": recurringParsed,
         "location_id": availData.location_id,
       }
-  
+
       return apiWrapper({
         path: AVAILABILITIES,
         token,
-        body:availability,
+        body: availability,
         method: 'POST',
       }).then(res => console.log(res.json()));
     }
