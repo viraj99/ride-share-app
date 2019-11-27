@@ -1,16 +1,17 @@
+/* eslint-disable prettier/prettier */
 import {
   LOGIN,
   RIDES,
-  SCHEDULEDRIDES,
-  APPROVEDRIDES,
+  //? SCHEDULEDRIDES,
+  //? APPROVEDRIDES,
   SETTINGS,
   LOGOUT,
   AVAILABILITIES,
-  driverRides,
+  //? driverRides,
   RIDER,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
-
+//TODO get the ride id not the rider id from the API to accept the correct response
 
 export default {
   // ex. of how the post and etc. requests can be written
@@ -53,6 +54,7 @@ export default {
       token,
     }).then(res => res.json());
   },
+
   cancelRide(id, token) {
     return apiWrapper({
       path: RIDES,
@@ -61,17 +63,7 @@ export default {
       token,
     }).then(res => res.json());
   },
-  //////////////////
-  // getRider() {
-  //   return fetch(RIDER, {
-  //     method: 'GET',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       token: '',
-  //     },
-  //   });
-  // },
-  // ////////////////////
+
   getAvailabilities() {
     // change this with the api wrapper
     return fetch(AVAILABILITIES, {

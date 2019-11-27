@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
@@ -16,9 +17,8 @@ const RequestedRidesCard = ({
         <Block row space="between" style={{ marginBottom: 16 }}>
           <Text style={styles.date}>{moment(date).format('MMM D')}</Text>
           <Text style={styles.date}>{moment(date).format('h:mm A')}</Text>
-          {/*------------------------------------------------------------*/}
-          {/* <Text styles={styles.name}>{name}</Text> */}
-          {/*------------------------------------------------------------*/}
+          {/*//? <Text styles={styles.name}>{name}</Text>
+                                                          */}
         </Block>
         <Block row center>
           <Badge color="rgba(30,170,112,0.2)" size={14} style={{ marginRight: 8 }}>
@@ -44,8 +44,8 @@ const RequestedRidesCard = ({
     </View>
   );
 
-// Card.propTypes = {
-//   onPress: PropTypes.func,
-// };
+//? Card.propTypes = {
+//?  onPress: PropTypes.func,
+//? };
 
 export default RequestedRidesCard;

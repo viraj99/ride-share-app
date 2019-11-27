@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import {
   Text,
@@ -8,9 +9,11 @@ import {
   ActivityIndicator,
   FlatList,
   Animated,
+  SafeAreaView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import { NavigationEvents } from 'react-navigation';
 import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
 import { CalendarButton } from '../../components/Button';
@@ -29,7 +32,7 @@ export default class MainView extends Component<Props> {
       scheduledRides: [],
       approvedRides: [],
       isLoading: true,
-      token: '',
+      token: ''
     };
   }
 
@@ -38,36 +41,43 @@ export default class MainView extends Component<Props> {
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
     this.setState({
-      token: realToken,
+      token: realToken
     });
     this.ridesRequests();
   };
 
   ridesRequests = () => {
+    console.log('bout to get some rides')
     const { token } = this.state;
     this.setState({ isLoading: true });
     API.getRides(token)
       .then(res => {
         const rides = res.rides;
-        const scheduledRides = rides.filter(ride => ride.status === 'scheduled');
-        const approvedRides = rides.filter(ride => ride.status === 'approved' || ride.status === 'pending');
-        console.log('all rides', rides);
-        console.log('scheduled', scheduledRides);
-        console.log('approved', approvedRides);
+        const scheduledRides = rides.filter(
+          ride => ride.status === 'scheduled'
+        );
+        const approvedRides = rides.filter(
+          ride => ride.status === 'approved'
+        );
+        //console.log("all rides", rides);
+        // console.log("scheduled", scheduledRides);
+        // console.log("approved", approvedRides);
         this.setState({
           scheduledRides,
           approvedRides,
-          isLoading: false,
+          isLoading: false
         });
       })
       .catch(err => {
         console.log(err);
       });
-  }
-
-  componentDidMount = () => {
-    this.handleToken();
   };
+
+  // componentDidMount = () => {
+
+  // this.handleToken();
+  //   console.log('Update in MAIN TEST');
+  // };
 
   renderLoader = () => {
     const { isLoading } = this.state;
@@ -85,31 +95,31 @@ export default class MainView extends Component<Props> {
   upcomingScheduledRide = item => {
     const { token } = this.state;
     const { navigation } = this.props;
-    const id = item.rider_id;
+    const riderId = item.rider_id;
     const date = item.pick_up_time;
-    // const name = item.riderName;
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state,
+      item.start_location.state
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state,
+      item.end_location.state
     ];
-    const reason = item.reason
+    const reason = item.reason;
     return (
       <UpcomingRideCard
         key={item.driver_id}
         onPress={() => {
           navigation.navigate('RideView', {
-            id,
+            riderId,
+            //  rideId,
             token,
             startLocation,
             endLocation,
             date,
-            reason
+            reason,
           });
         }}
         date={item.pick_up_time}
@@ -194,16 +204,19 @@ export default class MainView extends Component<Props> {
       item.end_location.city,
       item.end_location.state,
     ];
-    const id = item.rider_id;
+    const riderId = item.rider_id;
+    const rideId = item.id;
     const date = item.pick_up_time;
+
     const name = item.riderName;
-    const reason = item.reason
+    const reason = item.reason;
     return (
       <RequestedRideCard
         key={item.driver_id}
         onPress={() => {
           navigation.navigate('RequestedRidesDetails', {
-            id,
+            riderId,
+            rideId,
             token,
             startLocation,
             endLocation,
@@ -222,9 +235,8 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
-
     return (
-      <View>
+      <SafeAreaView>
         <View style={styles.titlesContainer}>
           <View style={{ alignItems: 'flex-start' }}>
             <Text style={styles.subTitle}>Requested Rides</Text>
@@ -246,7 +258,7 @@ export default class MainView extends Component<Props> {
           ])}
           renderItem={({ item }) => this.requestedRide(item)}
         />
-      </View>
+      </SafeAreaView>
     );
   };
 
@@ -271,7 +283,9 @@ export default class MainView extends Component<Props> {
     const { isLoading } = this.state;
 
     return (
+
       <View style={styles.container}>
+        <NavigationEvents onDidFocus={() => this.handleToken()} />
         <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (
@@ -280,7 +294,8 @@ export default class MainView extends Component<Props> {
             <ScrollView
               scrollsToTop
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: variables.sizes.padding }}>
+              contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
+            >
               {this.renderUpcomingRides()}
               {this.renderRequestedRides()}
             </ScrollView>

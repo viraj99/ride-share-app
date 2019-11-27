@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Icon } from 'react-native-elements';
@@ -12,13 +13,13 @@ const data = [
   {
     pickupLocation: {
       latitude: 35.980656,
-      longitude: -78.898274,
+      longitude: -78.898274
     },
     dropOffLocation: {
       latitude: 36.00272,
-      longitude: -78.902597,
+      longitude: -78.902597
     },
-  },
+  }
 ];
 export default class RideView extends Component<Props> {
   constructor(props) {
@@ -28,29 +29,28 @@ export default class RideView extends Component<Props> {
       isVisible: false,
       latitude: 0,
       longitude: 0,
-      isLoading: true,
+      isLoading: true
     };
   }
   componentDidMount = () => {
     this.requestRider();
-  }
+  };
 
   requestRider = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
-    const id = navigation.getParam('id');
+    const riderId = navigation.getParam('riderId');
     // console.log('Props token', token);
     // console.log('Props id', id);
-    API.getRider(id, token)
-      .then(response => {
-        //console.log('response', response);
-        this.setState({
-          first: response.json.rider.first_name,
-          last: response.json.rider.last_name,
-          isLoading: false,
-        })
-      })
-  }
+    API.getRider(riderId, token).then(response => {
+      //console.log('response', response);
+      this.setState({
+        first: response.json.rider.first_name,
+        last: response.json.rider.last_name,
+        isLoading: false
+      });
+    });
+  };
 
   handlePickUpDirections = () => {
     const latitude = data.map(item => item.pickupLocation.latitude);
@@ -58,7 +58,7 @@ export default class RideView extends Component<Props> {
     this.setState({
       isVisible: true,
       latitude,
-      longitude,
+      longitude
     });
   };
 
@@ -68,7 +68,7 @@ export default class RideView extends Component<Props> {
     this.setState({
       isVisible: true,
       latitude,
-      longitude,
+      longitude
     });
   };
 
@@ -77,8 +77,8 @@ export default class RideView extends Component<Props> {
       { text: "Don't cancel", style: 'cancel' },
       {
         text: 'Yes, cancel this ride',
-        onPress: () => console.warn('ride cancelled'),
-      },
+        onPress: () => console.warn('ride cancelled')
+      }
     ]);
   };
 
@@ -88,7 +88,7 @@ export default class RideView extends Component<Props> {
 
     if (textValue === 'Go to pickup') {
       this.setState({
-        textValue: 'Tap to arrive',
+        textValue: 'Tap to arrive'
       });
     } else if (textValue === 'Tap to arrive') {
       Alert.alert('Have you arrived?', '', [
@@ -96,11 +96,11 @@ export default class RideView extends Component<Props> {
           text: 'Confirm arrival',
           onPress: () => {
             this.setState({
-              textValue: 'Pick up',
+              textValue: 'Pick up'
             });
-          },
+          }
         },
-        { text: 'cancel', style: 'cancel' },
+        { text: 'cancel', style: 'cancel' }
       ]);
     } else if (textValue === 'Pick up') {
       Alert.alert('Tap to confirm', '', [
@@ -108,11 +108,11 @@ export default class RideView extends Component<Props> {
           text: 'Confirm pick up',
           onPress: () => {
             this.setState({
-              textValue: 'Drop off',
+              textValue: 'Drop off'
             });
-          },
+          }
         },
-        { text: 'cancel', style: 'cancel' },
+        { text: 'cancel', style: 'cancel' }
       ]);
     } else if (textValue === 'Drop off') {
       Alert.alert('Did you drop-off?', '', [
@@ -120,13 +120,13 @@ export default class RideView extends Component<Props> {
           text: 'Confirm drop-off',
           onPress: () => {
             this.setState({
-              textValue: '',
+              textValue: ''
             });
             alert('ride complete');
             navigation.navigate('MainView');
-          },
+          }
         },
-        { text: 'cancel', style: 'cancel' },
+        { text: 'cancel', style: 'cancel' }
       ]);
     }
   };
@@ -171,7 +171,7 @@ export default class RideView extends Component<Props> {
   render() {
     const { textValue, isVisible, latitude, longitude } = this.state;
     const { navigation } = this.props;
-    const name = navigation.getParam('name');
+    // ?const name = navigation.getParam('name');
 
     return (
       <View style={styles.container}>
@@ -182,7 +182,7 @@ export default class RideView extends Component<Props> {
               rounded
               source={{
                 uri:
-                  'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                  'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg'
               }}
               containerStyle={styles.avatarContainer}
             />
@@ -207,12 +207,12 @@ export default class RideView extends Component<Props> {
               'waze',
               'yandex',
               'moovit',
-              'yandex-maps',
+              'yandex-maps'
             ]}
             modalProps={{ animationIn: 'slideInUp' }}
             options={{
               latitude,
-              longitude,
+              longitude
               // sourceLatitude: 35.995616, optionally specify starting location for directions
               // sourceLongitude: -78.902208, not optional if sourceLatitude is specified
             }}
