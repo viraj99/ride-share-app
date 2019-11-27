@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  Text, TextInput, View, TouchableOpacity, Switch, Alert,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Switch,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,7 +13,7 @@ import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
 import Notifications from 'react-native-vector-icons/MaterialIcons';
 import User from 'react-native-vector-icons/SimpleLineIcons';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import SettingHeader from './header';
 import styles from './settingsStyle.js';
 import API from '../../api/api';
@@ -46,23 +51,23 @@ class Settings extends Component {
     this.handleActive = this.handleActive.bind(this);
     this.handleEmailNotification = this.handleEmailNotification.bind(this);
     this.handlePhoneNotification = this.handlePhoneNotification.bind(this);
-    this.handleBackButton = this.handleBackButton.bind(this);
+    // this.handleBackButton = this.handleBackButton.bind(this);
     this.handleFirstName = this.handleFirstName.bind(this);
     this.handleLastName = this.handleLastName.bind(this);
     this.handleModel = this.handleModel.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  handleBackButton() {
+  handleBackButton = () => {
     this.props.navigation.navigate('MainView');
   }
 
   handleLogout() {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const { token } = obj;
+      const {token} = obj;
       API.logout(token)
-        .then((res) => {
+        .then(res => {
           const loggedOut = res.json.Success;
           if (loggedOut == 'Logged Out') {
             AsyncStorage.removeItem('token');
@@ -71,7 +76,7 @@ class Settings extends Component {
             Alert.alert('Unable to Logout', 'Please try again.');
           }
         })
-        .catch((error) => {
+        .catch(error => {
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
         });
@@ -98,7 +103,7 @@ class Settings extends Component {
       };
       AsyncStorage.getItem('token', (err, result) => {
         const obj = JSON.parse(result);
-        const { token } = obj;
+        const {token} = obj;
         API.updateSettingsInfo(data, token);
       });
     } else {
@@ -106,49 +111,49 @@ class Settings extends Component {
     }
   }
 
-  handleFirstName = (text) => {
+  handleFirstName = text => {
     this.setState({
       firstName: text,
     });
   };
 
-  handleLastName = (text) => {
+  handleLastName = text => {
     this.setState({
       lastName: text,
     });
   };
 
-  handleEmail = (text) => {
+  handleEmail = text => {
     this.setState({
       email: text,
     });
   };
 
-  handlePhoneNumber = (text) => {
+  handlePhoneNumber = text => {
     this.setState({
       phoneNumber: text,
     });
   };
 
-  handleRadius = (text) => {
+  handleRadius = text => {
     this.setState({
       radius: text,
     });
   };
 
-  handleMake = (text) => {
+  handleMake = text => {
     this.setState({
       make: text,
     });
   };
 
-  handleModel = (text) => {
+  handleModel = text => {
     this.setState({
       model: text,
     });
   };
 
-  handleColor = (text) => {
+  handleColor = text => {
     this.setState({
       color: text,
     });
@@ -178,7 +183,7 @@ class Settings extends Component {
       const tokenValue = obj.token;
 
       API.getSettingInfo(tokenValue)
-        .then((res) => {
+        .then(res => {
           this.setState({
             firstName: res.first_name,
             lastName: res.last_name,
@@ -192,7 +197,7 @@ class Settings extends Component {
             organization_id: res.organization_id,
           });
         })
-        .catch((error) => {
+        .catch(error => {
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
         });
@@ -212,7 +217,7 @@ class Settings extends Component {
               <View style={styles.inputContainer}>
                 <User name="user" size={30} color="#475c67" />
                 <View style={styles.userFirstLastName}>
-                  <View style={{ paddingRight: 8 }}>
+                  <View style={{paddingRight: 8}}>
                     <View style={styles.bottomBorder}>
                       <TextInput
                         style={styles.input}
@@ -288,7 +293,9 @@ class Settings extends Component {
               <View style={styles.inputContainer}>
                 <View>
                   <Text style={styles.inputTitle}>Active </Text>
-                  <Text style={styles.notificationDescription}>Turn off/on Active Status</Text>
+                  <Text style={styles.notificationDescription}>
+                    Turn off/on Active Status
+                  </Text>
                 </View>
                 <View style={styles.switchStyle}>
                   <Switch
@@ -372,13 +379,19 @@ class Settings extends Component {
               </View>
             </View>
             <View style={styles.buttonSection}>
-              <TouchableOpacity style={styles.editButton} onPress={this.handleEdit}>
-                <Text style={styles.buttonTitle}>{this.state.buttonTitle ? 'Update' : 'Edit'}</Text>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={this.handleEdit}>
+                <Text style={styles.buttonTitle}>
+                  {this.state.buttonTitle ? 'Update' : 'Edit'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.buttonSection}>
-            <TouchableOpacity style={styles.logoutButton} onPress={this.handleLogout}>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={this.handleLogout}>
               <Text style={styles.buttonTitle}>Log out</Text>
             </TouchableOpacity>
           </View>

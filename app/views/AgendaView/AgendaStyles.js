@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   addButton: {
@@ -32,7 +32,5 @@ export default StyleSheet.create({
     margin: 5,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-
   },
-
 });

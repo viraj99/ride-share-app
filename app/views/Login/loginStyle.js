@@ -1,9 +1,9 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff',
     alignItems: 'center',
     alignContent: 'flex-start',
     justifyContent: 'center',
@@ -35,7 +35,7 @@ export default StyleSheet.create({
   errorContainer: {
     paddingTop: 2,
     paddingBottom: 2,
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff',
     padding: 6,
     alignItems: 'center',
   },
@@ -48,7 +48,7 @@ export default StyleSheet.create({
     padding: 5,
   },
   sectionContainer: {
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     borderColor: '#475c67',
     borderWidth: 1,

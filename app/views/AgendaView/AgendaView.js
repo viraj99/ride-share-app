@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
-import {
-  Text, View, FlatList,
-} from 'react-native';
-import {
-  Header, Overlay, Input, Button, CheckBox,
-} from 'react-native-elements';
+import React, {Component} from 'react';
+import {Text, View, FlatList} from 'react-native';
+import {Header, Overlay, Input, Button, CheckBox} from 'react-native-elements';
 import Accordion from 'react-native-collapsible/Accordion';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { Calendar } from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import _ from 'lodash';
 import styles from './AgendaStyles';
 import Schedule from './Schedule';
 import {
-  MonthHeader, Day, WeekHeader, HeaderArrow, Availability,
+  MonthHeader,
+  Day,
+  WeekHeader,
+  HeaderArrow,
+  Availability,
 } from '../../components/ScheduleItems';
 import API from '../../api/api';
-
 
 const SECTIONS = [
   {
@@ -29,7 +28,6 @@ const SECTIONS = [
 
 const unix = day => moment(day).format('X');
 const utc = day => moment(day).utc();
-
 
 class ScheduleItem extends Schedule {
   constructor(
@@ -60,7 +58,6 @@ class DayObj {
   }
 }
 
-
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
@@ -85,17 +82,18 @@ export default class App extends Component<Props> {
   requestAvailabilities = () => {
     // this.setState({ loading: true })
     API.getAvailabilities()
-      .then((res) => {
+      .then(res => {
         console.log(res);
         this.parseAPI(res);
         this.populateAgenda();
-      }).catch((err) => {
+      })
+      .catch(err => {
         console.log(err);
         this.populateAgenda();
       });
-  }
+  };
 
-  parseAPI = (res) => {
+  parseAPI = res => {
     const results = res.json;
     const avails = [];
 
@@ -103,12 +101,7 @@ export default class App extends Component<Props> {
     _.forIn(obj, (v, k) => {
       const formatDate = moment(k).format('MMM D');
       // startOfDay = moment(startOfDay).startOf('day');
-      const dayToRender = new DayObj(
-        'date',
-        formatDate,
-        k,
-        v,
-      );
+      const dayToRender = new DayObj('date', formatDate, k, v);
       avails.push(dayToRender);
     });
     console.log(avails);
@@ -126,25 +119,25 @@ export default class App extends Component<Props> {
     //   );
     //   avails.push(importedSchedule);
     // });
-    this.setState({ loadedSchedule: avails });
-  }
+    this.setState({loadedSchedule: avails});
+  };
 
   componentDidMount = () => {
     console.log('COMPONENT DID MOUNT');
     console.log('--------------------');
     this.requestAvailabilities();
-  }
+  };
 
   // this function needs integration with Calendar component
-  displayCurrentMonth = (month) => {
+  displayCurrentMonth = month => {
     let currentMonth = month.dateString;
     currentMonth = moment(currentMonth).format('MMMM YYYY');
     return currentMonth;
-  }
+  };
 
   // creating initial array of elements to appear in flatlist
   populateAgenda = () => {
-    const { loadedSchedule } = this.state;
+    const {loadedSchedule} = this.state;
 
     const weeks = [];
 
@@ -159,17 +152,42 @@ export default class App extends Component<Props> {
       monthEnd = moment(monthEnd).startOf('month');
 
       if (moment(end).isSame(moment(start).endOf('month'))) {
-        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${monthEnd.format('MMMM YYYY')}`, 'none', `${monthEnd.format('X')}`);
+        const newWeek = new Schedule(
+          'weekHeader',
+          `${start.format('MMM D')}`,
+          `${end.format('X')}`,
+          `${start.format('X')}`,
+        );
+        const newMonth = new Schedule(
+          'monthHeader',
+          `${monthEnd.format('MMMM YYYY')}`,
+          'none',
+          `${monthEnd.format('X')}`,
+        );
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() !== moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
-        const newMonth = new Schedule('monthHeader', `${betweenMonth.format('MMMM YYYY')}`, 'none', `${betweenMonth.format('X')}`);
+        const newWeek = new Schedule(
+          'weekHeader',
+          `${start.format('MMM D')}`,
+          `${end.format('X')}`,
+          `${start.format('X')}`,
+        );
+        const newMonth = new Schedule(
+          'monthHeader',
+          `${betweenMonth.format('MMMM YYYY')}`,
+          'none',
+          `${betweenMonth.format('X')}`,
+        );
         weeks.push(newWeek);
         weeks.push(newMonth);
       } else if (moment(start).month() === moment(end).month()) {
-        const newWeek = new Schedule('weekHeader', `${start.format('MMM D')}`, `${end.format('X')}`, `${start.format('X')}`);
+        const newWeek = new Schedule(
+          'weekHeader',
+          `${start.format('MMM D')}`,
+          `${end.format('X')}`,
+          `${start.format('X')}`,
+        );
         weeks.push(newWeek);
       }
     }
@@ -178,39 +196,53 @@ export default class App extends Component<Props> {
     newArr = newArr.sort(this.organizeArray);
     console.log(newArr);
 
-    this.setState({
-      scheduleItems: newArr,
-    }, () => {
-      this.initialDayRender();
-    });
-  }
+    this.setState(
+      {
+        scheduleItems: newArr,
+      },
+      () => {
+        this.initialDayRender();
+      },
+    );
+  };
 
   // keeping array in chronological order
   organizeArray = (a, b) => moment(a.timestamp, 'X') - moment(b.timestamp, 'X');
 
   // on first load, today's date is displayed and is at top of view
   initialDayRender = () => {
-    const { scheduleItems, todayRendered } = this.state;
+    const {scheduleItems, todayRendered} = this.state;
     const today = moment().startOf('day');
 
     if (!todayRendered && scheduleItems) {
-      const initialDay = new Schedule('emptyDay', today, undefined, unix(today));
+      const initialDay = new Schedule(
+        'emptyDay',
+        today,
+        undefined,
+        unix(today),
+      );
 
       scheduleItems.push(initialDay);
       scheduleItems.sort(this.organizeArray);
 
-      this.setState({ scheduleItems });
+      this.setState({scheduleItems});
 
       const indexOfDay = this.findDayIndex(scheduleItems, 'startDate', today);
-      this.flatListRef.scrollToIndex({ animated: false, index: indexOfDay, viewPosition: 0 });
+      this.flatListRef.scrollToIndex({
+        animated: false,
+        index: indexOfDay,
+        viewPosition: 0,
+      });
 
-      this.setState({ todayRendered: true });
-    } else console.log('else hit');
-  }
+      this.setState({todayRendered: true});
+    } else {
+      console.log('else hit');
+    }
+  };
 
   // adding temporary day when date in calendar selected
-  dayPressHandler = (day) => {
-    const { scheduleItems, temporaryDate, tempDateIndex } = this.state;
+  dayPressHandler = day => {
+    const {scheduleItems, temporaryDate, tempDateIndex} = this.state;
     const arr = scheduleItems;
     if (temporaryDate && tempDateIndex > -1) {
       arr.splice(tempDateIndex, 1);
@@ -220,7 +252,12 @@ export default class App extends Component<Props> {
       });
     }
     const dayClicked = moment(day.dateString).startOf('day');
-    const emptyDay = new Schedule('emptyDay', dayClicked, undefined, moment(dayClicked).format('X'));
+    const emptyDay = new Schedule(
+      'emptyDay',
+      dayClicked,
+      undefined,
+      moment(dayClicked).format('X'),
+    );
 
     arr.push(emptyDay);
     arr.sort(this.organizeArray);
@@ -235,7 +272,7 @@ export default class App extends Component<Props> {
       index: indexOfDay,
       viewPosition: 0.1,
     });
-  }
+  };
 
   // helper function to remove index of temporary day
   findDayIndex = (arr, attr, value) => {
@@ -245,7 +282,7 @@ export default class App extends Component<Props> {
       }
     }
     return -1;
-  }
+  };
 
   // what is displayed in accordion
   renderContent = () => (
@@ -261,13 +298,34 @@ export default class App extends Component<Props> {
         }}
       />
     </View>
-  )
+  );
 
   // collapsing tab render for accordion. need to change to ternary operator and export styles
   renderHeader = (item, isActive) => {
     if (!isActive) {
       return (
-        <View style={{
+        <View
+          style={{
+            backgroundColor: '#1EAA70',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: -2,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}>
+          <Icon name="angle-down" color="white" size={20} />
+        </View>
+      );
+    }
+    return (
+      <View
+        style={{
           backgroundColor: '#1EAA70',
           alignItems: 'center',
           justifyContent: 'center',
@@ -280,40 +338,19 @@ export default class App extends Component<Props> {
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
           elevation: 5,
-        }}
-        >
-          <Icon name="angle-down" color="white" size={20} />
-        </View>
-      );
-    }
-    return (
-      <View style={{
-        backgroundColor: '#1EAA70',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: -2,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
-      >
+        }}>
         <Icon name="angle-up" color="white" size={20} />
       </View>
     );
-  }
+  };
 
   // accordion stuff
-  updateSections = (activeSections) => {
-    this.setState({ activeSections });
+  updateSections = activeSections => {
+    this.setState({activeSections});
   };
 
   // flatlist render function, need to turn these into components
-  renderAgenda = ({ item }) => {
+  renderAgenda = ({item}) => {
     const {
       startDate,
       endDate,
@@ -328,18 +365,10 @@ export default class App extends Component<Props> {
     } = item;
 
     if (type === 'weekHeader') {
-      return (
-        <WeekHeader
-          start={startDate}
-          end={endDate}
-        />
-      );
-    } if (type === 'monthHeader') {
-      return (
-        <MonthHeader
-          month={startDate}
-        />
-      );
+      return <WeekHeader start={startDate} end={endDate} />;
+    }
+    if (type === 'monthHeader') {
+      return <MonthHeader month={startDate} />;
     }
     // if (type === 'date') {
     //   return (
@@ -349,38 +378,35 @@ export default class App extends Component<Props> {
     //   );
     // }
     if (type === 'date') {
-      return (
-        <Day
-          data={item}
-          onPress={this.toggleForm}
-        />
-      );
+      return <Day data={item} onPress={this.toggleForm} />;
     }
-  }
+  };
 
   // Modal open
   toggleForm = () => {
     const overlayVisible = this.state;
     if (overlayVisible === true) {
-      this.setState({ overlayVisible: false });
+      this.setState({overlayVisible: false});
     } else {
-      this.setState({ overlayVisible: true });
+      this.setState({overlayVisible: true});
     }
-  }
+  };
 
   // following functions handle date picker visibility
-  showStartTimePicker = () => this.setState({ startPickerVisibility: true });
+  showStartTimePicker = () => this.setState({startPickerVisibility: true});
 
-  hideStartTimePicker = () => this.setState({ startPickerVisibility: false });
+  hideStartTimePicker = () => this.setState({startPickerVisibility: false});
 
-  showEndTimePicker = () => this.setState({ endPickerVisibility: true });
+  showEndTimePicker = () => this.setState({endPickerVisibility: true});
 
-  hideEndTimePicker = () => this.setState({ endPickerVisibility: false });
+  hideEndTimePicker = () => this.setState({endPickerVisibility: false});
 
   // onSubmit handlers
-  handleStartTimePicker = (time) => {
+  handleStartTimePicker = time => {
     const convertedTime = moment(time).format('X');
-    const date = moment(time).startOf('day').format('X');
+    const date = moment(time)
+      .startOf('day')
+      .format('X');
     this.setState({
       initTime: convertedTime,
       availableDate: date,
@@ -388,26 +414,30 @@ export default class App extends Component<Props> {
     this.hideStartTimePicker();
   };
 
-  handleEndTimePicker = (time) => {
+  handleEndTimePicker = time => {
     const convertedTime = moment(time).format('X');
-    this.setState({ endTime: convertedTime });
+    this.setState({endTime: convertedTime});
     this.hideEndTimePicker();
   };
 
   // time displayed for user
   initTimeDisplay = () => {
-    const { initTime } = this.state;
+    const {initTime} = this.state;
     if (!initTime) {
       return moment().format('h:mm a');
-    } return moment(initTime, 'X').format('h:mm a');
-  }
+    }
+    return moment(initTime, 'X').format('h:mm a');
+  };
 
   endTimeDisplay = () => {
-    const { endTime } = this.state;
+    const {endTime} = this.state;
     if (!endTime) {
-      return moment().add(1, 'h').format('h:mm a');
-    } return moment(endTime, 'X').format('h:mm a');
-  }
+      return moment()
+        .add(1, 'h')
+        .format('h:mm a');
+    }
+    return moment(endTime, 'X').format('h:mm a');
+  };
 
   // adding new schedule items to array
   handleAgendaSubmit = () => {
@@ -424,7 +454,9 @@ export default class App extends Component<Props> {
 
     // need better handling for this
     if (!availableDate || !initTime || !endTime || !userAddress) {
-      console.log('form not completed, do something before you delete this log');
+      console.log(
+        'form not completed, do something before you delete this log',
+      );
     }
 
     let arr = scheduleItems;
@@ -434,17 +466,34 @@ export default class App extends Component<Props> {
         const newDate = moment(availableDate, 'X').add(i, 'w');
         const newTimestamp = moment(initTime, 'X').add(i, 'w');
         const newEndTime = moment(endTime, 'X').add(i, 'w');
-        const repeatingItem = new ScheduleItem('availability', newDate, newEndTime, newTimestamp, newTimestamp, newEndTime, userAddress, reoccurringCheck);
+        const repeatingItem = new ScheduleItem(
+          'availability',
+          newDate,
+          newEndTime,
+          newTimestamp,
+          newTimestamp,
+          newEndTime,
+          userAddress,
+          reoccurringCheck,
+        );
         arr.push(repeatingItem);
         arr = arr.sort(this.organizeArray);
       }
     } else {
-      const newAvailability = new ScheduleItem('availability', availableDate, endTime, initTime, initTime, endTime, userAddress, reoccurringCheck);
+      const newAvailability = new ScheduleItem(
+        'availability',
+        availableDate,
+        endTime,
+        initTime,
+        initTime,
+        endTime,
+        userAddress,
+        reoccurringCheck,
+      );
       console.log(newAvailability);
       arr.push(newAvailability);
       arr = arr.sort(this.organizeArray);
     }
-
 
     arr = arr.sort(this.organizeArray);
     this.setState({
@@ -456,12 +505,12 @@ export default class App extends Component<Props> {
       userAddress: '',
       reoccurringCheck: undefined,
     });
-  }
+  };
 
   navigateBack = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     navigation.navigate('MainView');
-  }
+  };
 
   render() {
     const {
@@ -473,17 +522,20 @@ export default class App extends Component<Props> {
       endPickerVisibility,
     } = this.state;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <Header
           containerStyle={{
             flex: 1,
             backgroundColor: '#1EAA70',
           }}
           leftComponent={<HeaderArrow onPress={this.navigateBack} />}
-          centerComponent={{ text: 'Agenda', style: { color: '#fff', fontSize: 24, fontWeight: 'bold' } }}
-        // rightComponent={{ icon: 'home', color: '#fff' }}
+          centerComponent={{
+            text: 'Agenda',
+            style: {color: '#fff', fontSize: 24, fontWeight: 'bold'},
+          }}
+          // rightComponent={{ icon: 'home', color: '#fff' }}
         />
-        <View style={{ flex: 10 }}>
+        <View style={{flex: 10}}>
           <Accordion
             sections={SECTIONS}
             activeSections={activeSections}
@@ -495,10 +547,14 @@ export default class App extends Component<Props> {
           />
           <View>
             <FlatList
-              onScrollToIndexFailed={() => { console.log('scroll failed'); }}
+              onScrollToIndexFailed={() => {
+                console.log('scroll failed');
+              }}
               style={styles.flatlistContainer}
               data={scheduleItems}
-              ref={(ref) => { this.flatListRef = ref; }}
+              ref={ref => {
+                this.flatListRef = ref;
+              }}
               renderItem={this.renderAgenda}
               extraData={this.state}
               keyExtractor={(item, index) => `list-item-${index}`}
@@ -516,8 +572,10 @@ export default class App extends Component<Props> {
         <Overlay
           height={280}
           isVisible={overlayVisible}
-          onBackdropPress={() => { this.setState({ overlayVisible: false }); }}
-          children={(
+          onBackdropPress={() => {
+            this.setState({overlayVisible: false});
+          }}
+          children={
             <View style={styles.overlayContainer}>
               <View style={styles.inputRow}>
                 <Button
@@ -525,7 +583,8 @@ export default class App extends Component<Props> {
                   title="Select Start Time"
                   buttonStyle={styles.formButton}
                 />
-                <Text style={styles.timeText}>{`${this.initTimeDisplay()}`}</Text>
+                <Text
+                  style={styles.timeText}>{`${this.initTimeDisplay()}`}</Text>
               </View>
               <View style={styles.inputRow}>
                 <Button
@@ -533,26 +592,31 @@ export default class App extends Component<Props> {
                   title="Select End Time"
                   buttonStyle={styles.formButton}
                 />
-                <Text style={styles.timeText}>{`${this.endTimeDisplay()}`}</Text>
+                <Text
+                  style={styles.timeText}>{`${this.endTimeDisplay()}`}</Text>
               </View>
               <Input
-                style={{ margin: 5 }}
+                style={{margin: 5}}
                 placeholder="Please input your address"
-                onChangeText={text => this.setState({ userAddress: text })}
+                onChangeText={text => this.setState({userAddress: text})}
               />
               <CheckBox
-                style={{ margin: 5 }}
+                style={{margin: 5}}
                 center
                 title="Is this a weekly availability?"
                 checked={reoccurringCheck}
-                onPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
-                onIconPress={() => this.setState({ reoccurringCheck: !reoccurringCheck })}
+                onPress={() =>
+                  this.setState({reoccurringCheck: !reoccurringCheck})
+                }
+                onIconPress={() =>
+                  this.setState({reoccurringCheck: !reoccurringCheck})
+                }
               />
               <Button
                 title="Submit"
                 onPress={this.handleAgendaSubmit}
                 buttonStyle={styles.formButton}
-                style={{ margin: 5 }}
+                style={{margin: 5}}
               />
               {/* Date Picker modals  */}
               <DateTimePicker
@@ -570,9 +634,8 @@ export default class App extends Component<Props> {
                 is24Hour={false}
               />
             </View>
-          )}
+          }
         />
-
       </View>
     );
   }

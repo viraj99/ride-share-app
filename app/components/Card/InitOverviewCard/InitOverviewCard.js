@@ -1,10 +1,8 @@
 import React from 'react';
-import {
-  Text, View, TouchableOpacity, ScrollView,
-} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
 
 import moment from 'moment';
-import { createOpenLink } from 'react-native-open-maps';
+import {createOpenLink} from 'react-native-open-maps';
 
 import Badge from '../../Badge';
 import Block from '../../Block';
@@ -15,7 +13,11 @@ import styles from './styles';
 // const handlePickup = { latitude: pickupLat, longitude: pickupLong, query: 'Pickup Spot' };
 // const openYosemite = createOpenLink(handlePickup);
 const InitOverviewCard = ({
-  onPress, pickupAddress, dropoffAddress, date, note,
+  onPress,
+  pickupAddress,
+  dropoffAddress,
+  date,
+  note,
 }) => (
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
@@ -25,7 +27,7 @@ const InitOverviewCard = ({
         <Text style={styles.date}>{moment(date).format('h:mm A')}</Text>
       </Block>
       <Block row center>
-        <Badge color="rgba(30,170,112,0.2)" size={14} style={{ marginRight: 8 }}>
+        <Badge color="rgba(30,170,112,0.2)" size={14} style={{marginRight: 8}}>
           <Badge color="#1EAA70" size={8} />
         </Badge>
         <TouchableOpacity>
@@ -35,7 +37,10 @@ const InitOverviewCard = ({
         </TouchableOpacity>
       </Block>
       <Block row center>
-        <Badge color="rgba(255, 71, 87, 0.2)" size={14} style={{ marginRight: 8 }}>
+        <Badge
+          color="rgba(255, 71, 87, 0.2)"
+          size={14}
+          style={{marginRight: 8}}>
           <Badge color="#FF4957" size={8} />
         </Badge>
         <TouchableOpacity>

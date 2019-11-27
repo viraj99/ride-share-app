@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { Header } from '../../components/Header';
-import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
-import { CalendarButton } from '../../components/Button';
+import {Header} from '../../components/Header';
+import {UpcomingRideCard, RequestedRideCard} from '../../components/Card';
+import {CalendarButton} from '../../components/Button';
 import styles from './styles';
 import variables from '../../utils/variables';
 import API from '../../api/api';
@@ -44,28 +44,28 @@ export default class MainView extends Component<Props> {
   };
 
   ridesRequests = () => {
-    const { token } = this.state;
-    this.setState({ isLoading: true });
+    const {token} = this.state;
+    this.setState({isLoading: true});
     API.getRides(token) // currently just using method to GET all the rides w/o status
-      .then((res) => {
-        console.log('scheduled rides', res);
+      .then(res => {
+        // console.log('scheduled rides', res);
         this.setState({
-          scheduledRides: res,
+          scheduledRides: res.rides,
           isLoading: false,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
     API.getRides(token) // this method will be changed
-      .then((res) => {
-        console.log('requested rides', res);
+      .then(res => {
+        // console.log('requested rides', res);
         this.setState({
-          approvedRides: res,
+          approvedRides: res.rides,
           isLoading: false,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -75,8 +75,10 @@ export default class MainView extends Component<Props> {
   };
 
   renderLoader = () => {
-    const { isLoading } = this.state;
-    if (!isLoading) return null;
+    const {isLoading} = this.state;
+    if (!isLoading) {
+      return null;
+    }
 
     return (
       <View style={styles.loader}>
@@ -85,9 +87,9 @@ export default class MainView extends Component<Props> {
     );
   };
 
-  upcomingScheduledRide = (item) => {
-    const { token } = this.state;
-    const { navigation } = this.props;
+  upcomingScheduledRide = item => {
+    const {token} = this.state;
+    const {navigation} = this.props;
     const id = item.rider_id;
     const date = item.pick_up_time;
     const name = item.riderName;
@@ -96,7 +98,11 @@ export default class MainView extends Component<Props> {
       item.start_location.city,
       item.start_location.state,
     ];
-    const endLocation = [item.end_location.street, item.end_location.city, item.end_location.state];
+    const endLocation = [
+      item.end_location.street,
+      item.end_location.city,
+      item.end_location.state,
+    ];
     return (
       <UpcomingRideCard
         key={item.driver_id}
@@ -119,11 +125,11 @@ export default class MainView extends Component<Props> {
   };
 
   renderDots = () => {
-    const { scheduledRides } = this.state;
+    const {scheduledRides} = this.state;
     const dotPosition = Animated.divide(this.scrollX, variables.deviceWidth);
     return (
       <View style={styles.dotContainer}>
-        {scheduledRides.map((item, index) => {
+        {scheduledRides.slice(0, 3).map((item, index) => {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
@@ -132,7 +138,7 @@ export default class MainView extends Component<Props> {
           return (
             <Animated.View
               key={`step-${item.id}`}
-              style={[styles.dots, styles.activeDot, { borderWidth }]}
+              style={[styles.dots, styles.activeDot, {borderWidth}]}
             />
           );
         })}
@@ -141,17 +147,17 @@ export default class MainView extends Component<Props> {
   };
 
   renderUpcomingRides = () => {
-    const { scheduledRides } = this.state;
+    const {scheduledRides} = this.state;
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
     return (
-      <View style={{ flex: 2 }}>
+      <View style={{flex: 2}}>
         <View style={styles.titleWrapper}>
-          <View style={{ alignItems: 'flex-start' }}>
+          <View style={{alignItems: 'flex-start'}}>
             <Text style={styles.subTitle}>Upcoming Schedule</Text>
           </View>
           {numRides > 3 ? (
-            <View style={{ alignItems: 'flex-end' }}>
+            <View style={{alignItems: 'flex-end'}}>
               <TouchableOpacity onPress={this.navigateToDriverSchedule}>
                 <Text style={styles.seeAllText}>{seeAll}</Text>
               </TouchableOpacity>
@@ -167,26 +173,32 @@ export default class MainView extends Component<Props> {
           decelerationRate={0}
           scrollEventThrottle={16}
           snapToAlignment="center"
-          style={{ overflow: 'visible' }}
+          style={{overflow: 'visible'}}
           data={scheduledRides.slice(0, 3)}
           keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
-          renderItem={({ item }) => this.upcomingScheduledRide(item)}
+          onScroll={Animated.event([
+            {nativeEvent: {contentOffset: {x: this.scrollX}}},
+          ])}
+          renderItem={({item}) => this.upcomingScheduledRide(item)}
         />
         {this.renderDots()}
       </View>
     );
   };
 
-  requestedRide = (item) => {
-    const { token } = this.state;
-    const { navigation } = this.props;
+  requestedRide = item => {
+    const {token} = this.state;
+    const {navigation} = this.props;
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
       item.start_location.state,
     ];
-    const endLocation = [item.end_location.street, item.end_location.city, item.end_location.state];
+    const endLocation = [
+      item.end_location.street,
+      item.end_location.city,
+      item.end_location.state,
+    ];
     const id = item.rider_id;
     const date = item.pick_up_time;
     const name = item.riderName;
@@ -212,12 +224,12 @@ export default class MainView extends Component<Props> {
   };
 
   renderRequestedRides = () => {
-    const { approvedRides } = this.state;
+    const {approvedRides} = this.state;
 
     return (
       <View>
         <View style={styles.titlesContainer}>
-          <View style={{ alignItems: 'flex-start' }}>
+          <View style={{alignItems: 'flex-start'}}>
             <Text style={styles.subTitle}>Requested Rides</Text>
           </View>
         </View>
@@ -229,35 +241,37 @@ export default class MainView extends Component<Props> {
           decelerationRate={0}
           scrollEventThrottle={16}
           snapToAlignment="center"
-          style={{ overflow: 'visible' }}
+          style={{overflow: 'visible'}}
           data={approvedRides}
           keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
-          renderItem={({ item }) => this.requestedRide(item)}
+          onScroll={Animated.event([
+            {nativeEvent: {contentOffset: {x: this.scrollX}}},
+          ])}
+          renderItem={({item}) => this.requestedRide(item)}
         />
       </View>
     );
   };
 
   navigateToSettings = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     navigation.navigate('Settings');
   };
 
   navigateToCalendar = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     navigation.navigate('AgendaView');
   };
 
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
-    const { scheduledRides } = this.state;
-    const { navigation } = this.props;
-    navigation.navigate('DriverScheduleView', { scheduledRides });
+    const {scheduledRides} = this.state;
+    const {navigation} = this.props;
+    navigation.navigate('DriverScheduleView', {scheduledRides});
   };
 
   render() {
-    const { isLoading } = this.state;
+    const {isLoading} = this.state;
 
     return (
       <View style={styles.container}>
@@ -269,8 +283,7 @@ export default class MainView extends Component<Props> {
           <ScrollView
             scrollsToTop
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
-          >
+            contentContainerStyle={{paddingBottom: variables.sizes.padding}}>
             {this.renderUpcomingRides()}
             {this.renderRequestedRides()}
           </ScrollView>

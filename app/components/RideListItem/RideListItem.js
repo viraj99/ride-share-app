@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import {Text, View} from 'react-native';
 import moment from 'moment';
 import Touch from '../../utils/Touch';
 import styles from './styles';
@@ -20,11 +20,12 @@ const RideListItem = ({
     onPress={onPress}
     underlayColor={underlayColor}
     onLongPress={onLongPress}
-    style={styles.button}
-  >
+    style={styles.button}>
     <View style={[styles.container]}>
       <View style={[styles.dateContainer]}>
-        <Text style={[styles.date, { fontWeight: '600' }]}>{moment(date).format('D')}</Text>
+        <Text style={[styles.date, {fontWeight: '600'}]}>
+          {moment(date).format('D')}
+        </Text>
         <Text style={styles.date}>{moment(date).format('MMM')}</Text>
       </View>
       <View style={styles.verticalSepartor} />

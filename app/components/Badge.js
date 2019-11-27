@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import variables from '../utils/variables';
 
 import Block from './Block';
@@ -12,9 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Badge = ({
-  children, style, size, color, ...props
-}) => {
+const Badge = ({children, style, size, color, ...props}) => {
   const badgeStyles = StyleSheet.flatten([
     styles.badge,
     size && {
@@ -26,7 +24,13 @@ const Badge = ({
   ]);
 
   return (
-    <Block flex={false} middle center color={color} style={badgeStyles} {...props}>
+    <Block
+      flex={false}
+      middle
+      center
+      color={color}
+      style={badgeStyles}
+      {...props}>
       {children}
     </Block>
   );

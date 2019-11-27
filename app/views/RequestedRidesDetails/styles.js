@@ -1,7 +1,7 @@
-import { Platform, StyleSheet, Dimensions } from 'react-native';
-import { getBottomSpace } from '../../components/Header/StatusBar';
+import {Platform, StyleSheet, Dimensions} from 'react-native';
+import {getBottomSpace} from '../../components/Header/StatusBar';
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
