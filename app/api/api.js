@@ -6,8 +6,9 @@ import {
   //? APPROVEDRIDES,
   SETTINGS,
   LOGOUT,
+  RIDER,
   AVAILABILITIES,
-  //driverRides,
+  // ?driverRides,
   REGISTER,
   VEHICLES,
 } from '../utils/urls';
