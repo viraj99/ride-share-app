@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView, Picker} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
@@ -20,12 +20,21 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   //async await needed for proper Promise handling during submit function
-  handleUserSubmit = async (userEntries) => {
+  handleUserSubmit = async (userEntries, recurring) => {
+
+    console.log("in handlesubmit: ", recurring)
+    console.log("what type of info? ", typeof recurring)
+
     alert('Thank you for registering! You will receive an email regarding next steps within _ business days.')
     let token = await AsyncStorage.getItem('token')
     token = JSON.parse(token)
+    
+    console.log("right before createAvail API: ", userEntries);
+
+    let endDate = userEntries.end_date
+
     //use API file, createAvailability fx to send user's availability to database; token required
-    API.createAvailability(userEntries, token.token)
+    API.createAvailability(userEntries, recurring, endDate, token.token)
     .then(
         //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
         API.logout(token.token)
@@ -51,7 +60,8 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   render() {
-    const {userEntries} = this.props
+    const {userEntries} = this.props;
+    let availabilitySelectors;
     
     return (
       <ScrollView>
@@ -92,12 +102,53 @@ class RegisterAvailabilityForm extends React.Component {
               returnKeyType="next"
               onChangeText={text => this.props.handleChange(text, 'end_time')}
               ref={input => this.props.innerRef(input, 'EndTime')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('EndTime')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Recurring')}
             //   blurOnSubmit={false}
             />
 
+            <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Is this availability recurring? </Text>
+            <Picker
+              label="Recurring"
+              key={availabilitySelectors}
+              inputPadding={16}
+              labelHeight={24}
+              borderHeight={2}
+              borderColor="#475c67"
+              blurOnSubmit={false}
+              selectedValue={this.state.is_recurring}
+              //set the item value (which will be the radius mileage) to state so it can be passed to API post
+              onValueChange={(itemValue) =>
+                this.setState({is_recurring: itemValue})
+              }
+            >
+              {/* default to instruct user what to do */}
+              <Picker.Item label="Select One" value="null"/>
+              <Picker.Item label="Yes" value="true"/>
+              <Picker.Item label="No" value="false"/>
+            </Picker>
+
+            {this.state.is_recurring === 'true' && 
+              <Sae 
+                  label="End Recurring Schedule Date (YYYY-MM-DD)"
+                  labelStyle={styles.labelStyle}
+                  inputPadding={16}
+                  labelHeight={24}
+                  // active border height
+                  borderHeight={2}
+                  borderColor="#475c67"
+                  style={[styles.saeInput]}
+                  inputStyle={styles.saeText}
+                  // TextInput props
+                  returnKeyType="next"
+                  onChangeText={text => this.props.handleChange(text, 'end_date')}
+                  ref={input => this.props.innerRef(input, 'EndDate')}
+                  onSubmitEditing={() => this.props.handleSubmitEditing('EndDate')}
+                //   blurOnSubmit={false}>
+              />
+            }
+
             <Block style={styles.footer}>
-              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries)} />
+              <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, this.state.is_recurring)} />
             </Block>
           </Block>
         </KeyboardAwareScrollView>

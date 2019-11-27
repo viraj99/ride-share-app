@@ -148,20 +148,48 @@ export default {
     }).then(res => console.log(res.json()));
   },
 
-  createAvailability(availData, token) {
-    const availability = {
-      "start_time": availData.start_time,
-      "end_time": availData.end_time,
-      "is_recurring": availData.is_recurring, 
-      "location_id": availData.location_id,
+  createAvailability(availData, recurring, endDate, token) {
+    console.log("before parsing: ", recurring)
+    console.log("before parsing it's a :", typeof recurring)
+    let recurringParsed = JSON.parse(recurring)
+    console.log("after parse: ", recurringParsed)
+    console.log("after parsing it's a: ", typeof recurringParsed)
+
+    if (recurring === 'true') {
+      let startDateArray = availData.start_time.split(" ")
+      let startDate = startDateArray[0]
+     
+      const availability = {
+        "start_date": startDate,   
+        "end_date": endDate,
+        "start_time": availData.start_time,
+        "end_time": availData.end_time,
+        "is_recurring": recurringParsed, 
+        "location_id": availData.location_id,
+      }
+    
+      console.log("data to availReg API: ", availability)
+      console.log("token to availReg API: ", token)
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body:availability,
+        method: 'POST',
+      }).then(res => console.log(res.json()));
+    } else {
+      const availability = {
+        "start_time": availData.start_time,
+        "end_time": availData.end_time,
+        "is_recurring": recurringParsed, 
+        "location_id": availData.location_id,
+      }
+  
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body:availability,
+        method: 'POST',
+      }).then(res => console.log(res.json()));
     }
-    console.log("data to availReg API: ", availability)
-    console.log("token to availReg API: ", token)
-    return apiWrapper({
-      path: AVAILABILITIES,
-      token,
-      body:availability,
-      method: 'POST',
-    }).then(res => console.log(res.json()));
   }
 };
