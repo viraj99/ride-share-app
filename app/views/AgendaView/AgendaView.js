@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, FlatList} from 'react-native';
+import {Text, View, FlatList, SafeAreaView} from 'react-native';
 import {Header, Overlay, Input, Button, CheckBox} from 'react-native-elements';
 import Accordion from 'react-native-collapsible/Accordion';
 import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -546,19 +546,19 @@ export default class App extends Component<Props> {
             expandFromBottom
           />
           <View>
-            <FlatList
-              onScrollToIndexFailed={() => {
-                console.log('scroll failed');
-              }}
-              style={styles.flatlistContainer}
-              data={scheduleItems}
-              ref={ref => {
-                this.flatListRef = ref;
-              }}
-              renderItem={this.renderAgenda}
-              extraData={this.state}
-              keyExtractor={(item, index) => `list-item-${index}`}
-            />
+              <FlatList
+                onScrollToIndexFailed={() => {
+                  console.log('scroll failed');
+                }}
+                style={styles.flatlistContainer}
+                data={scheduleItems}
+                ref={ref => {
+                  this.flatListRef = ref;
+                }}
+                renderItem={this.renderAgenda}
+                extraData={this.state}
+                keyExtractor={(item, index) => `list-item-${index}`}
+              />
           </View>
           <Icon
             name="plus-circle"

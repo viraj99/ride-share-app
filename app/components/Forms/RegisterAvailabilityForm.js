@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, ScrollView, Picker} from 'react-native';
+import {Text, ScrollView, Picker, Platform} from 'react-native';
+import { Button } from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
@@ -7,16 +8,39 @@ import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 class RegisterAvailabilityForm extends React.Component {
   constructor(props){
       super(props);
       this.state = {
         availData: {},
+        date: new Date(),
+        mode: 'date',
+        show: false,
       }
   }
 
   componentDidMount() {
+  }
+
+  setDate = (event, date) => {
+    date = date || this.state.date;
+
+    this.setState({
+      date
+    })
+  }
+
+  show = mode => {
+    this.setState({
+      show: true,
+      mode,
+    })
+  }
+
+  datepicker = () => {
+    this.show('date');
   }
 
   //async await needed for proper Promise handling during submit function
@@ -62,6 +86,7 @@ class RegisterAvailabilityForm extends React.Component {
   render() {
     const {userEntries} = this.props;
     let availabilitySelectors;
+    const { show, date, mode } = this.state;
     
     return (
       <ScrollView>
@@ -71,6 +96,16 @@ class RegisterAvailabilityForm extends React.Component {
             <Text style={styles.subTitle}>Continue with availability information</Text>
           </Block>
           <Block middle>
+            <Button onPress={this.datepicker} title="Show date picker!" />
+            { show && <DateTimePicker 
+                            value={date}
+                            mode={mode}
+                            is24Hour={true}
+                            display="default"
+                            // onChange={this.setDate} 
+                            onConfirm={this.setDate}
+                            onCancel={this.datePicker}/>
+            }
             <Sae
               label="Start Date and Time (YYYY-MM-DD HH:MM)"
               labelStyle={styles.labelStyle}

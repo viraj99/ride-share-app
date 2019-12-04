@@ -170,22 +170,22 @@ export default class MainView extends Component<Props> {
           ) : null}
         </View>
         <View style={styles.seperator} />
-        <FlatList
-          horizontal
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          style={{ overflow: 'visible' }}
-          data={scheduledRides.slice(0, 3)}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
-          renderItem={({ item }) => this.upcomingScheduledRide(item)}
-        />
+          <FlatList
+            horizontal
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            style={{ overflow: 'visible' }}
+            data={scheduledRides.slice(0, 3)}
+            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+            ])}
+            renderItem={({ item }) => this.upcomingScheduledRide(item)}
+          />
         {this.renderDots()}
       </View>
     );
@@ -243,21 +243,21 @@ export default class MainView extends Component<Props> {
           </View>
         </View>
         <View style={styles.seperator} />
-        <FlatList
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          style={{ overflow: 'visible' }}
-          data={approvedRides}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
-          renderItem={({ item }) => this.requestedRide(item)}
-        />
+          <FlatList
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            style={{ overflow: 'visible' }}
+            data={approvedRides}
+            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+            ])}
+            renderItem={({ item }) => this.requestedRide(item)}
+          />
       </SafeAreaView>
     );
   };

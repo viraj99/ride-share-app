@@ -7,12 +7,15 @@ import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props){
       super(props);
       this.state = {
         carData: {},
+        startDate: new Date(),
+        stopDate: new Date(),
       }
   }
 
@@ -37,7 +40,9 @@ class RegisterVehicleForm extends React.Component {
   }
 
   render(){
-    const {navigation, userEntries} = this.props;
+    const {navigation, userEntries, showCal} = this.props;
+    console.log ("showCal value in Form render is: ", showCal)
+
     return (
       <ScrollView>
         <KeyboardAwareScrollView>
@@ -168,53 +173,40 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
             />
 
-            <Sae
-              label="Insurance Coverage Start Date"
+            <Text
+              name="Insurance Coverage Start Date"
               labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              // TextInput props
-              returnKeyType="next"
-              placeholder="YYYY-MM-DD"
-              onChangeText={text => this.props.handleChange(text, 'insurance_start')}
+              style={styles.subTitle}
               ref={input => this.props.innerRef(input, 'Insur Start')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Insur End')}
-              blurOnSubmit={false}
-            />
+            >Insurance Coverage Start Date</Text>
 
-            <Sae
-              label="Insurance Coverage End Date"
+            {showCal && <DateTimePicker
+              value={this.state.startDate}
+              date={this.state.startDate}
+              mode='date'
+              format="YYY-MM-DD"
+              display='calendar'
+              onChange={(startDate) => {this.props.handleDatePicked('Insur Start', startDate)}}
+            />}
+
+            <Text
+              name="Insurance Coverage End Date"
               labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              // TextInput props
-              keyboardType="numeric"
+              style={styles.subTitle}
+              ref={input => this.props.innerRef(input, 'Insur Stop')}
               returnKeyType="done"
-              placeholder="YYYY-MM-DD"
-              onChangeText={text => this.props.handleChange(text, 'insurance_stop')}
-              ref={input => this.props.innerRef(input, 'Insur End')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Insur End')}
-              // blurOnSubmit={false}
-            />
+            >Insurance Coverage End Date</Text>
 
-            {/* <DateTimePicker
-              ref={input => this.props.innerRef(input, 'Insurance')}
-              isVisible={this.state.startPickerVisibility}
-              onConfirm={this.handleStartTimePicker}
-              onCancel={this.hideStartTimePicker}
-              mode="datetime"
-              is24Hour={false}
-            /> */}
+            {showCal && <DateTimePicker
+              label="Insurance Coverage End Date"
+              value={this.state.stopDate}
+              date={this.state.stopDate}
+              mode='date'
+              placeholder="Select Insurance Coverage End Date"
+              format="YYY-MM-DD"
+              display='calendar'
+              onChange={(date) => {this.props.handleDatePicked('Insur Stop', date)}}
+            />}
 
             <Block style={styles.footer}>
               <CalendarButton title="Continue" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
