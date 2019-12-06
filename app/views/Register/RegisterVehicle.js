@@ -11,7 +11,8 @@ class RegisterVehicle extends Component {
     this.state = {
       errors: [],
       carData: {},
-      showCal: false,
+      showFirstCal: false,
+      showSecondCal: false,
     };
     this.inputs = {};
   }
@@ -20,37 +21,15 @@ class RegisterVehicle extends Component {
     this.setState({[name]: text});
   };
 
-  handleDatePicked = (id, date) => {
-    if (id === 'Insur Start') {
-      this.setState({
-        showCal: true,
-        insurance_start: date.nativeEvent.timestamp,
-      })
-      this.handleSubmitEditing(id)
-    }
-
-    if (id === 'Insur Stop') {
-      this.setState({
-        showCal: false,
-        insurance_stop: date.nativeEvent.timestamp,
-      })
-      this.handleSubmitEditing(id)
-    }
-  }
-
   handleSubmitEditing = id => {
     this.inputs[id].focus();
 
-    if (id === 'Insur Start') {  
+    if (id === "Insur Start") {
+      this.setState({showFirstCal: true})
+    } else if (id === "Insur Stop") {
       this.setState({
-        showCal: true,
-      })
-    }
-
-    if (id === 'Insur Stop') {
-      this.setState({
-        showCal: true,
-      })
+        showFirstCal: false,
+        showSecondCal: true})
     }
 
     const vehicleInfo = {
@@ -85,9 +64,9 @@ class RegisterVehicle extends Component {
             handleChange={this.handleChange}
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
-            handleDatePicked={this.handleDatePicked}
             userEntries={this.state.carData}
-            showCal={this.state.showCal}
+            showFirstCal={this.state.showFirstCal}
+            showSecondCal={this.state.showSecondCal}
           />
         </View>
       </Container>

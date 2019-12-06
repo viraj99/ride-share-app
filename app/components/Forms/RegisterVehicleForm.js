@@ -8,18 +8,31 @@ import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props){
       super(props);
       this.state = {
         carData: {},
-        startDate: new Date(),
-        stopDate: new Date(),
+        startInsur: moment(new Date()).format("YYYY-MM-DD"),
+        stopInsur: moment(new Date()).format("YYYY-MM-DD"),
+        showFirstCal: this.props.showFirstCal,
+        showSecondCal: this.props.showSecondCal,
       }
   }
 
   componentDidMount() {
+  }
+
+  handleDatePick = (pickedDate, id) => {
+    console.log("date selected: ", pickedDate)
+    this.props.handleChange(pickedDate, id);
+    this.setState({
+      startInsur: moment(pickedDate.nativeEvent.timestamp).format("YYYY-MM-DD"),
+      showFirstCal: false,
+      showSecondCal: false,
+    });
   }
 
   //async await needed for proper Promise handling during submit function
@@ -40,8 +53,7 @@ class RegisterVehicleForm extends React.Component {
   }
 
   render(){
-    const {navigation, userEntries, showCal} = this.props;
-    console.log ("showCal value in Form render is: ", showCal)
+    const {navigation, userEntries, showFirstCal, showSecondCal} = this.props;
 
     return (
       <ScrollView>
@@ -173,40 +185,63 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
             />
 
-            <Text
-              name="Insurance Coverage Start Date"
+            <Sae
+              label="Insurance Coverage Start Date"
               labelStyle={styles.labelStyle}
-              style={styles.subTitle}
+              inputPadding={16}
+              labelHeight={12}
+              // active border height
+              borderHeight={2}
+              borderColor="#475c67"
+              style={[styles.saeInput]}
+              inputStyle={styles.saeText}
+              // TextInput props
+              returnKeyType="next"
+              // onChangeText={text => this.props.handleChange(text, 'insurance_start')}
               ref={input => this.props.innerRef(input, 'Insur Start')}
-            >Insurance Coverage Start Date</Text>
+              placeholder={this.state.startInsur}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Insur Stop')}
+              blurOnSubmit={false}
+            />
 
-            {showCal && <DateTimePicker
-              value={this.state.startDate}
-              date={this.state.startDate}
+            {showFirstCal && <DateTimePicker
+              value={new Date()}
               mode='date'
-              format="YYY-MM-DD"
+              format="YYYY-MM-DD"
               display='calendar'
-              onChange={(startDate) => {this.props.handleDatePicked('Insur Start', startDate)}}
+              onChange={(startDate) => this.handleDatePick(startDate, 'insurance_start')}
             />}
 
-            <Text
-              name="Insurance Coverage End Date"
-              labelStyle={styles.labelStyle}
-              style={styles.subTitle}
-              ref={input => this.props.innerRef(input, 'Insur Stop')}
-              returnKeyType="done"
-            >Insurance Coverage End Date</Text>
-
-            {showCal && <DateTimePicker
+            <Sae
               label="Insurance Coverage End Date"
-              value={this.state.stopDate}
-              date={this.state.stopDate}
+              labelStyle={styles.labelStyle}
+              inputPadding={16}
+              labelHeight={24}
+              // active border height
+              borderHeight={2}
+              borderColor="#475c67"
+              style={[styles.saeInput]}
+              inputStyle={styles.saeText}
+              // TextInput props
+              returnKeyType="done"
+              // onChangeText={text => this.props.handleChange(text, 'insurance_stop')}
+              ref={input => this.props.innerRef(input, 'Insur Stop')}
+              onSubmitEditing={() => this.props.handleSubmitEditing('Done')}
+              blurOnSubmit={false}
+            />
+
+            {showSecondCal && <DateTimePicker
+              value={new Date()}
               mode='date'
-              placeholder="Select Insurance Coverage End Date"
-              format="YYY-MM-DD"
+              format="YYYY-MM-DD"
               display='calendar'
-              onChange={(date) => {this.props.handleDatePicked('Insur Stop', date)}}
+              onChange={(startDate) => this.handleDatePick(startDate, 'insurance_stop')}
             />}
+
+            <Sae
+              ref={input => this.props.innerRef(input, 'Done')}
+              blurOnSubmit={false}
+            />
 
             <Block style={styles.footer}>
               <CalendarButton title="Continue" onPress={() => this.handleUserSubmit(userEntries, navigation)} />
@@ -219,7 +254,6 @@ class RegisterVehicleForm extends React.Component {
 };
 
 export default RegisterVehicleForm;
-
 
 // alert('Thank you for registering! You will receive an email regarding next steps within _ business days.'),
 //         //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
