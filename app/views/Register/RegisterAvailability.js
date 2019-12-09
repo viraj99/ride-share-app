@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { View, Keyboard } from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
-import {RegisterHeader} from '../../components/Header';
 import RegisterAvailabilityForm from '../../components/Forms/RegisterAvailabilityForm';
 
 class RegisterAvailability extends Component {
