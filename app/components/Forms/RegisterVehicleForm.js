@@ -54,17 +54,37 @@ class RegisterVehicleForm extends React.Component {
     this.setState({picker2: false})
   }
 
+    //async await needed for proper Promise handling during submit function
+    handleUserSubmit = async (userEntries) => {
+      console.log("testing in vehicle form: ", this.props.navigation);
+      let token = await AsyncStorage.getItem('token')
+      //parse just the token from the token object in async storage
+      token = JSON.parse(token)
+      //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
+      API.createVehicle(userEntries, token.token)
+      .then(
+        this.props.navigation.navigate('RegisterAvailability'))
+      //if error performing API fetch for posting driver, show error
+      .catch(error => {
+        console.warn('There has been a problem with your operation: ' + error.message);
+        throw error;
+      })
+    }
+
   render() {
-    let data = 
-      "\n" + "Make: " + this.state.item1 + 
-      "\n" + "Model: " + this.state.item2 + 
-      "\n" + "Year: " + parseInt(this.state.item3) + 
-      "\n" + "Seatbelts: " + parseInt(this.state.item4) +
-      "\n" + "Color: " + this.state.item5 +
-      "\n" + "License Plate: " + this.state.item6 +
-      "\n" + "Insurer: " + this.state.item7 +
-      "\n" + "Insur Start Date: " + moment(this.state.startDate).format("YYYY-MM-DD") +
-      "\n" + "Insur End Date: " + moment(this.state.endDate).format("YYYY-MM-DD");
+    let userEntries = {
+      "vehicle": {
+        "car_make": this.state.item1,
+        "car_model": this.state.item2,
+        "car_year": parseInt(this.state.item3),
+        "car_color": this.state.item5,
+        "car_plate": this.state.item6,
+        "seat_belt_num": this.state.item4,
+        "insurance_provider": this.state.item7,
+        "insurance_start": moment(this.state.startDate).format("YYYY-MM-DD"),
+        "insurance_stop": moment(this.state.endDate).format("YYYY-MM-DD"),
+      }
+    }
 
     const { date, picker1, picker2 } = this.state;
 
@@ -148,7 +168,7 @@ class RegisterVehicleForm extends React.Component {
 
             <Text></Text>
 
-          <Button title="Submit" onPress={() => alert("Data is: " + data)} />
+          <CalendarButton title="Continue" onPress={() => this.handleUserSubmit(userEntries, this.props.navigation)} />
         </View>
       </ScrollView>
     )
