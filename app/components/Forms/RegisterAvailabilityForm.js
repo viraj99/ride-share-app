@@ -132,12 +132,12 @@ class RegisterAvailabilityForm extends React.Component {
 
   render() {
     const userEntries = {
-      "start_time": moment(this.state.startDate).format("YYYY-MM-DD") + moment(this.state.startTime).format("HH:mm"),
-      "end_time": moment(this.state.endTime).format("HH:mm"),
+      "start_time": moment(this.state.startDate).format("YYYY-MM-DD") + " " + moment(this.state.startTime).format("HH:mm"),
+      "end_time": moment(this.state.startDate).format("YYYY-MM-DD") + " " + moment(this.state.endTime).format("HH:mm"),
       "is_recurring": this.state.is_recurring,
       "end_date": moment(this.state.endDate).format("YYYY-MM-DD"),
       //below values need to be changed, place-holding for now
-      "location_if": 1,
+      "location_id": 1,
     };
 
     let availabilitySelectors;

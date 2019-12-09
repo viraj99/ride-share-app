@@ -21,7 +21,7 @@ import {
 const MainViewStack = createStackNavigator(
   {
     MainView: {
-      screen: RegisterAvailability,
+      screen: MainView,
       navigationOptions: {
         header: () => null,
       },
