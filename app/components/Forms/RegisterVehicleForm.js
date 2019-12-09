@@ -9,7 +9,6 @@ import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { placeholder } from '@babel/types';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props){
@@ -86,7 +85,7 @@ class RegisterVehicleForm extends React.Component {
       }
     }
 
-    const { date, picker1, picker2 } = this.state;
+    const { picker1, picker2 } = this.state;
 
     console.log("in render: ", this.state.startDate)
 

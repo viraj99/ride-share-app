@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, ScrollView, Picker, Platform} from 'react-native';
+import {Text, ScrollView, Picker, View} from 'react-native';
 import { Button } from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
@@ -8,39 +8,86 @@ import {CalendarButton} from '../Button';
 import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import DateTimePicker from 'react-native-modal-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 class RegisterAvailabilityForm extends React.Component {
   constructor(props){
       super(props);
       this.state = {
+        stDatePicker: false,
+        stTimePicker: false,
+        endTimePicker: false,
+        endDatePicker: false,
         availData: {},
-        date: new Date(),
-        mode: 'date',
-        show: false,
       }
   }
 
   componentDidMount() {
   }
 
-  setDate = (event, date) => {
-    date = date || this.state.date;
-
+  setStartDate = (event, date) => {
     this.setState({
-      date
+      startDate: date,
+      stDatePicker: false,
     })
+    this.hideStDatePicker();
   }
 
-  show = mode => {
+  setStartTime = (event, time) => {
     this.setState({
-      show: true,
-      mode,
+      startTime: time,
+      stTimePicker: false,
     })
+    this.hideStTimePicker();
   }
 
-  datepicker = () => {
-    this.show('date');
+  setEndTime = (event, time) => {
+    this.setState({
+      endTime: time,
+      endTimePicker: false,
+    })
+    this.hideEndTimePicker();
+  }
+
+  setEndDate = (event, date) => {
+    this.setState({
+      endDate: date,
+      endDatePicker: false,
+    })
+    this.hideEndDatePicker();
+  }
+
+  showStDatePicker = () => {
+    this.setState({stDatePicker: true})
+  }
+
+  showStTimePicker = () => {
+    this.setState({stTimePicker: true})
+  }
+
+  showEndTimePicker = () => {
+    this.setState({endTimePicker: true})
+  }
+
+  showEndDatePicker = () => {
+    this.setState({endDatePicker: true})
+  }
+
+  hideStDatePicker = () => {
+    this.setState({stDatePicker: false})
+  }
+
+  hideStTimePicker = () => {
+    this.setState({stTimePicker: false})
+  }
+
+  hideEndTimePicker = () => {
+    this.setState({endTimePicker: false})
+  }
+
+  hideEndDatePicker = () => {
+    this.setState({endDatePicker: false})
   }
 
   //async await needed for proper Promise handling during submit function
@@ -84,9 +131,17 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   render() {
-    const {userEntries} = this.props;
+    const userEntries = {
+      "start_time": moment(this.state.startDate).format("YYYY-MM-DD") + moment(this.state.startTime).format("HH:mm"),
+      "end_time": moment(this.state.endTime).format("HH:mm"),
+      "is_recurring": this.state.is_recurring,
+      "end_date": moment(this.state.endDate).format("YYYY-MM-DD"),
+      //below values need to be changed, place-holding for now
+      "location_if": 1,
+    };
+
     let availabilitySelectors;
-    const { show, date, mode } = this.state;
+    let { stDatePicker, stTimePicker, endTimePicker, endDatePicker } = this.state;
     
     return (
       <ScrollView>
@@ -96,50 +151,49 @@ class RegisterAvailabilityForm extends React.Component {
             <Text style={styles.subTitle}>Continue with availability information</Text>
           </Block>
           <Block middle>
-            <Button onPress={this.datepicker} title="Show date picker!" />
-            { show && <DateTimePicker 
-                            value={date}
-                            mode={mode}
-                            is24Hour={true}
-                            display="default"
-                            // onChange={this.setDate} 
-                            onConfirm={this.setDate}
-                            onCancel={this.datePicker}/>
-            }
-            <Sae
-              label="Start Date and Time (YYYY-MM-DD HH:MM)"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              // TextInput props
-              returnKeyType="next"
-              onChangeText={text => this.props.handleChange(text, 'start_time')}
-              ref={input => this.props.innerRef(input, 'StartTime')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('EndTime')}
-              blurOnSubmit={false}
-            />
-            <Sae
-              label="End Date and Time (YYYY-MM-DD HH:MM)"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              // TextInput props
-              returnKeyType="next"
-              onChangeText={text => this.props.handleChange(text, 'end_time')}
-              ref={input => this.props.innerRef(input, 'EndTime')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Recurring')}
-            //   blurOnSubmit={false}
-            />
+
+            <Text></Text>
+            <Text style={styles.subTitle}>
+              Availability Start Date:
+            </Text>
+            <Button title="Pick a Date" onPress={this.showStDatePicker} />
+            {stDatePicker && <DateTimePicker
+              value={ new Date()}
+              display="default"
+              mode="date"
+              onChange={this.setStartDate}
+            />}
+            <Text style={styles.subTitle}>Selected date: {moment(this.state.startDate).format("YYYY-MM-DD")}</Text>
+
+            <Text></Text>
+
+            <Text style={styles.subTitle}>
+              Availability Start Time:
+            </Text>
+            <Button title="Pick a Time" onPress={this.showStTimePicker} />
+            {stTimePicker && <DateTimePicker
+              value={ new Date()}
+              display="default"
+              mode="time"
+              onChange={this.setStartTime}
+            />}
+            <Text style={styles.subTitle}>Selected time: {moment(this.state.startTime).format("HH:mm")}</Text>
+
+              <Text></Text>
+
+            <Text style={styles.subTitle}>
+              Availability End Time:
+            </Text>
+            <Button title="Pick a Time" onPress={this.showEndTimePicker} />
+            {endTimePicker && <DateTimePicker
+              value={ new Date()}
+              display="default"
+              mode="time"
+              onChange={this.setEndTime}
+            />}
+            <Text style={styles.subTitle}>Selected time: {moment(this.state.endTime).format("HH:mm")}</Text>
+
+              <Text></Text>
 
             <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Is this availability recurring? </Text>
             <Picker
@@ -151,18 +205,38 @@ class RegisterAvailabilityForm extends React.Component {
               borderColor="#475c67"
               blurOnSubmit={false}
               selectedValue={this.state.is_recurring}
-              //set the item value (which will be the radius mileage) to state so it can be passed to API post
+              //set the item value (which will be the radius mileage) to state so it can be passed to API post; default to instruct user what to do
               onValueChange={(itemValue) =>
                 this.setState({is_recurring: itemValue})
               }
             >
-              {/* default to instruct user what to do */}
+              
               <Picker.Item label="Select One" value="null"/>
               <Picker.Item label="Yes" value="true"/>
               <Picker.Item label="No" value="false"/>
             </Picker>
 
             {this.state.is_recurring === 'true' && 
+            <View>
+            <Text style={styles.subTitle}>
+              Date to End Recurring Availability:
+            </Text>
+            <Button title="Pick a Date" onPress={this.showEndDatePicker} />
+            {endDatePicker && <DateTimePicker
+              value={ new Date()}
+              display="default"
+              onChange={this.setEndDate}
+            />}
+            <Text style={styles.subTitle}>Selected date: {moment(this.state.endDate).format("YYYY-MM-DD")}</Text>
+
+              <Text></Text>
+            </View>}
+
+                        
+            
+
+            
+            {/* {this.state.is_recurring === 'true' && 
               <Sae 
                   label="End Recurring Schedule Date (YYYY-MM-DD)"
                   labelStyle={styles.labelStyle}
@@ -180,7 +254,7 @@ class RegisterAvailabilityForm extends React.Component {
                   onSubmitEditing={() => this.props.handleSubmitEditing('EndDate')}
                 //   blurOnSubmit={false}>
               />
-            }
+            } */}
 
             <Block style={styles.footer}>
               <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, this.state.is_recurring)} />
