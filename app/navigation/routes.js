@@ -21,7 +21,7 @@ import {
 const MainViewStack = createStackNavigator(
   {
     MainView: {
-      screen: MainView,
+      screen: RegisterVehicle,
       navigationOptions: {
         header: () => null,
       },

@@ -11,25 +11,22 @@ class RegisterVehicle extends Component {
     this.state = {
       errors: [],
       carData: {},
-      showFirstCal: false,
-      showSecondCal: false,
+      // showFirstCal: false,
+      // showSecondCal: false,
     };
     this.inputs = {};
   }
 
   handleChange = (text, name) => {
+    console.log("in registervehicle, handleChg: ", text);
     this.setState({[name]: text});
   };
 
   handleSubmitEditing = id => {
-    this.inputs[id].focus();
+    // this.inputs[id].focus();
 
     if (id === "Insur Start") {
-      this.setState({showFirstCal: true})
-    } else if (id === "Insur Stop") {
-      this.setState({
-        showFirstCal: false,
-        showSecondCal: true})
+      Keyboard.dismiss();
     }
 
     const vehicleInfo = {
@@ -49,9 +46,9 @@ class RegisterVehicle extends Component {
     this.setState({carData: vehicleInfo});
   };
 
-  handleInnerRef = (input, id) => {
-    this.inputs[id] = input;
-  };
+  // handleInnerRef = (input, id) => {
+    // this.inputs[id] = input;
+  // };
 
   render() {
     const {navigation} = this.props;
@@ -65,8 +62,8 @@ class RegisterVehicle extends Component {
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
             userEntries={this.state.carData}
-            showFirstCal={this.state.showFirstCal}
-            showSecondCal={this.state.showSecondCal}
+            // showFirstCal={this.state.showFirstCal}
+            // showSecondCal={this.state.showSecondCal}
           />
         </View>
       </Container>
