@@ -9,7 +9,11 @@ class Register extends Component {
     super(props);
     this.state = {
       errors: [],
+<<<<<<< HEAD
       // data: {},
+=======
+      data: {},
+>>>>>>> fixed warning
     };
     // this.inputs = {};
   }
@@ -18,6 +22,7 @@ class Register extends Component {
   //   this.setState({[name]: text});
   // };
 
+<<<<<<< HEAD
   // handleSubmitEditing = id => {
   //   if (id === 'OrgName') {
   //     Keyboard.dismiss();
@@ -40,6 +45,30 @@ class Register extends Component {
   //   console.log("data input is: ", registerInfo);
   //   this.setState({data: registerInfo});
   // };
+=======
+  handleSubmitEditing = id => {
+    if (id === 'OrgName') {
+      Keyboard.dismiss();
+    } else {
+      this.inputs[id].focus();
+    }
+    
+    const registerInfo = {
+      "driver":{
+          "organization_id": "1",	
+          "email": this.state.email,
+          "password": this.state.password,
+          "first_name": this.state.first_name,
+          "last_name": this.state.last_name,
+          "phone" : this.state.phone,
+          "is_active" : true,
+          "radius": this.state.radius,
+      }
+    }
+    console.log("data input is: ", registerInfo);
+    this.setState({data: registerInfo});
+  };
+>>>>>>> fixed warning
 
   // handleInnerRef = (input, id) => {
   //   this.inputs[id] = input;

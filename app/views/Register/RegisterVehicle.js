@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
 import { View, Keyboard } from 'react-native';
+=======
+import { View } from 'react-native';
+>>>>>>> fixed warning
 import styles from './styles';
 import Container from '../../components/Container';
 import {RegisterVehicleForm} from '../../components/Forms';
@@ -11,8 +15,11 @@ class RegisterVehicle extends Component {
     this.state = {
       errors: [],
       carData: {},
+<<<<<<< HEAD
       // showFirstCal: false,
       // showSecondCal: false,
+=======
+>>>>>>> fixed warning
     };
     this.inputs = {};
   }
@@ -23,7 +30,28 @@ class RegisterVehicle extends Component {
   };
 
   handleSubmitEditing = id => {
+<<<<<<< HEAD
     // this.inputs[id].focus();
+=======
+    this.inputs[id].focus();
+
+    const vehicleInfo = {
+        "vehicle":{
+            "car_make": this.state.car_make,
+            "car_model": this.state.car_model,
+            "car_year": this.state.car_year,
+            "car_color": this.state.car_color,
+            "car_plate": this.state.car_plate,
+            "seat_belt_num": this.state.seat_belt_num,
+            "insurance_provider": this.state.insurance_provider,
+            "insurance_start": this.state.insurance_start,
+            "insurance_stop": this.state.insurance_stop,
+        }
+    }
+    console.log("car data input is: ", vehicleInfo)
+    this.setState({carData: vehicleInfo});
+  };
+>>>>>>> fixed warning
 
     if (id === "Insur Start") {
       Keyboard.dismiss();
@@ -62,8 +90,11 @@ class RegisterVehicle extends Component {
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
             userEntries={this.state.carData}
+<<<<<<< HEAD
             // showFirstCal={this.state.showFirstCal}
             // showSecondCal={this.state.showSecondCal}
+=======
+>>>>>>> fixed warning
           />
         </View>
       </Container>

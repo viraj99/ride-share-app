@@ -39,6 +39,18 @@ export default {
     return apiWrapper({
       path: RIDER,
       params: `/${id}`,
+<<<<<<< HEAD
+=======
+      token,
+    }).then(res => res.json());
+  },
+
+  getDriver(token){
+    return apiWrapper({
+      path: REGISTER,
+      //params:
+      method: 'GET',
+>>>>>>> fixed warning
       token,
     }).then(res => res.json());
   },
@@ -59,7 +71,26 @@ export default {
       token,
     }).then(res => res.json());
   },
+<<<<<<< HEAD
 
+=======
+  pickUpRide(id,token){
+    return apiWrapper({
+      path: RIDES,
+      params: `/${id}/picking-up`,
+      method: 'POST',
+      token,
+    }).then(res => res.json());
+  },
+  dropOffRide(id,token) {
+    return apiWrapper({
+      path: RIDES,
+      params: `/${id}/dropping-off`,
+      method: 'POST',
+      token,
+    }).then(res => res.json());
+  },
+>>>>>>> fixed warning
   cancelRide(id, token) {
     return apiWrapper({
       path: RIDES,
@@ -111,17 +142,28 @@ export default {
     }).then(res => res.json());
   },
 
+<<<<<<< HEAD
   createDriver(data) {
     const driver = {
       "driver": {
         "organization_id": data.driver.organization_id,
+=======
+  createDriver(data, radius, orgID) {
+    const driver = {
+      "driver": {
+        "organization_id": parseInt(orgID),
+>>>>>>> fixed warning
         "email": data.driver.email,
         "password": data.driver.password,
         "first_name": data.driver.first_name,
         "last_name": data.driver.last_name,
         "phone": data.driver.phone,
         "is_active": true,
+<<<<<<< HEAD
         "radius": data.driver.radius,
+=======
+        "radius": parseInt(radius),
+>>>>>>> fixed warning
       }
     }
 
@@ -134,7 +176,11 @@ export default {
       },
       body: driver,
     })
+<<<<<<< HEAD
       // .then(res => res.json())
+=======
+      .then(res => res.json())
+>>>>>>> fixed warning
   },
 
   createVehicle(vehicleData, token) {
