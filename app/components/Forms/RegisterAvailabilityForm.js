@@ -1,11 +1,9 @@
 import React from 'react';
-import {Text, ScrollView, Picker, View} from 'react-native';
-import { Button } from 'react-native-elements';
+import {Text, ScrollView, Picker, View, Button} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
-import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -145,92 +143,98 @@ class RegisterAvailabilityForm extends React.Component {
     
     return (
       <ScrollView>
-        <KeyboardAwareScrollView>
-          <Block style={styles.scrollContainer}>
-            <Text style={styles.title}>Availability Info</Text>
-            <Text style={styles.subTitle}>Continue with availability information</Text>
-          </Block>
-          <Block middle>
-
-            <Text></Text>
-            <Text style={styles.subTitle}>
-              Availability Start Date:
-            </Text>
-            <Button title="Pick a Date" onPress={this.showStDatePicker} />
-            {stDatePicker && <DateTimePicker
-              value={ new Date()}
-              display="default"
-              mode="date"
-              onChange={this.setStartDate}
-            />}
-            <Text style={styles.subTitle}>Selected date: {moment(this.state.startDate).format("YYYY-MM-DD")}</Text>
-
-            <Text></Text>
-
-            <Text style={styles.subTitle}>
-              Availability Start Time:
-            </Text>
-            <Button title="Pick a Time" onPress={this.showStTimePicker} />
-            {stTimePicker && <DateTimePicker
-              value={ new Date()}
-              display="default"
-              mode="time"
-              onChange={this.setStartTime}
-            />}
-            <Text style={styles.subTitle}>Selected time: {moment(this.state.startTime).format("HH:mm")}</Text>
+        <Block middle>
+           <KeyboardAwareScrollView>
+              <Block style={styles.scrollContainer}>
+                <Text style={styles.titleAvail}>Availability Info</Text>
+                <Text style={styles.subTitleAvail}>Continue with availability information</Text>
+              </Block>
 
               <Text></Text>
-
-            <Text style={styles.subTitle}>
-              Availability End Time:
-            </Text>
-            <Button title="Pick a Time" onPress={this.showEndTimePicker} />
-            {endTimePicker && <DateTimePicker
-              value={ new Date()}
-              display="default"
-              mode="time"
-              onChange={this.setEndTime}
-            />}
-            <Text style={styles.subTitle}>Selected time: {moment(this.state.endTime).format("HH:mm")}</Text>
-
-              <Text></Text>
-
-            <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Is this availability recurring? </Text>
-            <Picker
-              label="Recurring"
-              key={availabilitySelectors}
-              inputPadding={16}
-              labelHeight={24}
-              borderHeight={2}
-              borderColor="#475c67"
-              blurOnSubmit={false}
-              selectedValue={this.state.is_recurring}
-              //set the item value (which will be the radius mileage) to state so it can be passed to API post; default to instruct user what to do
-              onValueChange={(itemValue) =>
-                this.setState({is_recurring: itemValue})
-              }
-            >
+              <Text style={styles.labelStyleAvail}>
+                Availability Start Date:
+              </Text>
               
-              <Picker.Item label="Select One" value="null"/>
-              <Picker.Item label="Yes" value="true"/>
-              <Picker.Item label="No" value="false"/>
-            </Picker>
-
-            {this.state.is_recurring === 'true' && 
-            <View>
-            <Text style={styles.subTitle}>
-              Date to End Recurring Availability:
-            </Text>
-            <Button title="Pick a Date" onPress={this.showEndDatePicker} />
-            {endDatePicker && <DateTimePicker
-              value={ new Date()}
-              display="default"
-              onChange={this.setEndDate}
-            />}
-            <Text style={styles.subTitle}>Selected date: {moment(this.state.endDate).format("YYYY-MM-DD")}</Text>
+              <Button title="Pick a Date" onPress={this.showStDatePicker} color='#475c67'/>
+              {stDatePicker && <DateTimePicker
+                value={ new Date()}
+                display="default"
+                mode="date"
+                onChange={this.setStartDate}
+              />}
+              
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.startDate).format("YYYY-MM-DD")}</Text>
 
               <Text></Text>
-            </View>}
+
+              <Text style={styles.labelStyleAvail}>
+                Availability Start Time:
+              </Text>
+
+              <Button title="Pick a Time" onPress={this.showStTimePicker} color='#475c67'/>
+              {stTimePicker && <DateTimePicker
+                value={ new Date()}
+                display="default"
+                mode="time"
+                display="spinner"
+                onChange={this.setStartTime}
+              />}
+
+              <Text style={styles.displaySelection}>Selected time: {moment(this.state.startTime).format("HH:mm")}</Text>
+
+              <Text></Text>
+
+              <Text style={styles.labelStyleAvail}>
+                Availability End Time:
+              </Text>
+
+              <Button title="Pick a Time" onPress={this.showEndTimePicker} color='#475c67'/>
+              {endTimePicker && <DateTimePicker
+                value={ new Date()}
+                display="default"
+                mode="time"
+                display="spinner"
+                onChange={this.setEndTime}
+              />}
+              <Text style={styles.displaySelection}>Selected time: {moment(this.state.endTime).format("HH:mm")}</Text>
+
+              <Text></Text>
+
+              <Text style={styles.labelStyleAvail}>Is this availability recurring? </Text>
+              <Picker
+                label="Recurring"
+                key={availabilitySelectors}
+                inputPadding={16}
+                labelHeight={24}
+                borderHeight={2}
+                borderColor="#475c67"
+                blurOnSubmit={false}
+                selectedValue={this.state.is_recurring}
+                //set the item value (which will be the radius mileage) to state so it can be passed to API post; default to instruct user what to do
+                onValueChange={(itemValue) =>
+                  this.setState({is_recurring: itemValue})
+                }
+              >                
+                <Picker.Item label="Select One" value="null"/>
+                <Picker.Item label="Yes" value="true"/>
+                <Picker.Item label="No" value="false"/>
+              </Picker>
+
+              {this.state.is_recurring === 'true' && 
+              <View>
+              <Text style={styles.labelStyleAvail}>
+                Date to End Recurring Availability:
+              </Text>
+              <Button title="Pick a Date" onPress={this.showEndDatePicker} color='#475c67'/>
+              {endDatePicker && <DateTimePicker
+                value={ new Date()}
+                display="default"
+                onChange={this.setEndDate}
+              />}
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.endDate).format("YYYY-MM-DD")}</Text>
+
+                <Text></Text>
+              </View>}
 
                         
             
@@ -259,8 +263,9 @@ class RegisterAvailabilityForm extends React.Component {
             <Block style={styles.footer}>
               <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, this.state.is_recurring)} />
             </Block>
-          </Block>
+          
         </KeyboardAwareScrollView>
+        </Block>
       </ScrollView>
     );
   }
