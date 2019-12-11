@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, SafeAreaView } from 'react-native';
 import { RideListItem } from '../../components/RideListItem';
 
 const DriverScheduleView = props => {
@@ -58,11 +58,11 @@ const DriverScheduleView = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fcfcf6' }}>
-      <FlatList
-        data={scheduledRides}
-        renderItem={this.renderRideList}
-        keyExtractor={this.keyExtractor}
-      />
+        <FlatList
+          data={scheduledRides}
+          renderItem={this.renderRideList}
+          keyExtractor={this.keyExtractor}
+        />
     </View>
   );
 };

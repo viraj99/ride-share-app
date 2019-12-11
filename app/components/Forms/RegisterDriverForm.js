@@ -1,10 +1,9 @@
 import React from 'react';
-import {Text, ScrollView, Picker} from 'react-native';
+import {Text, ScrollView, Picker, TextInput} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
-import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -13,9 +12,8 @@ class RegisterDriverForm extends React.Component {
     super(props);
     this.state = {
       orgs: [],
-      radius: '',
       orgNum: 0,
-      data: {},
+      radius: 0,
     };
   };
 
@@ -44,10 +42,28 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserInput = (userEntries, radius, orgID) => {
+  handleUserSubmit = () => {
+    let userEntries = {
+      "driver": {
+        "organization_id": parseInt(this.state.orgNum),
+        "email": this.state.email,
+        "password": this.state.password,
+        "first_name": this.state.first_name,
+        "last_name": this.state.last_name,
+        "phone": this.state.phone,
+        "is_active": true,
+        "radius": parseInt(this.state.radius),
+      }
+    }
+
+    console.log("WHATS THE PROBLEM???", userEntries)
     //use API file, createDriver fx to send user inputs to database
-    API.createDriver(userEntries, radius, orgID)
-    .then(this.autoLogin(userEntries))
+    API.createDriver(userEntries)
+    .then((res) => {
+        console.log("testing something here: ", res.json())
+        this.autoLogin(userEntries)
+      }
+    )
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -107,113 +123,86 @@ class RegisterDriverForm extends React.Component {
             </Block>
             
             {/* Input for Volunteer Driver's First Name */}
-            <Sae
-              //displays label for input field
-              label="First Name"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              returnKeyType="next"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
-              onChangeText={text => this.props.handleChange(text, 'first_name')}
-              /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
-              ref={input => this.props.innerRef(input, 'FirstName')}
-              /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
-              onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
-              blurOnSubmit={false}
-            />
+            <Text style={styles.labelStyleAlt}>
+                First Name:
+              </Text>
+              <TextInput
+                onChangeText={(text) => this.setState({first_name: text})}
+                placeholder="First Name"
+                returnKeyType={"next"}
+                onSubmitEditing={() => {this.lastName.focus();}}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              ></TextInput>
+            
 
             {/* Input for Volunteer Driver's Last Name */}
-            <Sae
-              label="Last Name"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              returnKeyType="next"
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              onChangeText={text => this.props.handleChange(text, 'last_name')}
-              ref={input => this.props.innerRef(input, 'LastName')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
-              blurOnSubmit={false}
-            />
+            <Text style={styles.labelStyleAlt}>
+                Last Name:
+              </Text>
+              <TextInput
+                onChangeText={(text) => this.setState({last_name: text})}
+                placeholder="Last Name"
+                ref={(input) => {this.lastName = input;}}
+                returnKeyType={"next"}
+                onSubmitEditing={() => {this.phone.focus();}}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              ></TextInput>
+            
 
             {/* Input for Volunteer Driver's Phone Number */}
-            <Sae
-              label="Phone Number"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              keyboardType="phone-pad"
-              returnKeyType="next"
-              onChangeText={text => this.props.handleChange(text, 'phone')}
-              ref={input => this.props.innerRef(input, 'PhoneNumber')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
-              blurOnSubmit={false}
-            />
+            <Text style={styles.labelStyleAlt}>
+                Phone Number:
+              </Text>
+              <TextInput
+                onChangeText={(text) => this.setState({phone: text})}
+                placeholder="9195551234"
+                ref={(input) => {this.phone = input;}}
+                returnKeyType={"next"}
+                onSubmitEditing={() => {this.email.focus();}}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              ></TextInput>
 
             {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
-            <Sae
-              label="Email Address"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              email
-              keyboardType="email-address"
-              autoCapitalize="none"
-              returnKeyType="next"
-              onChangeText={text => this.props.handleChange(text, 'email')}
-              ref={input => this.props.innerRef(input, 'EmailAddress')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
-              blurOnSubmit={false}
-            />
+            <Text style={styles.labelStyleAlt}>
+                Email:
+              </Text>
+              <TextInput
+                onChangeText={(text) => this.setState({email: text})}
+                placeholder="example@example.com"
+                ref={(input) => {this.email = input;}}
+                returnKeyType={"next"}
+                onSubmitEditing={() => {this.password.focus();}}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              ></TextInput>
 
             {/* Input for Volunteer Driver's Password */}
-            <Sae
-              label="Password"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              //this code shows asterisks in place of characters in field as user types
-              secureTextEntry
-              returnKeyType="next"
-              autoCapitalize="none"
-              onChangeText={text => this.props.handleChange(text, 'password')}
-              ref={input => this.props.innerRef(input, 'Password')}
-              onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
-              blurOnSubmit={false}
-            />
+            <Text style={styles.labelStyleAlt}>
+                Create a Password:
+              </Text>
+              <TextInput
+                onChangeText={(text) => this.setState({password: text})}
+                placeholder="password"
+                ref={(input) => {this.password = input;}}
+                returnKeyType={"done"}
+                // onSubmitEditing={() => {this.password.focus();}}
+                // blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+                autoCapitalize="none"
+                secureTextEntry
+              ></TextInput>
+            
 
-            <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Volunteering for:</Text>
+            <Text style={styles.labelStyleAvail}>Volunteering for:</Text>
 
             {/* Picker selector for org volunteer works with */}
             <Picker
@@ -237,7 +226,7 @@ class RegisterDriverForm extends React.Component {
               {orgsList}
             </Picker>
 
-            <Text style={{marginTop: 20, marginHorizontal: 16, fontSize: 18,}}>Distance available to drive:</Text>
+            <Text style={styles.labelStyleAvail}>Distance available to drive:</Text>
             <Picker
               label="Radius"
               key={mileage}
@@ -262,9 +251,9 @@ class RegisterDriverForm extends React.Component {
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"
-                onPress={() => 
+                onPress={
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
-                  this.handleUserInput(this.props.data, this.state.radius, this.state.orgNum)}
+                  this.handleUserSubmit}
               />
             </Block>
           </KeyboardAwareScrollView>
@@ -292,3 +281,104 @@ export default RegisterDriverForm;
               ref={input => this.props.innerRef(input, 'City')}
               blurOnSubmit
             /> */}
+
+            // <Sae
+            //   //displays label for input field
+            //   label="First Name"
+            //   labelStyle={styles.labelStyle}
+            //   inputPadding={16}
+            //   labelHeight={24}
+            //   // active border height
+            //   borderHeight={2}
+            //   borderColor="#475c67"
+            //   // TextInput props
+            //   returnKeyType="next"
+            //   style={[styles.saeInput]}
+            //   inputStyle={styles.saeText}
+            //   /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
+            //   onChangeText={text => this.props.handleChange(text, 'first_name')}
+            //   /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
+            //   ref={input => this.props.innerRef(input, 'FirstName')}
+            //   /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
+            //   onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
+            //   blurOnSubmit={false}
+            // />
+
+            // <Sae
+            //   label="Last Name"
+            //   labelStyle={styles.labelStyle}
+            //   inputPadding={16}
+            //   labelHeight={24}
+            //   // active border height
+            //   borderHeight={2}
+            //   borderColor="#475c67"
+            //   // TextInput props
+            //   returnKeyType="next"
+            //   style={[styles.saeInput]}
+            //   inputStyle={styles.saeText}
+            //   onChangeText={text => this.props.handleChange(text, 'last_name')}
+            //   ref={input => this.props.innerRef(input, 'LastName')}
+            //   onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
+            //   blurOnSubmit={false}
+            // />
+
+            // <Sae
+            //   label="Phone Number"
+            //   labelStyle={styles.labelStyle}
+            //   inputPadding={16}
+            //   labelHeight={24}
+            //   // active border height
+            //   borderHeight={2}
+            //   borderColor="#475c67"
+            //   // TextInput props
+            //   style={[styles.saeInput]}
+            //   inputStyle={styles.saeText}
+            //   keyboardType="phone-pad"
+            //   returnKeyType="next"
+            //   onChangeText={text => this.props.handleChange(text, 'phone')}
+            //   ref={input => this.props.innerRef(input, 'PhoneNumber')}
+            //   onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
+            //   blurOnSubmit={false}
+            // />
+
+            // <Sae
+            //   label="Email Address"
+            //   labelStyle={styles.labelStyle}
+            //   inputPadding={16}
+            //   labelHeight={24}
+            //   // active border height
+            //   borderHeight={2}
+            //   borderColor="#475c67"
+            //   // TextInput props
+            //   style={[styles.saeInput]}
+            //   inputStyle={styles.saeText}
+            //   email
+            //   keyboardType="email-address"
+            //   autoCapitalize="none"
+            //   returnKeyType="next"
+            //   onChangeText={text => this.props.handleChange(text, 'email')}
+            //   ref={input => this.props.innerRef(input, 'EmailAddress')}
+            //   onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
+            //   blurOnSubmit={false}
+            // />
+
+            // <Sae
+            //   label="Password"
+            //   labelStyle={styles.labelStyle}
+            //   inputPadding={16}
+            //   labelHeight={24}
+            //   // active border height
+            //   borderHeight={2}
+            //   borderColor="#475c67"
+            //   // TextInput props
+            //   style={[styles.saeInput]}
+            //   inputStyle={styles.saeText}
+            //   //this code shows asterisks in place of characters in field as user types
+            //   secureTextEntry
+            //   returnKeyType="next"
+            //   autoCapitalize="none"
+            //   onChangeText={text => this.props.handleChange(text, 'password')}
+            //   ref={input => this.props.innerRef(input, 'Password')}
+            //   onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
+            //   blurOnSubmit={false}
+            // />

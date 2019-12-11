@@ -11,16 +11,49 @@ export default StyleSheet.create({
     fontSize: 26,
     color: '#475c67',
   },
+  titleAvail: {
+    marginTop: 40,
+    fontWeight: 'bold',
+    fontSize: 26,
+    color: '#475c67',
+  },
   subTitle: {
     fontWeight: '400',
     fontSize: 22,
+  },
+  subTitleAvail: {
+    fontWeight: '400',
+    fontSize: 20,
   },
   labelStyle: {
     color: '#2F2F2F',
     fontWeight: '500',
   },
+  labelStyleAlt: {
+    color: '#475c67',
+    fontWeight: '700',
+    marginHorizontal: 16,
+    paddingTop: 10,
+    marginTop: 3,
+    fontSize: 20,
+  },
+  labelStyleAvail: {
+    color: '#475c67',
+    fontWeight: '700',
+    marginHorizontal: 16,
+    marginTop: 3,
+    marginBottom: 10,
+    fontSize: 20,
+  },
   saeInput: {
     marginHorizontal: 16,
+    borderBottomColor: '#2F2F2F',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  saeInputAlt: {
+    marginHorizontal: 16,
+    fontSize: 18,
+    paddingLeft: 30,
     borderBottomColor: '#2F2F2F',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -29,9 +62,23 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: variables.colors.black,
   },
+  saeTextAlt: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: variables.colors.black,
+  },
   footer: {
     marginTop: 20,
     paddingHorizontal: 32,
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() : 0,
   },
+  displaySelection: {
+    color: 'black',
+    fontSize: 18,
+    marginTop: 5,
+    paddingBottom: 15,
+    textAlign: 'center',
+    borderBottomColor: '#2F2F2F',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  }
 });

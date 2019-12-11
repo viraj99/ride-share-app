@@ -22,7 +22,7 @@ export default class BaseInput extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps) {
     const newValue = newProps.value;
     if (newProps.hasOwnProperty('value') && newValue !== this.state.value) {
       this.setState({

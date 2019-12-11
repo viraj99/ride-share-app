@@ -111,17 +111,17 @@ export default {
     }).then(res => res.json());
   },
 
-  createDriver(data, radius, orgID) {
+  createDriver(data) {
     const driver = {
       "driver": {
-        "organization_id": parseInt(orgID),
+        "organization_id": data.driver.organization_id,
         "email": data.driver.email,
         "password": data.driver.password,
         "first_name": data.driver.first_name,
         "last_name": data.driver.last_name,
         "phone": data.driver.phone,
         "is_active": true,
-        "radius": parseInt(radius),
+        "radius": data.driver.radius,
       }
     }
 
@@ -134,7 +134,7 @@ export default {
       },
       body: driver,
     })
-      .then(res => res.json())
+      // .then(res => res.json())
   },
 
   createVehicle(vehicleData, token) {

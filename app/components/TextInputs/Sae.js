@@ -48,8 +48,9 @@ export default class Sae extends BaseInput {
       inputStyle,
       labelStyle,
       borderColor,
+      value
     } = this.props;
-    const {width, focusedAnim, value} = this.state;
+    const {width, focusedAnim} = this.state;
 
     return (
       <View
