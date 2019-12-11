@@ -4,7 +4,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
 import {CalendarButton} from '../Button';
-import {Sae} from '../TextInputs';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -43,11 +42,28 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserSubmit = (userEntries) => {
+  handleUserSubmit = () => {
+    let userEntries = {
+      "driver": {
+        "organization_id": parseInt(this.state.orgNum),
+        "email": this.state.email,
+        "password": this.state.password,
+        "first_name": this.state.first_name,
+        "last_name": this.state.last_name,
+        "phone": this.state.phone,
+        "is_active": true,
+        "radius": parseInt(this.state.radius),
+      }
+    }
+
     console.log("WHATS THE PROBLEM???", userEntries)
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries)
-    .then(this.autoLogin(userEntries))
+    .then((res) => {
+        console.log("testing something here: ", res.json())
+        this.autoLogin(userEntries)
+      }
+    )
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -96,19 +112,6 @@ class RegisterDriverForm extends React.Component {
         />
     );
     let mileage;
-
-    let userEntries = {
-      "driver": {
-        "organization_id": parseInt(this.state.orgNum),
-        "email": this.state.email,
-        "password": this.state.password,
-        "first_name": this.state.first_name,
-        "last_name": this.state.last_name,
-        "phone": this.state.phone,
-        "is_active": true,
-        "radius": parseInt(this.state.radius),
-      }
-    }
 
     return (
       <ScrollView>
@@ -248,9 +251,9 @@ class RegisterDriverForm extends React.Component {
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"
-                onPress={() => 
+                onPress={
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
-                  this.handleUserSubmit(userEntries)}
+                  this.handleUserSubmit}
               />
             </Block>
           </KeyboardAwareScrollView>

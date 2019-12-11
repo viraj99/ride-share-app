@@ -134,7 +134,7 @@ export default {
       },
       body: driver,
     })
-      .then(res => res.json())
+      // .then(res => res.json())
   },
 
   createVehicle(vehicleData, token) {
