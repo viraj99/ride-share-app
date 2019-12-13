@@ -130,6 +130,7 @@ class RegisterVehicleForm extends React.Component {
                 placeholder="YYYY"
                 ref={(input) => {this.carYear = input;}}
                 returnKeyType={"next"}
+                keyboardType="numeric"
                 onSubmitEditing={() => {this.carBelts.focus();}}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
@@ -144,6 +145,7 @@ class RegisterVehicleForm extends React.Component {
                 placeholder="#"
                 ref={(input) => {this.carBelts = input;}}
                 returnKeyType={"next"}
+                keyboardType="numeric"
                 onSubmitEditing={() => {this.carColor.focus();}}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
@@ -172,6 +174,7 @@ class RegisterVehicleForm extends React.Component {
                 placeholder="ex. PEG-1234"
                 ref={(input) => {this.carPlate = input;}}
                 returnKeyType={"next"}
+                autoCapitalize="characters"
                 onSubmitEditing={() => {this.carInsur.focus();}}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}

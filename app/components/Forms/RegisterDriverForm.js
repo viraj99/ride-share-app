@@ -42,6 +42,21 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
+  handlePhoneFormat = () => {
+    if (this.state.phone) {
+      let text = this.state.phone;
+      console.log("user entered: ", text)
+      if (text.length === 10) {
+        let phoneReformatted = text.slice(0,3) + "-" + text.slice(3,6) + "-" + text.slice(6)
+        console.log("reformated #: ", phoneReformatted)
+        return phoneReformatted
+      } 
+      if (text.length === 10 || (text.search("\u0008") === true)) {
+        return this.state.phone
+      }
+    }
+  }
+
   handleUserSubmit = (userEntries) => {
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries)
@@ -98,6 +113,9 @@ class RegisterDriverForm extends React.Component {
         "radius": parseInt(this.state.radius),
       }
     }
+
+    console.log("is it the phone? ", typeof this.state.phone)
+
     //take array of org names list retrieved from API call getOrgs function that was performed on did mount 
     //then map through each org name in list, create a Picker Item, use split to show only org name as label
     //and store id number of corresponding org in the value
@@ -157,13 +175,14 @@ class RegisterDriverForm extends React.Component {
               <TextInput
                 onChangeText={(text) => this.setState({phone: text})}
                 placeholder="9195551234"
-                ref={(input) => {this.phone = input;}}
+                ref={(input) => {this.phone = input}}
                 returnKeyType={"next"}
+                keyboardType="numeric"
                 onSubmitEditing={() => {this.email.focus();}}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-              ></TextInput>
+              >{this.handlePhoneFormat()}</TextInput>
 
             {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
@@ -175,6 +194,7 @@ class RegisterDriverForm extends React.Component {
                 placeholder="example@example.com"
                 ref={(input) => {this.email = input;}}
                 returnKeyType={"next"}
+                autoCapitalize="none"
                 onSubmitEditing={() => {this.password.focus();}}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
@@ -190,12 +210,12 @@ class RegisterDriverForm extends React.Component {
                 placeholder="password"
                 ref={(input) => {this.password = input;}}
                 returnKeyType={"done"}
+                autoCapitalize="none"
+                secureTextEntry
                 // onSubmitEditing={() => {this.password.focus();}}
                 // blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-                autoCapitalize="none"
-                secureTextEntry
               ></TextInput>
             
 

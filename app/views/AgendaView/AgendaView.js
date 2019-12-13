@@ -17,6 +17,31 @@ import {
   Availability,
 } from '../../components/ScheduleItems';
 import API from '../../api/api';
+// import moment from 'moment';
+
+// class ScheduleItem extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state={
+//       hasAvailability: [],
+//     }
+//   }
+
+//   // API.getAvailabilities(token)
+
+//   render() {
+//     const hasAvailability = this.state.hasAvailability;
+
+//     return(
+//       <View>
+//         <Text>Your Availability Schedule:</Text>
+//     {hasAvailability && <Text>{}</Text>}
+//       </View>
+//     )
+//   }
+// }
+
+// export default ScheduleItem;
 
 const SECTIONS = [
   {
