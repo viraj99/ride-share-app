@@ -17,7 +17,6 @@ class RegisterAvailabilityForm extends React.Component {
         stTimePicker: false,
         endTimePicker: false,
         endDatePicker: false,
-        availData: {},
       }
   }
 
@@ -90,15 +89,11 @@ class RegisterAvailabilityForm extends React.Component {
 
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async (userEntries, recurring) => {
-
-    console.log("in handlesubmit: ", recurring)
-    console.log("what type of info? ", typeof recurring)
-
-    alert('Thank you for registering! You will receive an email regarding next steps within _ business days.')
+    alert('Thank you for registering! You will receive an email regarding next steps within __ business days.')
     let token = await AsyncStorage.getItem('token')
     token = JSON.parse(token)
     
-    console.log("right before createAvail API: ", userEntries);
+    console.log("in RegAvail, handleUserSub: ", userEntries);
 
     let endDate = userEntries.end_date
 
@@ -236,30 +231,6 @@ class RegisterAvailabilityForm extends React.Component {
                 <Text></Text>
               </View>}
 
-                        
-            
-
-            
-            {/* {this.state.is_recurring === 'true' && 
-              <Sae 
-                  label="End Recurring Schedule Date (YYYY-MM-DD)"
-                  labelStyle={styles.labelStyle}
-                  inputPadding={16}
-                  labelHeight={24}
-                  // active border height
-                  borderHeight={2}
-                  borderColor="#475c67"
-                  style={[styles.saeInput]}
-                  inputStyle={styles.saeText}
-                  // TextInput props
-                  returnKeyType="next"
-                  onChangeText={text => this.props.handleChange(text, 'end_date')}
-                  ref={input => this.props.innerRef(input, 'EndDate')}
-                  onSubmitEditing={() => this.props.handleSubmitEditing('EndDate')}
-                //   blurOnSubmit={false}>
-              />
-            } */}
-
             <Block style={styles.footer}>
               <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, this.state.is_recurring)} />
             </Block>
@@ -272,3 +243,25 @@ class RegisterAvailabilityForm extends React.Component {
 };
 
 export default RegisterAvailabilityForm;
+
+//OLD CODE FOR APP USING CUSTOM BUILT SAE COMPONENT FOR INPUTS.....  
+//
+//  {this.state.is_recurring === 'true' && 
+//    <Sae 
+//      label="End Recurring Schedule Date (YYYY-MM-DD)"
+//      labelStyle={styles.labelStyle}
+//      inputPadding={16}
+//      labelHeight={24}
+//      // active border height
+//      borderHeight={2}
+//      borderColor="#475c67"
+//      style={[styles.saeInput]}
+//      inputStyle={styles.saeText}
+//      // TextInput props
+//      returnKeyType="next"
+//      onChangeText={text => this.props.handleChange(text, 'end_date')}
+//      ref={input => this.props.innerRef(input, 'EndDate')}
+//      onSubmitEditing={() => this.props.handleSubmitEditing('EndDate')}
+//      //   blurOnSubmit={false}>
+//      />
+//  }

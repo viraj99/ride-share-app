@@ -42,25 +42,11 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserSubmit = () => {
-    let userEntries = {
-      "driver": {
-        "organization_id": parseInt(this.state.orgNum),
-        "email": this.state.email,
-        "password": this.state.password,
-        "first_name": this.state.first_name,
-        "last_name": this.state.last_name,
-        "phone": this.state.phone,
-        "is_active": true,
-        "radius": parseInt(this.state.radius),
-      }
-    }
-
-    console.log("WHATS THE PROBLEM???", userEntries)
+  handleUserSubmit = (userEntries) => {
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userEntries)
     .then((res) => {
-        console.log("testing something here: ", res.json())
+        console.log("data sent properly? ", res.json())
         this.autoLogin(userEntries)
       }
     )
@@ -72,7 +58,6 @@ class RegisterDriverForm extends React.Component {
   };
 
   autoLogin = (userEntries) => {
-    console.log("testing in driver form: ", this.props.navigation)
     //use API file, login fx to create a token in order to add vehicle data to driver
               //login fx requries email and password as params
     API.login(userEntries.driver.email, userEntries.driver.password)
@@ -101,6 +86,18 @@ class RegisterDriverForm extends React.Component {
   }  
   
   render() {
+    const userEntries = {
+      "driver": {
+        "organization_id": parseInt(this.state.orgNum),
+        "email": this.state.email,
+        "password": this.state.password,
+        "first_name": this.state.first_name,
+        "last_name": this.state.last_name,
+        "phone": this.state.phone,
+        "is_active": true,
+        "radius": parseInt(this.state.radius),
+      }
+    }
     //take array of org names list retrieved from API call getOrgs function that was performed on did mount 
     //then map through each org name in list, create a Picker Item, use split to show only org name as label
     //and store id number of corresponding org in the value
@@ -251,9 +248,9 @@ class RegisterDriverForm extends React.Component {
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"
-                onPress={
+                onPress={() => 
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
-                  this.handleUserSubmit}
+                  this.handleUserSubmit(userEntries)}
               />
             </Block>
           </KeyboardAwareScrollView>
@@ -265,120 +262,117 @@ class RegisterDriverForm extends React.Component {
 
 export default RegisterDriverForm;
 
-{/* <Sae
-              label="City"
-              labelStyle={styles.labelStyle}
-              inputPadding={16}
-              labelHeight={24}
-              // active border height
-              borderHeight={2}
-              borderColor="#475c67"
-              // TextInput props
-              style={[styles.saeInput]}
-              inputStyle={styles.saeText}
-              returnKeyType="go"
-              onChangeText={text => this.props.handleChange(text, 'city')}
-              ref={input => this.props.innerRef(input, 'City')}
-              blurOnSubmit
-            /> */}
-
-            // <Sae
-            //   //displays label for input field
-            //   label="First Name"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   returnKeyType="next"
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
-            //   onChangeText={text => this.props.handleChange(text, 'first_name')}
-            //   /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
-            //   ref={input => this.props.innerRef(input, 'FirstName')}
-            //   /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
-            //   blurOnSubmit={false}
-            // />
-
-            // <Sae
-            //   label="Last Name"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   returnKeyType="next"
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   onChangeText={text => this.props.handleChange(text, 'last_name')}
-            //   ref={input => this.props.innerRef(input, 'LastName')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
-            //   blurOnSubmit={false}
-            // />
-
-            // <Sae
-            //   label="Phone Number"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   keyboardType="phone-pad"
-            //   returnKeyType="next"
-            //   onChangeText={text => this.props.handleChange(text, 'phone')}
-            //   ref={input => this.props.innerRef(input, 'PhoneNumber')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
-            //   blurOnSubmit={false}
-            // />
-
-            // <Sae
-            //   label="Email Address"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   email
-            //   keyboardType="email-address"
-            //   autoCapitalize="none"
-            //   returnKeyType="next"
-            //   onChangeText={text => this.props.handleChange(text, 'email')}
-            //   ref={input => this.props.innerRef(input, 'EmailAddress')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
-            //   blurOnSubmit={false}
-            // />
-
-            // <Sae
-            //   label="Password"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   //this code shows asterisks in place of characters in field as user types
-            //   secureTextEntry
-            //   returnKeyType="next"
-            //   autoCapitalize="none"
-            //   onChangeText={text => this.props.handleChange(text, 'password')}
-            //   ref={input => this.props.innerRef(input, 'Password')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
-            //   blurOnSubmit={false}
-            // />
+//OLD CODE FOR APP USING CUSTOM BUILT SAE COMPONENT FOR INPUTS.....
+//
+//  <Sae
+//    label="City"
+//    labelStyle={styles.labelStyle}
+//    inputPadding={16}
+//    labelHeight={24}
+//    // active border height
+//    borderHeight={2}
+//    borderColor="#475c67"
+//    // TextInput props
+//    style={[styles.saeInput]}
+//    inputStyle={styles.saeText}
+//    returnKeyType="go"
+//    onChangeText={text => this.props.handleChange(text, 'city')}
+//    ref={input => this.props.innerRef(input, 'City')}
+//    blurOnSubmit
+//  />
+// <Sae
+//   //displays label for input field
+//   label="First Name"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   returnKeyType="next"
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
+//   onChangeText={text => this.props.handleChange(text, 'first_name')}
+//   /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
+//   ref={input => this.props.innerRef(input, 'FirstName')}
+//   /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
+//   onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
+//   blurOnSubmit={false}
+// />
+// <Sae
+//   label="Last Name"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   returnKeyType="next"
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   onChangeText={text => this.props.handleChange(text, 'last_name')}
+//   ref={input => this.props.innerRef(input, 'LastName')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
+//   blurOnSubmit={false}
+// />
+// <Sae
+//   label="Phone Number"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   keyboardType="phone-pad"
+//   returnKeyType="next"
+//   onChangeText={text => this.props.handleChange(text, 'phone')}
+//   ref={input => this.props.innerRef(input, 'PhoneNumber')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
+//   blurOnSubmit={false}
+// />
+// <Sae
+//   label="Email Address"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   email
+//   keyboardType="email-address"
+//   autoCapitalize="none"
+//   returnKeyType="next"
+//   onChangeText={text => this.props.handleChange(text, 'email')}
+//   ref={input => this.props.innerRef(input, 'EmailAddress')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
+//   blurOnSubmit={false}
+// />
+// <Sae
+//   label="Password"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   //this code shows asterisks in place of characters in field as user types
+//   secureTextEntry
+//   returnKeyType="next"
+//   autoCapitalize="none"
+//   onChangeText={text => this.props.handleChange(text, 'password')}
+//   ref={input => this.props.innerRef(input, 'Password')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
+//   blurOnSubmit={false}
+// />
