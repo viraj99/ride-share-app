@@ -71,11 +71,7 @@ class Login extends Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           navigation.navigate('MainView');
         }
-<<<<<<< HEAD
-
-=======
         console.log('login token', asynStorage.getItem('token'));
->>>>>>> fixed warning
       })
       .catch(err => {
         this.setState({

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/* eslint-disable prettier/prettier */
-=======
->>>>>>> fixed warning
 import React, { Component, useState, useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { Button, ThemeConsumer } from 'react-native-elements';

@@ -1,23 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-import { View, FlatList, SafeAreaView } from 'react-native';
-import { RideListItem } from '../../components/RideListItem';
-
-const DriverScheduleView = props => {
-  const { navigation } = props;
-  const scheduledRides = navigation.getParam('scheduledRides');
-  console.log('scheduledRides', scheduledRides);
-
-  keyExtractor = item => {
-    return item.id.toString();
-  }
-
-  console.log('keyExtractor item:', keyExtractor);
-  navigateToRideView = (item) => {
-    console.log('click on schedule', item);
-    const date = item.pick_up_time;
-    const reason = item.reason;
-=======
 import { View, FlatList } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { RideListItem } from '../../components/RideListItem';
@@ -66,7 +47,6 @@ const DriverScheduleView = props => {
     const rideId = item.id;
    
     console.log('rideId in driverSchedule', rideId);
->>>>>>> fixed warning
     const riderId = item.rider_id;
     const startLocation = [
       item.start_location.street,
@@ -83,13 +63,9 @@ const DriverScheduleView = props => {
       startLocation,
       endLocation,
       reason,
-<<<<<<< HEAD
-      riderId,
-=======
       rideId,
       riderId,
       token,
->>>>>>> fixed warning
       date,
     });
   };
@@ -115,20 +91,12 @@ const DriverScheduleView = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fcfcf6' }}>
-<<<<<<< HEAD
-        <FlatList
-          data={scheduledRides}
-          renderItem={this.renderRideList}
-          keyExtractor={this.keyExtractor}
-        />
-=======
        <NavigationEvents onDidFocus={() => this.handleToken()} />
       <FlatList
         data={scheduledRides}
         renderItem={this.renderRideList}
         keyExtractor={this.keyExtractor}
       />
->>>>>>> fixed warning
     </View>
   );
 };

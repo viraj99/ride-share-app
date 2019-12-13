@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/* eslint-disable prettier/prettier */
-=======
->>>>>>> fixed warning
 import React, { Component } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Icon } from 'react-native-elements';
@@ -121,15 +117,6 @@ export default class RideView extends Component<Props> {
     });
   }
   onCancelPress = () => {
-<<<<<<< HEAD
-    Alert.alert('Cancel this ride?', '', [
-      { text: "Don't cancel", style: 'cancel' },
-      {
-        text: 'Yes, cancel this ride',
-        onPress: () => console.warn('ride cancelled')
-      }
-    ]);
-=======
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
@@ -156,7 +143,6 @@ export default class RideView extends Component<Props> {
     //     });}
     //   }
     // ]);
->>>>>>> fixed warning
   };
 
   onPress = () => {
@@ -164,13 +150,6 @@ export default class RideView extends Component<Props> {
     const { navigation } = this.props;
 
     if (textValue === 'Go to pickup') {
-<<<<<<< HEAD
-      this.setState({
-        textValue: 'Tap to arrive'
-      });
-    } else if (textValue === 'Tap to arrive') {
-      Alert.alert('Have you arrived?', '', [
-=======
     // Alert.alert('Headed to Pick Up', '',[
     //   { text:'PickUp?', onPress: () => {
     //   this.onPickUpPress();
@@ -191,18 +170,10 @@ export default class RideView extends Component<Props> {
     ])
     } else if (textValue === 'Arrived at Pick-up') {
       Alert.alert('All set?', '', [
->>>>>>> fixed warning
         {
           text: 'Good to GO',
           onPress: () => {
             this.setState({
-<<<<<<< HEAD
-              textValue: 'Pick up'
-            });
-          }
-        },
-        { text: 'cancel', style: 'cancel' }
-=======
               textValue: 'Good to GO'
             });
           }
@@ -211,7 +182,6 @@ export default class RideView extends Component<Props> {
           onPress: () => {
             this.onCancelPress();
           } }
->>>>>>> fixed warning
       ]);
     } else if (textValue === 'Good to GO') {
       Alert.alert('Drop Off Destination', '', [
@@ -224,14 +194,10 @@ export default class RideView extends Component<Props> {
             });
           }
         },
-<<<<<<< HEAD
-        { text: 'cancel', style: 'cancel' }
-=======
         { text: 'cancel', style: 'cancel',
         onPress: () => {
           this.onCancelPress();
         } }
->>>>>>> fixed warning
       ]);
     } else if (textValue === 'Drop off') {
       Alert.alert('Did you drop-off?', '', [
@@ -246,14 +212,10 @@ export default class RideView extends Component<Props> {
             navigation.navigate('MainView');
           }
         },
-<<<<<<< HEAD
-        { text: 'cancel', style: 'cancel' }
-=======
         { text: 'cancel', style: 'cancel',
         onPress: () => {
           this.onCancelPress();
         } }
->>>>>>> fixed warning
       ]);
     }
   };

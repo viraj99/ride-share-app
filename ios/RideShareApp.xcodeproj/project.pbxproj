@@ -638,10 +638,7 @@
 			baseConfigurationReference = 357CBFD4EA15265C015F56B4 /* Pods-RideShareAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-<<<<<<< HEAD
-=======
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
->>>>>>> fixed warning
 				DEVELOPMENT_TEAM = C2WNM92PMR;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
