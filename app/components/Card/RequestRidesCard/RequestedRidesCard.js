@@ -15,8 +15,8 @@ const RequestedRidesCard = ({
     <View style={styles.cardContainer}>
       <TouchableOpacity onPress={onPress}>
         <Block row space="between" style={{ marginBottom: 16 }}>
-          <Text style={styles.date}>{moment(date).format('MMM D')}</Text>
-          <Text style={styles.date}>{moment(date).format('h:mm A')}</Text>
+          <Text style={styles.date}>{moment.parseZone(date).format('MMM D')}</Text>
+          <Text style={styles.date}>{moment.parseZone(date).format('h:mm A')}</Text>
           {/*//? <Text styles={styles.name}>{name}</Text>
                                                           */}
         </Block>
