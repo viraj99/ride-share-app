@@ -89,16 +89,17 @@ class AddAvailability extends React.Component {
 
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async (userEntries, recurring) => {
-    alert('Thank you for registering! You will receive an email regarding next steps within __ business days.')
     let token = await AsyncStorage.getItem('token')
     token = JSON.parse(token)
     
-    console.log("in RegAvail, handleUserSub: ", userEntries);
-
     let endDate = userEntries.end_date
 
     //use API file, createAvailability fx to send user's availability to database; token required
     API.createAvailability(userEntries, recurring, endDate, token.token)
+    .then(
+        alert('Your availability has been added!'),
+        this.props.navigation.navigate('AgendaView')
+    )
     .then(
         //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
         API.logout(token.token)
@@ -121,6 +122,20 @@ class AddAvailability extends React.Component {
         errorMessage: 'Invalid username or password.',
       });
     })
+  }
+
+  addAnotherAvail = async (userEntries, recurring) => {
+    let token = await AsyncStorage.getItem('token')
+    token = JSON.parse(token)
+    
+    let endDate = userEntries.end_date
+
+    //use API file, createAvailability fx to send user's availability to database; token required
+    API.createAvailability(userEntries, recurring, endDate, token.token)
+    .then(
+        alert('Your availability has been added!'),
+        this.props.navigation.navigate('AvailabilityView')
+    )
   }
 
   render() {
@@ -232,6 +247,7 @@ class AddAvailability extends React.Component {
               </View>}
 
             <Block style={styles.footer}>
+              <Button title="Add Another Availability" onPress={() => this.addAnotherAvail(userEntries, this.state.is_recurring)} color='green' />
               <CalendarButton title="Submit" onPress={() => this.handleUserSubmit(userEntries, this.state.is_recurring)} />
             </Block>
           

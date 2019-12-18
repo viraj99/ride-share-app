@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
-import Availability from '../../components/ScheduleItems/Availability/Availability';
-import RegisterAvailabilityForm from '../../components/Forms/RegisterAvailabilityForm';
-import AddAvailability from '../../components/Forms/AddAvailability'
+import { NavigationEvents } from 'react-navigation';
+import { View, Text, Button, ScrollView } from 'react-native';
+import { CalendarButton } from '../../components/Button';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
 import moment from 'moment';
 import styles from '../../components/Forms/styles';
+import Container from '../../components/Container';
 
 class AgendaView extends React.Component {
   constructor(props){
@@ -27,60 +27,99 @@ class AgendaView extends React.Component {
     let avails = await api.getAvailabilities(token.token)
     console.log("response maybe? ", avails.json)
     
-    // let resArray = [];
-    // avails.json.map((each) => 
-    //   // this.setState({response: each})
-    //   // console.log("each Availability: ", each)
-    //   resArray.push(each)
-    // )
-    this.setState({response: avails.json})
+    const result = []
+    const map = new Map()
+    for (const item of avails.json) {
+      if (!map.has(item.eventId)){
+        map.set(item.eventId, true);
+        result.push({
+          id: item.eventId,
+          startTime: item.startTime,
+          endTime: item.endTime,
+          isRecurring: item.isRecurring,
+          day: moment(item.startTime).format("dddd")
+        })
+      }
+      console.log("testing this: ", result)
+      this.setState({
+        response: result
+      })
+    }
+
+    
+
+
+    // avails.json.map((each) => (
+      
+    // ))
+      // this.setState({response: each})
+      // console.log("each Availability: ", each)
+      // resArray.push(each)
+    
+    // if (avails.json.isRecurring === true) {
+    //   console.log("event recurrs")
+    // } else {
+    //   console.log("non-recurring event")
+    //   this.setState({response: avails.json})
+    // }
   }
 
   renderItem = (item) => {
     console.log("each item maybe: ", item)
+    // let idNum = item.eventId
     let date = moment(item.startTime).format("MMMM D, YYYY")
     let start = moment(item.startTime).format("h:mm A")
     let end = moment(item.endTime).format("h:mm A")
-    return(
-      <View style={styles.scrollContainer}>
-        <Text>{date}</Text> 
-        <Text>{start} to {end}</Text>
-        <Text></Text>
-      </View>
-    )
+    let day = moment(item.startTime).format("dddd")+"s"
+    if (item.isRecurring === true) {
+      return(
+        <View style={styles.scrollContainer}>
+          <Text>{day}</Text> 
+          <Text>{start} to {end}</Text>
+          <Text></Text>
+        </View>
+      )
+    } else {
+      return(
+        <View style={styles.scrollContainer}>
+          <Text>{date}</Text> 
+          <Text>{start} to {end}</Text>
+          <Text></Text>
+        </View>
+      )
+    }
   }
 
-  redirect = () => {
-    console.log('testing')
-  //   this.props.navigation.navigate('AvailabilityView')
+  redirectToAddAvail = () => {
+    const { navigation } = this.props;
+    navigation.navigate('AvailabilityView');
   }
 
   render(){
     return(
-      <View>
-        <Text style={styles.title}>Your current availability schedule: </Text>
-        <Text></Text>
-        {/*<Button
-          title="See Availability"
-          onPress={
-            () => this.getAvailability()
+      <Container>
+        <ScrollView>
+          <Text style={styles.title}>Your current availability schedule: </Text>
+          <Text></Text>
+          {/*<Button
+            title="See Availability"
+            onPress={
+              () => this.getAvailability()
+            }
+          /> */}
+          {this.state.response && 
+            <FlatList
+              data={this.state.response}
+              renderItem={({ item }) => this.renderItem(item)}
+              keyExtractor={item => item.eventId}
+            />
           }
-        /> */}
-        {this.state.response && 
-          <FlatList
-            data={this.state.response}
-            renderItem={({ item }) => this.renderItem(item)}
-            keyExtractor={item => item}
+          <CalendarButton
+            title="Add Availability"
+            onPress={this.redirectToAddAvail}
           />
-        }
-        <Button
-          title="Add Availability"
-          onPress={
-            () => this.redirect()
-          }
-          color='#475c67'
-        />
-      </View>
+        </ScrollView>
+      </Container>
     )
   }
 }

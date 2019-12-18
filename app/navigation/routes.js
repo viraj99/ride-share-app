@@ -6,7 +6,7 @@ import {
   MainView,
   Login,
   AgendaView,
-  // AvailabilityView,
+  AvailabilityView,
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,
@@ -33,12 +33,12 @@ const MainViewStack = createStackNavigator(
         header: () => null,
       },
     },
-    // AvailabilityView: {
-    //   screen: AvailabilityView,
-      // navigationOptions: {
-      //   header: () => null,
-      // },
-    // },
+    AvailabilityView: {
+      screen: AvailabilityView,
+      navigationOptions: {
+        header: () => null,
+      },
+    },
     Settings: {
       screen: Settings,
     },
