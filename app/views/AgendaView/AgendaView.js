@@ -1,48 +1,91 @@
 import React from 'react';
-import {Text, View} from 'react-native';
-import API from '../../api/api';
-import moment from 'moment';
+import { View, Text, Button } from 'react-native';
+import Availability from '../../components/ScheduleItems/Availability/Availability';
+import RegisterAvailabilityForm from '../../components/Forms/RegisterAvailabilityForm';
+import AddAvailability from '../../components/Forms/AddAvailability'
+import api from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import { FlatList } from 'react-native-gesture-handler';
+import moment from 'moment';
+import styles from '../../components/Forms/styles';
 
-class Agenda extends React.Component {
-  constructor(props) {
+class AgendaView extends React.Component {
+  constructor(props){
     super(props);
     this.state={
+
     }
   }
 
   componentDidMount() {
-    this.getAvailabilities();
+    this.getAvailability();
   }
 
-  getAvailabilities = async () => {
+  getAvailability = async() => {
     let token = await AsyncStorage.getItem('token')
-    console.log("token in AgendaView is: ", token)
     token = JSON.parse(token)
-    console.log("real token is: ", token)
-    API.getAvailabilities(token.token)
-      .then(res => {
-        console.log("response from getAvail API call: ", res)
-        this.setState({availabilities: res.json})
-        this.state.availabilities.map((each) => 
-          console.log("an availability item: ", each)
-        )
-      })
+    let avails = await api.getAvailabilities(token.token)
+    console.log("response maybe? ", avails.json)
+    
+    // let resArray = [];
+    // avails.json.map((each) => 
+    //   // this.setState({response: each})
+    //   // console.log("each Availability: ", each)
+    //   resArray.push(each)
+    // )
+    this.setState({response: avails.json})
   }
 
-  render() {
+  renderItem = (item) => {
+    console.log("each item maybe: ", item)
+    let date = moment(item.startTime).format("MMMM D, YYYY")
+    let start = moment(item.startTime).format("h:mm A")
+    let end = moment(item.endTime).format("h:mm A")
+    return(
+      <View style={styles.scrollContainer}>
+        <Text>{date}</Text> 
+        <Text>{start} to {end}</Text>
+        <Text></Text>
+      </View>
+    )
+  }
+
+  redirect = () => {
+    console.log('testing')
+  //   this.props.navigation.navigate('AvailabilityView')
+  }
+
+  render(){
     return(
       <View>
-        <Text>Your Availability Schedule:</Text>
+        <Text style={styles.title}>Your current availability schedule: </Text>
+        <Text></Text>
+        {/*<Button
+          title="See Availability"
+          onPress={
+            () => this.getAvailability()
+          }
+        /> */}
+        {this.state.response && 
+          <FlatList
+            data={this.state.response}
+            renderItem={({ item }) => this.renderItem(item)}
+            keyExtractor={item => item}
+          />
+        }
+        <Button
+          title="Add Availability"
+          onPress={
+            () => this.redirect()
+          }
+          color='#475c67'
+        />
       </View>
     )
   }
 }
 
-export default Agenda;
-
-
-
+export default AgendaView;
 
 // import React, {Component} from 'react';
 // import {Text, View, FlatList, SafeAreaView} from 'react-native';
@@ -429,15 +472,7 @@ export default Agenda;
 //     }
 //   };
 
-//   // Modal open
-//   toggleForm = () => {
-//     const overlayVisible = this.state;
-//     if (overlayVisible === true) {
-//       this.setState({overlayVisible: false});
-//     } else {
-//       this.setState({overlayVisible: true});
-//     }
-//   };
+  
 
 //   // following functions handle date picker visibility
 //   showStartTimePicker = () => this.setState({startPickerVisibility: true});

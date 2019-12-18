@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { apiBaseUrl } from '../utils/urls';
 
 
@@ -50,6 +49,5 @@ const apiWrapper = async request => {
   }
   throw response;
 };
-
 
 export default apiWrapper;
