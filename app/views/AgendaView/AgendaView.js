@@ -1,12 +1,11 @@
 import React from 'react';
-import { NavigationEvents } from 'react-navigation';
-import { View, Text, Button, ScrollView } from 'react-native';
-import { CalendarButton } from '../../components/Button';
+import { View, Text, ScrollView, Block, Button, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
 import moment from 'moment';
-import styles from '../../components/Forms/styles';
+import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
 
 class AgendaView extends React.Component {
@@ -45,46 +44,28 @@ class AgendaView extends React.Component {
         response: result
       })
     }
-
-    
-
-
-    // avails.json.map((each) => (
-      
-    // ))
-      // this.setState({response: each})
-      // console.log("each Availability: ", each)
-      // resArray.push(each)
-    
-    // if (avails.json.isRecurring === true) {
-    //   console.log("event recurrs")
-    // } else {
-    //   console.log("non-recurring event")
-    //   this.setState({response: avails.json})
-    // }
   }
 
   renderItem = (item) => {
     console.log("each item maybe: ", item)
-    // let idNum = item.eventId
     let date = moment(item.startTime).format("MMMM D, YYYY")
     let start = moment(item.startTime).format("h:mm A")
     let end = moment(item.endTime).format("h:mm A")
     let day = moment(item.startTime).format("dddd")+"s"
+    let endDate = moment(item.endTime).format("MMMM D, YYYY")
     if (item.isRecurring === true) {
       return(
-        <View style={styles.scrollContainer}>
-          <Text>{day}</Text> 
-          <Text>{start} to {end}</Text>
-          <Text></Text>
+        <View style={styles.availListItem}>
+          <Text style={styles.flatListText}>{day}</Text> 
+          <Text style={styles.flatListText}>{start} to {end}</Text>
+          {/* <Text>until {endDate}</Text> */}
         </View>
       )
     } else {
       return(
-        <View style={styles.scrollContainer}>
-          <Text>{date}</Text> 
-          <Text>{start} to {end}</Text>
-          <Text></Text>
+        <View style={styles.availListItem}>
+          <Text style={styles.flatListText}>{date}</Text> 
+          <Text style={styles.flatListText}>{start} to {end}</Text>
         </View>
       )
     }
@@ -95,18 +76,33 @@ class AgendaView extends React.Component {
     navigation.navigate('AvailabilityView');
   }
 
+  backButton = () => {
+    const { navigation } = this.props;
+    navigation.navigate('MainView');
+  }
+
   render(){
     return(
       <Container>
+        {/* <RegisterHeader
+          onPress={() => navigation.navigate('MainView')}
+          iconColor="#475c67"
+        /> */}
+
+        <View
+          style={[styles.headerContainer]}>
+          <View style={styles.leftContainer}>
+            <TouchableOpacity onPress={this.backButton}>
+              <Icon color={`gray`} name="close" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rightContainer}>
+            <Text style={styles.title}>Your current availability schedule: </Text>
+          </View>
+        </View>
+
+
         <ScrollView>
-          <Text style={styles.title}>Your current availability schedule: </Text>
-          <Text></Text>
-          {/*<Button
-            title="See Availability"
-            onPress={
-              () => this.getAvailability()
-            }
-          /> */}
           {this.state.response && 
             <FlatList
               data={this.state.response}
@@ -114,10 +110,13 @@ class AgendaView extends React.Component {
               keyExtractor={item => item.eventId}
             />
           }
-          <CalendarButton
-            title="Add Availability"
-            onPress={this.redirectToAddAvail}
-          />
+          {/* <Block style={styles.footer}> */}
+            <Button
+              title="Add Availability"
+              onPress={this.redirectToAddAvail}
+              color='#475c67'
+            />
+          {/* </Block> */}
         </ScrollView>
       </Container>
     )
@@ -125,6 +124,8 @@ class AgendaView extends React.Component {
 }
 
 export default AgendaView;
+
+//*****OLD CODE USED TO DISPLAY AGENDA....
 
 // import React, {Component} from 'react';
 // import {Text, View, FlatList, SafeAreaView} from 'react-native';

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { NavigationEvents } from 'react-navigation';
-import { View } from 'react-native';
-import styles from './styles';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Container from '../../components/Container';
 import AddAvailability from '../../components/Forms/AddAvailability';
+import styles from '../AvailabilityView/styles'
 
 class AvailabilityView extends Component {
   constructor(props) {
@@ -14,42 +14,25 @@ class AvailabilityView extends Component {
   }
 
   render() {    
+    const {navigation} = this.props;
     return (
       <Container>
-        <View style={[styles.signup, styles.headerPadding]}>
-          <AddAvailability />
-        </View>
+        <View
+          style={[styles.headerContainer]}>
+          <View style={styles.leftContainer}>
+            <TouchableOpacity onPress={this.backButton}>
+              <Icon color={`gray`} name="close" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rightContainer}>
+            <Text style={styles.title}>Availability Page</Text>
+          </View>
+        </View> 
+
+        <AddAvailability navigation={this.props.navigation} />
       </Container>
     );
   }
 }
 
 export default AvailabilityView;
-
-
-// import React from 'react';
-// import { View, Text, Button } from 'react-native';
-
-// class AvailabilityView extends React.Component {
-//   constructor(props){
-//     super(props);
-//     this.state={
-
-//     }
-//   }
-
-
-//   render(){
-//     return(
-//       <View>
-//         <Text>Testing</Text>
-//         <Button
-//           title="Add Availability"
-//           onPress={() => this.redirect()}
-//         />
-//       </View>
-//     )
-//   }
-// }
-
-// export default AvailabilityView;
