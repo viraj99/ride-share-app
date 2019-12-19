@@ -53,6 +53,7 @@ export default class MainView extends Component<Props> {
     // })
       API.getRides(token)
       .then((result) => {
+        console.log("result from get rides in main view: ", result)
         const rides = result.rides;
         const myRides = rides.filter(
           ride => ride.driver_id === driverId,
@@ -73,6 +74,13 @@ export default class MainView extends Component<Props> {
     }).catch((err) => {
       console.log('request ride err',err);
     });
+    API.getAvailabilities(token)
+      .then((response) => {
+        this.setState({
+          availabilities: response.json
+        }),
+        console.log("availabilities: ", this.state.availabilities)
+      })
   };
   renderLoader = () => {
     const { isLoading } = this.state;
@@ -93,7 +101,6 @@ export default class MainView extends Component<Props> {
     // console.log('upcoming rideID', rideId);
     // console.log('upcoming token', token);
     const date = item.pick_up_time;
-    console.log("time from API: ", date)
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
