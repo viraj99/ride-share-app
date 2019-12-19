@@ -164,11 +164,10 @@ export default {
       headers: {token},
     }).then(res => res.json());
   },
-  getVehicle(id, token){
+  getVehicle(token){
     return apiWrapper({
-      path: VEHICLE,
+      path: VEHICLES,
       method: 'GET',
-      params: `?id=${id}`,
       headers: {token},
     }).then(res => res.json());
   },

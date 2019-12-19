@@ -13,6 +13,11 @@ class AvailabilityView extends Component {
     };
   }
 
+  backButton = () => {
+    const { navigation } = this.props;
+    navigation.navigate('AgendaView');
+  }
+
   render() {    
     const {navigation} = this.props;
     return (
