@@ -106,7 +106,14 @@ export default {
   //   })
   //   .then(res => res.json())
   // },
-
+  deleteAvailability(token, eventID) {
+    return apiWrapper({
+      path: AVAILABILITIES,
+      params: eventID,
+      method: 'DELETE',
+      token,
+    })
+  },
 
   logout(token) {
     return apiWrapper({

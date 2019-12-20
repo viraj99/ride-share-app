@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Block, Button, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -55,17 +55,39 @@ class AgendaView extends React.Component {
     let endDate = moment(item.endTime).format("MMMM D, YYYY")
     if (item.isRecurring === true) {
       return(
-        <View style={styles.availListItem}>
-          <Text style={styles.flatListText}>{day}</Text> 
-          <Text style={styles.flatListText}>{start} to {end}</Text>
-          {/* <Text>until {endDate}</Text> */}
+        <View
+          style={[styles.availListItem]}>
+          <View style={styles.leftContainer}>
+            <Text style={styles.flatListText}>{day}</Text> 
+            <Text style={styles.flatListText}>{start} to {end}</Text>
+            {/* <Text>until {endDate}</Text> */}
+          </View>
+          <View style={styles.rightContainer}>
+          <TouchableOpacity onPress={this.deleteAvail}>
+              <Icon color={`gray`} name="pencil" size={30} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.deleteAvail}>
+              <Icon color={`gray`} name="delete" size={30} />
+            </TouchableOpacity>
+          </View>
         </View>
       )
     } else {
       return(
-        <View style={styles.availListItem}>
-          <Text style={styles.flatListText}>{date}</Text> 
-          <Text style={styles.flatListText}>{start} to {end}</Text>
+        <View
+          style={[styles.availListItem]}>
+          <View style={styles.leftContainer}>
+            <Text style={styles.flatListText}>{date}</Text> 
+            <Text style={styles.flatListText}>{start} to {end}</Text>
+          </View>
+          <View style={styles.rightContainer}>
+          <TouchableOpacity onPress={this.deleteAvail}>
+              <Icon color={`gray`} name="pencil" size={30} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.deleteAvail}>
+              <Icon color={`gray`} name="delete" size={30} />
+            </TouchableOpacity>
+          </View>
         </View>
       )
     }
@@ -79,6 +101,10 @@ class AgendaView extends React.Component {
   backButton = () => {
     const { navigation } = this.props;
     navigation.navigate('MainView');
+  }
+
+  deleteAvail = () => {
+    console.log("got to the delete avail fx")
   }
 
   render(){

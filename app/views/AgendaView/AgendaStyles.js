@@ -18,9 +18,15 @@ export default StyleSheet.create({
     paddingBottom:10,
     marginLeft: 20,
     marginRight: 20,
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   flatListText: {
     fontSize: 18,
+  },
+  leftContainer:{
+    paddingTop: 10,
   },
   // footer: {
   //   marginTop: 20,
