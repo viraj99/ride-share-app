@@ -28,6 +28,7 @@ export default class MainView extends Component<Props> {
       approvedRides: [],
       withinAvailRides: [],
       showAllRides: false,
+      toggleButtonText: "Show All Requested Rides",
       isLoading: true,
       token: ''
     };
@@ -386,17 +387,23 @@ export default class MainView extends Component<Props> {
           ])}
           renderItem={({ item }) => this.filteredRide(item)}
         />
-        <CalendarButton onPress={this.showAllRides} title="Show All Requested Rides" />
+        <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
       </View>
     );
   };
 
   showAllRides = () => {
-    return (
-      <View>
-        {this.renderRequestedRides()}
-      </View>
-    )
+    if (this.state.showAllRides === false) {
+      this.setState({
+        showAllRides: true,
+        toggleButtonText: "Hide All Requested Rides"
+      })
+    } else {
+      this.setState({
+        showAllRides: false,
+        toggleButtonText: "Show All Requested Rides"
+      })
+    }
   }
 
   navigateToSettings = () => {
@@ -440,7 +447,7 @@ export default class MainView extends Component<Props> {
                   {this.renderRequestedRides()}
                 </View>
               }
-              {/* {this.state.showAllRides && this.renderRequestedRides()} */}
+              {this.state.showAllRides && this.renderRequestedRides()}
             </ScrollView>
           )}
         <View style={styles.footer}>
