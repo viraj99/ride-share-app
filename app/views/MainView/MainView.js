@@ -218,8 +218,7 @@ export default class MainView extends Component<Props> {
     if (scheduledRides.length === 0) {
       return (
         <View>
-          <Text style={styles.subTitle}>You do not currently have any scheduled rides.</Text>
-          <Text></Text>
+          <Text style={styles.noSchedText}>You do not currently have any scheduled rides.</Text>
         </View>
       )
     } else {
@@ -394,8 +393,12 @@ export default class MainView extends Component<Props> {
     if (withinAvailRides.length === 0) {
       return (
         <View>
-          <Text style={styles.subTitle}>There currently are no requested rides within your availability.</Text>
-          <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
+          <Text style={styles.noAvailText}>There currently are no requested rides within your availability.</Text>
+            <TouchableOpacity style={styles.buttonBar} onPress={this.showAllRides}>
+              <View style={styles.buttonWrapper}>
+                <Text style={styles.buttonText}>{this.state.toggleButtonText}</Text>
+              </View>
+            </TouchableOpacity>
         </View>
       )
     } else {
@@ -422,7 +425,11 @@ export default class MainView extends Component<Props> {
             ])}
             renderItem={({ item }) => this.filteredRide(item)}
           />
-          <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
+            <TouchableOpacity style={styles.buttonBar} onPress={this.showAllRides}>
+              <View style={styles.buttonWrapper}>
+                <Text style={styles.buttonText}>{this.state.toggleButtonText}</Text>
+              </View>
+            </TouchableOpacity>
         </View>
       );
     }
