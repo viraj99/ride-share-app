@@ -25,8 +25,10 @@ export default class MainView extends Component<Props> {
     super(props);
     this.state = {
       scheduledRides: [],
+      hasScheduledRides: false,
       approvedRides: [],
       withinAvailRides: [],
+      hasReqRidesInAvail: false,
       showAllRides: false,
       toggleButtonText: "Show All Requested Rides",
       isLoading: true,
@@ -110,10 +112,25 @@ export default class MainView extends Component<Props> {
         const withinAvailRides = this.withinMyAvail(rides.filter(ride => ride.status === 'approved'))
         ;
         console.log("approved rides in my avail: ", withinAvailRides);
+        
+        // let yesHasSchedRides;
+        // if (scheduledRides !== []) {
+        //   let yesHasSchedRides = true;
+        //   return yesHasSchedRides
+        // }
+
+        // let yesHasRidesInAvail;
+        // if (withinAvailRides !== []) {
+        //   let yesHasRidesInAvail = true;
+        //   return yesHasRidesInAvail
+        // }
+
         this.setState({
           scheduledRides,
+          // hasScheduledRides: yesHasSchedRides,
           approvedRides,
           withinAvailRides,
+          // hasReqRidesInAvail: yesHasRidesInAvail,
           isLoading: false
         });
        
@@ -195,43 +212,52 @@ export default class MainView extends Component<Props> {
   };
   renderUpcomingRides = () => {
     const { scheduledRides } = this.state;
-   // console.log('render upcomming', scheduledRides);
+   console.log('render upcomming', scheduledRides);
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
-    return (
-      <View style={{ flex: 2 }}>
-        <View style={styles.titleWrapper}>
-          <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.subTitle}>Upcoming Schedule</Text>
-          </View>
-          {numRides > 3 ? (
-            <View style={{ alignItems: 'flex-end' }}>
-              <TouchableOpacity onPress={this.navigateToDriverSchedule}>
-                <Text style={styles.seeAllText}>{seeAll}</Text>
-              </TouchableOpacity>
-            </View>
-          ) : null}
+    if (scheduledRides.length === 0) {
+      return (
+        <View>
+          <Text style={styles.subTitle}>You do not currently have any scheduled rides.</Text>
+          <Text></Text>
         </View>
-        <View style={styles.seperator} />
-        <FlatList
-          horizontal
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          style={{ overflow: 'visible' }}
-          data={scheduledRides.slice(0, 3)}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
-          renderItem={({ item }) => this.upcomingScheduledRide(item)}
-        />
-        {this.renderDots()}
-      </View>
-    );
+      )
+    } else {
+      return (
+        <View style={{ flex: 2 }}>
+          <View style={styles.titleWrapper}>
+            <View style={{ alignItems: 'flex-start' }}>
+              <Text style={styles.subTitle}>Upcoming Schedule</Text>
+            </View>
+            {numRides > 3 ? (
+              <View style={{ alignItems: 'flex-end' }}>
+                <TouchableOpacity onPress={this.navigateToDriverSchedule}>
+                  <Text style={styles.seeAllText}>{seeAll}</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
+          <View style={styles.seperator} />
+          <FlatList
+            horizontal
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            style={{ overflow: 'visible' }}
+            data={scheduledRides.slice(0, 3)}
+            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+            ])}
+            renderItem={({ item }) => this.upcomingScheduledRide(item)}
+          />
+          {this.renderDots()}
+        </View>
+      );
+    }
   };
   requestedRide = item => {
     const { token } = this.state;
@@ -364,32 +390,42 @@ export default class MainView extends Component<Props> {
 
   renderFilteredRides = () => {
     const { withinAvailRides } = this.state;
-    return (
-      <View>
-        <View style={styles.titlesContainer}>
-          <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.subTitle}>Requested rides within my availability:</Text>
-          </View>
+    console.log("whats in the withinAvailRides state? ", withinAvailRides)
+    if (withinAvailRides.length === 0) {
+      return (
+        <View>
+          <Text style={styles.subTitle}>There currently are no requested rides within your availability.</Text>
+          <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
         </View>
-        <View style={styles.seperator} />
-        <FlatList
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={0}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          style={{ overflow: 'visible' }}
-          data={withinAvailRides}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
-          renderItem={({ item }) => this.filteredRide(item)}
-        />
-        <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
-      </View>
-    );
+      )
+    } else {
+      return (
+        <View>
+          <View style={styles.titlesContainer}>
+            <View style={{ alignItems: 'flex-start' }}>
+              <Text style={styles.subTitle}>Requested rides within my availability:</Text>
+            </View>
+          </View>
+          <View style={styles.seperator} />
+          <FlatList
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            style={{ overflow: 'visible' }}
+            data={withinAvailRides}
+            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+            ])}
+            renderItem={({ item }) => this.filteredRide(item)}
+          />
+          <CalendarButton onPress={this.showAllRides} title={this.state.toggleButtonText} />
+        </View>
+      );
+    }
   };
 
   showAllRides = () => {
@@ -439,14 +475,7 @@ export default class MainView extends Component<Props> {
               contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
             >
               {this.renderUpcomingRides()}
-              {this.state.withinAvailRides ? 
-                this.renderFilteredRides() 
-                : 
-                <View>
-                  <Text>There currently are no requested rides within your availability.</Text>
-                  {this.renderRequestedRides()}
-                </View>
-              }
+              {this.renderFilteredRides()}
               {this.state.showAllRides && this.renderRequestedRides()}
             </ScrollView>
           )}
