@@ -89,7 +89,7 @@ export default {
       path: AVAILABILITIES,
       method: 'GET',
       token,
-    }).then(res => res.json)
+    }).then(res => res.json());
   },
   logout(token) {
     return apiWrapper({

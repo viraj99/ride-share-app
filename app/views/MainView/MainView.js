@@ -26,6 +26,8 @@ export default class MainView extends Component<Props> {
     this.state = {
       scheduledRides: [],
       approvedRides: [],
+      withinAvailRides: [],
+      showAllRides: false,
       isLoading: true,
       token: ''
     };
@@ -39,48 +41,85 @@ export default class MainView extends Component<Props> {
     });
     this.ridesRequests();
   };
+  // compMount = async () => {
+  //   const token = await AsyncStorage.getItem('token');
+  //   const realToken = JSON.parse(token);
+  //   API.getDriver(realToken.token)
+  //   .then((result) => {
+  //     const driverId = result.driver.id;
+  //     API.getRides(realToken.token)
+  //     .then((result) => {
+  //       console.log("result from get rides in main view: ", result)
+  //       const rides = result.rides;
+  //       const myRides = rides.filter(
+  //         ride => ride.driver_id === driverId,
+  //       );
+  //       const scheduledRides = myRides.filter(
+  //         ride => ride.status === 'scheduled' //|| ride.status === 'picking-up'
+  //       );
+  //       const approvedRides = rides.filter(
+  //         ride => ride.status === 'approved'
+  //       );
+  //       return {scheduledRides, approvedRides}
+  //     })
+  //   }),
+  //   API.getAvailabilities(realToken.token)
+  //   .then((result) => {
+  //     const avails = result.json;
+  //     return avails
+  //   })
+  //   this.setState({
+  //     isLoading: true,
+  //     token: realToken.token,
+  //     scheduledRides,
+  //     approvedRides,
+  //     availabilities: avails,
+  //   });
+  // };
+
   ridesRequests = () => {
     const { token } = this.state;
     this.setState({ isLoading: true });
+    API.getAvailabilities(token)
+      .then((result) => {
+        this.setState({
+          availabilities: result.json
+        }),
+        console.log("in getAvail: ", result.json)
+      })
     API.getDriver(token)
     .then((result) => {
       const driverId = result.driver.id;
-     // console.log('driver id from getDriver', driverId);
-    // API.getAvailabilties(token)
-    // .then(res=>{
-    //   const availabilites = res;
-    //   console.log('availabilties =',availabilites);
-    // })
       API.getRides(token)
       .then((result) => {
-        console.log("result from get rides in main view: ", result)
+        console.log("all rides: ", result.rides)
         const rides = result.rides;
         const myRides = rides.filter(
           ride => ride.driver_id === driverId,
         );
+        console.log("just my rides: ", myRides);
         const scheduledRides = myRides.filter(
-          ride => ride.status === 'scheduled' //|| ride.status === 'picking-up'
+          ride => ride.status === 'scheduled' 
         );
+        console.log("scheduled rides: ", scheduledRides);
         const approvedRides = rides.filter(
-          ride => ride.status === 'approved'
+          ride =>  ride.status === 'approved'
         );
-         this.setState({
+        console.log("approved rides: ", approvedRides);
+        const withinAvailRides = this.withinMyAvail(rides.filter(ride => ride.status === 'approved'))
+        ;
+        console.log("approved rides in my avail: ", withinAvailRides);
+        this.setState({
           scheduledRides,
           approvedRides,
+          withinAvailRides,
           isLoading: false
         });
-      //  console.log(scheduledRides);
+       
       })
     }).catch((err) => {
       console.log('request ride err',err);
     });
-    API.getAvailabilities(token)
-      .then((response) => {
-        this.setState({
-          availabilities: response.json
-        }),
-        console.log("availabilities: ", this.state.availabilities)
-      })
   };
   renderLoader = () => {
     const { isLoading } = this.state;
@@ -233,6 +272,66 @@ export default class MainView extends Component<Props> {
       />
     );
   };
+
+  withinMyAvail = (ride) => {
+    let myAvailRides = [];
+    let availabilities = this.state.availabilities;
+
+    ride.map((eachRide) => {
+      availabilities.map((checkEach) => {
+        let start = checkEach.startTime;
+        let end = checkEach.endTime;
+        if (eachRide.pick_up_time >= start && eachRide.pick_up_time <= end) {
+          myAvailRides.push(eachRide)
+          // myAvailRides.push(ride)
+          // console.log("did the array get the result? ", myAvailRides)
+        }
+      })
+    })
+    return myAvailRides
+  }
+
+  filteredRide = item => {
+    const { token } = this.state;
+    const { navigation } = this.props;
+    const startLocation = [
+      item.start_location.street,
+      item.start_location.city,
+      item.start_location.state,
+    ];
+    const endLocation = [
+      item.end_location.street,
+      item.end_location.city,
+      item.end_location.state,
+    ];
+    const riderId = item.rider_id;
+    const rideId = item.id;
+    const date = item.pick_up_time;
+    const name = item.riderName;
+    const reason = item.reason;
+    return (
+      <RequestedRideCard
+        key={item.driver_id}
+        onPress={() => {
+          navigation.navigate('RequestedRidesDetails', {
+            riderId,
+            rideId,
+            token,
+            startLocation,
+            endLocation,
+            date,
+            name,
+            reason,
+          });
+        }}
+        name={name}
+        date={date}
+        pickupLocation={startLocation.join(', ')}
+        dropoffLocation={endLocation.join(', ')}
+      />
+    );
+  };
+
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
     return (
@@ -261,6 +360,45 @@ export default class MainView extends Component<Props> {
       </View>
     );
   };
+
+  renderFilteredRides = () => {
+    const { withinAvailRides } = this.state;
+    return (
+      <View>
+        <View style={styles.titlesContainer}>
+          <View style={{ alignItems: 'flex-start' }}>
+            <Text style={styles.subTitle}>Requested rides within my availability:</Text>
+          </View>
+        </View>
+        <View style={styles.seperator} />
+        <FlatList
+          pagingEnabled
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          decelerationRate={0}
+          scrollEventThrottle={16}
+          snapToAlignment="center"
+          style={{ overflow: 'visible' }}
+          data={withinAvailRides}
+          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { x: this.scrollX } } },
+          ])}
+          renderItem={({ item }) => this.filteredRide(item)}
+        />
+        <CalendarButton onPress={this.showAllRides} title="Show All Requested Rides" />
+      </View>
+    );
+  };
+
+  showAllRides = () => {
+    return (
+      <View>
+        {this.renderRequestedRides()}
+      </View>
+    )
+  }
+
   navigateToSettings = () => {
     const { navigation } = this.props;
     navigation.navigate('Settings');
@@ -294,7 +432,15 @@ export default class MainView extends Component<Props> {
               contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
             >
               {this.renderUpcomingRides()}
-              {this.renderRequestedRides()}
+              {this.state.withinAvailRides ? 
+                this.renderFilteredRides() 
+                : 
+                <View>
+                  <Text>There currently are no requested rides within your availability.</Text>
+                  {this.renderRequestedRides()}
+                </View>
+              }
+              {/* {this.state.showAllRides && this.renderRequestedRides()} */}
             </ScrollView>
           )}
         <View style={styles.footer}>
