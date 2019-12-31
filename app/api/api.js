@@ -84,13 +84,36 @@ export default {
       token,
     }).then(res => res.json());
   },
+  
   getAvailabilities(token) {
+    return fetch('https://ctd-rideshare.herokuapp.com/api/v1/availabilities', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        token,
+      },
+    }).then(res => res.json());
+  },
+  // getAvailabilities(token) {
+  //   // change this with the api wrapper
+  //   return fetch(AVAILABILITIES, {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       token: token,
+  //     },
+  //   })
+  //   .then(res => res.json())
+  // },
+  deleteAvailability(token, eventID) {
     return apiWrapper({
       path: AVAILABILITIES,
-      method: 'GET',
+      params: eventID,
+      method: 'DELETE',
       token,
-    }).then(res => res.json)
+    })
   },
+
   logout(token) {
     return apiWrapper({
       path: LOGOUT,
@@ -147,11 +170,10 @@ export default {
       headers: {token},
     }).then(res => res.json());
   },
-  getVehicle(id, token){
+  getVehicle(token){
     return apiWrapper({
-      path: VEHICLE,
+      path: VEHICLES,
       method: 'GET',
-      params: `?id=${id}`,
       headers: {token},
     }).then(res => res.json());
   },
