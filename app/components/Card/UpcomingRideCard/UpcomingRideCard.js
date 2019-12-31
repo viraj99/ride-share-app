@@ -12,9 +12,9 @@ import styles from './styles';
 const UpcomingRideCard = ({onPress, date, pickupLocation, dropoffLocation}) => (
   <View style={[styles.card, styles.shadow]}>
     <Block row space="evenly">
-      <Text style={styles.date}>{moment(date).format('MMMM D')}</Text>
+      <Text style={styles.date}>{moment.parseZone(date).format('MMMM D')}</Text>
       <Text style={styles.colon}>:</Text>
-      <Text style={styles.date}>{moment(date).format('h:mm A')}</Text>
+      <Text style={styles.date}>{moment.parseZone(date).format('h:mm A')}</Text>
     </Block>
     <Block color="gray3" style={styles.hLine} />
     <Block row center>
