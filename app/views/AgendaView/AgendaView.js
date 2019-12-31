@@ -16,7 +16,13 @@ class AgendaView extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const value = await AsyncStorage.getItem('token');
+    const parsedValue = JSON.parse(value);
+    const realToken = parsedValue.token;
+    this.setState({
+      token: realToken
+    });
     this.getAvailability();
   }
 
@@ -46,13 +52,31 @@ class AgendaView extends React.Component {
     }
   }
 
+  editAvail = () => {
+
+  }
+
+  deleteAvail = (eventId) => {
+    let token = this.state.token
+    console.log("in deleteAvail fx: ", token)
+    console.log("in deleteAvail fx: ", eventId)
+    api.deleteAvailability(token, eventId)
+  }
+
   renderItem = (item) => {
-    console.log("each item maybe: ", item)
+    let token = this.state.token
+    console.log("token is: ", token)
+
+    console.log("each item: ", item)
+    let id = item.id
     let date = moment(item.startTime).format("MMMM D, YYYY")
-    let start = moment(item.startTime).format("h:mm A")
-    let end = moment(item.endTime).format("h:mm A")
+    let start = moment.utc(item.startTime).format("h:mm A")
+    let end = moment.utc(item.endTime).format("h:mm A")
     let day = moment(item.startTime).format("dddd")+"s"
     let endDate = moment(item.endTime).format("MMMM D, YYYY")
+    let driverToken = this.state.token
+    console.log("in return, id is: ", id)
+    console.log("in return, token is: ", driverToken)
     if (item.isRecurring === true) {
       return(
         <View
@@ -63,16 +87,17 @@ class AgendaView extends React.Component {
             {/* <Text>until {endDate}</Text> */}
           </View>
           <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={this.deleteAvail}>
-              <Icon color={`gray`} name="pencil" size={30} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.deleteAvail}>
-              <Icon color={`gray`} name="delete" size={30} />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.editAvail}>
+            <Icon color={`gray`} name="pencil" size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.deleteAvail(id)}>
+            <Icon color={`gray`} name="delete" size={30} />
+          </TouchableOpacity>
           </View>
         </View>
       )
     } else {
+      
       return(
         <View
           style={[styles.availListItem]}>
@@ -81,12 +106,12 @@ class AgendaView extends React.Component {
             <Text style={styles.flatListText}>{start} to {end}</Text>
           </View>
           <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={this.deleteAvail}>
-              <Icon color={`gray`} name="pencil" size={30} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.deleteAvail}>
-              <Icon color={`gray`} name="delete" size={30} />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={this.editAvail}>
+            <Icon color={`gray`} name="pencil" size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.deleteAvail(id)}>
+            <Icon color={`gray`} name="delete" size={30} />
+          </TouchableOpacity>
           </View>
         </View>
       )
@@ -103,10 +128,6 @@ class AgendaView extends React.Component {
     navigation.navigate('MainView');
   }
 
-  deleteAvail = () => {
-    console.log("got to the delete avail fx")
-  }
-
   render(){
     return(
       <Container>
@@ -119,7 +140,7 @@ class AgendaView extends React.Component {
           style={[styles.headerContainer]}>
           <View style={styles.leftContainer}>
             <TouchableOpacity onPress={this.backButton}>
-              <Icon color={`gray`} name="close" size={30} />
+              <Icon color={`gray`} name="arrow-left" size={30} />
             </TouchableOpacity>
           </View>
           <View style={styles.rightContainer}>
