@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Button, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -52,10 +52,6 @@ class AgendaView extends React.Component {
     }
   }
 
-  editAvail = () => {
-
-  }
-
   deleteAvail = (eventId) => {
     let token = this.state.token
     console.log("in deleteAvail fx: ", token)
@@ -87,7 +83,7 @@ class AgendaView extends React.Component {
             {/* <Text>until {endDate}</Text> */}
           </View>
           <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={() => this.editAvail}>
+          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
             <Icon color={`gray`} name="pencil" size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.deleteAvail(id)}>
@@ -106,7 +102,7 @@ class AgendaView extends React.Component {
             <Text style={styles.flatListText}>{start} to {end}</Text>
           </View>
           <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={this.editAvail}>
+          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
             <Icon color={`gray`} name="pencil" size={30} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.deleteAvail(id)}>
@@ -118,9 +114,13 @@ class AgendaView extends React.Component {
     }
   }
 
-  redirectToAddAvail = () => {
+  redirectToAddAvail = (item) => {
     const { navigation } = this.props;
-    navigation.navigate('AvailabilityView');
+    if (item) {
+      navigation.navigate('AvailabilityView', {item})
+    } else { 
+      navigation.navigate('AvailabilityView');
+    }
   }
 
   backButton = () => {
@@ -157,13 +157,13 @@ class AgendaView extends React.Component {
               keyExtractor={item => item.eventId}
             />
           }
-          {/* <Block style={styles.footer}> */}
-            <Button
-              title="Add Availability"
-              onPress={this.redirectToAddAvail}
-              color='#475c67'
-            />
-          {/* </Block> */}
+          <View style={styles.footer}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.redirectToAddAvail}>
+              <View style={styles.buttonWrapper}>
+                <Text style={styles.buttonText}>Add Availability</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </Container>
     )

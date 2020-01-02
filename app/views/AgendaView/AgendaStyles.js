@@ -63,4 +63,35 @@ export default StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
+  buttonContainer: {
+    alignItems: 'center',
+    backgroundColor: '#475c67',
+    borderWidth: 2,
+    borderColor: '#475c67',
+    borderRadius: 25,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.62,
+    elevation: 4,
+    marginLeft: 30,
+    marginRight: 30,
+    marginTop: 20,
+  },
+  buttonWrapper: {
+    // mainly used in calendar btn
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 100,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+    paddingVertical: 10,
+  },
 });

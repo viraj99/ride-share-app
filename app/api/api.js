@@ -113,6 +113,54 @@ export default {
       token,
     })
   },
+  editAvailability(token, eventID, userEntries, recurring, endDate) {
+    console.log("before parsing: ", recurring)
+    console.log("before parsing it's a :", typeof recurring)
+    let recurringParsed = JSON.parse(recurring)
+    console.log("after parse: ", recurringParsed)
+    console.log("after parsing it's a: ", typeof recurringParsed)
+    if (recurring === 'true') {
+      let startDateArray = userEntries.start_time.split(" ")
+      let startDate = startDateArray[0]
+      const availability = {
+        "start_date": startDate,
+        "end_date": endDate,
+        "start_time": userEntries.start_time,
+        "end_time": userEntries.end_time,
+        "is_recurring": recurringParsed,
+        "location_id": userEntries.location_id,
+        "id": eventID,
+      }
+      console.log("data to availReg API: ", availability)
+      console.log("token to availReg API: ", token)
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body: availability,
+        method: 'PUT',
+        params: eventID,
+      }).then(res => console.log(res.json()));
+    } else {
+      let startDateArray = userEntries.start_time.split(" ")
+      let startDate = startDateArray[0]
+      const availability = {
+        "start_date": startDate,
+        "end_date": endDate,
+        "start_time": userEntries.start_time,
+        "end_time": userEntries.end_time,
+        "is_recurring": recurringParsed,
+        "location_id": userEntries.location_id,
+        "id": eventID,
+      }
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body: availability,
+        method: 'PUT',
+        params: eventID,
+      }).then(res => console.log(res.json()));
+    }
+  },
 
   logout(token) {
     return apiWrapper({
