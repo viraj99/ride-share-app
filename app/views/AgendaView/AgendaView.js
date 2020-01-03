@@ -7,6 +7,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import moment from 'moment';
 import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
+import { NavigationEvents } from 'react-navigation';
 
 class AgendaView extends React.Component {
   constructor(props){
@@ -17,6 +18,7 @@ class AgendaView extends React.Component {
   }
 
   componentDidMount = async () => {
+    console.log("*****PAGE MOUNTING*****")
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
@@ -141,6 +143,7 @@ class AgendaView extends React.Component {
     };
     return(
       <Container>
+        <NavigationEvents onDidFocus={() => this.getAvailability()} />
         {/* <RegisterHeader
           onPress={() => navigation.navigate('MainView')}
           iconColor="#475c67"
