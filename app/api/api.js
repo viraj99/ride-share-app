@@ -140,20 +140,28 @@ export default {
       method: 'PUT,'
     }).then(res => res.json());
   },
-  getVehicleWithOutId(token){
+  // getVehicleWithOutId(token){
+  //   return apiWrapper({
+  //     path: VEHICLE,
+  //     method: 'GET',
+  //     headers: {token},
+  //   }).then(res => res.json());
+  // },
+  getVehicle(token){
     return apiWrapper({
-      path: VEHICLE,
+      path: VEHICLES,
       method: 'GET',
+      // params: `?id=${id}`,
       headers: {token},
     }).then(res => res.json());
   },
-  getVehicle(id, token){
+  deleteVehicle(id, token){
     return apiWrapper({
-      path: VEHICLE,
-      method: 'GET',
+      path:VEHICLES,
+      method: 'DELETE',
       params: `?id=${id}`,
       headers: {token},
-    }).then(res => res.json());
+    }).then(res => res.json())
   },
   getOrgs(token) {
     return apiWrapper({

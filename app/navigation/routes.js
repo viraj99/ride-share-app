@@ -5,7 +5,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {
   MainView,
   Login,
-  AgendaView,
+  // AgendaView,
+  //AvailabilityView,
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,
@@ -17,6 +18,7 @@ import {
   ForgotPassword,
   Welcome,
 } from '../views';
+import VehicleSettings from '../views/settings/VehicleSettings'
 
 const MainViewStack = createStackNavigator(
   {
@@ -26,15 +28,31 @@ const MainViewStack = createStackNavigator(
         header: () => null,
       },
     },
-    AgendaView: {
-      screen: AgendaView,
-      navigationOptions: {
-        header: () => null,
-      },
-    },
+    // AgendaView: {
+    //   screen: AgendaView,
+    //   navigationOptions: {
+    //     header: () => null,
+    //   },
+    // },
+    // AvailabilityView: {
+    //   screen: AvailabilityView,
+    //   navigationOptions: {
+    //     header: () => null,
+    //   },
+    // },
     Settings: {
       screen: Settings,
     },
+    //////////
+    VehicleSettings: {
+      screen: VehicleSettings,
+        headerTitle: 'Vehicle Settings',
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+        },
+        headerTintColor: '#fff',
+    },
+    ////////
     RideView: {
       screen: RideView,
       navigationOptions: {
