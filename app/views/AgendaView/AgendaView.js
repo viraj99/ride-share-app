@@ -73,54 +73,61 @@ class AgendaView extends React.Component {
     let driverToken = this.state.token
     console.log("in return, id is: ", id)
     console.log("in return, token is: ", driverToken)
-    if (item.isRecurring === true) {
+    
       return(
         <View
           style={[styles.availListItem]}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.flatListText}>{day}</Text> 
+          <View style={styles.leftList}>
+            <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
+              <Icon color={'#ff8262'} name="pencil" size={30} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.centerList}>
+            {item.isRecurring && <Text style={styles.flatListText}>{day}</Text>}
+            {!item.isRecurring && <Text style={styles.flatListText}>{date}</Text> }
             <Text style={styles.flatListText}>{start} to {end}</Text>
             {/* <Text>until {endDate}</Text> */}
           </View>
-          <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
-            <Icon color={`gray`} name="pencil" size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.deleteAvail(id)}>
-            <Icon color={`gray`} name="delete" size={30} />
-          </TouchableOpacity>
+          
+          <View style={styles.rightList}>
+            <TouchableOpacity onPress={() => this.deleteAvail(id)}>
+              <Icon color={'#ff8262'} name="delete" size={30} />
+            </TouchableOpacity>
           </View>
         </View>
       )
-    } else {
+    // } else {
       
-      return(
-        <View
-          style={[styles.availListItem]}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.flatListText}>{date}</Text> 
-            <Text style={styles.flatListText}>{start} to {end}</Text>
-          </View>
-          <View style={styles.rightContainer}>
-          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
-            <Icon color={`gray`} name="pencil" size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.deleteAvail(id)}>
-            <Icon color={`gray`} name="delete" size={30} />
-          </TouchableOpacity>
-          </View>
-        </View>
-      )
-    }
+    //   return(
+    //     <View
+    //       style={[styles.availListItem]}>
+    //         <View style={styles.leftList}>
+    //           <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
+    //             <Icon color={'#ff8262'} name="pencil" size={30} />
+    //           </TouchableOpacity>
+    //         </View>
+
+    //         <View style={styles.centerList}>
+              
+    //           <Text style={styles.flatListText}>{start} to {end}</Text>
+    //         </View>
+    //         <View style={styles.rightContainer}>
+            
+    //         <View style={styles.rightList}>
+    //           <TouchableOpacity onPress={() => this.deleteAvail(id)}>
+    //             <Icon color={'#ff8262'} name="delete" size={30} />
+    //           </TouchableOpacity>
+    //         </View>
+    //       </View>
+    //     </View>
+    //   )
+    // }
   }
 
   redirectToAddAvail = (item) => {
     const { navigation } = this.props;
-    if (item) {
-      navigation.navigate('AvailabilityView', {item})
-    } else { 
-      navigation.navigate('AvailabilityView');
-    }
+    navigation.navigate('AvailabilityView', {item})
   }
 
   backButton = () => {
@@ -129,6 +136,9 @@ class AgendaView extends React.Component {
   }
 
   render(){
+    let noItem = {
+      id: null,
+    };
     return(
       <Container>
         {/* <RegisterHeader
@@ -158,7 +168,7 @@ class AgendaView extends React.Component {
             />
           }
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.buttonContainer} onPress={this.redirectToAddAvail}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => this.redirectToAddAvail(noItem)}>
               <View style={styles.buttonWrapper}>
                 <Text style={styles.buttonText}>Add Availability</Text>
               </View>

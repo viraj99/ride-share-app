@@ -18,7 +18,7 @@ export default StyleSheet.create({
     paddingBottom:10,
     marginLeft: 20,
     marginRight: 20,
-    flex: 3,
+    flex: 5,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
@@ -53,6 +53,17 @@ export default StyleSheet.create({
   },
   flatlistContainer: {
     backgroundColor: '#fcfcf6',
+  },
+  leftList: {
+     marginRight: 10,
+     marginTop: 5,
+  },
+  centerList: {
+    flex: 3,
+    justifyContent: 'space-between'
+  },
+  rightList: {
+    marginTop: 5,
   },
   formButton: {
     backgroundColor: '#ff8262',

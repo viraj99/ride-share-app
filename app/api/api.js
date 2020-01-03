@@ -114,12 +114,16 @@ export default {
     })
   },
   editAvailability(token, eventID, userEntries, recurring, endDate) {
-    console.log("before parsing: ", recurring)
-    console.log("before parsing it's a :", typeof recurring)
     let recurringParsed = JSON.parse(recurring)
-    console.log("after parse: ", recurringParsed)
-    console.log("after parsing it's a: ", typeof recurringParsed)
+    // let userEntries = JSON.parse(userEntries)
+    console.log("recurring: ", recurringParsed)
+    console.log("token: ", token)
+    console.log("eventID: ", eventID)
+    console.log("userEntries: ", userEntries)
+    console.log("endDate: ", endDate)
+    // console.log("revised endDate: ", userEntries.startDate)
     if (recurring === 'true') {
+      console.log("RECURRING IS TRUE")
       let startDateArray = userEntries.start_time.split(" ")
       let startDate = startDateArray[0]
       const availability = {
@@ -141,21 +145,23 @@ export default {
         params: eventID,
       }).then(res => console.log(res.json()));
     } else {
-      let startDateArray = userEntries.start_time.split(" ")
-      let startDate = startDateArray[0]
-      const availability = {
-        "start_date": startDate,
-        "end_date": endDate,
-        "start_time": userEntries.start_time,
-        "end_time": userEntries.end_time,
+      let avail = userEntries
+      console.log("RECURRING IS FALSE")
+      console.log("in the else: ", avail)
+      avail = {
+        "start_date": avail.start_time,
+        "end_date": avail.end_time,
+        "start_time": avail.start_time,
+        "end_time": avail.end_time,
         "is_recurring": recurringParsed,
         "location_id": userEntries.location_id,
         "id": eventID,
       }
+      console.log("in the else: ", avail)
       return apiWrapper({
         path: AVAILABILITIES,
         token,
-        body: availability,
+        body: avail,
         method: 'PUT',
         params: eventID,
       }).then(res => console.log(res.json()));
