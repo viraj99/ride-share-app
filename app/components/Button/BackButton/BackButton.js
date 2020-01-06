@@ -16,7 +16,7 @@ const BackButton = ({title, onPress, editVehicle, vehicleId, token}) => (
         
           <Icon
             color="#ff8262"
-            name="arrow-left-thick"
+            name="backspace"
             size={20}
             style={{alignSelf: 'center'}}
           />

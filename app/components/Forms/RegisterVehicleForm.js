@@ -53,7 +53,7 @@ class RegisterVehicleForm extends React.Component {
   }
 
     //async await needed for proper Promise handling during submit function
-    handleUserSubmit = async (entries) => {
+    handleSubmit = async (entries) => {
      // console.log("testing in vehicle form: ", this.props.navigation);
       let token = await AsyncStorage.getItem('token')
       //parse just the token from the token object in async storage
@@ -169,7 +169,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
               <TextInput
                 onChangeText={(text) => this.setState({car_model: text})}
-                value={entries.vehicle.car_model}
+                placeholder={entries.vehicle.car_model}
                 ref={(input) => {this.carModel = input;}}
                 returnKeyType={"next"}
                 onSubmitEditing={() => {this.carYear.focus();}}
@@ -211,7 +211,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
               <TextInput
                 onChangeText={(text) => this.setState({car_color: text})}
-                value={entries.vehicle.car_color}
+                placeholder={entries.vehicle.car_color}
                 ref={(input) => {this.carColor = input;}}
                 returnKeyType={"next"}
                 onSubmitEditing={() => {this.carPlate.focus();}}
@@ -225,7 +225,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
               <TextInput
                 onChangeText={(text) => this.setState({car_plate: text})}
-                value={entries.vehicle.car_plate}
+                placeholder={entries.vehicle.car_plate}
                 ref={(input) => {this.carPlate = input;}}
                 returnKeyType={"next"}
                 onSubmitEditing={() => {this.carInsur.focus();}}
@@ -239,7 +239,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
               <TextInput
                 onChangeText={(text) => this.setState({insurance_provider: text})}
-                value={entries.vehicle.insurance_provider}
+                placeholder={entries.vehicle.insurance_provider}
                 ref={(input) => {this.carInsur = input;}}
                 returnKeyType={"done"}
                 style={[styles.saeInputAlt]}
@@ -277,9 +277,9 @@ class RegisterVehicleForm extends React.Component {
 
               <Block style={styles.footer}>
                 <CalendarButton 
-                  title="Continue" 
+                  title="Submit" 
                   onPress={() => 
-                    this.handleUserSubmit(entries, this.props.navigation)} 
+                    this.handleSubmit(entries, this.props.navigation)} 
                 />
             </Block>
           </KeyboardAwareScrollView>
@@ -289,8 +289,6 @@ class RegisterVehicleForm extends React.Component {
       )
     }
     else{
-
-
     return(
      
       <ScrollView>
@@ -431,7 +429,7 @@ class RegisterVehicleForm extends React.Component {
                 <CalendarButton 
                   title="Continue" 
                   onPress={() => 
-                    this.handleUserSubmit(entries, this.props.navigation)} 
+                    this.handleSubmit(entries, this.props.navigation)} 
                 />
             </Block>
           </KeyboardAwareScrollView>
