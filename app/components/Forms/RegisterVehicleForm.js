@@ -200,7 +200,7 @@ class RegisterVehicleForm extends React.Component {
                 display="default"
                 onChange={this.setStartDate}
               />}
-              <Text style={styles.displaySelection}>Selected date: {moment(this.state.insurStartDate).format("YYYY-MM-DD")}</Text>
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.insurStartDate).format("MMMM D, YYYY")}</Text>
 
                 <Text></Text>
 
@@ -213,7 +213,7 @@ class RegisterVehicleForm extends React.Component {
                 display="default"
                 onChange={this.setEndDate}
               />}
-              <Text style={styles.displaySelection}>Selected date: {moment(this.state.insurEndDate).format("YYYY-MM-DD")}</Text>
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.insurEndDate).format("MMMM D, YYYY")}</Text>
 
               <Text></Text>
 

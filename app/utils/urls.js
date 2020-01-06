@@ -5,6 +5,7 @@ export const DRIVER = 'drivers';
 export const RIDES = 'rides';
 export const RIDER = 'riders';
 export const AVAILABILITIES = 'availabilities';
+export const ORGANIZATIONS = 'organizations';
 export const REGISTER = 'drivers';
 export const VEHICLES = 'vehicles';
 
