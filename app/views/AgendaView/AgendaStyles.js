@@ -142,4 +142,9 @@ export default StyleSheet.create({
     fontSize: 25,
     color: '#ffffff',
   },
+  noAvailText: {
+    fontSize: 18,
+    paddingHorizontal: 25,
+    paddingTop: 10,
+  }
 });

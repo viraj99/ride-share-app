@@ -18,7 +18,7 @@ const buildHeaders = (additionalHeaders, token) => {
 
 const buildUrl = (path, params) => {
   let url = `${apiBaseUrl}${path}`;
-  url = params ? `${apiBaseUrl}${path}${params}` : url;
+  url = params ? `${apiBaseUrl}${path}/${params}` : url;
   return url;
 };
 

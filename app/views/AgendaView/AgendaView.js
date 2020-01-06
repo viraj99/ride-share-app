@@ -141,6 +141,7 @@ class AgendaView extends React.Component {
   deleteAvail = (eventId) => {
     let token = this.state.token
     api.deleteAvailability(token, eventId)
+    .then(this.getAvailability())
   }
 
   backButton = () => {
@@ -158,11 +159,6 @@ class AgendaView extends React.Component {
 
         <View
           style={[styles.headerContainer]}>
-          {/* <View style={styles.leftContainer}>
-            <TouchableOpacity onPress={this.backButton}>
-              <Icon color={`gray`} name="arrow-left" size={30} />
-            </TouchableOpacity>
-          </View> */}
           
           <View style={styles.mainContainer}>
             <View style={styles.componentsContainer}>
@@ -177,19 +173,17 @@ class AgendaView extends React.Component {
               </View>
             </View>
           </View>
-
-          {/* <View style={styles.rightContainer}>
-            <Text style={styles.title}>Your current availability schedule: </Text>
-          </View> */}
         </View>
 
         <ScrollView>
-          {this.state.response && 
+          {this.state.response ? 
             <FlatList
               data={this.state.response}
               renderItem={({ item }) => this.renderItem(item)}
               keyExtractor={item => item.eventId}
             />
+            :
+            <Text style={styles.noAvailText}>There is no availability in your schedule, to add availability click the button below:</Text>
           }
 
           <View style={styles.footer}>
