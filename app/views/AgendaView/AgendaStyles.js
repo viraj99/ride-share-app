@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
+import variables from '../../utils/variables';
 // import {getBottomSpace} from '../Header/StatusBar';
 
 const {height, width} = Dimensions.get('window');
@@ -12,18 +13,26 @@ export default StyleSheet.create({
     color: '#475c67',
   },
   availListItem: {
-    borderColor: 'gray',
-    borderBottomWidth: 2,
-    marginTop: 10,
-    paddingBottom:10,
-    marginLeft: 20,
-    marginRight: 20,
+    width: width - variables.sizes.padding * 2,
+    marginHorizontal: variables.sizes.margin,
+    marginVertical: 20,
+    marginBottom: variables.sizes.base,
+    paddingHorizontal: 10,
+    paddingVertical: variables.sizes.padding * 0.66,
+    borderRadius: variables.sizes.border,
+    backgroundColor: variables.cardDefaultBg,
+    shadowColor: '#000',
+    shadowOpacity: 0.11,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 13,
+    elevation: Platform.OS === 'ios' ? 0 : 5,
     flex: 5,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   flatListText: {
     fontSize: 18,
+    paddingLeft: 5,
   },
   leftContainer:{
     paddingTop: 10,
@@ -104,5 +113,33 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     paddingVertical: 10,
+  },
+  mainContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1EAA70',
+    height: Platform.OS == 'ios' ? 120 : 80,
+    marginTop: Platform.OS == 'android' ? 0 : 0,
+  },
+  componentsContainer: {
+    paddingTop: Platform.OS == 'ios' ? 55 : 0,
+    flexDirection: 'row',
+    flex: 1,
+  },
+  backButtonContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 10,
+  },
+  headerTextContainer: {
+    flex: 1,
+    alignItems: 'center',
+    paddingRight: 120,
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: '#ffffff',
   },
 });

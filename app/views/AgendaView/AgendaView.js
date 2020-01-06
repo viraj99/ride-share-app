@@ -158,14 +158,29 @@ class AgendaView extends React.Component {
 
         <View
           style={[styles.headerContainer]}>
-          <View style={styles.leftContainer}>
+          {/* <View style={styles.leftContainer}>
             <TouchableOpacity onPress={this.backButton}>
               <Icon color={`gray`} name="arrow-left" size={30} />
             </TouchableOpacity>
+          </View> */}
+          
+          <View style={styles.mainContainer}>
+            <View style={styles.componentsContainer}>
+              <View style={styles.backButtonContainer}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('MainView')}>
+                  <Icon name="chevron-left" size={36} color="#ffffff" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.headerText}>Availability</Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.rightContainer}>
+
+          {/* <View style={styles.rightContainer}>
             <Text style={styles.title}>Your current availability schedule: </Text>
-          </View>
+          </View> */}
         </View>
 
         <ScrollView>

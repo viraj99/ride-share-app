@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, ScrollView, Picker, View, Button} from 'react-native';
+import {Text, ScrollView, Picker, View, Button, TouchableOpacity} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Container from '../Container';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class AddAvailability extends React.Component {
   constructor(props){
@@ -147,15 +148,25 @@ class AddAvailability extends React.Component {
     
     if (editItem.id === null) {
       return (
-        <Container>    
+        <Container>   
+          <View style={styles.mainContainer}>
+            <View style={styles.componentsContainer}>
+              <View style={styles.backButtonContainer}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AgendaView')}>
+                  <Icon name="chevron-left" size={36} color="#ffffff" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.headerText}>Add Availability</Text>
+              </View>
+            </View>
+          </View>
+
           <ScrollView>
             <Block middle>
               <KeyboardAwareScrollView>
-                  <Block style={styles.scrollContainer}>
-                    <Text style={styles.subTitleAvail}>Use the form below to add to your availability</Text>
-                  </Block>
-
-                  <Text></Text>
+                  
                   <Text style={styles.labelStyleAvail}>
                     Availability Start Date:
                   </Text>
@@ -253,15 +264,24 @@ class AddAvailability extends React.Component {
       );
     } else {
       return (
-        <Container>    
+        <Container>  
+          <View style={styles.mainContainer}>
+            <View style={styles.componentsContainer}>
+              <View style={styles.backButtonContainer}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AgendaView')}>
+                  <Icon name="chevron-left" size={36} color="#ffffff" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.headerTextContainer}>
+                <Text style={styles.headerText}>Edit Availability</Text>
+              </View>
+            </View>
+          </View>  
           <ScrollView>
             <Block middle>
               <KeyboardAwareScrollView>
-                  <Block style={styles.scrollContainer}>
-                    <Text style={styles.subTitleAvail}>Edit your availability</Text>
-                  </Block>
-
-                  <Text></Text>
+              
                   <Text style={styles.labelStyleAvail}>
                     Availability Start Date:
                     <Text> {editStartDate}</Text>
