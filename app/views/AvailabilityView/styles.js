@@ -18,15 +18,9 @@ export default StyleSheet.create({
     paddingBottom:10,
     marginLeft: 20,
     marginRight: 20,
-    flex: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
   },
   flatListText: {
     fontSize: 18,
-  },
-  leftContainer:{
-    paddingTop: 10,
   },
   // footer: {
   //   marginTop: 20,
@@ -54,17 +48,6 @@ export default StyleSheet.create({
   flatlistContainer: {
     backgroundColor: '#fcfcf6',
   },
-  leftList: {
-     marginRight: 10,
-     marginTop: 5,
-  },
-  centerList: {
-    flex: 3,
-    justifyContent: 'space-between'
-  },
-  rightList: {
-    marginTop: 5,
-  },
   formButton: {
     backgroundColor: '#ff8262',
   },
@@ -73,36 +56,5 @@ export default StyleSheet.create({
     margin: 5,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    backgroundColor: '#475c67',
-    borderWidth: 2,
-    borderColor: '#475c67',
-    borderRadius: 25,
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 2.62,
-    elevation: 4,
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-  },
-  buttonWrapper: {
-    // mainly used in calendar btn
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 100,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-    paddingVertical: 10,
   },
 });
