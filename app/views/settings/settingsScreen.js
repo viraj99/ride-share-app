@@ -310,7 +310,6 @@ class Settings extends Component {
     //     });
     //   }}
     
-    addVehicle
 
     deleteVehicle = (id) => {
       Alert.alert('Delete this Vehicle?', '', [
@@ -374,9 +373,9 @@ class Settings extends Component {
     Vehicles = item => {
       const { token } = this.state;
       const { navigation } = this.props;
-      console.log('token', token);
-      console.log('navigation',navigation);
-      console.log('item in requested vehicles', item)
+      // console.log('token', token);
+      // console.log('navigation',navigation);
+      // console.log('item in requested vehicles', item)
       const vehicle = item
 
       const make = item.item.car_make;
@@ -391,7 +390,7 @@ class Settings extends Component {
           onPress={() => {
             navigation.navigate('RegisterVehicle', {
               vehicle,
-              isEditing: true,
+              isEditing: true, isAdding: false,
             });
           }}
           token={token}
@@ -514,7 +513,8 @@ class Settings extends Component {
     console.log('in render this.state.vehicles', this.state.vehicles);
     // console.log('Vehicle data id', this.state.vehicles.vehicle.id);
     const { token } = this.state;
-      const { navigation } = this.props;
+    console.log('in render this.state = token', token)
+    const { navigation } = this.props;
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -664,7 +664,7 @@ class Settings extends Component {
                 <Text style={styles.sectionTitle}>Vehicles</Text>
                 <AddButton onPress={() => {
                   navigation.navigate('RegisterVehicle', {
-                    isEditing: true,
+                    isAdding: true, isEditing: false
                   });
                 }}token={token}/> 
                 {/* <View style={styles.container}>

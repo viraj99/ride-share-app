@@ -18,7 +18,7 @@ import {
   ForgotPassword,
   Welcome,
 } from '../views';
-import VehicleSettings from '../views/settings/VehicleSettings'
+// import VehicleSettings from '../views/settings/VehicleSettings'
 
 const MainViewStack = createStackNavigator(
   {
@@ -44,14 +44,14 @@ const MainViewStack = createStackNavigator(
       screen: Settings,
     },
     //////////
-    VehicleSettings: {
-      screen: VehicleSettings,
-        headerTitle: 'Vehicle Settings',
-        headerStyle: {
-          backgroundColor: '#1EAA70',
-        },
-        headerTintColor: '#fff',
-    },
+    // VehicleSettings: {
+    //   screen: VehicleSettings,
+    //     headerTitle: 'Vehicle Settings',
+    //     headerStyle: {
+    //       backgroundColor: '#1EAA70',
+    //     },
+    //     headerTintColor: '#fff',
+    // },
     ////////
     RideView: {
       screen: RideView,

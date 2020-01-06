@@ -52,7 +52,9 @@ class RegisterVehicle extends Component {
 
   render() {
     const {navigation} = this.props;
-    
+    const token = this.state;
+    console.log('hopefully this worx in here too', navigation)
+    console.log('token',token)
     return (
       <Container>
         <View style={[styles.signup, styles.headerPadding]}>

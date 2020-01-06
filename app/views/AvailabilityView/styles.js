@@ -1,6 +1,6 @@
 
-Mary Alice 10:56 AM
-Untitled 
+// Mary Alice 10:56 AM
+// Untitled 
 import React, {Component} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
