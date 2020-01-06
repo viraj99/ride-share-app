@@ -42,8 +42,8 @@ class RegisterDriverForm extends React.Component {
       })
   };
 
-  handleUserSubmit = () => {
-    let userEntries = {
+  handleUserSubmit = (userEntries, navigation) => {
+    let userData = {
       "driver": {
         "organization_id": parseInt(this.state.orgNum),
         "email": this.state.email,
@@ -55,14 +55,10 @@ class RegisterDriverForm extends React.Component {
         "radius": parseInt(this.state.radius),
       }
     }
-
-    console.log("WHATS THE PROBLEM???", userEntries)
     //use API file, createDriver fx to send user inputs to database
-    API.createDriver(userEntries)
-    .then((res) => {
-        console.log("testing something here: ", res.json())
-        this.autoLogin(userEntries)
-      }
+    API.createDriver(userData)
+    .then(
+        this.autoLogin(userData, navigation)
     )
     //if error performing API fetch for posting driver, show error
     .catch(error => {
@@ -71,7 +67,7 @@ class RegisterDriverForm extends React.Component {
     });
   };
 
-  autoLogin = (userEntries) => {
+  autoLogin = (userEntries, navigation) => {
     console.log("testing in driver form: ", this.props.navigation)
     //use API file, login fx to create a token in order to add vehicle data to driver
               //login fx requries email and password as params
@@ -253,7 +249,7 @@ class RegisterDriverForm extends React.Component {
                 title="Continue"
                 onPress={
                   //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
-                  this.handleUserSubmit}
+                  () => this.handleUserSubmit(this.state.userEntries, this.props.navigation)}
               />
             </Block>
           </KeyboardAwareScrollView>
