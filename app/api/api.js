@@ -1,20 +1,17 @@
-/* eslint-disable prettier/prettier */
 import {
   LOGIN,
   RIDES,
-  //? SCHEDULEDRIDES,
-  //? APPROVEDRIDES,
   SETTINGS,
   LOGOUT,
   RIDER,
   AVAILABILITIES,
-  // ?driverRides,
   REGISTER,
+  VEHICLE,
   VEHICLES,
+  ORGANIZATIONS,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 //TODO get the ride id not the rider id from the API to accept the correct response
-
 export default {
   // ex. of how the post and etc. requests can be written
   login(email, password) {
@@ -26,15 +23,12 @@ export default {
       method: 'POST',
     }).then(res => { return res.json() });
   },
-
   getRides(token) {
     return apiWrapper({
       path: RIDES,
-      // params: driverRides,
       token,
     }).then(res => res.json());
   },
-  //////////////////////////////////
   getRider(id, token) {
     return apiWrapper({
       path: RIDER,
@@ -42,11 +36,9 @@ export default {
       token,
     }).then(res => res.json());
   },
-
   getDriver(token){
     return apiWrapper({
       path: REGISTER,
-      //params:
       method: 'GET',
       token,
     }).then(res => res.json());
@@ -92,18 +84,62 @@ export default {
       token,
     }).then(res => res.json());
   },
-
-  getAvailabilities() {
-    // change this with the api wrapper
-    return fetch(AVAILABILITIES, {
+  getAvailabilities(token) {
+    return apiWrapper({
+      path: AVAILABILITIES,
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        token: '',
-      },
-    });
+      token,
+    }).then(res => res.json());
   },
-
+  deleteAvailability(token, eventID) {
+    return apiWrapper({
+      path: AVAILABILITIES,
+      params: eventID,
+      method: 'DELETE',
+      token,
+    }).then(res => { alert("Your availability has been deleted"), res.json() })
+  },
+  editAvailability(token, eventID, userEntries, recurring, endDate) {
+    let recurringParsed = JSON.parse(recurring)
+    if (recurring === 'true') {
+      let startDateArray = userEntries.start_time.split(" ")
+      let startDate = startDateArray[0]
+      const availability = {
+        "start_date": startDate,
+        "end_date": endDate,
+        "start_time": userEntries.start_time,
+        "end_time": userEntries.end_time,
+        "is_recurring": recurringParsed,
+        "location_id": userEntries.location_id,
+        "id": eventID,
+      }
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body: availability,
+        method: 'PUT',
+        params: eventID,
+      }).then(res => console.log(res.json()));
+    } else {
+      let avail = userEntries
+      avail = {
+        "start_date": avail.start_time,
+        "end_date": avail.end_time,
+        "start_time": avail.start_time,
+        "end_time": avail.end_time,
+        "is_recurring": recurringParsed,
+        "location_id": userEntries.location_id,
+        "id": eventID,
+      }
+      return apiWrapper({
+        path: AVAILABILITIES,
+        token,
+        body: avail,
+        method: 'PUT',
+        params: eventID,
+      }).then(res => console.log(res.json()));
+    }
+  },
   logout(token) {
     return apiWrapper({
       path: LOGOUT,
@@ -117,24 +153,63 @@ export default {
       headers: { token },
     }).then(res => res.json());
   },
-  updateSettingsInfo(data, token) {
+  updateSettingsDriver(data, token) {
+    const driverData = {
+     'driver':
+      {
+        'organization_id': data.organization_id,
+        'first_name': data.first_name,
+        'last_name': data.last_name,
+        'email': data.email,
+        'phone': data.phone,
+        'radius': data.radius,
+        'is_active': data.is_active,
+      }  
+    }
     return apiWrapper({
       path: SETTINGS,
       headers: { token },
-      body: data,
+      body: driverData,
       method: 'PUT',
     }).then(res => res.json());
   },
-
-  getOrgs() {
-    return fetch('https://ctd-rideshare.herokuapp.com/api/v1/organizations', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
+  updateSettingsVehicle(id, data, token) {
+    const vehicleData = {
+      'vehicle':{
+        'car_make': data.car_make,
+        'car_model': data.car_model,
+        'car_color': data.car_color,
+        'insurance_provider': data.insurance_provider,
+      }
+    }
+    return apiWrapper({
+      path: VEHICLES,
+      headers: {token},
+      body: vehicleData,
+      method: 'PUT,'
     }).then(res => res.json());
   },
-
+  getVehicleWithOutId(token){
+    return apiWrapper({
+      path: VEHICLE,
+      method: 'GET',
+      headers: {token},
+    }).then(res => res.json());
+  },
+  getVehicle(id, token){
+    return apiWrapper({
+      path: VEHICLE,
+      method: 'GET',
+      params: `?id=${id}`,
+      headers: {token},
+    }).then(res => res.json());
+  },
+  getOrgs() {
+    return apiWrapper({
+      path: ORGANIZATIONS,
+      method: 'GET',
+    }).then(res => res.json());
+  },
   createDriver(data) {
     const driver = {
       "driver": {
@@ -148,7 +223,6 @@ export default {
         "radius": data.driver.radius,
       }
     }
-
     console.log("data to API: ", driver)
     return apiWrapper({
       path: REGISTER,
@@ -158,9 +232,8 @@ export default {
       },
       body: driver,
     })
-      // .then(res => res.json())
+      .then(res => res.json())
   },
-
   createVehicle(vehicleData, token) {
     const vehicle = {
       "vehicle": {
@@ -184,18 +257,15 @@ export default {
       method: 'POST',
     }).then(res => console.log(res.json()));
   },
-
   createAvailability(availData, recurring, endDate, token) {
     console.log("before parsing: ", recurring)
     console.log("before parsing it's a :", typeof recurring)
     let recurringParsed = JSON.parse(recurring)
     console.log("after parse: ", recurringParsed)
     console.log("after parsing it's a: ", typeof recurringParsed)
-
     if (recurring === 'true') {
       let startDateArray = availData.start_time.split(" ")
       let startDate = startDateArray[0]
-
       const availability = {
         "start_date": startDate,
         "end_date": endDate,
@@ -204,7 +274,6 @@ export default {
         "is_recurring": recurringParsed,
         "location_id": availData.location_id,
       }
-
       console.log("data to availReg API: ", availability)
       console.log("token to availReg API: ", token)
       return apiWrapper({
@@ -220,7 +289,6 @@ export default {
         "is_recurring": recurringParsed,
         "location_id": availData.location_id,
       }
-
       return apiWrapper({
         path: AVAILABILITIES,
         token,
