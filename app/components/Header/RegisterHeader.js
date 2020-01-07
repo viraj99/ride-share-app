@@ -8,7 +8,7 @@ const RegisterHeader = ({onPress, backgroundColor, iconColor}) => (
   <View
     style={[styles.headerContainer, {backgroundColor: `${backgroundColor}`}]}>
     <View style={styles.leftContainer}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onPress} style={styles.close} hitSlop={{top: 20, bottom: 0, left: 10, right: 10}} >
         <Icon color={`${iconColor}`} name="close" size={32} />
       </TouchableOpacity>
     </View>
