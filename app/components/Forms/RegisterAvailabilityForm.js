@@ -196,7 +196,7 @@ class RegisterAvailabilityForm extends React.Component {
                 display="spinner"
                 onChange={this.setEndTime}
               />}
-              <Text style={styles.displaySelection}>Selected time: {moment(this.state.endTime).format("h:mm A")}</Text>
+              <Text style={styles.displaySelection}>Selected time: {moment(this.state.endTime).format("h:mm  A")}</Text>
 
               <Text></Text>
 
