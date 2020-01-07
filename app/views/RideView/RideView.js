@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Icon } from 'react-native-elements';
@@ -8,6 +7,7 @@ import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
 import styles from './styles';
+import api from '../../api/api';
 
 const data = [
   {
@@ -71,15 +71,78 @@ export default class RideView extends Component<Props> {
       longitude
     });
   };
+  onPickUpPress = () => {
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+    API.pickUpRide( rideId, token )
+    .then(result => {
+      Alert.alert('Pick Up En Route');
+      console.log('pick up rideId', rideId);
+      console.log('pick up token', token);
+      console.log('result',result);
+    }).catch(err => {
+      Alert.alert('Unable to PickUp');
+      console.log('err pick up rideId', rideId);
+      console.log('err pick up token', token);
+      console.log(err,'result',result);      
+    });
+  }
+  onDropOffPress = () => {
+    const {navigation} = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+    
+    API.dropOffRide(rideId, token)
+    .then((result) => {
+      Alert.alert('Drop Off En Route');
+      console.log('drop off rideId', rideId);
+      console.log('drop off token', token);
+    }).catch((err) => {
+      Alert.alert('Unable to Drop Off');
+      console.log('err drop off rideId', rideId);
+      console.log('err drop off token', token);
+    });
+  }
+  onCompletePress = () => {
+    const {navigation} = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
 
+    API.completeRide(rideId,token)
+    .then((result) => {
+      Alert.alert('Ride Complete');
+    }).catch((err) => {
+      Alert.alert('Could not Complete Ride');
+    });
+  }
   onCancelPress = () => {
-    Alert.alert('Cancel this ride?', '', [
-      { text: "Don't cancel", style: 'cancel' },
-      {
-        text: 'Yes, cancel this ride',
-        onPress: () => console.warn('ride cancelled')
-      }
-    ]);
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+    API.cancelRide(rideId, token)
+    .then((result) => {
+      Alert.alert('Ride Cancelled');
+      navigation.navigate('MainView');
+      console.log('rideId from cancel press', rideId);
+      console.log('accept API call', result);
+    }).catch((err) => {
+      Alert.alert('Did not Cancel');
+      console.log('Did not work');
+    });
+    // Alert.alert('Cancel this ride?', '', [
+    //   { text: "Don't cancel", style: 'cancel' },
+    //   {
+    //     text: 'Yes, cancel this ride',
+    //     onPress: () => {
+    //     API.cancelRide(rideId, token)
+    //     .then((result) => {
+    //       Alert.alert('RIDE CANCELLED')
+    //     }).catch((err) => {
+    //       Alert.alert('Unable to Cancel Ride')
+    //     });}
+    //   }
+    // ]);
   };
 
   onPress = () => {
@@ -87,46 +150,72 @@ export default class RideView extends Component<Props> {
     const { navigation } = this.props;
 
     if (textValue === 'Go to pickup') {
-      this.setState({
-        textValue: 'Tap to arrive'
-      });
-    } else if (textValue === 'Tap to arrive') {
-      Alert.alert('Have you arrived?', '', [
+    // Alert.alert('Headed to Pick Up', '',[
+    //   { text:'PickUp?', onPress: () => {
+    //   this.onPickUpPress();
+    //   this.setState({
+    //     textValue: 'Arrived at Pick-up'
+    //   });
+    // }]);}
+    Alert.alert('Head to Pick Up', '',[
+      {
+        text: 'Pick UP?',
+        onPress: () => {
+          this.onPickUpPress();
+          this.setState({
+            textValue: 'Arrived at Pick-up'
+          })
+        }
+      }
+    ])
+    } else if (textValue === 'Arrived at Pick-up') {
+      Alert.alert('All set?', '', [
         {
-          text: 'Confirm arrival',
+          text: 'Good to GO',
           onPress: () => {
             this.setState({
-              textValue: 'Pick up'
+              textValue: 'Good to GO'
             });
           }
         },
-        { text: 'cancel', style: 'cancel' }
-      ]);
-    } else if (textValue === 'Pick up') {
-      Alert.alert('Tap to confirm', '', [
-        {
-          text: 'Confirm pick up',
+        { text: 'cancel', style: 'cancel',
           onPress: () => {
+            this.onCancelPress();
+          } }
+      ]);
+    } else if (textValue === 'Good to GO') {
+      Alert.alert('Drop Off Destination', '', [
+        {
+          text: 'Go to Drop off',
+          onPress: () => {
+            this.onDropOffPress(); 
             this.setState({
               textValue: 'Drop off'
             });
           }
         },
-        { text: 'cancel', style: 'cancel' }
+        { text: 'cancel', style: 'cancel',
+        onPress: () => {
+          this.onCancelPress();
+        } }
       ]);
     } else if (textValue === 'Drop off') {
       Alert.alert('Did you drop-off?', '', [
         {
           text: 'Confirm drop-off',
           onPress: () => {
+            this.onCompletePress();
             this.setState({
               textValue: ''
             });
-            alert('ride complete');
+            //alert('ride complete');
             navigation.navigate('MainView');
           }
         },
-        { text: 'cancel', style: 'cancel' }
+        { text: 'cancel', style: 'cancel',
+        onPress: () => {
+          this.onCancelPress();
+        } }
       ]);
     }
   };

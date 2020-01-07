@@ -1,21 +1,52 @@
 import React from 'react';
-import { View, FlatList, SafeAreaView } from 'react-native';
+import { View, FlatList } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { RideListItem } from '../../components/RideListItem';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const DriverScheduleView = props => {
+  
+    handleToken = async () => {
+    const value = await AsyncStorage.getItem('token');
+    const parsedValue = JSON.parse(value);
+    const realToken = parsedValue.token;
+    this.setState({
+      token: realToken,
+    });
+    console.log('inside handleToken',token);
+    this.navigateToRideView();
+  };
+  
+  // componentDidMount = () => {
+  //   this.handleToken();
+  // }
+  
+  
   const { navigation } = props;
+  
   const scheduledRides = navigation.getParam('scheduledRides');
-  console.log('scheduledRides', scheduledRides);
-
+  const token = navigation.getParam('token');
+  //console.log('scheduledRides', scheduledRides);
+ //console.log('token in driverSchedule', token);
+ 
   keyExtractor = item => {
-    return item.id.toString();
+    return item.id.toString() //&& item.token.toString();
+    
   }
-
-  console.log('keyExtractor item:', keyExtractor);
+  
+ // console.log('keyExtractor item:', keyExtractor);
   navigateToRideView = (item) => {
     console.log('click on schedule', item);
+    // const token = navigation.getParam('token');
+    // const { navigation } = props;
+    // const { token } = navigation.getParam('token');    
+    console.log('tokem',token);
+
     const date = item.pick_up_time;
     const reason = item.reason;
+    const rideId = item.id;
+   
+    console.log('rideId in driverSchedule', rideId);
     const riderId = item.rider_id;
     const startLocation = [
       item.start_location.street,
@@ -32,7 +63,9 @@ const DriverScheduleView = props => {
       startLocation,
       endLocation,
       reason,
+      rideId,
       riderId,
+      token,
       date,
     });
   };
@@ -58,11 +91,12 @@ const DriverScheduleView = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fcfcf6' }}>
-        <FlatList
-          data={scheduledRides}
-          renderItem={this.renderRideList}
-          keyExtractor={this.keyExtractor}
-        />
+       <NavigationEvents onDidFocus={() => this.handleToken()} />
+      <FlatList
+        data={scheduledRides}
+        renderItem={this.renderRideList}
+        keyExtractor={this.keyExtractor}
+      />
     </View>
   );
 };

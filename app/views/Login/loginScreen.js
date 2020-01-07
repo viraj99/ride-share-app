@@ -62,7 +62,7 @@ class Login extends Component {
         const obj = {
           token: res.json.auth_token,
         };
-
+        //console.log('login token', token);
         if (obj.token === undefined) {
           this.setState({
             errorMessage: 'Invalid username or password.',
@@ -71,7 +71,7 @@ class Login extends Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           navigation.navigate('MainView');
         }
-
+        console.log('login token', asynStorage.getItem('token'));
       })
       .catch(err => {
         this.setState({

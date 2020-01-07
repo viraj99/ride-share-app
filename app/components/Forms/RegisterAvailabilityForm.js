@@ -27,7 +27,7 @@ class RegisterAvailabilityForm extends React.Component {
   setStartDate = (event, date) => {
     this.setState({
       startDate: date,
-      stDatePicker: false,
+      // stDatePicker: false,
     })
     this.hideStDatePicker();
   }
@@ -35,7 +35,7 @@ class RegisterAvailabilityForm extends React.Component {
   setStartTime = (event, time) => {
     this.setState({
       startTime: time,
-      stTimePicker: false,
+      // stTimePicker: false,
     })
     this.hideStTimePicker();
   }
@@ -43,7 +43,7 @@ class RegisterAvailabilityForm extends React.Component {
   setEndTime = (event, time) => {
     this.setState({
       endTime: time,
-      endTimePicker: false,
+      // endTimePicker: false,
     })
     this.hideEndTimePicker();
   }
@@ -51,7 +51,7 @@ class RegisterAvailabilityForm extends React.Component {
   setEndDate = (event, date) => {
     this.setState({
       endDate: date,
-      endDatePicker: false,
+      // endDatePicker: false,
     })
     this.hideEndDatePicker();
   }
