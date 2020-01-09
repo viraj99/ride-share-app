@@ -12,7 +12,7 @@ class RegisterDriverForm extends React.Component {
     super(props);
     this.state = {
       orgs: [],
-      orgNum: 0,
+      orgNum: 1,
       radius: 0,
     };
   };
@@ -216,14 +216,14 @@ class RegisterDriverForm extends React.Component {
               //shows which item in list user has selected
               selectedValue={this.state.orgNum}
               //set the item value (which will be the org_id number) to state so it can be passed to API post
-              onValueChange={(itemValue) =>
-                  this.setState({orgNum: itemValue})
+              value={() =>
+                  this.setState({orgNum: 1})
               }
-            >
+              > 
               {/* default to instruct user what to do */}
-              <Picker.Item label="Select an organization" value="0" />
+              <Picker.Item label="Select an organization" value='orgNum' />
               {/* uses the orgsList const at beginning of render to display a picker item for each org*/}
-              {orgsList}
+               {orgsList}
             </Picker>
 
             <Text style={styles.labelStyleAvail}>Distance available to drive:</Text>

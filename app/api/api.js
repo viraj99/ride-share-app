@@ -124,29 +124,33 @@ export default {
       method: 'PUT',
     }).then(res => res.json());
   },
-  updateSettingsVehicle(id, data, token) {
-    const vehicleData = {
-      'vehicle':{
-        'car_make': data.car_make,
-        'car_model': data.car_model,
-        'car_color': data.car_color,
-        'insurance_provider': data.insurance_provider,
+
+  updateSettingsVehicle(id, vehicleData, token) {
+    const vehicle = {
+      'vehicle': {
+        'id': id,
+        'car_make': vehicleData.vehicle.car_make,
+        'car_model': vehicleData.vehicle.car_model,
+        // "car_year": parseInt(vehicleData.vehicle.car_year),
+        // "car_color": vehicleData.vehicle.car_color,
+        // "car_plate": vehicleData.vehicle.car_plate,
+        // "seat_belt_num": parseInt(vehicleData.vehicle.seat_belt_num),
+        // "insurance_provider": vehicleData.vehicle.insurance_provider,
+        // "insurance_start": vehicleData.vehicle.insurance_start,
+        // "insurance_stop": vehicleData.vehicle.insurance_stop,
       }
     }
+    console.log("data to carReg API: ", vehicle)
+    console.log("token to carReg API: ", token)
     return apiWrapper({
       path: VEHICLES,
-      headers: {token},
-      body: vehicleData,
-      method: 'PUT,'
+      headers: { token },
+      // params: `?id=${id}`,
+      body: vehicle,
+      method: 'PUT',
     }).then(res => res.json());
   },
-  // getVehicleWithOutId(token){
-  //   return apiWrapper({
-  //     path: VEHICLE,
-  //     method: 'GET',
-  //     headers: {token},
-  //   }).then(res => res.json());
-  // },
+
   getVehicle(token){
     return apiWrapper({
       path: VEHICLES,
@@ -176,17 +180,18 @@ export default {
     //   },
     // }).then(res => res.json());
   },
-  createDriver(data, radius, orgID) {
+  createDriver(data) {
+    console.log('data', data)
     const driver = {
       "driver": {
-        "organization_id": parseInt(orgID),
+        "organization_id": data.driver.organization_id,
         "email": data.driver.email,
         "password": data.driver.password,
         "first_name": data.driver.first_name,
         "last_name": data.driver.last_name,
         "phone": data.driver.phone,
         "is_active": true,
-        "radius": parseInt(radius),
+        "radius": data.driver.radius,
       }
     }
     console.log("data to API: ", driver)
