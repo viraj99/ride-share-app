@@ -1,6 +1,6 @@
 // import React from 'react';
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import {
   MainView,
@@ -16,7 +16,7 @@ import {
   RegisterVehicle,
   RegisterAvailability,
   ForgotPassword,
-  Welcome,
+  Welcome
 } from '../views';
 
 const MainViewStack = createStackNavigator(
@@ -24,70 +24,70 @@ const MainViewStack = createStackNavigator(
     MainView: {
       screen: MainView,
       navigationOptions: {
-        header: () => null,
-      },
+        header: () => null
+      }
     },
     AgendaView: {
       screen: AgendaView,
       navigationOptions: {
-        header: () => null,
-      },
+        header: () => null
+      }
     },
-    AvailabilityView: {
-      screen: AvailabilityView,
-      navigationOptions: {
-        header: () => null,
-      },
-    },
+    // AvailabilityView: {
+    //   screen: AvailabilityView,
+    //   navigationOptions: {
+    //     header: () => null,
+    //   },
+    // },
     Settings: {
-      screen: Settings,
+      screen: Settings
     },
     RideView: {
       screen: RideView,
       navigationOptions: {
         headerTitle: 'Ride Overview',
         headerStyle: {
-          backgroundColor: '#1EAA70',
+          backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-      },
+        headerTintColor: '#fff'
+      }
     },
     DriverScheduleView: {
       screen: DriverScheduleView,
       navigationOptions: {
         headerTitle: 'Scheduled Rides',
         headerStyle: {
-          backgroundColor: '#1EAA70',
+          backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-      },
+        headerTintColor: '#fff'
+      }
     },
     RequestedRidesDetails: {
       screen: RequestedRidesDetails,
       navigationOptions: {
         headerTitle: 'Requested Ride Details',
         headerStyle: {
-          backgroundColor: '#1EAA70',
+          backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-      },
-    },
+        headerTintColor: '#fff'
+      }
+    }
   },
 
   {
     headerMode: 'screen',
-    headerBackTitleVisible: false,
-  },
+    headerBackTitleVisible: false
+  }
 );
 
 const AppStack = createStackNavigator(
-  {Home: MainViewStack},
+  { Home: MainViewStack },
   {
     headerMode: 'none',
     navigationOptions: {
-      headerVisible: false,
-    },
-  },
+      headerVisible: false
+    }
+  }
 );
 
 const RegisterStack = createStackNavigator(
@@ -96,27 +96,27 @@ const RegisterStack = createStackNavigator(
       screen: Register,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
+        headerTintColor: '#C5CCD6'
+      }
     },
     RegisterVehicle: {
       screen: RegisterVehicle,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
+        headerTintColor: '#C5CCD6'
+      }
     },
     RegisterAvailability: {
       screen: RegisterAvailability,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
-    },
+        headerTintColor: '#C5CCD6'
+      }
+    }
   },
   {
-    headerBackTitleVisible: false,
-  },
+    headerBackTitleVisible: false
+  }
 );
 
 const AuthStack = createStackNavigator(
@@ -124,44 +124,44 @@ const AuthStack = createStackNavigator(
     Welcome: {
       screen: Welcome,
       navigationOptions: {
-        header: () => null,
-      },
+        header: () => null
+      }
     },
     Login: {
       screen: Login,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
+        headerTintColor: '#C5CCD6'
+      }
     },
     ForgotPassword: {
       screen: ForgotPassword,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-      },
+        headerTintColor: '#C5CCD6'
+      }
     },
     Register: {
       screen: RegisterStack,
       navigationOptions: {
-        header: () => null,
-      },
-    },
+        header: () => null
+      }
+    }
   },
   {
-    headerBackTitleVisible: false,
-  },
+    headerBackTitleVisible: false
+  }
 );
 
 const AppStackNavigator = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: AppStack,
-    Auth: AuthStack,
+    Auth: AuthStack
   },
   {
-    initialRouteName: 'AuthLoading',
-  },
+    initialRouteName: 'AuthLoading'
+  }
 );
 
 export default createAppContainer(AppStackNavigator);

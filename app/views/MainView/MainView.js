@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   FlatList,
   Animated,
-  SafeAreaView,
+  SafeAreaView
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
@@ -30,7 +30,7 @@ export default class MainView extends Component<Props> {
       withinAvailRides: [],
       hasReqRidesInAvail: false,
       showAllRides: false,
-      toggleButtonText: "Show All Requested Rides",
+      toggleButtonText: 'Show All Requested Rides',
       isLoading: true,
       token: ''
     };
@@ -83,61 +83,58 @@ export default class MainView extends Component<Props> {
   ridesRequests = () => {
     const { token } = this.state;
     this.setState({ isLoading: true });
-    API.getAvailabilities(token)
-      .then((result) => {
-        this.setState({
-          availabilities: result.json
-        }),
-        console.log("in getAvail: ", result.json)
-      })
-    API.getDriver(token)
-    .then((result) => {
-      const driverId = result.driver.id;
-      API.getRides(token)
-      .then((result) => {
-        console.log("all rides: ", result.rides)
-        const rides = result.rides;
-        const myRides = rides.filter(
-          ride => ride.driver_id === driverId,
-        );
-        console.log("just my rides: ", myRides);
-        const scheduledRides = myRides.filter(
-          ride => ride.status === 'scheduled' 
-        );
-        console.log("scheduled rides: ", scheduledRides);
-        const approvedRides = rides.filter(
-          ride =>  ride.status === 'approved'
-        );
-        console.log("approved rides: ", approvedRides);
-        const withinAvailRides = this.withinMyAvail(rides.filter(ride => ride.status === 'approved'))
-        ;
-        console.log("approved rides in my avail: ", withinAvailRides);
-        
-        // let yesHasSchedRides;
-        // if (scheduledRides !== []) {
-        //   let yesHasSchedRides = true;
-        //   return yesHasSchedRides
-        // }
-
-        // let yesHasRidesInAvail;
-        // if (withinAvailRides !== []) {
-        //   let yesHasRidesInAvail = true;
-        //   return yesHasRidesInAvail
-        // }
-
-        this.setState({
-          scheduledRides,
-          // hasScheduledRides: yesHasSchedRides,
-          approvedRides,
-          withinAvailRides,
-          // hasReqRidesInAvail: yesHasRidesInAvail,
-          isLoading: false
-        });
-       
-      })
-    }).catch((err) => {
-      console.log('request ride err',err);
+    API.getAvailabilities(token).then(result => {
+      this.setState({
+        availabilities: result.json
+      }),
+        console.log('in getAvail: ', result.json);
     });
+    API.getDriver(token)
+      .then(result => {
+        const driverId = result.driver.id;
+        API.getRides(token).then(result => {
+          console.log('all rides: ', result.rides);
+          const rides = result.rides;
+          const myRides = rides.filter(ride => ride.driver_id === driverId);
+          console.log('just my rides: ', myRides);
+          const scheduledRides = myRides.filter(
+            ride => ride.status === 'scheduled'
+          );
+          console.log('scheduled rides: ', scheduledRides);
+          const approvedRides = rides.filter(
+            ride => ride.status === 'approved'
+          );
+          console.log('approved rides: ', approvedRides);
+          const withinAvailRides = this.withinMyAvail(
+            rides.filter(ride => ride.status === 'approved')
+          );
+          console.log('approved rides in my avail: ', withinAvailRides);
+
+          // let yesHasSchedRides;
+          // if (scheduledRides !== []) {
+          //   let yesHasSchedRides = true;
+          //   return yesHasSchedRides
+          // }
+
+          // let yesHasRidesInAvail;
+          // if (withinAvailRides !== []) {
+          //   let yesHasRidesInAvail = true;
+          //   return yesHasRidesInAvail
+          // }
+
+          this.setState({
+            scheduledRides,
+            // hasScheduledRides: yesHasSchedRides,
+            approvedRides,
+            withinAvailRides,
+            // hasReqRidesInAvail: yesHasRidesInAvail,
+            isLoading: false
+          });
+        });
+      })
+      .catch(err => {
+        console.log('request ride err', err);
+      });
   };
   renderLoader = () => {
     const { isLoading } = this.state;
@@ -180,7 +177,7 @@ export default class MainView extends Component<Props> {
             startLocation,
             endLocation,
             date,
-            reason,
+            reason
           });
         }}
         date={item.pick_up_time}
@@ -198,7 +195,7 @@ export default class MainView extends Component<Props> {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
-            extrapolate: 'clamp',
+            extrapolate: 'clamp'
           });
           return (
             <Animated.View
@@ -212,15 +209,17 @@ export default class MainView extends Component<Props> {
   };
   renderUpcomingRides = () => {
     const { scheduledRides } = this.state;
-   console.log('render upcomming', scheduledRides);
+    console.log('render upcomming', scheduledRides);
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
     if (scheduledRides.length === 0) {
       return (
         <View>
-          <Text style={styles.noSchedText}>You do not currently have any scheduled rides.</Text>
+          <Text style={styles.noSchedText}>
+            You do not currently have any scheduled rides.
+          </Text>
         </View>
-      )
+      );
     } else {
       return (
         <View style={{ flex: 2 }}>
@@ -249,7 +248,7 @@ export default class MainView extends Component<Props> {
             data={scheduledRides.slice(0, 3)}
             keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+              { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
             renderItem={({ item }) => this.upcomingScheduledRide(item)}
           />
@@ -264,12 +263,12 @@ export default class MainView extends Component<Props> {
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state,
+      item.start_location.state
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state,
+      item.end_location.state
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
@@ -288,7 +287,7 @@ export default class MainView extends Component<Props> {
             endLocation,
             date,
             name,
-            reason,
+            reason
           });
         }}
         name={name}
@@ -299,23 +298,23 @@ export default class MainView extends Component<Props> {
     );
   };
 
-  withinMyAvail = (ride) => {
+  withinMyAvail = ride => {
     let myAvailRides = [];
     let availabilities = this.state.availabilities;
 
-    ride.map((eachRide) => {
-      availabilities.map((checkEach) => {
+    ride.map(eachRide => {
+      availabilities.map(checkEach => {
         let start = checkEach.startTime;
         let end = checkEach.endTime;
         if (eachRide.pick_up_time >= start && eachRide.pick_up_time <= end) {
-          myAvailRides.push(eachRide)
+          myAvailRides.push(eachRide);
           // myAvailRides.push(ride)
           // console.log("did the array get the result? ", myAvailRides)
         }
-      })
-    })
-    return myAvailRides
-  }
+      });
+    });
+    return myAvailRides;
+  };
 
   filteredRide = item => {
     const { token } = this.state;
@@ -323,12 +322,12 @@ export default class MainView extends Component<Props> {
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state,
+      item.start_location.state
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state,
+      item.end_location.state
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
@@ -347,7 +346,7 @@ export default class MainView extends Component<Props> {
             endLocation,
             date,
             name,
-            reason,
+            reason
           });
         }}
         name={name}
@@ -379,7 +378,7 @@ export default class MainView extends Component<Props> {
           data={approvedRides}
           keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
           onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
+            { nativeEvent: { contentOffset: { x: this.scrollX } } }
           ])}
           renderItem={({ item }) => this.requestedRide(item)}
         />
@@ -389,24 +388,33 @@ export default class MainView extends Component<Props> {
 
   renderFilteredRides = () => {
     const { withinAvailRides } = this.state;
-    console.log("whats in the withinAvailRides state? ", withinAvailRides)
+    console.log('whats in the withinAvailRides state? ', withinAvailRides);
     if (withinAvailRides.length === 0) {
       return (
         <View>
-          <Text style={styles.noAvailText}>There currently are no requested rides within your availability.</Text>
-            <TouchableOpacity style={styles.buttonBar} onPress={this.showAllRides}>
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.buttonText}>{this.state.toggleButtonText}</Text>
-              </View>
-            </TouchableOpacity>
+          <Text style={styles.noAvailText}>
+            There currently are no requested rides within your availability.
+          </Text>
+          <TouchableOpacity
+            style={styles.buttonBar}
+            onPress={this.showAllRides}
+          >
+            <View style={styles.buttonWrapper}>
+              <Text style={styles.buttonText}>
+                {this.state.toggleButtonText}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
-      )
+      );
     } else {
       return (
         <View>
           <View style={styles.titlesContainer}>
             <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>Requested rides within my availability:</Text>
+              <Text style={styles.subTitle}>
+                Requested rides within my availability:
+              </Text>
             </View>
           </View>
           <View style={styles.seperator} />
@@ -421,15 +429,20 @@ export default class MainView extends Component<Props> {
             data={withinAvailRides}
             keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
+              { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
             renderItem={({ item }) => this.filteredRide(item)}
           />
-            <TouchableOpacity style={styles.buttonBar} onPress={this.showAllRides}>
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.buttonText}>{this.state.toggleButtonText}</Text>
-              </View>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonBar}
+            onPress={this.showAllRides}
+          >
+            <View style={styles.buttonWrapper}>
+              <Text style={styles.buttonText}>
+                {this.state.toggleButtonText}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -439,15 +452,15 @@ export default class MainView extends Component<Props> {
     if (this.state.showAllRides === false) {
       this.setState({
         showAllRides: true,
-        toggleButtonText: "Hide All Requested Rides"
-      })
+        toggleButtonText: 'Hide All Requested Rides'
+      });
     } else {
       this.setState({
         showAllRides: false,
-        toggleButtonText: "Show All Requested Rides"
-      })
+        toggleButtonText: 'Show All Requested Rides'
+      });
     }
-  }
+  };
 
   navigateToSettings = () => {
     const { navigation } = this.props;
@@ -455,7 +468,7 @@ export default class MainView extends Component<Props> {
   };
   navigateToCalendar = () => {
     const { navigation } = this.props;
-    navigation.navigate('AgendaView');
+    navigation.navigate('AgendaView', { navigation });
   };
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
@@ -464,7 +477,7 @@ export default class MainView extends Component<Props> {
     const { token } = this.state;
     // console.log('in navigate to driver', scheduledRides);
     // console.log('navigate token', token);
-    navigation.navigate('DriverScheduleView', { scheduledRides , token});
+    navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
   render() {
     const { isLoading } = this.state;
@@ -476,16 +489,16 @@ export default class MainView extends Component<Props> {
         {isLoading ? (
           this.renderLoader()
         ) : (
-            <ScrollView
-              scrollsToTop
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
-            >
-              {this.renderUpcomingRides()}
-              {this.renderFilteredRides()}
-              {this.state.showAllRides && this.renderRequestedRides()}
-            </ScrollView>
-          )}
+          <ScrollView
+            scrollsToTop
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
+          >
+            {this.renderUpcomingRides()}
+            {this.renderFilteredRides()}
+            {this.state.showAllRides && this.renderRequestedRides()}
+          </ScrollView>
+        )}
         <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
         </View>
