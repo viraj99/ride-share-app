@@ -570,7 +570,12 @@ class RegisterVehicleForm extends React.Component {
     const isAdding = this.props.navigation.state.params.isAdding;
     console.log('isEditiing', isEditing);
     console.log('isAdding', isAdding);
-    console.log('DATE PICKED?', moment(insurance_start).format('MMMM D, YYYY'));
+    console.log(
+      'DATE PICKED?',
+      moment(this.state.editingEntries.vehicle.insurance_start).format(
+        'MMMM D, YYYY'
+      )
+    );
     return (
       <View>
         {(isEditing || isAdding) && (
