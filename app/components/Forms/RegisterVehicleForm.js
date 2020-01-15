@@ -8,7 +8,6 @@ import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { RegisterHeader } from '../../components/Header';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props) {
@@ -93,10 +92,6 @@ class RegisterVehicleForm extends React.Component {
 
     return (
       <ScrollView>
-        <RegisterHeader
-          onPress={() => navigation.navigate('Register')}
-          iconColor="#475c67"
-        />
         <Block middle>
           <KeyboardAwareScrollView>
             <Block style={styles.scrollContainer}>

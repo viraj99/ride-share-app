@@ -6,7 +6,6 @@ import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import { RegisterHeader } from '../../components/Header';
 
 class RegisterDriverForm extends React.Component {
   constructor(props) {
@@ -112,10 +111,6 @@ class RegisterDriverForm extends React.Component {
 
     return (
       <ScrollView>
-        <RegisterHeader
-          onPress={() => navigation.navigate('Welcome')}
-          iconColor="#475c67"
-        />
         <Block middle>
           <KeyboardAwareScrollView>
             <Block style={styles.scrollContainer}>
