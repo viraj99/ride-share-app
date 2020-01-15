@@ -13,6 +13,9 @@ class RegisterVehicleForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      editedEntries: {
+        vehicle: {}
+      },
       picker1: false,
       picker2: false,
       car_make: '',
@@ -31,6 +34,9 @@ class RegisterVehicleForm extends React.Component {
     if (this.props.navigation.state.params.isEditing) {
       const vehicle = this.props.navigation.state.params.vehicle.item;
       this.setState({
+        editedEntries: {
+          vehicle: {}
+        },
         car_make: vehicle.car_make,
         car_model: vehicle.car_model,
         car_year: vehicle.car_year,
@@ -50,6 +56,7 @@ class RegisterVehicleForm extends React.Component {
     this.setState({
       show: Platform.OS === 'ios' ? true : false,
       insurance_start: date,
+      insurStartDate: date,
       picker1: false
     });
     this.hidePicker1();
@@ -60,6 +67,7 @@ class RegisterVehicleForm extends React.Component {
     date = date || this.state.insurance_stop;
     this.setState({
       insurance_stop: date,
+      insurEndDate: date,
       picker2: false
     });
     this.hidePicker2();
@@ -86,18 +94,62 @@ class RegisterVehicleForm extends React.Component {
   handleUserSubmit = async userEntries => {
     console.log('testing in vehicle form: ', this.props.navigation);
     let token = await AsyncStorage.getItem('token');
-    //parse just the token from the token object in async storage
     token = JSON.parse(token);
-    //use API file, createVehicle fx to send user inputs to database, must pass token.token so only the token value itself and not the key:value pair of token is passed to api call for creating vehicle
-    API.createVehicle(userEntries, token.token)
-      .then(this.props.navigation.navigate('RegisterAvailability'))
-      //if error performing API fetch for posting driver, show error
-      .catch(error => {
-        console.warn(
-          'There has been a problem with your operation: ' + error.message
-        );
-        throw error;
-      });
+    if (this.props.navigation.state.params.isEditing) {
+      console.log('inside the if statement of isEditing');
+      let id = this.props.navigation.state.params.vehicle.item.id;
+      console.log('v id of if', id);
+      let edited = this.state.editedEntries;
+      edited.vehicle.car_make = this.state.car_make;
+      edited.vehicle.car_model = this.state.car_model;
+      edited.vehicle.car_year = this.state.car_year;
+      edited.vehicle.car_color = this.state.car_color;
+      edited.vehicle.car_plate = this.state.car_plate;
+      edited.vehicle.seat_belt_num = this.state.seat_belt_num;
+      edited.vehicle.insurance_provider = this.state.insurance_provider;
+      edited.vehicle.insurance_start = this.state.insurance_start;
+      edited.vehicle.insurance_stop = this.state.insurance_stop;
+      console.log('this is b4 Api entries', edited);
+      API.updateSettingsVehicle(id, edited, token.token)
+        .then(() => {
+          this.props.navigation.navigate('Settings');
+          console.log('worked SO HARD');
+        })
+        .catch(err => {
+          console.log('FAILED HORRIBLY');
+        });
+    } else if (this.props.navigation.state.params.isAdding) {
+      console.log('inside if of is isAdding');
+      console.log('userinput', userEntries);
+      // let user = this.state.userEntries;
+      // user.vehicle.car_make = this.state.car_make;
+      // user.vehicle.car_model = this.state.car_model;
+      // user.vehicle.car_year = this.state.car_year;
+      // user.vehicle.car_color = this.state.car_color;
+      // user.vehicle.car_plate = this.state.car_plate;
+      // user.vehicle.seat_belt_num = this.state.seat_belt_num;
+      // user.vehicle.insurance_provider = this.state.insurance_provider;
+      // user.vehicle.insurance_start = this.state.insurance_start;
+      // user.vehicle.insurance_stop = this.state.insurance_stop;
+      // console.log('user', user);
+      API.createVehicle(userEntries, token.token)
+        .then(this.props.navigation.navigate('Settings'))
+        .catch(error => {
+          console.warn(
+            'There has been a problem with your operation: ' + error.message
+          );
+          throw error;
+        });
+    } else {
+      API.createVehicle(userEntries, token.token)
+        .then(this.props.navigation.navigate('RegisterAvailability'))
+        .catch(error => {
+          console.warn(
+            'There has been a problem with your operation: ' + error.message
+          );
+          throw error;
+        });
+    }
   };
 
   render() {
@@ -108,13 +160,12 @@ class RegisterVehicleForm extends React.Component {
         car_year: parseInt(this.state.car_year),
         car_color: this.state.car_color,
         car_plate: this.state.car_plate,
-        seat_belt_num: this.state.item4,
+        seat_belt_num: this.state.seat_belt_num,
         insurance_provider: this.state.insurance_provider,
         insurance_start: moment(this.state.insurStartDate).format('YYYY-MM-DD'),
         insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD')
       }
     };
-
     const {
       car_make,
       car_model,
@@ -195,7 +246,7 @@ class RegisterVehicleForm extends React.Component {
 
               <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
               <TextInput
-                onChangeText={text => this.setState({ item4: text })}
+                onChangeText={text => this.setState({ seat_belt_num: text })}
                 placeholder="#"
                 ref={input => {
                   this.carBelts = input;
@@ -272,14 +323,21 @@ class RegisterVehicleForm extends React.Component {
               />
               {picker1 && (
                 <DateTimePicker
-                  value={new Date(insurance_start)}
+                  value={new Date() || new Date(insurance_start)}
                   onChange={this.setStartDate}
                 />
               )}
-              <Text style={styles.displaySelection}>
-                Selected date:
-                {moment(insurance_start).format('MMMM D, YYYY')}
-              </Text>
+              {this.props.navigation.state.params.isEditing ? (
+                <Text style={styles.displaySelection}>
+                  Selected date:
+                  {moment(insurance_start).format('MMMM D, YYYY')}
+                </Text>
+              ) : (
+                <Text style={styles.displaySelection}>
+                  Selected date:{' '}
+                  {moment(this.state.insurStartDate).format('MMMM D, YYYY')}
+                </Text>
+              )}
 
               <Text></Text>
 
@@ -293,22 +351,27 @@ class RegisterVehicleForm extends React.Component {
               />
               {picker2 && (
                 <DateTimePicker
-                  value={new Date(insurance_stop)}
+                  value={new Date() || new Date(insurance_stop)}
                   onChange={this.setEndDate}
                 />
               )}
-              <Text style={styles.displaySelection}>
-                Selected date:
-                {moment(insurance_stop).format('MMMM D, YYYY')}
-              </Text>
+              {this.props.navigation.state.params.isEditing ? (
+                <Text style={styles.displaySelection}>
+                  Selected date:
+                  {moment(insurance_stop).format('MMMM D, YYYY')}
+                </Text>
+              ) : (
+                <Text style={styles.displaySelection}>
+                  Selected date:{' '}
+                  {moment(this.state.insurEndDate).format('MMMM D, YYYY')}
+                </Text>
+              )}
 
               <Text></Text>
               <Block style={styles.footer}>
                 <CalendarButton
                   title="Continue"
-                  onPress={() =>
-                    this.handleUserSubmit(userEntries, this.props.navigation)
-                  }
+                  onPress={() => this.handleUserSubmit(userEntries)}
                 />
               </Block>
             </KeyboardAwareScrollView>
