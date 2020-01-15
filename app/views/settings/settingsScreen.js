@@ -112,16 +112,10 @@ class Settings extends Component {
         is_active: this.state.active,
         allowEmailNotification: this.state.allowEmailNotification
       };
-      // const vehicleData ={
-      //   car_make: this.state.make,
-      //   car_model: this.state.model,
-      //   car_color: this.state.color,
-      //   insurance: this.state.insurance,}
       AsyncStorage.getItem('token', (err, result) => {
         const obj = JSON.parse(result);
         const { token } = obj;
-        // console.log('data',data);
-        // console.log('token', token);
+
         API.updateSettingsDriver(driverData, token)
           .then(result => {
             // const driverRes = (result);
@@ -155,15 +149,6 @@ class Settings extends Component {
       null;
     }
   }
-  //   AsyncStorage.getItem('token', (err, result) => {
-  //     const obj = JSON.parse(result);
-  //     const {token} = obj;
-  //     API.updateSettingsInfo(data, token);
-  //     console.log('data in get item:', data);
-  //   });
-  // } else {
-  //   console.log('Error Fail in API.updatesettings');
-  // }
 
   handleFirstName = text => {
     this.setState({
@@ -240,7 +225,6 @@ class Settings extends Component {
       const obj = JSON.parse(result);
       const tokenValue = obj.token;
       this._isMounted = true;
-      // console.log('object in settings:',obj);
 
       API.getSettingInfo(tokenValue)
         .then(res => {
@@ -255,14 +239,6 @@ class Settings extends Component {
               radius: JSON.stringify(settingInfo.driver.radius),
               active: settingInfo.driver.is_active,
               organization_id: settingInfo.driver.organization_id
-
-              // API.getVehicle(tokenValue)
-              // .then(res => {
-              // console.log('response in getVehicle', res);
-              // make: res.vehicle.car_make,
-              // model: res.vehicle.car_model,
-              // color: res.vehicle.car_color,
-              // insurance: res.vehicle.insurance_provider,
             });
           }
           API.getVehicle(tokenValue).then(response => {
@@ -282,36 +258,6 @@ class Settings extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
-  // Item = (item) => {
-  //     console.log('inside the item', item)
-  //     return(
-  //       <View style={styles.item}>
-  //         <Text style={styles.title}>{item.item.car_make}</Text>
-  //         <Text style={styles.title}>{item.item.car_model}</Text>
-  //         <Text style={styles.title}>{item.item.car_year}</Text>
-  //       </View>
-  //     );
-  //   }
-  //   renderRequestedVehicles = (item) => {
-  //     console.log('this is inside requested vehicles', this.state.vehicles);
-  //     console.log('item',item)
-  //     return (
-  //       <Veiw>
-  //       {this.state.vehicles &&
-  //             <FlatList
-  //             data={this.state.vehicles}
-  //             renderItem={({item}) => <Item make={item.make} model={item.model} year={item.year}/>}
-  //             keyExtractor={item => item.id}/> }
-  //       </Veiw>
-  //     )
-  //  }
-  // addVehicle = () => {
-  //   onPress: {() => {
-  //     navigation.navigate('VehicleSettings', {
-  //       vehicle,
-  //       isEditing: true,
-  //     });
-  //   }}
 
   deleteVehicle = id => {
     Alert.alert('Delete this Vehicle?', '', [
@@ -338,7 +284,6 @@ class Settings extends Component {
               console.log('updatedVehicleArray', updatedVehicleArray);
               console.log('result of delete Api', result);
               console.log('worked');
-              //forceUpdate(this.renderVehicles());
             })
             .catch(err => {
               console.log('DIDNT Work');
@@ -348,41 +293,10 @@ class Settings extends Component {
     ]);
   };
 
-  // updateVehicleState = () => {
-  //   this.setState({
-  //     vehicles: this.state.vehicle,
-  //   })
-  //   // console.log('inside update vehicle', this.state.vehicles )
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if(prevState.vehicles !== this.state.vheicles){
-  //     // console.log('Something Changed');
-  //     // this.updateVehicleState();
-  //   }
-  // }
-  // onPressDelete = () => {
-  // //  AsyncStorage.getItem('token', (err, result)  => {
-  // //   const obj = JSON.parse(result);
-  // //   const tokenValue = obj.token;
-  // //   console.log('tokenValue', tokenValue)
-  // //     API.deleteVehicle(id, tokenValue)
-  // //     .then((result) => {
-  // //       console.log('it worked')
-  // //     }).catch((err) => {
-  // //       console.log(err,'did NOT Work')
-  // //     });
-  // //   }
-  // }
-
   Vehicles = item => {
     const { token } = this.state;
     const { navigation } = this.props;
-    // console.log('token', token);
-    // console.log('navigation',navigation);
-    // console.log('item in requested vehicles', item)
     const vehicle = item;
-
     const make = item.item.car_make;
     const model = item.item.car_model;
     const vehicleId = item.item.id;
@@ -420,21 +334,6 @@ class Settings extends Component {
             renderItem={item => this.Vehicles(item)}
             keyExtractor={item => `${item.id}`}
           />
-          {/* <FlatList
-            //  pagingEnabled
-            //  scrollEnabled
-            //  showsHorizontalScrollIndicator={false}
-            //  decelerationRate={0}
-            //  scrollEventThrottle={16}
-            //  snapToAlignment="center"
-            //  style={{ overflow: 'visible' }}
-                data={vehicles}
-                keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
-            //  onScroll={Animated.event([
-            //    { nativeEvent: { contentOffset: { x: this.scrollX } } },
-            //  ])}
-             renderItem={({ item }) => this.Vehicles(item)}
-          /> */}
         </View>
       );
     } else {
@@ -442,87 +341,15 @@ class Settings extends Component {
       return null;
     }
   };
-  // renderLoader = () => {
-  //   // const {isLoading} =this.state;
-  //   // if(!isLoading){
-  //     return null;
-  //   }
-  //   return(
-  //     <View style={styles.loader}>
-  //       <ActivityIndicator animating size='large'/>
-  //     </View>
-  //   )
-  // }
-  // function Item({model, make, year}) {
-  //   return (
-  //     <View>
-  //       <Text>{model}</Text>
-  //       <Text>{make}</Text>
-  //       <Text>{year}</Text>
-  //     </View>
-  //   )
-  // }
-  // renderRequestedVehicles = (Item) => {
-  //   const {vehicles} = this.state;
-
-  //   return(
-  //     <View>
-  //        {vehicles &&<FlatList
-  //       data={this.state.vehicles}
-  //       renderItem={({item}) => <Item make={item.car_make} model={item.car_model} year={item.car_year}/>}
-  //       keyExtractor={item => item.id}/>}
-  //     </View>
-  //   );
-  // }
-
-  //     // <View>
-  //     //   <View styles={styles.titlesContainer}>
-  //     //     <View style={{alignItems: 'flex-start'}}>
-  //     //       <Text style={styles.subTitle}>Vehicles</Text>
-  //     //     </View>
-  //     //   </View>
-  //     //   <FlatList
-  //     //     pagingEnabled
-  //     //     scrollEnabled
-  //     //     showsHorizontalScrollIndicator={false}
-  //     //     decelerationRate={0}
-  //     //     scrollEventThrottle={16}
-  //     //     snapToAlignment='center'
-  //     //     style={{overflow: 'visible'}}
-  //     //     data={vehicles}
-  //     //     keyExtractor={(item, index)=> `${item.id}`}
-  //     //     onScroll={Animated.event([
-  //     //       {nativeEvent: {contentOffset: {x: this.scrollX}}}
-  //     //     ])}
-  //     //     renderItem={({item}) =>this.requestedVehicles(item)}/>
-  //     // </View>
-  //       <List>
-
-  //       </List>
-  //   )
-  // };
-  // navigateToVehicles = () => {
-  //   const {vehicles} = this.state;
-  //   const {navigation} = this.props;
-  //   const {token} = this.state;
-  //   navigation.navigate('VehiclesView',{vehicles, token})
-  // }
-  // navigateToVehicleSettings = () => {
-  //   const {navigation} = this.props;
-  //   const {ehicles} = this.state;
-  //   navigation.navigate('', {Vehicles})
-  // }
 
   render() {
     console.log('in render this.state.vehicles', this.state.vehicles);
-    // console.log('Vehicle data id', this.state.vehicles.vehicle.id);
     const { token } = this.state;
     console.log('in render this.state = token', token);
     const { navigation } = this.props;
     return (
       <ScrollView>
         <View style={styles.container}>
-          {/* <NavigationEvents onDidFocus={() => this.updateVehicleState()} /> */}
           <SettingHeader onPress={this.handleBackButton} />
           <View style={styles.settingSection}>
             <View style={styles.section}>
@@ -622,7 +449,7 @@ class Settings extends Component {
                 </View>
               </View>
               <View style={styles.inputContainer}>
-                <View>
+                {/* <View>
                   <Text style={styles.inputTitle}>Email</Text>
                   <Text style={styles.notificationDescription}>
                     Turn off/on email notifications
@@ -649,7 +476,7 @@ class Settings extends Component {
                     onValueChange={this.handlePhoneNotification}
                     value={this.state.allowPhoneNotification}
                   />
-                </View>
+                </View> */}
               </View>
             </View>
             <View style={styles.buttonSection}>
@@ -676,95 +503,8 @@ class Settings extends Component {
                 }}
                 token={token}
               />
-              {/* <View style={styles.container}>
-                  {console.log('about to hit the FlatList')}
-                  {this.state.vehicles ?
-                  
-                     <FlatList
-                      data={this.state.vehicles}
-                      //extraData={this.state}
-                      renderItem={(item) => this.Item(item)}
-                      keyExtractor={item=> `${item.id}`}/> : null }
-                 </View> */}
-              {/* <List>
-                    <FlatList
-                      data ={this.state.vehicles}
-                      renderItem={({item}) => {
-                        console.log(object);
-                        return (<ListItem
-                          roundAvatar
-                          title={`${item.car_make}`}
-                          subtitle={`${item.car_model}&&${item.car_year}`}
-                        />)
-                      }}
-                    />
-                  </List> */}
-              {/* {isLoading ? ( */}
-              {/* <View>
-                  {this.state.vehicles && 
-                  <FlatList
-                  data={this.state.vehicles}
-                  renderItem={({item}) => <Item make={item.make} model={item.model} year={item.year}/>}
-                  keyExtractor={item => item.id}/> }
-                </View> */}
             </View>
-            {this.state.vehicles && (
-              <View
-              // scrollsToTop
-              // showsVerticalScrollIndicator={false}
-              // contentContainerStyle={{paddingBottom:variables.sizes.padding}}
-              >
-                {this.renderVehicles()}
-              </View>
-            )}
-            {/* <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Make</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Ford"
-                    value={this.state.make}
-                    editable={this.state.editable}
-                    onChangeText={this.handleMake}
-                  />
-                </View>
-              </View> */}
-            {/* <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Model</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Civic"
-                    value={this.state.model}
-                    editable={this.state.editable}
-                    onChangeText={this.handleModel}
-                  />
-                </View>
-              </View> */}
-            {/* <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Color</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Blue"
-                    value={this.state.color}
-                    editable={this.state.editable}
-                    onChangeText={this.handleColor} 
-                  />
-                </View>
-              </View> */}
-            {/* <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Insurance</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder='Alflac'
-                    value={this.state.insurance}
-                    editable={this.state.editable}
-                    onChangeText={this.handleInsurance}
-                    />
-                </View>
-              </View> */}
+            {this.state.vehicles && <View>{this.renderVehicles()}</View>}
           </View>
 
           <View style={styles.buttonSection}>
