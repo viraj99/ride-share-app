@@ -38,6 +38,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      // is_mounting: false,
       editable: false,
       active: true,
       buttonTitle: false,
@@ -342,6 +343,12 @@ class Settings extends Component {
     }
   };
 
+  // componentWillUnmount() {
+      // this.setState({
+        // is_mounting: false,
+      // })
+  // }
+
   render() {
     console.log('in render this.state.vehicles', this.state.vehicles);
     const { token } = this.state;
@@ -518,6 +525,7 @@ class Settings extends Component {
         </View>
       </ScrollView>
     );
+    // }
   }
 }
 

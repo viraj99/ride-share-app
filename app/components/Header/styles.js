@@ -10,6 +10,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     height: (Platform.OS === 'ios' ? 80 : 56) + getStatusBarHeight(),
   },
+  close: {
+    paddingTop: 20
+  },
   centerContainer: {
     flex: 3,
     alignItems: 'center',

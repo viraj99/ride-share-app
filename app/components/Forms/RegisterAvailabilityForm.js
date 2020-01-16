@@ -27,7 +27,7 @@ class RegisterAvailabilityForm extends React.Component {
   setStartDate = (event, date) => {
     this.setState({
       startDate: date,
-      stDatePicker: false,
+      // stDatePicker: false,
     })
     this.hideStDatePicker();
   }
@@ -35,7 +35,7 @@ class RegisterAvailabilityForm extends React.Component {
   setStartTime = (event, time) => {
     this.setState({
       startTime: time,
-      stTimePicker: false,
+      // stTimePicker: false,
     })
     this.hideStTimePicker();
   }
@@ -43,7 +43,7 @@ class RegisterAvailabilityForm extends React.Component {
   setEndTime = (event, time) => {
     this.setState({
       endTime: time,
-      endTimePicker: false,
+      // endTimePicker: false,
     })
     this.hideEndTimePicker();
   }
@@ -51,7 +51,7 @@ class RegisterAvailabilityForm extends React.Component {
   setEndDate = (event, date) => {
     this.setState({
       endDate: date,
-      endDatePicker: false,
+      // endDatePicker: false,
     })
     this.hideEndDatePicker();
   }
@@ -163,7 +163,7 @@ class RegisterAvailabilityForm extends React.Component {
                 onChange={this.setStartDate}
               />}
               
-              <Text style={styles.displaySelection}>Selected date: {moment(this.state.startDate).format("YYYY-MM-DD")}</Text>
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.startDate).format("MMMM D, YYYY")}</Text>
 
               <Text></Text>
 
@@ -180,7 +180,7 @@ class RegisterAvailabilityForm extends React.Component {
                 onChange={this.setStartTime}
               />}
 
-              <Text style={styles.displaySelection}>Selected time: {moment(this.state.startTime).format("HH:mm")}</Text>
+              <Text style={styles.displaySelection}>Selected time: {moment(this.state.startTime).format("h:mm A")}</Text>
 
               <Text></Text>
 
@@ -196,7 +196,7 @@ class RegisterAvailabilityForm extends React.Component {
                 display="spinner"
                 onChange={this.setEndTime}
               />}
-              <Text style={styles.displaySelection}>Selected time: {moment(this.state.endTime).format("HH:mm")}</Text>
+              <Text style={styles.displaySelection}>Selected time: {moment(this.state.endTime).format("h:mm  A")}</Text>
 
               <Text></Text>
 
@@ -231,7 +231,7 @@ class RegisterAvailabilityForm extends React.Component {
                 display="default"
                 onChange={this.setEndDate}
               />}
-              <Text style={styles.displaySelection}>Selected date: {moment(this.state.endDate).format("YYYY-MM-DD")}</Text>
+              <Text style={styles.displaySelection}>Selected date: {moment(this.state.endDate).format("MMMM D, YYYY")}</Text>
 
                 <Text></Text>
               </View>}

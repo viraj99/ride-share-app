@@ -1,53 +1,8 @@
-
-// Mary Alice 10:56 AM
-// Untitled 
-import React, {Component} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Container from '../../components/Container';
-import AddAvailability from '../../components/Forms/AddAvailability';
-import styles from '../AvailabilityView/styles'
-class AvailabilityView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errors: [],
-    };
-  }
-  backButton = () => {
-    const { navigation } = this.props;
-    navigation.navigate('AgendaView');
-  }
-  render() {    
-    const {navigation} = this.props;
-    return (
-      <Container>
-        <View
-          style={[styles.headerContainer]}>
-          <View style={styles.leftContainer}>
-            <TouchableOpacity onPress={this.backButton}>
-              <Icon color={`gray`} name="close" size={30} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.rightContainer}>
-            <Text style={styles.title}>Availability Page</Text>
-          </View>
-        </View> 
-        <AddAvailability navigation={this.props.navigation} />
-      </Container>
-    );
-  }
-}
-export default AvailabilityView;
-Collapse
-
-
-
-new messages
-Untitled 
 import {StyleSheet, Dimensions, Platform} from 'react-native';
 // import {getBottomSpace} from '../Header/StatusBar';
+
 const {height, width} = Dimensions.get('window');
+
 export default StyleSheet.create({
   title: {
     paddingLeft: 20,

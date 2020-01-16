@@ -43,7 +43,7 @@ class RegisterDriverForm extends React.Component {
   };
 
   handleUserSubmit = () => {
-    let userEntries = {
+    let userData = {
       "driver": {
         "organization_id": parseInt(this.state.orgNum),
         "email": this.state.email,
@@ -55,15 +55,11 @@ class RegisterDriverForm extends React.Component {
         "radius": parseInt(this.state.radius),
       }
     }
-
-    console.log("WHATS THE PROBLEM???", userEntries)
     //use API file, createDriver fx to send user inputs to database
-    API.createDriver(userEntries)
+    API.createDriver(userData)
     .then((res) => {
-        console.log("testing something here: ", res.json())
-        this.autoLogin(userEntries)
-      }
-    )
+        this.autoLogin(userData)
+    })
     //if error performing API fetch for posting driver, show error
     .catch(error => {
       console.warn('There has been a problem with your operation: ' + error.message);
@@ -252,7 +248,7 @@ class RegisterDriverForm extends React.Component {
               <CalendarButton
                 title="Continue"
                 onPress={
-                  //pass the data (user inputs), nav info for redirect, driver radius, driver's org_id to handleUserInput fx above
+                  //pass the data (user inputs including orgID and radius), nav info for redirect to handleUserInput fx above
                   this.handleUserSubmit}
               />
             </Block>
