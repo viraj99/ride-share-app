@@ -40,6 +40,9 @@ const MainViewStack = createStackNavigator(
         header: () => null
       }
     },
+    Settings: {
+      screen: Settings
+    },
     //////////
     // VehicleSettings: {
     //   screen: VehicleSettings,
