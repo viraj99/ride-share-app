@@ -54,8 +54,7 @@ const MainViewStack = createStackNavigator(
         headerStyle: {
           backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-        headerLeft: null
+        headerTintColor: '#fff'
       }
     },
     DriverScheduleView: {
@@ -65,8 +64,7 @@ const MainViewStack = createStackNavigator(
         headerStyle: {
           backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-        headerLeft: null
+        headerTintColor: '#fff'
       }
     },
     RequestedRidesDetails: {
@@ -76,8 +74,7 @@ const MainViewStack = createStackNavigator(
         headerStyle: {
           backgroundColor: '#1EAA70'
         },
-        headerTintColor: '#fff',
-        headerLeft: null
+        headerTintColor: '#fff'
       }
     }
   },
@@ -104,21 +101,24 @@ const RegisterStack = createStackNavigator(
       screen: Register,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6'
+        headerTintColor: '#C5CCD6',
+        headerLeft: null
       }
     },
     RegisterVehicle: {
       screen: RegisterVehicle,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6'
+        headerTintColor: '#C5CCD6',
+        headerLeft: null
       }
     },
     RegisterAvailability: {
       screen: RegisterAvailability,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6'
+        headerTintColor: '#C5CCD6',
+        headerLeft: null
       }
     }
   },

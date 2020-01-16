@@ -118,30 +118,7 @@ class Settings extends Component {
         const { token } = obj;
 
         API.updateSettingsDriver(driverData, token)
-          .then(result => {
-            // const driverRes = (result);
-            // console.log('driverRes', driverRes);
-            // console.log('driverData ', driverData);
-            // API.updateSettingsVehicle(vehicleData, token)
-            // .then(res => {
-            //   console.log('inside updateSettings');
-            // const vehicleRes = (res);
-            // console.log('vehicle response', vehicleRes);
-            // console.log('vehicle Data', vehicleData);
-            //   this.setState({
-            //     organization_id: driverRes.organization_id,
-            //     first_name: driverRes.firstName,
-            //     last_name: driverRes.lastName,
-            //     email: driverRes.email,
-            //     phone: driverRes.phoneNumber,
-            //     radius: driverRes.radius,
-            //     is_active: driverRes.active,
-            // })
-            //})
-            // this.setState({
-            //   data,
-            // })
-          })
+          .then(result => {})
           .catch(err => {
             console.log(err);
           });
@@ -344,9 +321,9 @@ class Settings extends Component {
   };
 
   // componentWillUnmount() {
-      // this.setState({
-        // is_mounting: false,
-      // })
+  // this.setState({
+  // is_mounting: false,
+  // })
   // }
 
   render() {
@@ -358,7 +335,7 @@ class Settings extends Component {
       <ScrollView>
         <View style={styles.container}>
           <SettingHeader onPress={this.handleBackButton} />
-          <View style={styles.settingSection}>
+          <View style={styles.settingSection} stickyHeaderIndices={[0]}>
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Account</Text>
