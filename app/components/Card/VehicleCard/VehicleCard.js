@@ -17,6 +17,7 @@ const VehicleCard = ({
   <View style={styles.availListItem}>
     <View style={styles.leftList}>
       <EditButton
+        style={styles.leftList}
         title={'Edit'}
         onPress={onPress}
         vehicleId={vehicleId}
@@ -32,6 +33,7 @@ const VehicleCard = ({
       <Text style={styles.flatListText}> {model}</Text>
       <View style={styles.rightList}>
         <DeleteButton
+          style={styles.rightList}
           title={'Delete'}
           deleteVehicle={deleteVehicle}
           vehicleId={vehicleId}

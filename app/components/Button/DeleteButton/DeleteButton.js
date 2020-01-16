@@ -15,7 +15,7 @@ const DeleteButton = ({ title, deleteVehicle, vehicleId, token }) => (
         color="#ff8262"
         name="delete"
         size={30}
-        // style={{alignSelf: 'center'}}
+        // style={{ alignSelf: 'flex-start' }}
       />
       {/* </View> */}
     </TouchableOpacity>
