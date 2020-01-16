@@ -28,14 +28,17 @@ const MainViewStack = createStackNavigator(
         header: () => null
       }
     },
+    AgendaView: {
+      screen: AgendaView,
+      navigationOptions: {
+        header: () => null
+      }
+    },
     AvailabilityView: {
       screen: AvailabilityView,
       navigationOptions: {
         header: () => null
       }
-    },
-    Settings: {
-      screen: Settings
     },
     //////////
     // VehicleSettings: {

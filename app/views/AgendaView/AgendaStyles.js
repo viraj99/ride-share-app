@@ -3,6 +3,7 @@ import variables from '../../utils/variables';
 // import {getBottomSpace} from '../Header/StatusBar';
 
 const { height, width } = Dimensions.get('window');
+
 export default StyleSheet.create({
   title: {
     paddingLeft: 20,
