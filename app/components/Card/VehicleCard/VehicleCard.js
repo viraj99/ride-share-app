@@ -14,39 +14,31 @@ const VehicleCard = ({
   model,
   vehicleId
 }) => (
-  <View style={styles.availListItem}>
-    <View style={styles.leftList}>
-      <EditButton
-        style={styles.leftList}
-        title={'Edit'}
-        onPress={onPress}
-        vehicleId={vehicleId}
-        token={token}
-      />
-    </View>
+  <View style={styles.cardContainer}>
+    <EditButton
+      style={[{ justifyContent: 'flex-start' }]}
+      title={'Edit'}
+      onPress={onPress}
+      vehicleId={vehicleId}
+      token={token}
+    />
+    {/* <View style={styles.bottomBorder}> */}
+    <Text style={styles.flatListText}>{make}</Text>
+    {/* </View> */}
+    {/* <View style={styles.bottomBorder}> */}
+    <Text style={styles.flatListText}> {model}</Text>
+    {/* </View> */}
+    {/* <View style={styles.bottomBorder}> */}
+    <Text style={styles.flatListText}>{year}</Text>
+    {/* </View> */}
 
-    <View style={styles.centerList}>
-      <Text style={styles.flatListText}>{year}</Text>
-
-      <Text style={styles.flatListText}>{make}</Text>
-
-      <Text style={styles.flatListText}> {model}</Text>
-      <View style={styles.rightList}>
-        <DeleteButton
-          style={styles.rightList}
-          title={'Delete'}
-          deleteVehicle={deleteVehicle}
-          vehicleId={vehicleId}
-          token={token}
-        />
-      </View>
-    </View>
-
-    {/* <Block
-      row
-      center
-      style={{ marginTop: 16, marginLeft: 16, justifyContent: 'space-between' }}
-    /> */}
+    <DeleteButton
+      style={[{ paddingRight: 15 }]}
+      title={'Delete'}
+      deleteVehicle={deleteVehicle}
+      vehicleId={vehicleId}
+      token={token}
+    />
   </View>
 );
 //? Card.propTypes = {

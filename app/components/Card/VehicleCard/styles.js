@@ -14,9 +14,21 @@ export default StyleSheet.create({
     borderRadius: variables.sizes.border,
     backgroundColor: variables.cardDefaultBg,
     shadowColor: '#000',
-    shadowOpacity: 0.11,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 5, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 0.2,
+    elevation: 1,
+    marginLeft: 35,
+    marginRight: 35,
+
+    // marginTop: 10,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.11,
+    // shadowOffset: { width: 0, height: 2 },
     shadowRadius: 13,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     elevation: Platform.OS === 'ios' ? 0 : 5
   },
   name: {
@@ -33,37 +45,14 @@ export default StyleSheet.create({
     color: '#BDBFC7',
     fontWeight: Platform.OS === 'ios' ? '500' : '400'
   },
-  availListItem: {
-    width: width - variables.sizes.padding * 2,
-    marginHorizontal: variables.sizes.margin,
-    marginVertical: 20,
-    marginBottom: variables.sizes.base,
-    paddingHorizontal: 10,
-    paddingVertical: variables.sizes.padding * 0.66,
-    borderRadius: variables.sizes.border,
-    backgroundColor: variables.cardDefaultBg,
-    shadowColor: '#000',
-    shadowOpacity: 0.11,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 13,
-    elevation: Platform.OS === 'ios' ? 0 : 5,
-    flex: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  leftList: {
-    marginRight: 10,
-    marginTop: 5
-  },
-  centerList: {
-    flex: 3,
-    justifyContent: 'space-between'
-  },
   flatListText: {
-    fontSize: 18,
-    paddingLeft: 5
+    fontSize: 20,
+    paddingLeft: 3
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#ff8262'
   },
-  rightList: {
-    marginTop: 5
+  bottomBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ff8262'
   }
 });

@@ -15,7 +15,7 @@ const EditButton = ({ title, onPress, editVehicle, vehicleId, token }) => (
       <Icon
         color="#ff8262"
         name="pencil"
-        size={30}
+        size={25}
         // style={{ alignSelf:  }}
       />
       {/* </View> */}

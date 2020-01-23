@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Animated,
-  SafeAreaView
+  Animated
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
@@ -246,7 +245,7 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={scheduledRides.slice(0, 3)}
-            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
@@ -376,7 +375,7 @@ export default class MainView extends Component<Props> {
           snapToAlignment="center"
           style={{ overflow: 'visible' }}
           data={approvedRides}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+          keyExtractor={item => `${item.id}`} // id is not showing up in response
           onScroll={Animated.event([
             { nativeEvent: { contentOffset: { x: this.scrollX } } }
           ])}
@@ -427,7 +426,7 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={withinAvailRides}
-            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}

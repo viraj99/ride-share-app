@@ -27,6 +27,7 @@ import { VehicleCard } from '../../components/Card';
 import Animated from 'react-native-reanimated';
 import variables from '../../utils/variables';
 import { DeleteButton } from '../../components/Button';
+import Container from '../../components/Container';
 
 class Settings extends Component {
   _isMounted = false;
@@ -288,7 +289,8 @@ class Settings extends Component {
           navigation.navigate('RegisterVehicle', {
             vehicle,
             isEditing: true,
-            isAdding: false
+            isAdding: false,
+            isCreating: false
           });
         }}
         token={token}
@@ -327,18 +329,18 @@ class Settings extends Component {
   // }
 
   render() {
-    console.log('in render this.state.vehicles', this.state.vehicles);
+    // console.log('in render this.state.vehicles', this.state.vehicles);
     const { token } = this.state;
-    console.log('in render this.state = token', token);
+    // console.log('in render this.state = token', token);
     const { navigation } = this.props;
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <SettingHeader onPress={this.handleBackButton} />
+      <View style={styles.container}>
+        <SettingHeader onPress={this.handleBackButton} />
+        <ScrollView>
           <View style={styles.settingSection} stickyHeaderIndices={[0]}>
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>Account</Text>
+                <Text style={styles.sectionTitle}>Driver Information</Text>
               </View>
               <View style={styles.inputContainer}>
                 <User name="user" size={30} color="#475c67" />
@@ -474,23 +476,33 @@ class Settings extends Component {
               </TouchableOpacity>
             </View>
           </View>
-
           <View style={styles.section}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitle}>Vehicles</Text>
-              <AddButton
-                onPress={() => {
-                  navigation.navigate('RegisterVehicle', {
-                    isAdding: true,
-                    isEditing: false
-                  });
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                  // padding: 5,
+                  // borderRadius: 5
                 }}
-                token={token}
-              />
+              >
+                <Text style={styles.sectionTitle}>Vehicles</Text>
+                <View style={{ justifyContent: 'center', marginRight: 15 }}>
+                  <AddButton
+                    onPress={() => {
+                      navigation.navigate('RegisterVehicle', {
+                        isAdding: true,
+                        isEditing: false,
+                        isCreating: false
+                      });
+                    }}
+                    token={token}
+                  />
+                </View>
+              </View>
             </View>
             {this.state.vehicles && <View>{this.renderVehicles()}</View>}
           </View>
-
           <View style={styles.buttonSection}>
             <TouchableOpacity
               style={styles.logoutButton}
@@ -499,10 +511,9 @@ class Settings extends Component {
               <Text style={styles.buttonTitle}>Log out</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
-    // }
   }
 }
 
