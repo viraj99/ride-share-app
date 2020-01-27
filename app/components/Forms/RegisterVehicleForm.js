@@ -145,9 +145,9 @@ class RegisterVehicleForm extends React.Component {
       API.createVehicle(userEntries, token.token)
         .then(() => {
           if (this.props.navigation.state.params.isAdding) {
-            this.props.navigation.navigate('RegisterAvailability');
-          } else {
             this.props.navigation.navigate('Settings');
+          } else {
+            this.props.navigation.navigate('RegisterAvailability');
           }
         })
         .catch(error => {

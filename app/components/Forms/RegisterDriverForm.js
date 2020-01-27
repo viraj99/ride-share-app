@@ -1,27 +1,27 @@
 import React from 'react';
-import {Text, ScrollView, Picker, TextInput} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Text, ScrollView, Picker, TextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
-import {CalendarButton} from '../Button';
+import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class RegisterDriverForm extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       orgs: [],
       orgNum: 1,
-      radius: 0,
+      radius: 0
     };
-  };
+  }
 
   componentDidMount() {
     //make sure there aren't any orgs in cache that will duplicate list
     this.setState({
-      orgs: [],
-    })
+      orgs: []
+    });
     //call getOrganizations fx which handles API call and retrieves list of orgs
     this.getOrganizations();
   }
@@ -29,84 +29,88 @@ class RegisterDriverForm extends React.Component {
   getOrganizations() {
     //using API file, getOrgs function, which fetches list of orgs
     API.getOrgs()
-      .then(res => {              
+      .then(res => {
         //store full list of all orgs in local state
         this.setState({
           orgs: res.organization
-        })
+        });
       })
       //if error performing API fetch for getting orgs, show error
       .catch(error => {
-        console.log('There has been a problem with your fetch operation: ' + error.message);
+        console.log(
+          'There has been a problem with your fetch operation: ' + error.message
+        );
         throw error;
-      })
-  };
+      });
+  }
 
   handleUserSubmit = () => {
     let userData = {
-      "driver": {
-        "organization_id": parseInt(this.state.orgNum),
-        "email": this.state.email,
-        "password": this.state.password,
-        "first_name": this.state.first_name,
-        "last_name": this.state.last_name,
-        "phone": this.state.phone,
-        "is_active": true,
-        "radius": parseInt(this.state.radius),
+      driver: {
+        organization_id: parseInt(this.state.orgNum),
+        email: this.state.email,
+        password: this.state.password,
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        phone: this.state.phone,
+        is_active: true,
+        radius: parseInt(this.state.radius)
       }
-    }
+    };
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userData)
-    .then((res) => {
-        this.autoLogin(userData)
-    })
-    //if error performing API fetch for posting driver, show error
-    .catch(error => {
-      console.warn('There has been a problem with your operation: ' + error.message);
-      throw error;
-    });
+      .then(res => {
+        this.autoLogin(userData);
+      })
+      //if error performing API fetch for posting driver, show error
+      .catch(error => {
+        console.warn(
+          'There has been a problem with your operation: ' + error.message
+        );
+        throw error;
+      });
   };
 
-  autoLogin = (userEntries) => {
-    console.log("testing in driver form: ", this.props.navigation)
+  autoLogin = userEntries => {
+    console.log('testing in driver form: ', this.props.navigation);
     //use API file, login fx to create a token in order to add vehicle data to driver
-              //login fx requries email and password as params
+    //login fx requries email and password as params
     API.login(userEntries.driver.email, userEntries.driver.password)
       //after sending email and pword, get auth_token
       .then(res => {
         const obj = {
-          token: res.json.auth_token,
+          token: res.json.auth_token
         };
         if (obj.token === undefined) {
           this.setState({
-            errorMessage: 'Invalid username or password.',
+            errorMessage: 'Invalid username or password.'
           });
         } else {
           //if API call for autologin upon driver data submit successful, store auth_token in local storage
           AsyncStorage.setItem('token', JSON.stringify(obj));
-          console.log("in autoLogin: ", AsyncStorage.getItem('token'));
+          console.log('in autoLogin: ', AsyncStorage.getItem('token'));
           //redirect to vehicle registation
-          this.props.navigation.navigate('RegisterVehicle');
+          this.props.navigation.navigate('RegisterVehicle', {
+            isAdding: false,
+            isEditing: false,
+            isCreating: true
+          });
         }
       })
       .catch(err => {
         this.setState({
-          errorMessage: 'Invalid username or password.',
+          errorMessage: 'Invalid username or password.'
         });
-      })
-  }  
-  
+      });
+  };
+
   render() {
-    //take array of org names list retrieved from API call getOrgs function that was performed on did mount 
+    //take array of org names list retrieved from API call getOrgs function that was performed on did mount
     //then map through each org name in list, create a Picker Item, use split to show only org name as label
     //and store id number of corresponding org in the value
-    const orgsList = this.state.orgs.map((eachOrg) =>       
-        <Picker.Item 
-          label={eachOrg.name} 
-          value={eachOrg.id} 
-          key={eachOrg}
-        />
-    );
+    const orgsList = this.state.orgs.map(eachOrg => (
+      <Picker.Item label={eachOrg.name} value={eachOrg.id} key={eachOrg} />
+    ));
     let mileage;
 
     return (
@@ -117,86 +121,89 @@ class RegisterDriverForm extends React.Component {
               <Text style={styles.title}>Sign Up</Text>
               <Text style={styles.subTitle}>{this.props.subTitle}</Text>
             </Block>
-            
+
             {/* Input for Volunteer Driver's First Name */}
-            <Text style={styles.labelStyleAlt}>
-                First Name:
-              </Text>
-              <TextInput
-                onChangeText={(text) => this.setState({first_name: text})}
-                placeholder="First Name"
-                returnKeyType={"next"}
-                onSubmitEditing={() => {this.lastName.focus();}}
-                blurOnSubmit={false}
-                style={[styles.saeInputAlt]}
-                inputStyle={styles.saeTextAlt}
-              ></TextInput>
-            
+            <Text style={styles.labelStyleAlt}>First Name:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ first_name: text })}
+              placeholder="First Name"
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.lastName.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
 
             {/* Input for Volunteer Driver's Last Name */}
-            <Text style={styles.labelStyleAlt}>
-                Last Name:
-              </Text>
-              <TextInput
-                onChangeText={(text) => this.setState({last_name: text})}
-                placeholder="Last Name"
-                ref={(input) => {this.lastName = input;}}
-                returnKeyType={"next"}
-                onSubmitEditing={() => {this.phone.focus();}}
-                blurOnSubmit={false}
-                style={[styles.saeInputAlt]}
-                inputStyle={styles.saeTextAlt}
-              ></TextInput>
-            
+            <Text style={styles.labelStyleAlt}>Last Name:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ last_name: text })}
+              placeholder="Last Name"
+              ref={input => {
+                this.lastName = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.phone.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
 
             {/* Input for Volunteer Driver's Phone Number */}
-            <Text style={styles.labelStyleAlt}>
-                Phone Number:
-              </Text>
-              <TextInput
-                onChangeText={(text) => this.setState({phone: text})}
-                placeholder="9195551234"
-                ref={(input) => {this.phone = input;}}
-                returnKeyType={"next"}
-                onSubmitEditing={() => {this.email.focus();}}
-                blurOnSubmit={false}
-                style={[styles.saeInputAlt]}
-                inputStyle={styles.saeTextAlt}
-              ></TextInput>
+            <Text style={styles.labelStyleAlt}>Phone Number:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ phone: text })}
+              placeholder="9195551234"
+              ref={input => {
+                this.phone = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.email.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
 
             {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
-            <Text style={styles.labelStyleAlt}>
-                Email:
-              </Text>
-              <TextInput
-                onChangeText={(text) => this.setState({email: text})}
-                placeholder="example@example.com"
-                ref={(input) => {this.email = input;}}
-                returnKeyType={"next"}
-                onSubmitEditing={() => {this.password.focus();}}
-                blurOnSubmit={false}
-                style={[styles.saeInputAlt]}
-                inputStyle={styles.saeTextAlt}
-              ></TextInput>
+            <Text style={styles.labelStyleAlt}>Email:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ email: text })}
+              placeholder="example@example.com"
+              ref={input => {
+                this.email = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.password.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
 
             {/* Input for Volunteer Driver's Password */}
-            <Text style={styles.labelStyleAlt}>
-                Create a Password:
-              </Text>
-              <TextInput
-                onChangeText={(text) => this.setState({password: text})}
-                placeholder="password"
-                ref={(input) => {this.password = input;}}
-                returnKeyType={"done"}
-                // onSubmitEditing={() => {this.password.focus();}}
-                // blurOnSubmit={false}
-                style={[styles.saeInputAlt]}
-                inputStyle={styles.saeTextAlt}
-                autoCapitalize="none"
-                secureTextEntry
-              ></TextInput>
-            
+            <Text style={styles.labelStyleAlt}>Create a Password:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ password: text })}
+              placeholder="password"
+              ref={input => {
+                this.password = input;
+              }}
+              returnKeyType={'done'}
+              // onSubmitEditing={() => {this.password.focus();}}
+              // blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+              autoCapitalize="none"
+              secureTextEntry
+            ></TextInput>
 
             <Text style={styles.labelStyleAvail}>Volunteering for:</Text>
 
@@ -212,17 +219,17 @@ class RegisterDriverForm extends React.Component {
               //shows which item in list user has selected
               selectedValue={this.state.orgNum}
               //set the item value (which will be the org_id number) to state so it can be passed to API post
-              value={() =>
-                  this.setState({orgNum: 1})
-              }
-              > 
+              value={() => this.setState({ orgNum: 1 })}
+            >
               {/* default to instruct user what to do */}
-              <Picker.Item label="Select an organization" value='orgNum' />
+              <Picker.Item label="Select an organization" value="orgNum" />
               {/* uses the orgsList const at beginning of render to display a picker item for each org*/}
-               {orgsList}
+              {orgsList}
             </Picker>
 
-            <Text style={styles.labelStyleAvail}>Distance available to drive:</Text>
+            <Text style={styles.labelStyleAvail}>
+              Distance available to drive:
+            </Text>
             <Picker
               label="Radius"
               key={mileage}
@@ -233,15 +240,13 @@ class RegisterDriverForm extends React.Component {
               blurOnSubmit={false}
               selectedValue={this.state.radius}
               //set the item value (which will be the radius mileage) to state so it can be passed to API post
-              onValueChange={(itemValue) =>
-                this.setState({radius: itemValue})
-              }
+              onValueChange={itemValue => this.setState({ radius: itemValue })}
             >
               {/* default to instruct user what to do */}
-              <Picker.Item label="Select a mileage" value="0"/>
-              <Picker.Item label="10 miles" value="10"/>
-              <Picker.Item label="25 miles" value="25"/>
-              <Picker.Item label="50 miles" value="50"/>
+              <Picker.Item label="Select a mileage" value="0" />
+              <Picker.Item label="10 miles" value="10" />
+              <Picker.Item label="25 miles" value="25" />
+              <Picker.Item label="50 miles" value="50" />
             </Picker>
 
             <Block style={styles.footer}>
@@ -249,19 +254,21 @@ class RegisterDriverForm extends React.Component {
                 title="Continue"
                 onPress={
                   //pass the data (user inputs including orgID and radius), nav info for redirect to handleUserInput fx above
-                  this.handleUserSubmit}
+                  this.handleUserSubmit
+                }
               />
             </Block>
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>
-    )
-  };
-};
+    );
+  }
+}
 
 export default RegisterDriverForm;
 
-{/* <Sae
+{
+  /* <Sae
               label="City"
               labelStyle={styles.labelStyle}
               inputPadding={16}
@@ -276,105 +283,106 @@ export default RegisterDriverForm;
               onChangeText={text => this.props.handleChange(text, 'city')}
               ref={input => this.props.innerRef(input, 'City')}
               blurOnSubmit
-            /> */}
+            /> */
+}
 
-            // <Sae
-            //   //displays label for input field
-            //   label="First Name"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   returnKeyType="next"
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
-            //   onChangeText={text => this.props.handleChange(text, 'first_name')}
-            //   /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
-            //   ref={input => this.props.innerRef(input, 'FirstName')}
-            //   /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
-            //   blurOnSubmit={false}
-            // />
+// <Sae
+//   //displays label for input field
+//   label="First Name"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   returnKeyType="next"
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   /* As user types, use the handleChange fx in Register Component to update state with what is being typed, second param is the object key, first param is the value */
+//   onChangeText={text => this.props.handleChange(text, 'first_name')}
+//   /* Use the handleInnerRef fx in Register Component to use the next button on keyboard to advance to next field */
+//   ref={input => this.props.innerRef(input, 'FirstName')}
+//   /* Use the handleSubmitEditing fx in Register Component to change focus to next field and commit what was typed in current field to local state in Register Component */
+//   onSubmitEditing={() => this.props.handleSubmitEditing('LastName')}
+//   blurOnSubmit={false}
+// />
 
-            // <Sae
-            //   label="Last Name"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   returnKeyType="next"
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   onChangeText={text => this.props.handleChange(text, 'last_name')}
-            //   ref={input => this.props.innerRef(input, 'LastName')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
-            //   blurOnSubmit={false}
-            // />
+// <Sae
+//   label="Last Name"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   returnKeyType="next"
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   onChangeText={text => this.props.handleChange(text, 'last_name')}
+//   ref={input => this.props.innerRef(input, 'LastName')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('PhoneNumber')}
+//   blurOnSubmit={false}
+// />
 
-            // <Sae
-            //   label="Phone Number"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   keyboardType="phone-pad"
-            //   returnKeyType="next"
-            //   onChangeText={text => this.props.handleChange(text, 'phone')}
-            //   ref={input => this.props.innerRef(input, 'PhoneNumber')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
-            //   blurOnSubmit={false}
-            // />
+// <Sae
+//   label="Phone Number"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   keyboardType="phone-pad"
+//   returnKeyType="next"
+//   onChangeText={text => this.props.handleChange(text, 'phone')}
+//   ref={input => this.props.innerRef(input, 'PhoneNumber')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('EmailAddress')}
+//   blurOnSubmit={false}
+// />
 
-            // <Sae
-            //   label="Email Address"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   email
-            //   keyboardType="email-address"
-            //   autoCapitalize="none"
-            //   returnKeyType="next"
-            //   onChangeText={text => this.props.handleChange(text, 'email')}
-            //   ref={input => this.props.innerRef(input, 'EmailAddress')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
-            //   blurOnSubmit={false}
-            // />
+// <Sae
+//   label="Email Address"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   email
+//   keyboardType="email-address"
+//   autoCapitalize="none"
+//   returnKeyType="next"
+//   onChangeText={text => this.props.handleChange(text, 'email')}
+//   ref={input => this.props.innerRef(input, 'EmailAddress')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('Password')}
+//   blurOnSubmit={false}
+// />
 
-            // <Sae
-            //   label="Password"
-            //   labelStyle={styles.labelStyle}
-            //   inputPadding={16}
-            //   labelHeight={24}
-            //   // active border height
-            //   borderHeight={2}
-            //   borderColor="#475c67"
-            //   // TextInput props
-            //   style={[styles.saeInput]}
-            //   inputStyle={styles.saeText}
-            //   //this code shows asterisks in place of characters in field as user types
-            //   secureTextEntry
-            //   returnKeyType="next"
-            //   autoCapitalize="none"
-            //   onChangeText={text => this.props.handleChange(text, 'password')}
-            //   ref={input => this.props.innerRef(input, 'Password')}
-            //   onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
-            //   blurOnSubmit={false}
-            // />
+// <Sae
+//   label="Password"
+//   labelStyle={styles.labelStyle}
+//   inputPadding={16}
+//   labelHeight={24}
+//   // active border height
+//   borderHeight={2}
+//   borderColor="#475c67"
+//   // TextInput props
+//   style={[styles.saeInput]}
+//   inputStyle={styles.saeText}
+//   //this code shows asterisks in place of characters in field as user types
+//   secureTextEntry
+//   returnKeyType="next"
+//   autoCapitalize="none"
+//   onChangeText={text => this.props.handleChange(text, 'password')}
+//   ref={input => this.props.innerRef(input, 'Password')}
+//   onSubmitEditing={() => this.props.handleSubmitEditing('OrgName')}
+//   blurOnSubmit={false}
+// />
