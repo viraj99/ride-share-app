@@ -120,7 +120,6 @@ class RegisterVehicleForm extends React.Component {
         .catch(err => {
           console.log('FAILED HORRIBLY');
         });
-<<<<<<< HEAD
     }
     //else if (this.props.navigation.state.params.isAdding) {
     //   console.log('inside if of is isAdding');
@@ -145,20 +144,6 @@ class RegisterVehicleForm extends React.Component {
     //       throw error;
     //     });
     else {
-=======
-    } else if (this.props.navigation.state.params.isAdding) {
-      console.log('inside if of is isAdding');
-      console.log('userinput', userEntries);
-      API.createVehicle(userEntries, token.token)
-        .then(this.props.navigation.navigate('Settings'))
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
-    } else if (this.props.navigation.state.params.isCreating) {
->>>>>>> passwordForgot
       API.createVehicle(userEntries, token.token)
         .then(() => {
           if (this.props.navigation.state.params.isAdding) {
