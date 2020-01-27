@@ -7,7 +7,6 @@ import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
 import styles from './styles';
-import api from '../../api/api';
 
 const data = [
   {
@@ -40,10 +39,7 @@ export default class RideView extends Component {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     const riderId = navigation.getParam('riderId');
-    // console.log('Props token', token);
-    // console.log('Props id', id);
     API.getRider(riderId, token).then(response => {
-      //console.log('response', response);
       this.setState({
         first: response.json.rider.first_name,
         last: response.json.rider.last_name,
@@ -77,10 +73,10 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
     API.pickUpRide(rideId, token)
       .then(result => {
-        Alert.alert('Pick Up En Route');
-        console.log('pick up rideId', rideId);
-        console.log('pick up token', token);
-        console.log('result', result);
+        Alert.alert('Picking Up');
+        // console.log('pick up rideId', rideId);
+        // console.log('pick up token', token);
+        // console.log('result', result);
       })
       .catch(err => {
         Alert.alert('Unable to PickUp');
@@ -96,7 +92,7 @@ export default class RideView extends Component {
 
     API.dropOffRide(rideId, token)
       .then(result => {
-        Alert.alert('Drop Off En Route');
+        Alert.alert('Dropping Off');
         console.log('drop off rideId', rideId);
         console.log('drop off token', token);
       })
@@ -113,7 +109,7 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
 
     if (rideId && token) {
-      Alert.alert('R u Waiting');
+      Alert.alert('Now Waiting');
     } else {
       Alert.alert('Unable to wait');
     }
@@ -171,19 +167,6 @@ export default class RideView extends Component {
         Alert.alert('Did not Cancel');
         console.log('Did not work');
       });
-    // Alert.alert('Cancel this ride?', '', [
-    //   { text: "Don't cancel", style: 'cancel' },
-    //   {
-    //     text: 'Yes, cancel this ride',
-    //     onPress: () => {
-    //     API.cancelRide(rideId, token)
-    //     .then((result) => {
-    //       Alert.alert('RIDE CANCELLED')
-    //     }).catch((err) => {
-    //       Alert.alert('Unable to Cancel Ride')
-    //     });}
-    //   }
-    // ]);
   };
 
   onPress = () => {
@@ -191,16 +174,9 @@ export default class RideView extends Component {
     const { navigation } = this.props;
 
     if (textValue === 'Go to pickup') {
-      // Alert.alert('Headed to Pick Up', '',[
-      //   { text:'PickUp?', onPress: () => {
-      //   this.onPickUpPress();
-      //   this.setState({
-      //     textValue: 'Arrived at Pick-up'
-      //   });
-      // }]);}
       Alert.alert('Head to Pick Up', '', [
         {
-          text: 'Pick UP?',
+          text: 'Picking Up?',
           onPress: () => {
             this.onPickUpPress();
             this.setState({
@@ -212,10 +188,10 @@ export default class RideView extends Component {
     } else if (textValue === 'Tap to arrive') {
       Alert.alert('All set?', '', [
         {
-          text: 'Good to GO',
+          text: 'Ready',
           onPress: () => {
             this.setState({
-              textValue: 'Good to GO'
+              textValue: 'Ready'
             });
           }
         },
@@ -227,7 +203,7 @@ export default class RideView extends Component {
           }
         }
       ]);
-    } else if (textValue === 'Good to GO') {
+    } else if (textValue === 'Ready') {
       Alert.alert('Drop Off Destination', '', [
         {
           text: 'Go to Drop off',
@@ -253,10 +229,8 @@ export default class RideView extends Component {
           onPress: () => {
             this.onWaitingPress();
             this.setState({
-              textValue: 'Waiting'
+              textValue: 'Now Waiting'
             });
-            //alert('ride complete');
-            // navigation.navigate('MainView');
           }
         },
         {
@@ -267,8 +241,8 @@ export default class RideView extends Component {
           }
         }
       ]);
-    } else if (textValue === 'Waiting') {
-      Alert.alert('Ready to go?', '', [
+    } else if (textValue === 'Now Waiting') {
+      Alert.alert('Done Waiting?', '', [
         {
           text: 'Ready for prior Destination',
           onPress: () => {
@@ -276,8 +250,6 @@ export default class RideView extends Component {
             this.setState({
               textValue: 'Tap to return'
             });
-            //alert('ride complete');
-            // navigation.navigate('MainView');
           }
         },
         {
@@ -298,7 +270,6 @@ export default class RideView extends Component {
             this.setState({
               textValue: 'Returned'
             });
-            //alert('ride complete');
             navigation.navigate('MainView');
           }
         },
@@ -403,8 +374,6 @@ export default class RideView extends Component {
             options={{
               latitude,
               longitude
-              // sourceLatitude: 35.995616, optionally specify starting location for directions
-              // sourceLongitude: -78.902208, not optional if sourceLatitude is specified
             }}
           />
           {this.renderOverview()}
