@@ -43,16 +43,6 @@ const MainViewStack = createStackNavigator(
     Settings: {
       screen: Settings
     },
-    //////////
-    // VehicleSettings: {
-    //   screen: VehicleSettings,
-    //     headerTitle: 'Vehicle Settings',
-    //     headerStyle: {
-    //       backgroundColor: '#1EAA70',
-    //     },
-    //     headerTintColor: '#fff',
-    // },
-    ////////
     RideView: {
       screen: RideView,
       navigationOptions: {

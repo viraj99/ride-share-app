@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Text, ScrollView, Picker, TextInput } from 'react-native';
+=======
+import { Text, ScrollView, View, Picker, TextInput } from 'react-native';
+>>>>>>> passwordForgot
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
@@ -117,10 +121,19 @@ class RegisterDriverForm extends React.Component {
       <ScrollView>
         <Block middle>
           <KeyboardAwareScrollView>
-            <Block style={styles.scrollContainer}>
+            {/* <Block style={styles.scrollContainer}>
               <Text style={styles.title}>Sign Up</Text>
               <Text style={styles.subTitle}>{this.props.subTitle}</Text>
+<<<<<<< HEAD
             </Block>
+=======
+            </Block> */}
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Sign Up</Text>
+              </View>
+            </View>
+>>>>>>> passwordForgot
 
             {/* Input for Volunteer Driver's First Name */}
             <Text style={styles.labelStyleAlt}>First Name:</Text>
@@ -205,7 +218,12 @@ class RegisterDriverForm extends React.Component {
               secureTextEntry
             ></TextInput>
 
-            <Text style={styles.labelStyleAvail}>Volunteering for:</Text>
+            {/* <Text style={styles.labelStyleAvail}>Volunteering for:</Text> */}
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Volunteering for:</Text>
+              </View>
+            </View>
 
             {/* Picker selector for org volunteer works with */}
             <Picker
@@ -227,9 +245,22 @@ class RegisterDriverForm extends React.Component {
               {orgsList}
             </Picker>
 
+<<<<<<< HEAD
             <Text style={styles.labelStyleAvail}>
               Distance available to drive:
             </Text>
+=======
+            {/* <Text style={styles.labelStyleAvail}>
+              Distance available to drive:
+            </Text> */}
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>
+                  Distance available to drive:
+                </Text>
+              </View>
+            </View>
+>>>>>>> passwordForgot
             <Picker
               label="Radius"
               key={mileage}

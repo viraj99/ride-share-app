@@ -14,7 +14,7 @@ const DeleteButton = ({ title, deleteVehicle, vehicleId, token }) => (
       <Icon
         color="#ff8262"
         name="delete"
-        size={30}
+        size={25}
         // style={{ alignSelf: 'flex-start' }}
       />
       {/* </View> */}
