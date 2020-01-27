@@ -118,31 +118,38 @@ class RegisterVehicleForm extends React.Component {
         .catch(err => {
           console.log('FAILED HORRIBLY');
         });
-    } else if (this.props.navigation.state.params.isAdding) {
-      console.log('inside if of is isAdding');
-      console.log('userinput', userEntries);
-      // let user = this.state.userEntries;
-      // user.vehicle.car_make = this.state.car_make;
-      // user.vehicle.car_model = this.state.car_model;
-      // user.vehicle.car_year = this.state.car_year;
-      // user.vehicle.car_color = this.state.car_color;
-      // user.vehicle.car_plate = this.state.car_plate;
-      // user.vehicle.seat_belt_num = this.state.seat_belt_num;
-      // user.vehicle.insurance_provider = this.state.insurance_provider;
-      // user.vehicle.insurance_start = this.state.insurance_start;
-      // user.vehicle.insurance_stop = this.state.insurance_stop;
-      // console.log('user', user);
+    }
+    //else if (this.props.navigation.state.params.isAdding) {
+    //   console.log('inside if of is isAdding');
+    //   console.log('userinput', userEntries);
+    //   // let user = this.state.userEntries;
+    //   // user.vehicle.car_make = this.state.car_make;
+    //   // user.vehicle.car_model = this.state.car_model;
+    //   // user.vehicle.car_year = this.state.car_year;
+    //   // user.vehicle.car_color = this.state.car_color;
+    //   // user.vehicle.car_plate = this.state.car_plate;
+    //   // user.vehicle.seat_belt_num = this.state.seat_belt_num;
+    //   // user.vehicle.insurance_provider = this.state.insurance_provider;
+    //   // user.vehicle.insurance_start = this.state.insurance_start;
+    //   // user.vehicle.insurance_stop = this.state.insurance_stop;
+    //   // console.log('user', user);
+    //   API.createVehicle(userEntries, token.token)
+    //     .then(this.props.navigation.navigate('Settings'))
+    //     .catch(error => {
+    //       console.warn(
+    //         'There has been a problem with your operation: ' + error.message
+    //       );
+    //       throw error;
+    //     });
+    else {
       API.createVehicle(userEntries, token.token)
-        .then(this.props.navigation.navigate('Settings'))
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
-    } else {
-      API.createVehicle(userEntries, token.token)
-        .then(this.props.navigation.navigate('RegisterAvailability'))
+        .then(() => {
+          if (this.props.navigation.state.params.isAdding) {
+            this.props.navigation.navigate('RegisterAvailability');
+          } else {
+            this.props.navigation.navigate('Settings');
+          }
+        })
         .catch(error => {
           console.warn(
             'There has been a problem with your operation: ' + error.message
