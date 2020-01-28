@@ -5,7 +5,6 @@ import {
   Picker,
   View,
   Button,
-  Container,
   TouchableOpacity
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -27,7 +26,11 @@ class RegisterAvailabilityForm extends React.Component {
       stTimePicker: false,
       endTimePicker: false,
       endDatePicker: false,
-      availData: {}
+      availData: {},
+      startDate: new Date(),
+      startTime: new Date(),
+      endTime: new Date(),
+      endDate: new Date()
     };
   }
 
@@ -205,15 +208,33 @@ class RegisterAvailabilityForm extends React.Component {
       endDatePicker
     } = this.state;
     const { navigation } = this.props;
+    let placeholderStartDate = moment
+      .utc(this.state.startDate)
+      .format('MMMM D, YYYY');
+    let placeholderStartTime = moment(this.state.startTime).format('h:mm A');
+    let placeholderEndTime = moment(this.state.endTime).format('h:mm A');
+    let placeholderEndDate = moment
+      .utc(this.state.endDate)
+      .format('MMMM D, YYYY');
 
     if (editMode === true) {
-      // let fromAgenda = this.props.navigation.state.params.item;
-      // console.log('item received from edit in Agenda: ', fromAgenda);
-      // let editItem = JSON.parse(fromAgenda);
-      // console.log('editItem is: ', editItem);
       let editStartDate = moment(editItem.startTime).format('MMM D, YYYY');
       let editStartTime = moment.utc(editItem.startTime).format('h:mm A');
       let editEndTime = moment.utc(editItem.endTime).format('h:mm A');
+      const editedUserEntries = {
+        start_time:
+          moment(this.state.startDate).format('YYYY-MM-DD') +
+          ' ' +
+          moment(this.state.startTime).format('HH:mm'),
+        end_time:
+          moment(this.state.startDate).format('YYYY-MM-DD') +
+          ' ' +
+          moment(this.state.endTime).format('HH:mm'),
+        is_recurring: this.state.is_recurring,
+        end_date: moment(this.state.endDate).format('YYYY-MM-DD'),
+        //below values need to be changed, place-holding for now
+        location_id: 1
+      };
 
       console.log('Editing/Adding Avail from Login', editItem.id);
       if (editItem.id === null) {
@@ -243,7 +264,7 @@ class RegisterAvailabilityForm extends React.Component {
                 </Text>
 
                 <Button
-                  title="Pick a Date"
+                  title={placeholderStartDate}
                   onPress={this.showStDatePicker}
                   color="#475c67"
                 />
@@ -256,11 +277,6 @@ class RegisterAvailabilityForm extends React.Component {
                   />
                 )}
 
-                <Text style={styles.displaySelection}>
-                  Selected date:{' '}
-                  {moment(this.state.startDate).format('MMMM D, YYYY')}
-                </Text>
-
                 <Text></Text>
 
                 <Text style={styles.labelStyleAvail}>
@@ -268,7 +284,7 @@ class RegisterAvailabilityForm extends React.Component {
                 </Text>
 
                 <Button
-                  title="Pick a Time"
+                  title={placeholderStartTime}
                   onPress={this.showStTimePicker}
                   color="#475c67"
                 />
@@ -282,10 +298,6 @@ class RegisterAvailabilityForm extends React.Component {
                   />
                 )}
 
-                <Text style={styles.displaySelection}>
-                  Selected time: {moment(this.state.startTime).format('h:mm A')}
-                </Text>
-
                 <Text></Text>
 
                 <Text style={styles.labelStyleAvail}>
@@ -293,7 +305,7 @@ class RegisterAvailabilityForm extends React.Component {
                 </Text>
 
                 <Button
-                  title="Pick a Time"
+                  title={placeholderEndTime}
                   onPress={this.showEndTimePicker}
                   color="#475c67"
                 />
@@ -306,9 +318,6 @@ class RegisterAvailabilityForm extends React.Component {
                     onChange={this.setEndTime}
                   />
                 )}
-                <Text style={styles.displaySelection}>
-                  Selected time: {moment(this.state.endTime).format('h:mm A')}
-                </Text>
 
                 <Text></Text>
 
@@ -340,7 +349,7 @@ class RegisterAvailabilityForm extends React.Component {
                       Date to End Recurring Availability:
                     </Text>
                     <Button
-                      title="Pick a Date"
+                      title={placeholderEndDate}
                       onPress={this.showEndDatePicker}
                       color="#475c67"
                     />
@@ -351,20 +360,17 @@ class RegisterAvailabilityForm extends React.Component {
                         onChange={this.setEndDate}
                       />
                     )}
-                    <Text style={styles.displaySelection}>
-                      Selected date:{' '}
-                      {moment(this.state.endDate).format('MMMM D, YYYY')}
-                    </Text>
                   </View>
                 )}
               </View>
+              <Text></Text>
 
               <View>
                 <Button
                   title="Submit and Add Another Availability"
                   onPress={() =>
                     this.addAnotherAvail(
-                      userEntries,
+                      editedUserEntries,
                       this.state.is_recurring,
                       navigation
                     )
@@ -376,7 +382,7 @@ class RegisterAvailabilityForm extends React.Component {
                   title="Submit"
                   onPress={() =>
                     this.handleUserSubmit(
-                      userEntries,
+                      editedUserEntries,
                       this.state.is_recurring,
                       navigation
                     )
@@ -388,6 +394,18 @@ class RegisterAvailabilityForm extends React.Component {
         );
       } else {
         console.log('Editing a specific Avail from Login', editItem);
+        let editPlaceholderStartDate = moment(editStartDate).format(
+          'MMMM D, YYYY'
+        );
+        let editPlaceholderStartTime = moment
+          .utc(editItem.startTime)
+          .format('h:mm A');
+        let editPlaceholderEndTime = moment
+          .utc(editItem.endTime)
+          .format('h:mm A');
+        let editPlaceholderEndDate = moment(this.props.endDate).format(
+          'MMMM D, YYYY'
+        );
         return (
           <View>
             <View style={styles.mainContainer}>
@@ -410,11 +428,10 @@ class RegisterAvailabilityForm extends React.Component {
                 <KeyboardAwareScrollView>
                   <Text style={styles.labelStyleAvail}>
                     Availability Start Date:
-                    {/* <Text>{editStartDate}</Text> */}
                   </Text>
 
                   <Button
-                    title="Change Date"
+                    title={editPlaceholderStartDate}
                     onPress={this.showStDatePicker}
                     color="#475c67"
                   />
@@ -427,19 +444,14 @@ class RegisterAvailabilityForm extends React.Component {
                     />
                   )}
 
-                  <Text style={styles.displaySelection}>
-                    Selected date: {moment(editStartDate).format('MMM D, YYYY')}
-                  </Text>
-
                   <Text></Text>
 
                   <Text style={styles.labelStyleAvail}>
                     Availability Start Time:
-                    {/* <Text>{editStartTime}</Text> */}
                   </Text>
 
                   <Button
-                    title="Change Time"
+                    title={editPlaceholderStartTime}
                     onPress={this.showStTimePicker}
                     color="#475c67"
                   />
@@ -453,19 +465,14 @@ class RegisterAvailabilityForm extends React.Component {
                     />
                   )}
 
-                  <Text style={styles.displaySelection}>
-                    Selected time: {editStartTime}
-                  </Text>
-
                   <Text></Text>
 
                   <Text style={styles.labelStyleAvail}>
                     Availability End Time:
-                    {/* <Text>{editEndTime}</Text> */}
                   </Text>
 
                   <Button
-                    title="Change Time"
+                    title={editPlaceholderEndTime}
                     onPress={this.showEndTimePicker}
                     color="#475c67"
                   />
@@ -478,9 +485,6 @@ class RegisterAvailabilityForm extends React.Component {
                       onChange={this.setEndTime}
                     />
                   )}
-                  <Text style={styles.displaySelection}>
-                    Selected time: {editEndTime}
-                  </Text>
 
                   <Text></Text>
 
@@ -516,7 +520,7 @@ class RegisterAvailabilityForm extends React.Component {
                         Date to End Recurring Availability:
                       </Text>
                       <Button
-                        title="Change Date"
+                        title={editPlaceholderEndDate}
                         onPress={this.showEndDatePicker}
                         color="#475c67"
                       />
@@ -527,10 +531,6 @@ class RegisterAvailabilityForm extends React.Component {
                           onChange={this.setEndDate}
                         />
                       )}
-                      <Text style={styles.displaySelection}>
-                        Selected date:{' '}
-                        {moment(this.state.endDate).format('MMM D, YYYY')}
-                      </Text>
 
                       <Text></Text>
                     </View>
@@ -541,7 +541,7 @@ class RegisterAvailabilityForm extends React.Component {
                       title="Submit Changes"
                       onPress={() =>
                         this.handleUserEdit(
-                          userEntries,
+                          editedUserEntries,
                           this.state.is_recurring,
                           navigation,
                           editItem

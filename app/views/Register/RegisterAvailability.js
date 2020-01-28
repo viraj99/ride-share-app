@@ -48,7 +48,12 @@ class RegisterAvailability extends Component {
       'the data from agenda view is: ',
       this.props.navigation.state.params.editItem
     );
+    console.log(
+      'the end Date from agenda view is: ',
+      this.props.navigation.state.params.endDate
+    );
     const editItem = this.props.navigation.state.params.editItem;
+    const endDate = this.props.navigation.state.params.endDate;
     const { navigation } = this.props;
 
     return (
@@ -62,6 +67,7 @@ class RegisterAvailability extends Component {
             userEntries={this.state.availData}
             editItem={editItem}
             isEditing={this.props.isEditing}
+            endDate={endDate}
           />
         </View>
       </Container>

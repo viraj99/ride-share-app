@@ -117,7 +117,8 @@ class AgendaView extends React.Component {
             onPress={() =>
               this.props.navigation.navigate('RegisterAvailability', {
                 editItem: item,
-                isEditing: true
+                isEditing: true,
+                endDate: ending
               })
             }
           >
