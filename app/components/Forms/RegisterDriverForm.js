@@ -59,17 +59,34 @@ class RegisterDriverForm extends React.Component {
     };
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
-    API.createDriver(userData)
-      .then(res => {
-        this.autoLogin(userData);
-      })
-      //if error performing API fetch for posting driver, show error
-      .catch(error => {
-        console.warn(
-          'There has been a problem with your operation: ' + error.message
-        );
-        throw error;
+    if (this.props.navigation.state.params === undefined) {
+      API.createDriver(userData)
+        .then(res => {
+          this.autoLogin(userData);
+        })
+        //if error performing API fetch for posting driver, show error
+        .catch(error => {
+          console.warn(
+            'There has been a problem with your operation: ' + error.message
+          );
+          throw error;
+        });
+    } else {
+      console.log('params defined', this.props.navigation.state.params);
+      AsyncStorage.getItem('token', (err, result) => {
+        const obj = JSON.parse(result);
+        const { token } = obj;
+
+        API.updateSettingsDriver(userData, token)
+          .then(result => {
+            console.log('inside the APIupdate');
+            this.autoLogin(userData);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       });
+    }
   };
 
   autoLogin = userEntries => {
