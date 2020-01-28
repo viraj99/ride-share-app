@@ -16,15 +16,25 @@ class RegisterVehicle extends Component {
   }
 
   handleBackButton = () => {
-    console.log(this.props.navigation.state.params);
+    console.log('the props params:', this.props.navigation.state.params);
     if (
       this.props.navigation.state.params.isEditing ||
       this.props.navigation.state.params.isAdding
     ) {
       this.props.navigation.navigate('Settings');
-    } else if (this.props.navigation.state.params.isCreating) {
-      this.props.navigation.navigate('RegisterUserInfo');
+    } else {
+      // this.props.navigation.navigate('RegisterUserInfo', {
+      //   isCreating: false,
+      //   isEditing: true,
+      //   isAdding: false
+      // });
+      this.props.navigation.navigate('RegisterUserInfo', {
+        isAdding: false,
+        isEditing: true,
+        isCreating: false
+      });
     }
+    console.log('the props params:', this.props.navigation.state.params);
   };
 
   handleChange = (text, name) => {

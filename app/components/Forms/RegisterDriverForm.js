@@ -57,6 +57,7 @@ class RegisterDriverForm extends React.Component {
         radius: parseInt(this.state.radius)
       }
     };
+    // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
     API.createDriver(userData)
       .then(res => {
@@ -108,6 +109,7 @@ class RegisterDriverForm extends React.Component {
     //take array of org names list retrieved from API call getOrgs function that was performed on did mount
     //then map through each org name in list, create a Picker Item, use split to show only org name as label
     //and store id number of corresponding org in the value
+    // console.log('isEditing: ', this.props.navigation.state.params);
     const orgsList = this.state.orgs.map(eachOrg => (
       <Picker.Item label={eachOrg.name} value={eachOrg.id} key={eachOrg} />
     ));
