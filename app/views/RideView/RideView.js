@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
-import { Avatar, Button, Icon } from 'react-native-elements';
+import { Avatar, Button, Icon, ThemeProvider } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
 
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
+import { SkipButton, CancelButton } from '../../components/Button';
 import styles from './styles';
 
 const data = [
@@ -73,7 +74,7 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
     API.pickUpRide(rideId, token)
       .then(result => {
-        Alert.alert('Picking Up');
+        // Alert.alert('Picking Up');
         // console.log('pick up rideId', rideId);
         // console.log('pick up token', token);
         // console.log('result', result);
@@ -92,12 +93,12 @@ export default class RideView extends Component {
 
     API.dropOffRide(rideId, token)
       .then(result => {
-        Alert.alert('Dropping Off');
+        // Alert.alert('Dropping Off');
         console.log('drop off rideId', rideId);
         console.log('drop off token', token);
       })
       .catch(err => {
-        Alert.alert('Unable to Drop Off');
+        // Alert.alert('Unable to Drop Off');
         console.log('err drop off rideId', rideId);
         console.log('err drop off token', token);
       });
@@ -109,9 +110,10 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
 
     if (rideId && token) {
-      Alert.alert('Now Waiting');
+      // Alert.alert('Now Waiting');
+      console.log('waiting');
     } else {
-      Alert.alert('Unable to wait');
+      // Alert.alert('Unable to wait');
     }
   };
 
@@ -121,9 +123,11 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
 
     if (rideId && token) {
-      Alert.alert('On your way back');
+      // Alert.alert('On your way back');
+      console.log('on the way back');
     } else {
-      Alert.alert('Unable to go back');
+      // Alert.alert('Unable to go back');
+      console.log('cant go back');
     }
   };
 
@@ -133,9 +137,11 @@ export default class RideView extends Component {
     const rideId = navigation.getParam('rideId');
 
     if (rideId && token) {
-      Alert.alert('Dropping off at inital location');
+      // Alert.alert('Dropping off at inital location');
+      console.log('dropped off at pick up');
     } else {
-      Alert.alert('Unable to drop off');
+      // Alert.alert('Unable to drop off');
+      console.log('couldnt drop off at pick up');
     }
   };
 
@@ -169,119 +175,145 @@ export default class RideView extends Component {
       });
   };
 
+  onSkipPress = () => {
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+
+    API.pickUpRide(rideId, token)
+      .then(result => {
+        API.dropOffRide(rideId, token).then(result => {
+          API.completeRide(rideId, token).then(result => {
+            Alert.alert('Ride Complete');
+            navigation.navigate('MainView');
+          });
+        });
+      })
+      .catch(err => {
+        Alert.alert('Could not Complete Ride');
+        navigation.navigate('MainView');
+      });
+  };
+
   onPress = () => {
     const { textValue } = this.state;
     const { navigation } = this.props;
 
     if (textValue === 'Go to pickup') {
-      Alert.alert('Head to Pick Up', '', [
-        {
-          text: 'Picking Up?',
-          onPress: () => {
-            this.onPickUpPress();
-            this.setState({
-              textValue: 'Tap to arrive'
-            });
-          }
-        }
-      ]);
+      // this.onPress = () => {
+      this.onPickUpPress();
+      this.setState({
+        textValue: 'Tap to arrive'
+      });
+      // };
+      // Alert.alert('Head to Pick Up', '', [
+      //   {
+      //     text: 'Picking Up?',
+      //     onPress: () => {
+      //       this.onPickUpPress();
+      //       this.setState({
+      //         textValue: 'Tap to arrive'
+      //       });
+      //     }
+      //   }
+      // ]);
     } else if (textValue === 'Tap to arrive') {
-      Alert.alert('All set?', '', [
-        {
-          text: 'Ready',
-          onPress: () => {
-            this.setState({
-              textValue: 'Ready'
-            });
-          }
-        },
-        {
-          text: 'cancel',
-          style: 'cancel',
-          onPress: () => {
-            this.onCancelPress();
-          }
-        }
-      ]);
+      // Alert.alert('All set?', '', [
+      // {
+      // text: 'Ready',
+      // onPress: () => {
+      this.setState({
+        textValue: 'Ready'
+      });
+      // }
+      // },
+      // {
+      // text: 'cancel',
+      // style: 'cancel',
+      // onPress: () => {
+      // this.onCancelPress();
+      // }
+      // }
+      // ]);
     } else if (textValue === 'Ready') {
-      Alert.alert('Drop Off Destination', '', [
-        {
-          text: 'Go to Drop off',
-          onPress: () => {
-            this.onDropOffPress();
-            this.setState({
-              textValue: 'Drop off'
-            });
-          }
-        },
-        {
-          text: 'cancel',
-          style: 'cancel',
-          onPress: () => {
-            this.onCancelPress();
-          }
-        }
-      ]);
+      // Alert.alert('Drop Off Destination', '', [
+      // {
+      //   text: 'Go to Drop off',
+      //   onPress: () => {
+      this.onDropOffPress();
+      this.setState({
+        textValue: 'Drop off'
+      });
+      //     }
+      //   },
+      //   {
+      //     text: 'cancel',
+      //     style: 'cancel',
+      //     onPress: () => {
+      //       this.onCancelPress();
+      //     }
+      //   }
+      // ]);
     } else if (textValue === 'Drop off') {
-      Alert.alert('Did you drop-off?', '', [
-        {
-          text: 'Confirm drop-off',
-          onPress: () => {
-            this.onWaitingPress();
-            this.setState({
-              textValue: 'Now Waiting'
-            });
-          }
-        },
-        {
-          text: 'cancel',
-          style: 'cancel',
-          onPress: () => {
-            this.onCancelPress();
-          }
-        }
-      ]);
+      // Alert.alert('Did you drop-off?', '', [
+      //   {
+      //     text: 'Confirm drop-off',
+      //     onPress: () => {
+      this.onWaitingPress();
+      this.setState({
+        textValue: 'Now Waiting'
+      });
+      //     }
+      //   },
+      //   {
+      //     text: 'cancel',
+      //     style: 'cancel',
+      //     onPress: () => {
+      //       this.onCancelPress();
+      //     }
+      //   }
+      // ]);
     } else if (textValue === 'Now Waiting') {
-      Alert.alert('Done Waiting?', '', [
-        {
-          text: 'Ready for prior Destination',
-          onPress: () => {
-            this.onReturnPickingUpPress();
-            this.setState({
-              textValue: 'Tap to return'
-            });
-          }
-        },
-        {
-          text: 'cancel',
-          style: 'cancel',
-          onPress: () => {
-            this.onCancelPress();
-          }
-        }
-      ]);
+      // Alert.alert('Done Waiting?', '', [
+      //   {
+      //     text: 'Ready for prior Destination',
+      //     onPress: () => {
+      this.onReturnPickingUpPress();
+      this.setState({
+        textValue: 'Tap to return'
+      });
+      //     }
+      //   },
+      //   {
+      //     text: 'cancel',
+      //     style: 'cancel',
+      //     onPress: () => {
+      //       this.onCancelPress();
+      //     }
+      //   }
+      // ]);
     } else if (textValue === 'Tap to return') {
-      Alert.alert('Dropping Off?', '', [
-        {
-          text: 'Did you Drop off',
-          onPress: () => {
-            this.onReturnDroppingOffPress();
-            this.onCompletePress();
-            this.setState({
-              textValue: 'Returned'
-            });
-            navigation.navigate('MainView');
-          }
-        },
-        {
-          text: 'cancel',
-          style: 'cancel',
-          onPress: () => {
-            this.onCancelPress();
-          }
-        }
-      ]);
+      // Alert.alert('Dropping Off?', '', [
+      //   {
+      //     text: 'Did you Drop off',
+      //     onPress: () => {
+      this.onReturnDroppingOffPress();
+      this.onCompletePress();
+      this.setState({
+        textValue: 'Returned'
+      });
+      navigation.navigate('MainView');
     }
+    //     },
+    //     {
+    //       text: 'cancel',
+    //       style: 'cancel',
+    //       onPress: () => {
+    //         this.onCancelPress();
+    //       }
+    //     }
+    //   ]);
+    // }
   };
 
   renderOverview = () => {
@@ -353,6 +385,43 @@ export default class RideView extends Component {
               {this.state.first} {this.state.last}
             </Text>
           </Block>
+          {textValue === 'Go to pickup' && (
+            <View
+              row
+              center
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                marginBottom: 10
+              }}
+            >
+              <SkipButton onPress={this.onSkipPress} title="Skip" />
+              {/* <TouchableOpacity onPress={this.onSkipPress}>
+                <Text>By Pass to end</Text>
+                <Icon
+                  name="skip-forward"
+                  size={40}
+                  color="#475c67"
+                  // reverse
+                  // raised
+                  type="material-community"
+                />
+              </TouchableOpacity> */}
+              <CancelButton onPress={this.onCancelPress} title="Stop" />
+              {/* <TouchableOpacity onPress={this.onCancelPress}>
+                <Icon
+                  name="close-box"
+                  size={50}
+                  color="#475c67"
+                  // reverse
+                  // raised
+                  type="material-community"
+                />
+              </TouchableOpacity> */}
+            </View>
+          )}
         </View>
         <View style={{ flex: 3 }}>
           <Popup
@@ -379,16 +448,6 @@ export default class RideView extends Component {
           {this.renderOverview()}
         </View>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={this.onCancelPress}>
-            <Icon
-              name="close"
-              size={20}
-              color="#475c67"
-              reverse
-              raised
-              type="material-community"
-            />
-          </TouchableOpacity>
           <Button
             title={textValue}
             containerStyle={styles.startRideContainer}
