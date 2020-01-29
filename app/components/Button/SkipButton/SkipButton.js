@@ -11,7 +11,7 @@ const SkipButton = ({ title, onPress }) => (
   <LinearGradient
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 0 }}
-    colors={['#678595', '#57717e', '#475c67']}
+    colors={['#57717e', '#475c67', '#678595']}
     style={styles.linearGradient}
   >
     <View style={styles.buttonWrapper}>
