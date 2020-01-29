@@ -44,17 +44,12 @@ class RegisterAvailability extends Component {
 
   render() {
     console.log('made it to register availability');
-    console.log(
-      'the data from agenda view is: ',
-      this.props.navigation.state.params.editItem
-    );
-    console.log(
-      'the end Date from agenda view is: ',
-      this.props.navigation.state.params.endDate
-    );
-    const editItem = this.props.navigation.state.params.editItem;
-    const endDate = this.props.navigation.state.params.endDate;
+    // if (this.props.navigation.state.params !== null) {
+    //   editItem = this.props.navigation.state.params.editItem;
+    //   endDate = this.props.navigation.state.params.endDate;
+    // }
     const { navigation } = this.props;
+    console.log('nav stuff: ', navigation);
 
     return (
       <Container>
@@ -65,9 +60,9 @@ class RegisterAvailability extends Component {
             innerRef={this.handleInnerRef}
             handleSubmitEditing={this.handleSubmitEditing}
             userEntries={this.state.availData}
-            editItem={editItem}
+            // editItem={editItem}
             isEditing={this.props.isEditing}
-            endDate={endDate}
+            // endDate={endDate}
           />
         </View>
       </Container>

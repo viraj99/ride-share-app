@@ -62,7 +62,7 @@ class AgendaView extends React.Component {
 
   testAMatch = item => {
     if (item.isRecurring === true) {
-      console.log('starting test a match');
+      console.log('starting test a match for: ', item.id);
       let { response, others } = this.state;
       console.log('in test a match fx: ', response);
       console.log('in test a match fx: ', others);
@@ -202,7 +202,8 @@ class AgendaView extends React.Component {
               onPress={() =>
                 this.props.navigation.navigate('RegisterAvailability', {
                   editItem: noItem,
-                  isEditing: true
+                  isEditing: true,
+                  endDate: new Date()
                 })
               }
             >
