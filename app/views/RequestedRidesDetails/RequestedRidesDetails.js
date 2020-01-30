@@ -13,7 +13,7 @@ export default class RequestedRidesDetails extends Component<Props> {
     this.state = {
       textValue: 'Accept Ride',
       err: '',
-      isLoading: true,
+      isLoading: true
     };
   }
   ////////////////////////////////
@@ -27,14 +27,15 @@ export default class RequestedRidesDetails extends Component<Props> {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     API.getRides(token)
-      .then((result) => {
+      .then(result => {
         //    console.log('request Ride', result);
         let ride_id = result.rides.rides.id;
         console.log('ride id', ride_id);
-      }).catch((err) => {
+      })
+      .catch(err => {
         console.log('request ride', err);
       });
-  }
+  };
 
   requestRider = () => {
     const { navigation } = this.props;
@@ -48,14 +49,14 @@ export default class RequestedRidesDetails extends Component<Props> {
         this.setState({
           firstName: res.json.rider.first_name,
           lastName: res.json.rider.last_name,
-          isLoading: false,
+          isLoading: false
         });
         //! console.log('lastName', this.state.lastName);
         //! console.log('firstName', this.state.firstName);
       })
       .catch(err => {
         console.log(err);
-      });;
+      });
   };
 
   acceptingRide = () => {
@@ -63,20 +64,21 @@ export default class RequestedRidesDetails extends Component<Props> {
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
     API.acceptRide(rideId, token)
-      .then((result) => {
-        Alert.alert('Ride Confirmed')
+      .then(result => {
+        // Alert.alert('Ride Confirmed')
         console.log('rideId from props', rideId);
         console.log('accept API call', result);
         navigation.navigate('MainView');
-      }).catch((_err) => {
-        Alert.alert('Did not confirm ride')
+      })
+      .catch(_err => {
+        Alert.alert('Did not confirm ride');
         console.log('DIDNT WORK in API call');
         console.log('rideId from props', rideId);
       });
     // useEffect(() => {
     //   navigation.navigate('MainView');
     // });
-  }
+  };
   //!-------------------------------------------
   onPress = () => {
     // const { navigation } = this.props;
@@ -91,8 +93,8 @@ export default class RequestedRidesDetails extends Component<Props> {
           this.acceptingRide();
           // console.warn('ride confirmed');
           // navigation.navigate('MainView');
-        },
-      },
+        }
+      }
     ]);
   };
 
@@ -103,6 +105,8 @@ export default class RequestedRidesDetails extends Component<Props> {
     const endLocation = navigation.getParam('endLocation');
     const date = navigation.getParam('date');
     const reason = navigation.getParam('reason');
+    console.log('in RequestRideDetails startLocat:', startLocation);
+    console.log('in RequestRideDetails endLocat:', endLocation);
     //? const name = navigation.getParam('name');
     //TODO const err = textValue;
     // if (this.state.err.length > 0) {
