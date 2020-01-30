@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import { Avatar, Button, Icon, ThemeProvider } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
-
+import getDirections from 'react-native-google-maps-directions';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
@@ -48,7 +48,60 @@ export default class RideView extends Component {
       });
     });
   };
+  /////////////
+  // handleGetDirections = () => {
+  //   // const data = [
+  //   //   {
+  //   //     pickupLocation: {
+  //   //       latitude: 35.980656,
+  //   //       longitude: -78.898274
+  //   //     },
+  //   //     dropOffLocation: {
+  //   //       latitude: 36.00272,
+  //   //       longitude: -78.902597
+  //   //     }
+  //   //   }
+  //   // ];
 
+  //   const data = {
+  //     source: {
+  //       latitude,
+  //       longitude
+  //     },
+  //     destination: {
+  //       latitude,
+  //       longitude
+  //     },
+  //     params: [
+  //       {
+  //         key: 'travelmode',
+  //         value: 'driving' // may be "walking", "bicycling" or "transit" as well
+  //       },
+  //       {
+  //         key: 'dir_action',
+  //         value: 'navigate' // this instantly initializes navigation using the given travel mode
+  //       }
+  //     ]
+  //     // waypoints: [
+  //     //   {
+  //     //     latitude: -33.8600025,
+  //     //     longitude: 18.697452
+  //     //   },
+  //     //   {
+  //     //     latitude: -33.8600026,
+  //     //     longitude: 18.697453
+  //     //   },
+  //     //   {
+  //     //     latitude: -33.8600036,
+  //     //     longitude: 18.697493
+  //     //   }
+  //     // ]
+  //   };
+  //   const latitude = data.map(item => item.pickupLocation.latitude);
+  //   const longitude = data.map(item => item.pickupLocation.longitude);
+  //   getDirections(data);
+  // };
+  //////////////////
   handlePickUpDirections = () => {
     const latitude = data.map(item => item.pickupLocation.latitude);
     const longitude = data.map(item => item.pickupLocation.longitude);
@@ -389,6 +442,7 @@ export default class RideView extends Component {
             <Text numberOfLines={3} style={styles.nameText}>
               {this.state.first} {this.state.last}
             </Text>
+            {/* <Button onPress={this.handleGetDirections} title="Get Directions" /> */}
           </Block>
           {textValue === 'Go to pickup' && (
             <View
