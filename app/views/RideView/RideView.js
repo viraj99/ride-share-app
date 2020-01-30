@@ -52,6 +52,7 @@ export default class RideView extends Component {
   handlePickUpDirections = () => {
     const latitude = data.map(item => item.pickupLocation.latitude);
     const longitude = data.map(item => item.pickupLocation.longitude);
+    console.log('RideView PickUp', latitude, ' & ', longitude);
     this.setState({
       isVisible: true,
       latitude,
@@ -62,6 +63,7 @@ export default class RideView extends Component {
   handleDropOffDirections = () => {
     const latitude = data.map(item => item.dropOffLocation.latitude);
     const longitude = data.map(item => item.dropOffLocation.longitude);
+    console.log('RideView Drop Off', latitude, ' & ', longitude);
     this.setState({
       isVisible: true,
       latitude,
@@ -182,8 +184,11 @@ export default class RideView extends Component {
 
     API.pickUpRide(rideId, token)
       .then(result => {
+        console.log('Picked UP');
         API.dropOffRide(rideId, token).then(result => {
+          console.log('Dropped');
           API.completeRide(rideId, token).then(result => {
+            console.log('Complete');
             Alert.alert('Ride Complete');
             navigation.navigate('MainView');
           });
