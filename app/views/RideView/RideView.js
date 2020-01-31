@@ -9,18 +9,6 @@ import Block from '../../components/Block';
 import { SkipButton, CancelButton } from '../../components/Button';
 import styles from './styles';
 
-const data = [
-  {
-    pickupLocation: {
-      latitude: 35.980656,
-      longitude: -78.898274
-    },
-    dropOffLocation: {
-      latitude: 36.00272,
-      longitude: -78.902597
-    }
-  }
-];
 export default class RideView extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +29,7 @@ export default class RideView extends Component {
     const token = navigation.getParam('token');
     const riderId = navigation.getParam('riderId');
     API.getRider(riderId, token).then(response => {
+      console.log('response: ', response);
       this.setState({
         first: response.json.rider.first_name,
         last: response.json.rider.last_name,
@@ -48,7 +37,7 @@ export default class RideView extends Component {
       });
     });
   };
-  /////////////
+  // /////////////
   // handleGetDirections = () => {
   //   // const data = [
   //   //   {
@@ -97,30 +86,26 @@ export default class RideView extends Component {
   //     //   }
   //     // ]
   //   };
-  //   const latitude = data.map(item => item.pickupLocation.latitude);
-  //   const longitude = data.map(item => item.pickupLocation.longitude);
+  //   // const latitude = data.map(item => item.pickupLocation.latitude);
+  //   // const longitude = data.map(item => item.pickupLocation.longitude);
   //   getDirections(data);
   // };
   //////////////////
   handlePickUpDirections = () => {
-    const latitude = data.map(item => item.pickupLocation.latitude);
-    const longitude = data.map(item => item.pickupLocation.longitude);
-    console.log('RideView PickUp', latitude, ' & ', longitude);
+    console.log('item with location:', item => item);
+    // console.log('RideView PickUp', latitude, ' & ', longitude);
     this.setState({
-      isVisible: true,
-      latitude,
-      longitude
+      isVisible: true
     });
+    // console.log('RideView PickUp after setState:', latitude, ' & ', longitude);
   };
 
   handleDropOffDirections = () => {
-    const latitude = data.map(item => item.dropOffLocation.latitude);
-    const longitude = data.map(item => item.dropOffLocation.longitude);
-    console.log('RideView Drop Off', latitude, ' & ', longitude);
+    // let latitude = this.props.navigation.state.params.endLocation.latitude;
+    // let longitude = this.props.navigation.state.params.endLocation.longitude;
+    // console.log('RideView Drop Off', latitude, ' & ', longitude);
     this.setState({
-      isVisible: true,
-      latitude,
-      longitude
+      isVisible: true
     });
   };
   onPickUpPress = () => {
@@ -130,9 +115,20 @@ export default class RideView extends Component {
     API.pickUpRide(rideId, token)
       .then(result => {
         // Alert.alert('Picking Up');
-        // console.log('pick up rideId', rideId);
-        // console.log('pick up token', token);
-        // console.log('result', result);
+        console.log('pick up rideId', rideId);
+        console.log('pick up token', token);
+        console.log(
+          'result',
+          result.ride.start_location.latitude,
+          '&',
+          result.ride.start_location.longitude
+        );
+        const latitude = result.ride.start_location.latitude;
+        const longitude = result.ride.start_location.longitude;
+        this.setState({
+          latitude,
+          longitude
+        });
       })
       .catch(err => {
         Alert.alert('Unable to PickUp');
@@ -151,6 +147,18 @@ export default class RideView extends Component {
         // Alert.alert('Dropping Off');
         console.log('drop off rideId', rideId);
         console.log('drop off token', token);
+        console.log(
+          'result',
+          result.ride.end_location.latitude,
+          '&',
+          result.ride.end_location.longitude
+        );
+        const latitude = result.ride.end_location.latitude;
+        const longitude = result.ride.end_location.longitude;
+        this.setState({
+          latitude,
+          longitude
+        });
       })
       .catch(err => {
         // Alert.alert('Unable to Drop Off');
@@ -422,6 +430,8 @@ export default class RideView extends Component {
   render() {
     const { textValue, isVisible, latitude, longitude } = this.state;
     const { navigation } = this.props;
+    console.log('trying to get location: ', latitude, '&', longitude);
+
     // ?const name = navigation.getParam('name');
 
     return (
