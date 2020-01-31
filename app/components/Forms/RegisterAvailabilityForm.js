@@ -39,10 +39,8 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   componentDidMount() {
-    if (
-      this.props.navigation.state.params.editItem.id !== null ||
-      this.props.navigation.state.params.editItem === null
-    ) {
+    console.log('meow', this.props.navigation.state.params);
+    if (this.props.navigation.state.params.editItem.id !== null) {
       let editItem = this.props.navigation.state.params.editItem;
       let editStartDate = editItem.startTime;
       let slicePoint = editStartDate.indexOf(' ');

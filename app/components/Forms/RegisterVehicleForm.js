@@ -61,7 +61,7 @@ class RegisterVehicleForm extends React.Component {
       .then(
         this.props.navigation.navigate('RegisterAvailability', {
           isEditing: false,
-          editItem: null
+          editItem: { id: null }
         })
       )
       //if error performing API fetch for posting driver, show error
