@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   TextInput,
@@ -6,21 +6,34 @@ import {
   TouchableOpacity,
   Switch,
   Alert,
+  FlatList
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
-import Notifications from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { AddButton } from '../../components/Button';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+import { NavigationEvents } from 'react-navigation';
+import { Header } from '../../components/Header';
+import { List, ListItem } from 'react-native-elements';
 import User from 'react-native-vector-icons/SimpleLineIcons';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
 import styles from './settingsStyle.js';
 import API from '../../api/api';
+import { VehicleCard } from '../../components/Card';
+import Animated from 'react-native-reanimated';
+import variables from '../../utils/variables';
+import { DeleteButton } from '../../components/Button';
+import Container from '../../components/Container';
 
 class Settings extends Component {
+  _isMounted = false;
+  scrollX = new Animated.Value(0);
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
@@ -32,6 +45,7 @@ class Settings extends Component {
       buttonTitle: false,
       allowEmailNotification: false,
       allowPhoneNotification: false,
+
       email: '',
       phoneNumber: '',
       radius: '',
@@ -41,7 +55,7 @@ class Settings extends Component {
       model: '',
       firstName: '',
       lastName: '',
-      organization_id: '',
+      organization_id: ''
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
@@ -61,12 +75,12 @@ class Settings extends Component {
 
   handleBackButton = () => {
     this.props.navigation.navigate('MainView');
-  }
+  };
 
   handleLogout() {
     AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
-      const {token} = obj;
+      const { token } = obj;
       API.logout(token)
         .then(res => {
           const loggedOut = res.json.Success;
@@ -87,10 +101,10 @@ class Settings extends Component {
   handleEdit() {
     this.setState({
       editable: !this.state.editable,
-      buttonTitle: !this.state.buttonTitle,
+      buttonTitle: !this.state.buttonTitle
     });
     if (this.state.editable) {
-      const data = {
+      const driverData = {
         organization_id: this.state.organization_id,
         first_name: this.state.firstName,
         last_name: this.state.lastName,
@@ -98,14 +112,17 @@ class Settings extends Component {
         phone: this.state.phoneNumber,
         radius: this.state.radius,
         is_active: this.state.active,
-        car_make: this.state.make,
-        car_model: this.state.model,
-        car_color: this.state.color,
+        allowEmailNotification: this.state.allowEmailNotification
       };
       AsyncStorage.getItem('token', (err, result) => {
         const obj = JSON.parse(result);
-        const {token} = obj;
-        API.updateSettingsInfo(data, token);
+        const { token } = obj;
+
+        API.updateSettingsDriver(driverData, token)
+          .then(result => {})
+          .catch(err => {
+            console.log(err);
+          });
       });
     } else {
       null;
@@ -114,67 +131,71 @@ class Settings extends Component {
 
   handleFirstName = text => {
     this.setState({
-      firstName: text,
+      firstName: text
     });
   };
 
   handleLastName = text => {
     this.setState({
-      lastName: text,
+      lastName: text
     });
   };
 
   handleEmail = text => {
     this.setState({
-      email: text,
+      email: text
     });
   };
 
   handlePhoneNumber = text => {
     this.setState({
-      phoneNumber: text,
+      phoneNumber: text
     });
   };
 
   handleRadius = text => {
     this.setState({
-      radius: text,
+      radius: text
     });
   };
 
   handleMake = text => {
     this.setState({
-      make: text,
+      make: text
     });
   };
 
   handleModel = text => {
     this.setState({
-      model: text,
+      model: text
     });
   };
 
   handleColor = text => {
     this.setState({
-      color: text,
+      color: text
     });
   };
-
+  handleInsurance = text => {
+    this.setState({
+      insurance: text
+    });
+  };
   handleActive() {
     this.setState({
-      active: !this.state.active,
+      active: !this.state.active
     });
   }
 
   handleEmailNotification() {
     this.setState({
-      allowEmailNotification: !this.state.allowEmailNotification,
+      allowEmailNotification: !this.state.allowEmailNotification
     });
   }
 
   handlePhoneNotification() {
     this.setState({
-      allowPhoneNotification: !this.state.allowPhoneNotification,
+      allowPhoneNotification: !this.state.allowPhoneNotification
     });
   }
 
@@ -182,51 +203,149 @@ class Settings extends Component {
     await AsyncStorage.getItem('token', (err, result) => {
       const obj = JSON.parse(result);
       const tokenValue = obj.token;
+      this._isMounted = true;
 
       API.getSettingInfo(tokenValue)
         .then(res => {
-          this.setState({
-            //is_mounting: true,
-            firstName: res.first_name,
-            lastName: res.last_name,
-            email: res.email,
-            phoneNumber: res.phone,
-            radius: JSON.stringify(res.radius),
-            active: res.is_active,
-            make: res.car_make,
-            model: res.car_model,
-            color: res.car_color,
-            organization_id: res.organization_id,
+          const settingInfo = res;
+          console.log('settingsInfo', settingInfo);
+          if (this._isMounted) {
+            this.setState({
+              firstName: settingInfo.driver.first_name,
+              lastName: settingInfo.driver.last_name,
+              email: settingInfo.driver.email,
+              phoneNumber: settingInfo.driver.phone,
+              radius: JSON.stringify(settingInfo.driver.radius),
+              active: settingInfo.driver.is_active,
+              organization_id: settingInfo.driver.organization_id
+            });
+          }
+          API.getVehicle(tokenValue).then(response => {
+            const vehicles = response.vehicle;
+            console.log('vehicles from API :', vehicles);
+            this.setState({
+              vehicles
+            });
           });
         })
-        .catch(error => {
+        .catch(err => {
           AsyncStorage.removeItem('token');
           this.props.navigation.navigate('Auth');
         });
     });
   }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  deleteVehicle = id => {
+    Alert.alert('Delete this Vehicle?', '', [
+      { text: "Don't Delete", style: 'cancel' },
+      {
+        text: 'Yes, delete this vehicle',
+        onPress: async () => {
+          const value = await AsyncStorage.getItem('token');
+          const parsedValue = JSON.parse(value);
+          const realToken = parsedValue.token;
+          this.setState({
+            token: realToken
+          });
+          console.log('Number of times this runs');
+          API.deleteVehicle(id, realToken)
+            .then(result => {
+              newVehicles = [...this.state.vehicles];
+              updatedVehicleArray = newVehicles.filter(
+                vehicle => vehicle.id !== id
+              );
+              this.setState({
+                vehicles: updatedVehicleArray
+              });
+              console.log('updatedVehicleArray', updatedVehicleArray);
+              console.log('result of delete Api', result);
+              console.log('worked');
+            })
+            .catch(err => {
+              console.log('DIDNT Work');
+            });
+        }
+      }
+    ]);
+  };
+
+  Vehicles = item => {
+    const { token } = this.state;
+    const { navigation } = this.props;
+    const vehicle = item;
+    const make = item.item.car_make;
+    const model = item.item.car_model;
+    const vehicleId = item.item.id;
+    const year = item.item.car_year;
+    console.log(vehicleId, 'v ID');
+    return (
+      <VehicleCard
+        key={item.id}
+        deleteVehicle={this.deleteVehicle}
+        onPress={() => {
+          navigation.navigate('RegisterVehicle', {
+            vehicle,
+            isEditing: true,
+            isAdding: false,
+            isCreating: false
+          });
+        }}
+        token={token}
+        make={make}
+        model={model}
+        year={year}
+        vehicleId={vehicleId}
+      />
+    );
+  };
+  renderVehicles = () => {
+    const { vehicles } = this.state;
+    console.log('vehicles from renderVehicles: ', vehicles);
+
+    if (vehicles) {
+      return (
+        <View>
+          <FlatList
+            data={this.state.vehicles}
+            extraData={this.state}
+            renderItem={item => this.Vehicles(item)}
+            keyExtractor={item => `${item.id}`}
+          />
+        </View>
+      );
+    } else {
+      console.log('DIDNT WORK in renderVehicles');
+      return null;
+    }
+  };
 
   // componentWillUnmount() {
-      // this.setState({
-        // is_mounting: false,
-      // })
+  // this.setState({
+  // is_mounting: false,
+  // })
   // }
 
   render() {
-    // {is_mounting && {
+    // console.log('in render this.state.vehicles', this.state.vehicles);
+    const { token } = this.state;
+    // console.log('in render this.state = token', token);
+    const { navigation } = this.props;
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <SettingHeader onPress={this.handleBackButton} />
-          <View style={styles.settingSection}>
+      <View style={styles.container}>
+        <SettingHeader onPress={this.handleBackButton} />
+        <ScrollView>
+          <View style={styles.settingSection} stickyHeaderIndices={[0]}>
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>Account</Text>
+                <Text style={styles.sectionTitle}>Driver Information</Text>
               </View>
               <View style={styles.inputContainer}>
                 <User name="user" size={30} color="#475c67" />
                 <View style={styles.userFirstLastName}>
-                  <View style={{paddingRight: 8}}>
+                  <View style={{ paddingRight: 8 }}>
                     <View style={styles.bottomBorder}>
                       <TextInput
                         style={styles.input}
@@ -260,6 +379,7 @@ class Settings extends Component {
                     value={this.state.email}
                     onChangeText={this.handleEmail}
                     editable={this.state.editable}
+                    autoCapitalize="none"
                   />
                 </View>
               </View>
@@ -315,7 +435,7 @@ class Settings extends Component {
                 </View>
               </View>
               <View style={styles.inputContainer}>
-                <View>
+                {/* <View>
                   <Text style={styles.inputTitle}>Email</Text>
                   <Text style={styles.notificationDescription}>
                     Turn off/on email notifications
@@ -342,72 +462,59 @@ class Settings extends Component {
                     onValueChange={this.handlePhoneNotification}
                     value={this.state.allowPhoneNotification}
                   />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>Car</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Make</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Ford"
-                    value={this.state.make}
-                    editable={this.state.editable}
-                    onChangeText={this.handleMake}
-                  />
-                </View>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Model</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Civic"
-                    value={this.state.model}
-                    editable={this.state.editable}
-                    onChangeText={this.handleModel}
-                  />
-                </View>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Color</Text>
-                <View style={styles.bottomBorder}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Blue"
-                    value={this.state.color}
-                    editable={this.state.editable}
-                    onChangeText={this.handleColor}
-                  />
-                </View>
+                </View> */}
               </View>
             </View>
             <View style={styles.buttonSection}>
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={this.handleEdit}>
+                onPress={this.handleEdit}
+              >
                 <Text style={styles.buttonTitle}>
                   {this.state.buttonTitle ? 'Update' : 'Edit'}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
+          <View style={styles.section}>
+            <View style={styles.sectionTitleContainer}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                  // padding: 5,
+                  // borderRadius: 5
+                }}
+              >
+                <Text style={styles.sectionTitle}>Vehicles</Text>
+                <View style={{ justifyContent: 'center', marginRight: 15 }}>
+                  <AddButton
+                    onPress={() => {
+                      navigation.navigate('RegisterVehicle', {
+                        isAdding: true,
+                        isEditing: false,
+                        isCreating: false
+                      });
+                    }}
+                    token={token}
+                  />
+                </View>
+              </View>
+            </View>
+            {this.state.vehicles && <View>{this.renderVehicles()}</View>}
+          </View>
           <View style={styles.buttonSection}>
             <TouchableOpacity
               style={styles.logoutButton}
-              onPress={this.handleLogout}>
+              onPress={this.handleLogout}
+            >
               <Text style={styles.buttonTitle}>Log out</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
-    // }
   }
 }
+
 export default Settings;

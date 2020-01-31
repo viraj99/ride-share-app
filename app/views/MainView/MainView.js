@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -7,17 +7,16 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Animated,
-  SafeAreaView
-} from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { NavigationEvents } from "react-navigation";
-import { Header } from "../../components/Header";
-import { UpcomingRideCard, RequestedRideCard } from "../../components/Card";
-import { CalendarButton } from "../../components/Button";
-import styles from "./styles";
-import variables from "../../utils/variables";
-import API from "../../api/api";
+  Animated
+} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { NavigationEvents } from 'react-navigation';
+import { Header } from '../../components/Header';
+import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
+import { CalendarButton } from '../../components/Button';
+import styles from './styles';
+import variables from '../../utils/variables';
+import API from '../../api/api';
 type Props = {};
 export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
@@ -30,13 +29,13 @@ export default class MainView extends Component<Props> {
       withinAvailRides: [],
       hasReqRidesInAvail: false,
       showAllRides: false,
-      toggleButtonText: "Show All Requested Rides",
+      toggleButtonText: 'Show All Requested Rides',
       isLoading: true,
-      token: ""
+      token: ''
     };
   }
   handleToken = async () => {
-    const value = await AsyncStorage.getItem("token");
+    const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
     this.setState({
@@ -87,28 +86,28 @@ export default class MainView extends Component<Props> {
       this.setState({
         availabilities: result.json
       }),
-        console.log("in getAvail: ", result.json);
+        console.log('in getAvail: ', result.json);
     });
     API.getDriver(token)
       .then(result => {
         const driverId = result.driver.id;
         API.getRides(token).then(result => {
-          console.log("all rides: ", result.rides);
+          console.log('all rides: ', result.rides);
           const rides = result.rides;
           const myRides = rides.filter(ride => ride.driver_id === driverId);
-          console.log("just my rides: ", myRides);
+          console.log('just my rides: ', myRides);
           const scheduledRides = myRides.filter(
-            ride => ride.status === "scheduled"
+            ride => ride.status === 'scheduled'
           );
-          console.log("scheduled rides: ", scheduledRides);
+          console.log('scheduled rides: ', scheduledRides);
           const approvedRides = rides.filter(
-            ride => ride.status === "approved"
+            ride => ride.status === 'approved'
           );
-          console.log("approved rides: ", approvedRides);
+          console.log('approved rides: ', approvedRides);
           const withinAvailRides = this.withinMyAvail(
-            rides.filter(ride => ride.status === "approved")
+            rides.filter(ride => ride.status === 'approved')
           );
-          console.log("approved rides in my avail: ", withinAvailRides);
+          console.log('approved rides in my avail: ', withinAvailRides);
 
           // let yesHasSchedRides;
           // if (scheduledRides !== []) {
@@ -133,7 +132,7 @@ export default class MainView extends Component<Props> {
         });
       })
       .catch(err => {
-        console.log("request ride err", err);
+        console.log('request ride err', err);
       });
   };
   renderLoader = () => {
@@ -170,7 +169,7 @@ export default class MainView extends Component<Props> {
       <UpcomingRideCard
         key={item.driver_id}
         onPress={() => {
-          navigation.navigate("RideView", {
+          navigation.navigate('RideView', {
             riderId,
             rideId,
             token,
@@ -181,8 +180,8 @@ export default class MainView extends Component<Props> {
           });
         }}
         date={item.pick_up_time}
-        pickupLocation={startLocation.join(", ")}
-        dropoffLocation={endLocation.join(", ")}
+        pickupLocation={startLocation.join(', ')}
+        dropoffLocation={endLocation.join(', ')}
       />
     );
   };
@@ -195,7 +194,7 @@ export default class MainView extends Component<Props> {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
-            extrapolate: "clamp"
+            extrapolate: 'clamp'
           });
           return (
             <Animated.View
@@ -209,7 +208,7 @@ export default class MainView extends Component<Props> {
   };
   renderUpcomingRides = () => {
     const { scheduledRides } = this.state;
-    console.log("render upcomming", scheduledRides);
+    console.log('render upcomming', scheduledRides);
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
     if (scheduledRides.length === 0) {
@@ -224,11 +223,11 @@ export default class MainView extends Component<Props> {
       return (
         <View style={{ flex: 2 }}>
           <View style={styles.titleWrapper}>
-            <View style={{ alignItems: "flex-start" }}>
+            <View style={{ alignItems: 'flex-start' }}>
               <Text style={styles.subTitle}>Upcoming Schedule</Text>
             </View>
             {numRides > 3 ? (
-              <View style={{ alignItems: "flex-end" }}>
+              <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity onPress={this.navigateToDriverSchedule}>
                   <Text style={styles.seeAllText}>{seeAll}</Text>
                 </TouchableOpacity>
@@ -244,9 +243,9 @@ export default class MainView extends Component<Props> {
             decelerationRate={0}
             scrollEventThrottle={16}
             snapToAlignment="center"
-            style={{ overflow: "visible" }}
+            style={{ overflow: 'visible' }}
             data={scheduledRides.slice(0, 3)}
-            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
@@ -279,7 +278,7 @@ export default class MainView extends Component<Props> {
       <RequestedRideCard
         key={item.driver_id}
         onPress={() => {
-          navigation.navigate("RequestedRidesDetails", {
+          navigation.navigate('RequestedRidesDetails', {
             riderId,
             rideId,
             token,
@@ -292,8 +291,8 @@ export default class MainView extends Component<Props> {
         }}
         name={name}
         date={date}
-        pickupLocation={startLocation.join(", ")}
-        dropoffLocation={endLocation.join(", ")}
+        pickupLocation={startLocation.join(', ')}
+        dropoffLocation={endLocation.join(', ')}
       />
     );
   };
@@ -338,7 +337,7 @@ export default class MainView extends Component<Props> {
       <RequestedRideCard
         key={item.driver_id}
         onPress={() => {
-          navigation.navigate("RequestedRidesDetails", {
+          navigation.navigate('RequestedRidesDetails', {
             riderId,
             rideId,
             token,
@@ -351,8 +350,8 @@ export default class MainView extends Component<Props> {
         }}
         name={name}
         date={date}
-        pickupLocation={startLocation.join(", ")}
-        dropoffLocation={endLocation.join(", ")}
+        pickupLocation={startLocation.join(', ')}
+        dropoffLocation={endLocation.join(', ')}
       />
     );
   };
@@ -362,7 +361,7 @@ export default class MainView extends Component<Props> {
     return (
       <View>
         <View style={styles.titlesContainer}>
-          <View style={{ alignItems: "flex-start" }}>
+          <View style={{ alignItems: 'flex-start' }}>
             <Text style={styles.subTitle}>Requested Rides</Text>
           </View>
         </View>
@@ -374,9 +373,9 @@ export default class MainView extends Component<Props> {
           decelerationRate={0}
           scrollEventThrottle={16}
           snapToAlignment="center"
-          style={{ overflow: "visible" }}
+          style={{ overflow: 'visible' }}
           data={approvedRides}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+          keyExtractor={item => `${item.id}`} // id is not showing up in response
           onScroll={Animated.event([
             { nativeEvent: { contentOffset: { x: this.scrollX } } }
           ])}
@@ -388,7 +387,7 @@ export default class MainView extends Component<Props> {
 
   renderFilteredRides = () => {
     const { withinAvailRides } = this.state;
-    console.log("whats in the withinAvailRides state? ", withinAvailRides);
+    console.log('whats in the withinAvailRides state? ', withinAvailRides);
     if (withinAvailRides.length === 0) {
       return (
         <View>
@@ -411,7 +410,7 @@ export default class MainView extends Component<Props> {
       return (
         <View>
           <View style={styles.titlesContainer}>
-            <View style={{ alignItems: "flex-start" }}>
+            <View style={{ alignItems: 'flex-start' }}>
               <Text style={styles.subTitle}>
                 Requested rides within my availability:
               </Text>
@@ -425,9 +424,9 @@ export default class MainView extends Component<Props> {
             decelerationRate={0}
             scrollEventThrottle={16}
             snapToAlignment="center"
-            style={{ overflow: "visible" }}
+            style={{ overflow: 'visible' }}
             data={withinAvailRides}
-            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
@@ -452,23 +451,23 @@ export default class MainView extends Component<Props> {
     if (this.state.showAllRides === false) {
       this.setState({
         showAllRides: true,
-        toggleButtonText: "Hide All Requested Rides"
+        toggleButtonText: 'Hide All Requested Rides'
       });
     } else {
       this.setState({
         showAllRides: false,
-        toggleButtonText: "Show All Requested Rides"
+        toggleButtonText: 'Show All Requested Rides'
       });
     }
   };
 
   navigateToSettings = () => {
     const { navigation } = this.props;
-    navigation.navigate("Settings");
+    navigation.navigate('Settings');
   };
   navigateToCalendar = () => {
     const { navigation } = this.props;
-    navigation.navigate("AgendaView");
+    navigation.navigate('AgendaView');
   };
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
@@ -477,7 +476,7 @@ export default class MainView extends Component<Props> {
     const { token } = this.state;
     // console.log('in navigate to driver', scheduledRides);
     // console.log('navigate token', token);
-    navigation.navigate("DriverScheduleView", { scheduledRides, token });
+    navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
   render() {
     const { isLoading } = this.state;

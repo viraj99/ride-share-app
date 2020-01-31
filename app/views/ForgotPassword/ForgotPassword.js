@@ -1,16 +1,24 @@
-import React, {Component} from 'react';
-import {View, TextInput, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, TextInput, Text } from 'react-native';
 import styles from './styles';
-import {CalendarButton} from '../../components/Button';
+import { CalendarButton } from '../../components/Button';
 
 class ForgotPassword extends Component {
   state = {
     email: '',
-    error: '',
+    error: ''
+  };
+
+  handleResetPress = email => {
+    if (email) {
+      console.log('email submitted:', email);
+    } else {
+      console.log('NO Email collected');
+    }
   };
 
   render() {
-    const {email} = this.state;
+    const { email } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -22,15 +30,16 @@ class ForgotPassword extends Component {
           </View>
           <TextInput
             style={styles.input}
-            email
+            onChangeText={text => this.setState({ email: text })}
+            placeholder="example@gmail.com"
             keyboardType="email-address"
             autoCapitalize="none"
             returnKeyType="go"
-            defaultValue={email}
+            value={email}
           />
           <View style={styles.padding}>
             <CalendarButton
-              onPress={() => console.log('reset pass')}
+              onPress={() => this.handleResetPress(email)}
               title="Reset Password"
             />
           </View>
