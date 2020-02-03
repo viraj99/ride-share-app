@@ -1,21 +1,22 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, Platform} from 'react-native';
+import { Text, View, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
 // import PropTypes from 'prop-types';
 import styles from './styles';
 
-const Header = ({onPress}) => (
+const Header = ({ onPress }) => (
   <LinearGradient
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
     colors={
       Platform.OS === 'ios'
         ? ['#15a76a', '#15a76a', '#11a461']
-        : ['#1EAA70', '#1EAA70']
+        : ['#3a556a', '#3a556a']
     }
-    style={styles.headerContainer}>
+    style={styles.headerContainer}
+  >
     <View style={styles.leftContainer}>
       <Text style={styles.titleText}>Welcome</Text>
     </View>

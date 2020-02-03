@@ -1,4 +1,4 @@
-import {Platform, Dimensions, PixelRatio} from 'react-native';
+import { Platform, Dimensions, PixelRatio } from 'react-native';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -18,11 +18,11 @@ const sizes = {
   margin: 36,
   title: 24,
   border: 16,
-  radius: 12,
+  radius: 12
 };
 
 const colors = {
-  primary: '#1EAA70',
+  primary: '#3a556a',
   secondary: '#ff8262',
   tertiary: '#fcfcf6',
   active: '#FF4957',
@@ -33,7 +33,7 @@ const colors = {
   gray3: '#F0F0F0',
   gray4: '#F7F8FA',
   darkgray: '#475c67',
-  lightgray: '#b1c1c8',
+  lightgray: '#b1c1c8'
 };
 
 export default {
@@ -119,5 +119,5 @@ export default {
   deviceWidth,
   deviceHeight,
   isIphoneX,
-  inputGroupRoundedBorderRadius: 30,
+  inputGroupRoundedBorderRadius: 30
 };

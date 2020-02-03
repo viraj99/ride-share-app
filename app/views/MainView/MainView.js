@@ -17,7 +17,8 @@ import { CalendarButton } from '../../components/Button';
 import styles from './styles';
 import variables from '../../utils/variables';
 import API from '../../api/api';
-type Props = {};
+import NavFooter from '../../components/NavFooter/NavFooter';
+
 export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
   constructor(props) {
@@ -483,7 +484,7 @@ export default class MainView extends Component<Props> {
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={() => this.handleToken()} />
-        <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
+        <StatusBar barStyle="light-content" backgroundColor="#3a556a" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (
           this.renderLoader()
@@ -498,9 +499,10 @@ export default class MainView extends Component<Props> {
             {this.state.showAllRides && this.renderRequestedRides()}
           </ScrollView>
         )}
-        <View style={styles.footer}>
+        <NavFooter navigation={this.props.navigation} />
+        {/* <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
-        </View>
+        </View> */}
       </View>
     );
   }

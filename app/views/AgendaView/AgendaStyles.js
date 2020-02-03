@@ -118,7 +118,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1EAA70',
+    backgroundColor: '#3a556a',
     height: Platform.OS == 'ios' ? 120 : 80,
     marginTop: Platform.OS == 'android' ? 0 : 0
   },
