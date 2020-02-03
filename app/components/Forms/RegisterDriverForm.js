@@ -150,6 +150,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>First Name:</Text>
             <TextInput
               onChangeText={text => this.setState({ first_name: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="First Name"
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -164,6 +165,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Last Name:</Text>
             <TextInput
               onChangeText={text => this.setState({ last_name: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="Last Name"
               ref={input => {
                 this.lastName = input;
@@ -181,6 +183,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Phone Number:</Text>
             <TextInput
               onChangeText={text => this.setState({ phone: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="9195551234"
               ref={input => {
                 this.phone = input;
@@ -199,6 +202,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Email:</Text>
             <TextInput
               onChangeText={text => this.setState({ email: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="example@example.com"
               ref={input => {
                 this.email = input;
@@ -216,6 +220,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Create a Password:</Text>
             <TextInput
               onChangeText={text => this.setState({ password: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="password"
               ref={input => {
                 this.password = input;
