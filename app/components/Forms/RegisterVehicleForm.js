@@ -182,6 +182,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Make:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_make: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Toyota"
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -196,6 +197,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Model:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_model: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Camry"
               ref={input => {
                 this.carModel = input;
@@ -213,6 +215,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Year:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_year: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="YYYY"
               ref={input => {
                 this.carYear = input;
@@ -230,6 +233,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
             <TextInput
               onChangeText={text => this.setState({ seat_belt_num: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="#"
               ref={input => {
                 this.carBelts = input;
@@ -247,6 +251,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Color:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_color: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Black"
               ref={input => {
                 this.carColor = input;
@@ -264,6 +269,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>License Plate:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_plate: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. PEG-1234"
               ref={input => {
                 this.carPlate = input;
@@ -281,6 +287,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
             <TextInput
               onChangeText={text => this.setState({ insurance_provider: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Geico"
               ref={input => {
                 this.carInsur = input;
@@ -308,6 +315,7 @@ class RegisterVehicleForm extends React.Component {
               <DateTimePicker
                 value={new Date() || new Date(insurance_start)}
                 onChange={this.setStartDate}
+                TextColor="#C0C0C0"
               />
             )}
             {this.props.navigation.state.params.isEditing ? (

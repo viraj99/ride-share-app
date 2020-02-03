@@ -475,7 +475,16 @@ class Settings extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.buttonSection}>
+              <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={this.handleLogout}
+              >
+                <Text style={styles.buttonTitle}>Log out</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+
           <View style={styles.section}>
             <View style={styles.sectionTitleContainer}>
               <View
@@ -503,14 +512,14 @@ class Settings extends Component {
             </View>
             {this.state.vehicles && <View>{this.renderVehicles()}</View>}
           </View>
-          <View style={styles.buttonSection}>
+          {/* <View style={styles.buttonSection}>
             <TouchableOpacity
               style={styles.logoutButton}
               onPress={this.handleLogout}
             >
               <Text style={styles.buttonTitle}>Log out</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
     );

@@ -107,6 +107,7 @@ class Login extends Component {
                     keyboardType="email-address"
                     blurOnSubmit={false}
                     style={styles.textInput}
+                    placeholderTextColor="#C0C0C0"
                     placeholder="Username"
                     value={this.state.username}
                     onChangeText={this.handleUsername}
@@ -126,6 +127,7 @@ class Login extends Component {
                     secureTextEntry
                     style={styles.textInput}
                     blurOnSubmit={false}
+                    placeholderTextColor="#C0C0C0"
                     placeholder="Password"
                     value={this.state.password}
                     onChangeText={this.handlePassword}

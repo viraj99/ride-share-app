@@ -13,7 +13,10 @@ class RegisterHeader extends Component {
       <View style={styles.mainContainer}>
         <View style={styles.componentsContainer}>
           <View style={styles.backButtonContainer}>
-            <TouchableOpacity onPress={this.props.onPress}>
+            <TouchableOpacity
+              onPress={this.props.onPress}
+              hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+            >
               <Icon name="ios-arrow-back" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
