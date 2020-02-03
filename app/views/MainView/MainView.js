@@ -360,7 +360,7 @@ export default class MainView extends Component<Props> {
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
     return (
-      <View>
+      <View style={styles.reqRidesContainer}>
         <View style={styles.titlesContainer}>
           <View style={{ alignItems: 'flex-start' }}>
             <Text style={styles.subTitle}>Requested Rides</Text>

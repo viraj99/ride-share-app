@@ -138,5 +138,8 @@ export default StyleSheet.create({
     paddingBottom: 25,
     borderBottomWidth: 2,
     borderColor: '#475c67'
+  },
+  reqRidesContainer: {
+    paddingBottom: 40
   }
 });
