@@ -113,7 +113,7 @@ export default StyleSheet.create({
   },
   sectionTitleContainer: {
     padding: 5,
-    backgroundColor: '#ff8262',
+    backgroundColor: '#e56353',
     borderRadius: 5
   },
   sectionTitle: {

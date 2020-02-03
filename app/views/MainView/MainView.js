@@ -481,6 +481,7 @@ export default class MainView extends Component<Props> {
   };
   render() {
     const { isLoading } = this.state;
+    console.log('SCHEDULED RIDES: ', this.state.scheduledRides);
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={() => this.handleToken()} />
@@ -499,7 +500,11 @@ export default class MainView extends Component<Props> {
             {this.state.showAllRides && this.renderRequestedRides()}
           </ScrollView>
         )}
-        <NavFooter navigation={this.props.navigation} />
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.state.token}
+          scheduledRides={this.state.scheduledRides}
+        />
         {/* <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
         </View> */}

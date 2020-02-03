@@ -23,8 +23,8 @@ const sizes = {
 
 const colors = {
   primary: '#3a556a',
-  secondary: '#ff8262',
-  tertiary: '#fcfcf6',
+  secondary: '#e56353',
+  tertiary: '#fff',
   active: '#FF4957',
   black: '#2F2F2F',
   white: '#FFFFFF',

@@ -13,7 +13,7 @@ const EditButton = ({ title, onPress, editVehicle, vehicleId, token }) => (
       {/* <View style={styles.circleButtonContainer}> */}
 
       <Icon
-        color="#ff8262"
+        color="#e56353"
         name="pencil"
         size={25}
         // style={{ alignSelf:  }}

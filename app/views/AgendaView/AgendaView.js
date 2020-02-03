@@ -111,7 +111,7 @@ class AgendaView extends React.Component {
       <View style={[styles.availListItem]}>
         <View style={styles.leftList}>
           <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
-            <Icon color={'#ff8262'} name="pencil" size={30} />
+            <Icon color={'#e56353'} name="pencil" size={30} />
           </TouchableOpacity>
         </View>
 
@@ -128,7 +128,7 @@ class AgendaView extends React.Component {
 
         <View style={styles.rightList}>
           <TouchableOpacity onPress={() => this.deleteAvail(id)}>
-            <Icon color={'#ff8262'} name="delete" size={30} />
+            <Icon color={'#e56353'} name="delete" size={30} />
           </TouchableOpacity>
         </View>
       </View>

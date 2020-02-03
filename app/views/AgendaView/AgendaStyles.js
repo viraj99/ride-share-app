@@ -61,7 +61,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   flatlistContainer: {
-    backgroundColor: '#fcfcf6'
+    backgroundColor: '#fff'
   },
   leftList: {
     marginRight: 10,
@@ -75,7 +75,7 @@ export default StyleSheet.create({
     marginTop: 5
   },
   formButton: {
-    backgroundColor: '#ff8262'
+    backgroundColor: '#e56353'
   },
   inputRow: {
     flexDirection: 'row',

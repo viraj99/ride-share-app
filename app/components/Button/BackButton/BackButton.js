@@ -13,7 +13,7 @@ const BackButton = ({ title, onPress, editVehicle, vehicleId, token }) => (
     <TouchableOpacity onPress={onPress}>
       {/* <View style={styles.circleButtonContainer}> */}
 
-      <Icon color="#ff8262" name="ios-arrow-back" size={30} marginLeft={10} />
+      <Icon color="#e56353" name="ios-arrow-back" size={30} marginLeft={10} />
       {/* </View> */}
     </TouchableOpacity>
   </View>

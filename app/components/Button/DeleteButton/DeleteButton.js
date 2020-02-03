@@ -12,7 +12,7 @@ const DeleteButton = ({ title, deleteVehicle, vehicleId, token }) => (
     <TouchableOpacity onPress={() => deleteVehicle(vehicleId, token)}>
       {/* <View style={styles.circleButtonContainer}> */}
       <Icon
-        color="#ff8262"
+        color="#e56353"
         name="delete"
         size={25}
         // style={{ alignSelf: 'flex-start' }}

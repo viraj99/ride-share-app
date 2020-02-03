@@ -4,10 +4,28 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import API from '../../api/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class NavFooter extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      scheduledRides: []
+    };
+  }
+
+  componentDidMount() {
+    let token = AsyncStorage.getItem('token');
+    console.log('TOKEN IS: ', token.token);
+    API.getRides(token).then(result => {
+      const scheduledRides = myRides.filter(
+        ride => ride.status === 'scheduled'
+      );
+      this.setState({
+        scheduledRides
+      });
+    });
   }
 
   goHome = navigation => {
@@ -15,9 +33,9 @@ class NavFooter extends React.Component {
     navigation.navigate('MainView');
   };
 
-  goToScheduledRides = navigation => {
+  goToScheduledRides = (navigation, token, scheduledRides) => {
     console.log('clicked on Schedule');
-    navigation.navigate('DriverScheduleView');
+    navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
 
   goToAgenda = navigation => {
@@ -52,7 +70,13 @@ class NavFooter extends React.Component {
             size={35}
             color="#3a556a"
             style={styles.navFooterIcon}
-            onPress={() => this.goToScheduledRides(navigation)}
+            onPress={() =>
+              this.goToScheduledRides(
+                navigation,
+                this.props.token,
+                this.props.scheduledRides
+              )
+            }
           />
 
           <Text style={styles.navFooterText}> Schedule </Text>

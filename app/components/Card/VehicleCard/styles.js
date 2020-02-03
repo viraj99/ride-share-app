@@ -53,6 +53,6 @@ export default StyleSheet.create({
   },
   bottomBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ff8262'
+    borderBottomColor: '#e56353'
   }
 });
