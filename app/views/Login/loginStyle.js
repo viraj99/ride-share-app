@@ -30,8 +30,7 @@ export default StyleSheet.create({
   },
   formTitleContainer: {
     borderBottomWidth: 1.5,
-    borderBottomColor: '#475c67',
-    paddingTop: 31
+    borderBottomColor: '#475c67'
   },
   formTitle: {
     fontWeight: 'bold',
@@ -99,7 +98,6 @@ export default StyleSheet.create({
   forgotPasswordLink: {
     color: '#e56353',
     fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 31
+    fontWeight: 'bold'
   }
 });

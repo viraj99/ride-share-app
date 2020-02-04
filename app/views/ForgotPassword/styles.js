@@ -31,8 +31,7 @@ export default StyleSheet.create({
   formTitleContainer: {
     borderBottomWidth: 1,
     borderBottomColor: '#475c67',
-    marginBottom: 20,
-    paddingTop: 96
+    marginBottom: 20
   },
   formTitle: {
     fontWeight: 'bold',
@@ -65,8 +64,7 @@ export default StyleSheet.create({
     color: '#ffffff'
   },
   buttonContainer: {
-    paddingTop: 10,
-    marginBottom: 86
+    paddingTop: 10
   },
   submitContainer: {
     backgroundColor: '#475c67',
