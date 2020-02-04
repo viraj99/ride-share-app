@@ -315,7 +315,6 @@ class RegisterVehicleForm extends React.Component {
               <DateTimePicker
                 value={new Date() || new Date(insurance_start)}
                 onChange={this.setStartDate}
-                TextColor="#C0C0C0"
               />
             )}
             {this.props.navigation.state.params.isEditing ? (
@@ -339,11 +338,7 @@ class RegisterVehicleForm extends React.Component {
                 </Text>
               </View>
             </View>
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker2}
-              color="#475c67"
-            />
+            <Button title="Pick a Date" onPress={this.showPicker2} />
             {picker2 && (
               <DateTimePicker
                 value={new Date() || new Date(insurance_stop)}
