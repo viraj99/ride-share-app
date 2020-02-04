@@ -1,44 +1,86 @@
-import {StyleSheet} from 'react-native';
-// import variables from '../../utils/variables';
-// import { getStatusBarHeight, getBottomSpace } from '../../components/Header/StatusBar';
+import { StyleSheet, Platform } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+    paddingBottom: Platform.OS == 'ios' ? 100 : 0
   },
-  headerContainer: {
-    flex: 1,
+  header: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  formContainer: {
-    flex: 3,
-    paddingHorizontal: 16,
+    marginTop: 70
   },
   title: {
-    fontSize: 28,
-    fontWeight: '500',
+    fontWeight: 'bold',
+    fontSize: 25,
     color: '#475c67',
+    textAlign: 'center'
   },
-  subTitle: {
-    color: '#2F2F2F',
-    fontSize: 16,
+  image: {
+    padding: 10
   },
-  buttonTitle: {
-    color: 'white',
+  formContainer: {
+    padding: 10,
+    paddingBottom: 90
+  },
+  formTitleContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#475c67',
+    marginBottom: 20
+  },
+  formTitle: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: '#475c67'
+  },
+  inputContainer: {
+    padding: 5
+  },
+  sectionContainer: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    borderColor: '#475c67',
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  icon: {
+    paddingLeft: 10,
+    paddingTop: 10
+  },
+  textInput: {
+    textAlign: 'left',
+    padding: 10,
+    fontSize: 15,
+    color: '#000000',
+    width: 200
+  },
+  default: {
+    textAlign: 'left',
+    color: '#ffffff'
+  },
+  buttonContainer: {
+    paddingTop: 10
+  },
+  submitContainer: {
+    backgroundColor: '#475c67',
+    borderWidth: 0.3,
+    borderRadius: 5,
+    borderColor: '#475c67',
+    alignItems: 'center'
+  },
+  submitButton: {
+    height: 40,
+    padding: 5
+  },
+  submitButtonText: {
+    fontSize: 15,
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  input: {
-    borderBottomColor: '#2F2F2F',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#2F2F2F',
-    height: 16 * 3,
-  },
-  padding: {
-    paddingTop: 10,
-  },
+    width: 200,
+    padding: 5,
+    color: '#ffffff'
+  }
 });

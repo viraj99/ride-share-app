@@ -10,15 +10,18 @@ export default StyleSheet.create({
     paddingBottom: Platform.OS == 'ios' ? 100 : 0
   },
   header: {
-    alignItems: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 70
   },
   title: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: '#475c67'
+    color: '#475c67',
+    textAlign: 'center'
   },
   image: {
-    padding: 20
+    padding: 10
   },
   formContainer: {
     padding: 10
