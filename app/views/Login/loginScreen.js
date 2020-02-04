@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
-  Image
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -85,97 +86,101 @@ class Login extends Component {
   render() {
     const { navigation } = this.props;
     return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>CRSN</Text>
-            <Text style={styles.title}>Community Ride Share Network</Text>
-          </View>
-          <View style={styles.image}>
-            <Image source={logo} />
-            {/* Icon made by Map & Navigation from www.flaticon.com */}
-          </View>
-        </View>
-
+      <KeyboardAvoidingView style={styles.container} enabled>
         <View style={styles.container}>
-          <View style={styles.formContainer}>
-            <View style={styles.formTitleContainer}>
-              <Text style={styles.formTitle}>Sign in</Text>
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}>CRSN</Text>
+              <Text style={styles.title}>Community Ride Share Network</Text>
             </View>
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+            <View style={styles.image}>
+              <Image source={logo} />
+              {/* Icon made by Map & Navigation from www.flaticon.com */}
             </View>
+          </View>
 
-            <View style={styles.inputContainer}>
-              <View style={styles.sectionContainer}>
-                <View style={styles.icon}>
-                  <Icon name="mail" size={20} color="#b1c1c8" />
-                </View>
-                <TextInput
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  blurOnSubmit={false}
-                  style={styles.textInput}
-                  placeholder="Username"
-                  value={this.state.username}
-                  onChangeText={this.handleUsername}
-                  onSubmitEditing={() => {
-                    this.validateUsername();
-                    this.focusNextField('two');
-                  }}
-                />
+          <View style={styles.container}>
+            <View style={styles.formContainer}>
+              <View style={styles.formTitleContainer}>
+                <Text style={styles.formTitle}>Sign in</Text>
               </View>
-            </View>
-            <View style={styles.inputContainer}>
-              <View style={styles.sectionContainer}>
-                <View style={styles.icon}>
-                  <Icon name="lock" size={24} color="#b1c1c8" />
-                </View>
-                <TextInput
-                  secureTextEntry
-                  style={styles.textInput}
-                  blurOnSubmit={false}
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChangeText={this.handlePassword}
-                  onSubmitEditing={() => {
-                    this.handleSubmit();
-                  }}
-                  ref={input => {
-                    this.inputs.two = input;
-                  }}
-                />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorMessage}>
+                  {this.state.errorMessage}
+                </Text>
               </View>
-            </View>
-            <View style={styles.buttonContainer}>
-              <View style={styles.submitContainer}>
+
+              <View style={styles.inputContainer}>
+                <View style={styles.sectionContainer}>
+                  <View style={styles.icon}>
+                    <Icon name="mail" size={20} color="#b1c1c8" />
+                  </View>
+                  <TextInput
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    blurOnSubmit={false}
+                    style={styles.textInput}
+                    placeholder="Username"
+                    value={this.state.username}
+                    onChangeText={this.handleUsername}
+                    onSubmitEditing={() => {
+                      this.validateUsername();
+                      this.focusNextField('two');
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <View style={styles.sectionContainer}>
+                  <View style={styles.icon}>
+                    <Icon name="lock" size={24} color="#b1c1c8" />
+                  </View>
+                  <TextInput
+                    secureTextEntry
+                    style={styles.textInput}
+                    blurOnSubmit={false}
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChangeText={this.handlePassword}
+                    onSubmitEditing={() => {
+                      this.handleSubmit();
+                    }}
+                    ref={input => {
+                      this.inputs.two = input;
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
+                <View style={styles.submitContainer}>
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.handleSubmit}
+                  >
+                    <Text style={styles.submitButtonText}>LOGIN</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{ paddingTop: 10 }}>
                 <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={this.handleSubmit}
+                  style={styles.forgotPasswordLink}
+                  onPress={() => navigation.navigate('ForgotPassword')}
                 >
-                  <Text style={styles.submitButtonText}>LOGIN</Text>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      textDecorationLine: 'underline'
+                    }}
+                  >
+                    Forgot password?
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{ paddingTop: 10 }}>
-              <TouchableOpacity
-                style={styles.errorMessage}
-                onPress={() => navigation.navigate('ForgotPassword')}
-              >
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    textDecorationLine: 'underline'
-                  }}
-                >
-                  Forgot password?
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

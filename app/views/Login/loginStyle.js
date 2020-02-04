@@ -24,11 +24,14 @@ export default StyleSheet.create({
     padding: 10
   },
   formContainer: {
-    padding: 10
+    paddingTop: 20,
+    paddingBottom: 60,
+    backgroundColor: '#fff'
   },
   formTitleContainer: {
     borderBottomWidth: 1.5,
-    borderBottomColor: '#475c67'
+    borderBottomColor: '#475c67',
+    paddingTop: 31
   },
   formTitle: {
     fontWeight: 'bold',
@@ -92,5 +95,11 @@ export default StyleSheet.create({
     width: 200,
     padding: 5,
     color: '#ffffff'
+  },
+  forgotPasswordLink: {
+    color: '#e56353',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 31
   }
 });
