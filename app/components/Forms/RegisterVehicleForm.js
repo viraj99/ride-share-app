@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, ScrollView, View, TextInput, Button } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Appearance } from 'react-native-appearance';
 import styles from './styles';
 import Block from '../Block';
 import { CalendarButton } from '../Button';
@@ -31,6 +32,8 @@ class RegisterVehicleForm extends React.Component {
   }
 
   componentDidMount = () => {
+    const colorScheme = Appearance.getColorScheme();
+    console.log('colorScheme:', colorScheme);
     if (this.props.navigation.state.params.isEditing) {
       const vehicle = this.props.navigation.state.params.vehicle.item;
       this.setState({
