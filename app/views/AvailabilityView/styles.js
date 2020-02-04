@@ -1,7 +1,7 @@
-import {StyleSheet, Dimensions, Platform} from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 // import {getBottomSpace} from '../Header/StatusBar';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export default StyleSheet.create({
   title: {
@@ -9,18 +9,18 @@ export default StyleSheet.create({
     paddingRight: 20,
     fontWeight: 'bold',
     fontSize: 26,
-    color: '#475c67',
+    color: '#475c67'
   },
   availListItem: {
     borderColor: 'gray',
     borderBottomWidth: 2,
     marginTop: 10,
-    paddingBottom:10,
+    paddingBottom: 10,
     marginLeft: 20,
-    marginRight: 20,
+    marginRight: 20
   },
   flatListText: {
-    fontSize: 18,
+    fontSize: 18
   },
   // footer: {
   //   marginTop: 20,
@@ -34,27 +34,27 @@ export default StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-    elevation: 6,
+    elevation: 6
   },
   datePicker: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   flatlistContainer: {
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff'
   },
   formButton: {
-    backgroundColor: '#ff8262',
+    backgroundColor: '#e56353'
   },
   inputRow: {
     flexDirection: 'row',
     margin: 5,
     justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });

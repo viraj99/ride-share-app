@@ -17,7 +17,7 @@ const RideOverviewCard = ({onPress, title, address}) => (
         raised
         reverse
         type="material-community"
-        color="#ff8262"
+        color="#e56353"
         size={32}
       />
     </TouchableOpacity>

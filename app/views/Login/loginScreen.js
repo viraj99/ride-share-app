@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   TextInput,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView,
+  StatusBar,
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/AntDesign';
 import styles from './loginStyle';
 import API from '../../api/api';
-import Container from '../../components/Container';
+import logo from '../../utils/images/route.png';
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class Login extends Component {
     this.state = {
       user: '',
       pass: '',
-      errorMessage: '',
+      errorMessage: ''
     };
 
     this.focusNextField = this.focusNextField.bind(this);
@@ -29,13 +31,13 @@ class Login extends Component {
 
   handleUsername = text => {
     this.setState({
-      user: text,
+      user: text
     });
   };
 
   handlePassword = text => {
     this.setState({
-      pass: text,
+      pass: text
     });
   };
 
@@ -44,28 +46,28 @@ class Login extends Component {
   }
 
   validateUsername() {
-    const {user} = this.state;
+    const { user } = this.state;
     if (user.includes('@') && user.includes('.')) {
       return null;
     }
     this.setState({
-      errorMessage: 'Please enter a valid email.',
+      errorMessage: 'Please enter a valid email.'
     });
   }
 
   handleSubmit() {
-    const {user, pass} = this.state;
-    const {navigation} = this.props;
+    const { user, pass } = this.state;
+    const { navigation } = this.props;
 
     API.login(user, pass)
       .then(res => {
         const obj = {
-          token: res.json.auth_token,
+          token: res.json.auth_token
         };
         //console.log('login token', token);
         if (obj.token === undefined) {
           this.setState({
-            errorMessage: 'Invalid username or password.',
+            errorMessage: 'Invalid username or password.'
           });
         } else {
           AsyncStorage.setItem('token', JSON.stringify(obj));
@@ -75,17 +77,29 @@ class Login extends Component {
       })
       .catch(err => {
         this.setState({
-          errorMessage: 'Invalid username or password.',
+          errorMessage: 'Invalid username or password.'
         });
       });
-      console.log("login token: ", AsyncStorage.getItem('token'))
+    console.log('login token: ', AsyncStorage.getItem('token'));
   }
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
-      <Container>
-        <KeyboardAvoidingView style={styles.container} enabled>
+      <KeyboardAvoidingView style={styles.container} enabled>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}>CRSN</Text>
+              <Text style={styles.title}>Community Ride Share Network</Text>
+            </View>
+            <View style={styles.image}>
+              <Image source={logo} />
+              {/* Icon made by Map & Navigation from www.flaticon.com */}
+            </View>
+          </View>
+
           <View style={styles.container}>
             <View style={styles.formContainer}>
               <View style={styles.formTitleContainer}>
@@ -142,28 +156,31 @@ class Login extends Component {
                 <View style={styles.submitContainer}>
                   <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={this.handleSubmit}>
+                    onPress={this.handleSubmit}
+                  >
                     <Text style={styles.submitButtonText}>LOGIN</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{paddingTop: 10}}>
+              <View style={{ paddingTop: 10 }}>
                 <TouchableOpacity
-                  style={styles.errorMessage}
-                  onPress={() => navigation.navigate('ForgotPassword')}>
+                  style={styles.forgotPasswordLink}
+                  onPress={() => navigation.navigate('ForgotPassword')}
+                >
                   <Text
                     style={{
                       textAlign: 'center',
-                      textDecorationLine: 'underline',
-                    }}>
+                      textDecorationLine: 'underline'
+                    }}
+                  >
                     Forgot password?
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </Container>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }

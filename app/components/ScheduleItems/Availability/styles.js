@@ -15,7 +15,7 @@ export default StyleSheet.create({
     height: 70,
     padding: 5,
     justifyContent: 'center',
-    backgroundColor: '#ff8262',
+    backgroundColor: '#e56353',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -32,7 +32,7 @@ export default StyleSheet.create({
     height: 70,
     padding: 5,
     justifyContent: 'center',
-    backgroundColor: '#ff8262',
+    backgroundColor: '#e56353',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
