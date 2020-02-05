@@ -30,7 +30,7 @@ export default class MainView extends Component<Props> {
       withinAvailRides: [],
       hasReqRidesInAvail: false,
       showAllRides: false,
-      toggleButtonText: 'Show All Requested Rides',
+      toggleButtonText: 'Show All',
       isLoading: true,
       token: ''
     };
@@ -209,7 +209,7 @@ export default class MainView extends Component<Props> {
   };
   renderUpcomingRides = () => {
     const { scheduledRides } = this.state;
-    console.log('render upcomming', scheduledRides);
+    console.log('render upcoming', scheduledRides);
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
     if (scheduledRides.length === 0) {
@@ -222,20 +222,20 @@ export default class MainView extends Component<Props> {
       );
     } else {
       return (
-        <View style={{ flex: 2 }}>
+        <View style={styles.sectionHeader}>
           <View style={styles.titleWrapper}>
-            <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>Upcoming Schedule</Text>
+            <View style={styles.upcomingHeader}>
+              <Text style={styles.upcomingSubTitle}>Your Scheduled Rides</Text>
+
+              {numRides > 3 ? (
+                <View style={{ alignItems: 'flex-start' }}>
+                  <TouchableOpacity onPress={this.navigateToDriverSchedule}>
+                    <Text style={styles.seeAllText}>{seeAll}</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
             </View>
-            {numRides > 3 ? (
-              <View style={{ alignItems: 'flex-end' }}>
-                <TouchableOpacity onPress={this.navigateToDriverSchedule}>
-                  <Text style={styles.seeAllText}>{seeAll}</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
           </View>
-          <View style={styles.seperator} />
           <FlatList
             horizontal
             pagingEnabled
@@ -361,12 +361,6 @@ export default class MainView extends Component<Props> {
     const { approvedRides } = this.state;
     return (
       <View style={styles.reqRidesContainer}>
-        <View style={styles.titlesContainer}>
-          <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.subTitle}>Requested Rides</Text>
-          </View>
-        </View>
-        <View style={styles.seperator} />
         <FlatList
           pagingEnabled
           scrollEnabled
@@ -389,35 +383,54 @@ export default class MainView extends Component<Props> {
   renderFilteredRides = () => {
     const { withinAvailRides } = this.state;
     console.log('whats in the withinAvailRides state? ', withinAvailRides);
-    if (withinAvailRides.length === 0) {
+    if (
+      withinAvailRides.length === 0 &&
+      this.state.toggleButtonText === 'Show All'
+    ) {
       return (
         <View>
-          <Text style={styles.noAvailText}>
-            There currently are no requested rides within your availability.
-          </Text>
-          <TouchableOpacity
-            style={styles.buttonBar}
-            onPress={this.showAllRides}
-          >
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.buttonText}>
-                {this.state.toggleButtonText}
-              </Text>
+          <View style={styles.sectionHeader}>
+            <View style={styles.titleWrapper}>
+              <View style={styles.upcomingHeader}>
+                <Text style={styles.upcomingSubTitle}>
+                  Requested Rides in Availabilty
+                </Text>
+                <TouchableOpacity onPress={this.showAllRides}>
+                  <Text style={styles.showAllText}>
+                    {this.state.toggleButtonText}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.noAvailText}>
+              There currently are no requested rides within your availability.
+            </Text>
+          </View>
+        </View>
+      );
+    } else if (
+      withinAvailRides.length === 0 &&
+      this.state.toggleButtonText === 'Hide All'
+    ) {
+      return (
+        <View style={styles.sectionHeader}>
+          <View style={styles.titleWrapper}>
+            <View style={styles.upcomingHeader}>
+              <Text style={styles.upcomingSubTitle}>All Requested Rides </Text>
+              <TouchableOpacity onPress={this.showAllRides}>
+                <Text style={styles.hideAllText}>
+                  {this.state.toggleButtonText}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       );
     } else {
       return (
         <View>
-          <View style={styles.titlesContainer}>
-            <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>
-                Requested rides within my availability:
-              </Text>
-            </View>
-          </View>
-          <View style={styles.seperator} />
           <FlatList
             pagingEnabled
             scrollEnabled
@@ -452,12 +465,12 @@ export default class MainView extends Component<Props> {
     if (this.state.showAllRides === false) {
       this.setState({
         showAllRides: true,
-        toggleButtonText: 'Hide All Requested Rides'
+        toggleButtonText: 'Hide All'
       });
     } else {
       this.setState({
         showAllRides: false,
-        toggleButtonText: 'Show All Requested Rides'
+        toggleButtonText: 'Show All'
       });
     }
   };
