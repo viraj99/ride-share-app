@@ -43,41 +43,6 @@ export default class MainView extends Component<Props> {
     });
     this.ridesRequests();
   };
-  // compMount = async () => {
-  //   const token = await AsyncStorage.getItem('token');
-  //   const realToken = JSON.parse(token);
-  //   API.getDriver(realToken.token)
-  //   .then((result) => {
-  //     const driverId = result.driver.id;
-  //     API.getRides(realToken.token)
-  //     .then((result) => {
-  //       console.log("result from get rides in main view: ", result)
-  //       const rides = result.rides;
-  //       const myRides = rides.filter(
-  //         ride => ride.driver_id === driverId,
-  //       );
-  //       const scheduledRides = myRides.filter(
-  //         ride => ride.status === 'scheduled' //|| ride.status === 'picking-up'
-  //       );
-  //       const approvedRides = rides.filter(
-  //         ride => ride.status === 'approved'
-  //       );
-  //       return {scheduledRides, approvedRides}
-  //     })
-  //   }),
-  //   API.getAvailabilities(realToken.token)
-  //   .then((result) => {
-  //     const avails = result.json;
-  //     return avails
-  //   })
-  //   this.setState({
-  //     isLoading: true,
-  //     token: realToken.token,
-  //     scheduledRides,
-  //     approvedRides,
-  //     availabilities: avails,
-  //   });
-  // };
 
   ridesRequests = () => {
     const { token } = this.state;
@@ -109,24 +74,10 @@ export default class MainView extends Component<Props> {
           );
           console.log('approved rides in my avail: ', withinAvailRides);
 
-          // let yesHasSchedRides;
-          // if (scheduledRides !== []) {
-          //   let yesHasSchedRides = true;
-          //   return yesHasSchedRides
-          // }
-
-          // let yesHasRidesInAvail;
-          // if (withinAvailRides !== []) {
-          //   let yesHasRidesInAvail = true;
-          //   return yesHasRidesInAvail
-          // }
-
           this.setState({
             scheduledRides,
-            // hasScheduledRides: yesHasSchedRides,
             approvedRides,
             withinAvailRides,
-            // hasReqRidesInAvail: yesHasRidesInAvail,
             isLoading: false
           });
         });
@@ -151,8 +102,6 @@ export default class MainView extends Component<Props> {
     const { navigation } = this.props;
     const riderId = item.rider_id;
     const rideId = item.id;
-    // console.log('upcoming rideID', rideId);
-    // console.log('upcoming token', token);
     const date = item.pick_up_time;
     const startLocation = [
       item.start_location.street,
@@ -307,8 +256,6 @@ export default class MainView extends Component<Props> {
         let end = checkEach.endTime;
         if (eachRide.pick_up_time >= start && eachRide.pick_up_time <= end) {
           myAvailRides.push(eachRide);
-          // myAvailRides.push(ride)
-          // console.log("did the array get the result? ", myAvailRides)
         }
       });
     });
@@ -474,8 +421,6 @@ export default class MainView extends Component<Props> {
     const { scheduledRides } = this.state;
     const { navigation } = this.props;
     const { token } = this.state;
-    // console.log('in navigate to driver', scheduledRides);
-    // console.log('navigate token', token);
     navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
   render() {

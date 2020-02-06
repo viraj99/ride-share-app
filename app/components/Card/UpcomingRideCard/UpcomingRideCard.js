@@ -1,11 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-
 import moment from 'moment';
 import Badge from '../../Badge';
 import Block from '../../Block';
 import { StartButton } from '../../Button';
-// import PropTypes from 'prop-types';
 import styles from './styles';
 
 const UpcomingRideCard = ({
@@ -47,9 +45,5 @@ const UpcomingRideCard = ({
     </Block>
   </View>
 );
-
-// Card.propTypes = {
-//   onPress: PropTypes.func,
-// };
 
 export default UpcomingRideCard;

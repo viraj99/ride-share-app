@@ -23,11 +23,6 @@ class RegisterVehicle extends Component {
     ) {
       this.props.navigation.navigate('Settings');
     } else {
-      // this.props.navigation.navigate('RegisterUserInfo', {
-      //   isCreating: false,
-      //   isEditing: true,
-      //   isAdding: false
-      // });
       this.props.navigation.navigate('RegisterUserInfo', {
         isAdding: false,
         isEditing: true,
