@@ -37,60 +37,7 @@ export default class RideView extends Component {
       });
     });
   };
-  // /////////////
-  // handleGetDirections = () => {
-  //   // const data = [
-  //   //   {
-  //   //     pickupLocation: {
-  //   //       latitude: 35.980656,
-  //   //       longitude: -78.898274
-  //   //     },
-  //   //     dropOffLocation: {
-  //   //       latitude: 36.00272,
-  //   //       longitude: -78.902597
-  //   //     }
-  //   //   }
-  //   // ];
 
-  //   const data = {
-  //     source: {
-  //       latitude,
-  //       longitude
-  //     },
-  //     destination: {
-  //       latitude,
-  //       longitude
-  //     },
-  //     params: [
-  //       {
-  //         key: 'travelmode',
-  //         value: 'driving' // may be "walking", "bicycling" or "transit" as well
-  //       },
-  //       {
-  //         key: 'dir_action',
-  //         value: 'navigate' // this instantly initializes navigation using the given travel mode
-  //       }
-  //     ]
-  //     // waypoints: [
-  //     //   {
-  //     //     latitude: -33.8600025,
-  //     //     longitude: 18.697452
-  //     //   },
-  //     //   {
-  //     //     latitude: -33.8600026,
-  //     //     longitude: 18.697453
-  //     //   },
-  //     //   {
-  //     //     latitude: -33.8600036,
-  //     //     longitude: 18.697493
-  //     //   }
-  //     // ]
-  //   };
-  //   // const latitude = data.map(item => item.pickupLocation.latitude);
-  //   // const longitude = data.map(item => item.pickupLocation.longitude);
-  //   getDirections(data);
-  // };
-  //////////////////
   handlePickUpDirections = () => {
     console.log('item with location:', item => item);
     // console.log('RideView PickUp', latitude, ' & ', longitude);
@@ -321,16 +268,14 @@ export default class RideView extends Component {
       //   }
       // ]);
     } else if (textValue === 'Drop off') {
-      this.onCompletePress();
-      navigation.navigate('MainView');
       // Alert.alert('Did you drop-off?', '', [
       //   {
       //     text: 'Confirm drop-off',
       //     onPress: () => {
-      // this.onWaitingPress();
-      // this.setState({
-      //   textValue: 'Now Waiting'
-      // });
+      this.onWaitingPress();
+      this.setState({
+        textValue: 'Now Waiting'
+      });
       //     }
       //   },
       //   {
@@ -341,15 +286,15 @@ export default class RideView extends Component {
       //     }
       //   }
       // ]);
-      // } else if (textValue === 'Now Waiting') {
+    } else if (textValue === 'Now Waiting') {
       // Alert.alert('Done Waiting?', '', [
       //   {
       //     text: 'Ready for prior Destination',
       //     onPress: () => {
-      // this.onReturnPickingUpPress();
-      // this.setState({
-      // textValue: 'Tap to return'
-      // });
+      this.onReturnPickingUpPress();
+      this.setState({
+        textValue: 'Tap to return'
+      });
       //     }
       //   },
       //   {
@@ -360,28 +305,28 @@ export default class RideView extends Component {
       //     }
       //   }
       // ]);
-      // } else if (textValue === 'Tap to return') {
+    } else if (textValue === 'Tap to return') {
       // Alert.alert('Dropping Off?', '', [
       //   {
       //     text: 'Did you Drop off',
       //     onPress: () => {
-      // this.onReturnDroppingOffPress();
-      // this.onCompletePress();
-      // this.setState({
-      // textValue: 'Returned'
-      // });
-      // navigation.navigate('MainView');
-      // }
-      //     },
-      //     {
-      //       text: 'cancel',
-      //       style: 'cancel',
-      //       onPress: () => {
-      //         this.onCancelPress();
-      //       }
-      //     }
-      //   ]);
+      this.onReturnDroppingOffPress();
+      this.onCompletePress();
+      this.setState({
+        textValue: 'Returned'
+      });
+      navigation.navigate('MainView');
     }
+    //     },
+    //     {
+    //       text: 'cancel',
+    //       style: 'cancel',
+    //       onPress: () => {
+    //         this.onCancelPress();
+    //       }
+    //     }
+    //   ]);
+    // }
   };
 
   renderOverview = () => {
@@ -469,28 +414,7 @@ export default class RideView extends Component {
               }}
             >
               <SkipButton onPress={this.onSkipPress} title="Skip" />
-              {/* <TouchableOpacity onPress={this.onSkipPress}>
-                <Text>By Pass to end</Text>
-                <Icon
-                  name="skip-forward"
-                  size={40}
-                  color="#475c67"
-                  // reverse
-                  // raised
-                  type="material-community"
-                />
-              </TouchableOpacity> */}
               <CancelButton onPress={this.onCancelPress} title="Stop" />
-              {/* <TouchableOpacity onPress={this.onCancelPress}>
-                <Icon
-                  name="close-box"
-                  size={50}
-                  color="#475c67"
-                  // reverse
-                  // raised
-                  type="material-community"
-                />
-              </TouchableOpacity> */}
             </View>
           )}
         </View>

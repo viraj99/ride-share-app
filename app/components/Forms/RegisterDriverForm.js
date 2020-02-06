@@ -136,10 +136,6 @@ class RegisterDriverForm extends React.Component {
       <ScrollView>
         <Block middle>
           <KeyboardAwareScrollView>
-            {/* <Block style={styles.scrollContainer}>
-              <Text style={styles.title}>Sign Up</Text>
-              <Text style={styles.subTitle}>{this.props.subTitle}</Text>
-            </Block> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Sign Up</Text>
@@ -226,15 +222,11 @@ class RegisterDriverForm extends React.Component {
                 this.password = input;
               }}
               returnKeyType={'done'}
-              // onSubmitEditing={() => {this.password.focus();}}
-              // blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
               autoCapitalize="none"
               secureTextEntry
             ></TextInput>
-
-            {/* <Text style={styles.labelStyleAvail}>Volunteering for:</Text> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Volunteering for:</Text>
@@ -261,9 +253,6 @@ class RegisterDriverForm extends React.Component {
               {orgsList}
             </Picker>
 
-            {/* <Text style={styles.labelStyleAvail}>
-              Distance available to drive:
-            </Text> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>

@@ -1,7 +1,5 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-// import PropTypes from 'prop-types';
-// import ArrowIcon from 'react-native-vector-icons/AntDesign';
 import { Icon } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -24,8 +22,6 @@ const CancelButton = ({ title, onPress }) => (
             name="close"
             size={30}
             color="#475c67"
-            // reverse
-            // raised
             type="material-community"
           />
         </View>
@@ -33,10 +29,5 @@ const CancelButton = ({ title, onPress }) => (
     </View>
   </LinearGradient>
 );
-
-// CancelButton.propTypes = {
-//   text: PropTypes.string,
-//   onPress: PropTypes.func,
-// };
 
 export default CancelButton;
