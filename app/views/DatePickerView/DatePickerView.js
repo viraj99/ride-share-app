@@ -21,12 +21,6 @@ const DatePickerView = ({ setDate }) => {
     setDate(date);
   };
   const colorScheme = Appearance.getColorScheme();
-  // console.log('colorScheme', Appearance.getColorScheme());
-  // if (colorScheme === 'light') {
-  //   darkMode = false;
-  // } else {
-  //   darkMode = true;
-  // }
   return (
     <View>
       <Button title="Pick Date" onPress={showDatePicker} color="black" />
@@ -35,9 +29,6 @@ const DatePickerView = ({ setDate }) => {
         isDarkModeEnabled={colorScheme === 'light' ? false : true}
         mode="date"
         date={new Date()}
-        // pickerContainerStyle={{backgroundColor='white'}}
-        // value={value}
-        // onChange={onChange}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

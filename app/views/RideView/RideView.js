@@ -321,14 +321,16 @@ export default class RideView extends Component {
       //   }
       // ]);
     } else if (textValue === 'Drop off') {
+      this.onCompletePress();
+      navigation.navigate('MainView');
       // Alert.alert('Did you drop-off?', '', [
       //   {
       //     text: 'Confirm drop-off',
       //     onPress: () => {
-      this.onWaitingPress();
-      this.setState({
-        textValue: 'Now Waiting'
-      });
+      // this.onWaitingPress();
+      // this.setState({
+      //   textValue: 'Now Waiting'
+      // });
       //     }
       //   },
       //   {
@@ -339,15 +341,15 @@ export default class RideView extends Component {
       //     }
       //   }
       // ]);
-    } else if (textValue === 'Now Waiting') {
+      // } else if (textValue === 'Now Waiting') {
       // Alert.alert('Done Waiting?', '', [
       //   {
       //     text: 'Ready for prior Destination',
       //     onPress: () => {
-      this.onReturnPickingUpPress();
-      this.setState({
-        textValue: 'Tap to return'
-      });
+      // this.onReturnPickingUpPress();
+      // this.setState({
+      // textValue: 'Tap to return'
+      // });
       //     }
       //   },
       //   {
@@ -358,28 +360,28 @@ export default class RideView extends Component {
       //     }
       //   }
       // ]);
-    } else if (textValue === 'Tap to return') {
+      // } else if (textValue === 'Tap to return') {
       // Alert.alert('Dropping Off?', '', [
       //   {
       //     text: 'Did you Drop off',
       //     onPress: () => {
-      this.onReturnDroppingOffPress();
-      this.onCompletePress();
-      this.setState({
-        textValue: 'Returned'
-      });
-      navigation.navigate('MainView');
+      // this.onReturnDroppingOffPress();
+      // this.onCompletePress();
+      // this.setState({
+      // textValue: 'Returned'
+      // });
+      // navigation.navigate('MainView');
+      // }
+      //     },
+      //     {
+      //       text: 'cancel',
+      //       style: 'cancel',
+      //       onPress: () => {
+      //         this.onCancelPress();
+      //       }
+      //     }
+      //   ]);
     }
-    //     },
-    //     {
-    //       text: 'cancel',
-    //       style: 'cancel',
-    //       onPress: () => {
-    //         this.onCancelPress();
-    //       }
-    //     }
-    //   ]);
-    // }
   };
 
   renderOverview = () => {

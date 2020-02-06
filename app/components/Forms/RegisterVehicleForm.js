@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
-import {
-  Text,
-  ScrollView,
-  View,
-  TextInput,
-  Button,
-  TouchableOpacity
-} from 'react-native';
+import { Text, ScrollView, View, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Appearance } from 'react-native-appearance';
 import styles from './styles';
 import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { DarkModeProvider } from 'react-native-dark-mode';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
 
