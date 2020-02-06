@@ -35,6 +35,10 @@ target 'RideShareApp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'react-native-appearance', :path => '../node_modules/react-native-appearance'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
+  pod 'ReactNativeDarkMode', :path => '../node_modules/react-native-dark-mode'
+
   target 'RideShareAppTests' do
     inherit! :search_paths
     # Pods for testing
