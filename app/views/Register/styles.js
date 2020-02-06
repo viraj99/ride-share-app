@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flex: 1
   },
   headerPadding: {
-    // paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() + 50 : 50,
+    paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() + 50 : 50,
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() : 0
   }
 });

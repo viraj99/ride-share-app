@@ -1,8 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-// import moment from 'moment';
-// import Badge from '../../Badge';
-import Block from '../../Block';
+import { Text, View } from 'react-native';
 import styles from './styles';
 import { EditButton, DeleteButton } from '../../Button';
 const VehicleCard = ({
@@ -22,16 +19,9 @@ const VehicleCard = ({
       vehicleId={vehicleId}
       token={token}
     />
-    {/* <View style={styles.bottomBorder}> */}
     <Text style={styles.flatListText}>{make}</Text>
-    {/* </View> */}
-    {/* <View style={styles.bottomBorder}> */}
     <Text style={styles.flatListText}> {model}</Text>
-    {/* </View> */}
-    {/* <View style={styles.bottomBorder}> */}
     <Text style={styles.flatListText}>{year}</Text>
-    {/* </View> */}
-
     <DeleteButton
       style={[{ paddingRight: 15 }]}
       title={'Delete'}
@@ -41,8 +31,4 @@ const VehicleCard = ({
     />
   </View>
 );
-//? Card.propTypes = {
-//?  onPress: PropTypes.func,
-//? };
-
 export default VehicleCard;
