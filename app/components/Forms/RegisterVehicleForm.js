@@ -148,75 +148,6 @@ class RegisterVehicleForm extends React.Component {
     }
   };
 
-  // DateTimePopUp = () => {
-  //   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  //   const showDatePicker = () => {
-  //     setDatePickerVisibility(true);
-  //   };
-
-  //   const hideDatePicker = () => {
-  //     setDatePickerVisibility(false);
-  //   };
-
-  //   const handleConfirm = date => {
-  //     console.warn('A date has been picked: ', date);
-  //     hideDatePicker();
-  //   };
-
-  //   return (
-  //     <View>
-  //       <Button title="Show Date Picker" onPress={showDatePicker} />
-  //       <DateTimePickerModal
-  //         isVisible={isDatePickerVisible}
-  //         mode="date"
-  //         onConfirm={handleConfirm}
-  //         onCancel={hideDatePicker}
-  //       />
-  //     </View>
-  //   );
-  // };
-  // /////////////////////
-  // popUpDate = () => {
-  //   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  //   const showDatePicker = () => {
-  //     setDatePickerVisibility(true);
-  //   };
-  //   const hideDatePicker = () => {
-  //     setDatePickerVisibility(false);
-  //   };
-  //   const handleConfirm = date => {
-  //     console.warn('Date Picked', date);
-  //     hideDatePicker();
-  //   };
-
-  //   this.renderPopUp();
-  // };
-  // renderPopUp = () => {
-  //   return (
-  //     <View>
-  //       <Button title="Show Date Picker" onPress={showDatePicker} />
-  //       <DateTimePickerModal
-  //         isVisible={isDatePickerVisible}
-  //         mode="date"
-  //         onConfirm={handleConfirm}
-  //         onCancel={hideDatePicker}
-  //       />
-  //     </View>
-  //   );
-  // };
-  // //////////////////////////
-  // DateScreen() {
-  //   return (
-  //     <DarkModeProvider mode="light">
-  //       <DateTimePicker
-  //         value={new Date() || new Date(insurance_start)}
-  //         onChange={this.setStartDate}
-  //       />
-  //     </DarkModeProvider>
-  //   );
-  // }
-
   render() {
     let userEntries = {
       vehicle: {
@@ -377,16 +308,6 @@ class RegisterVehicleForm extends React.Component {
               inputStyle={styles.saeTextAlt}
             ></TextInput>
 
-            {/* <View>
-              <Button title="Show Date Picker" onPress={showDatePicker} />
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
-            </View> */}
-
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>
@@ -394,24 +315,12 @@ class RegisterVehicleForm extends React.Component {
                 </Text>
               </View>
             </View>
-            {/* 
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker1}
-              // color="#475c67"
-            /> */}
+
             <DatePickerView
               value={new Date() || new Date(insurance_start)}
               setDate={this.setStartDate}
             />
-            {/* {picker1 && this.DateScreen()
-            // <DarkModeProvider mode="light">
-            // <DateTimePicker
-            //   value={new Date() || new Date(insurance_start)}
-            //   onChange={this.setStartDate}
-            //>
-            // </DarkModeProvider>
-            } */}
+
             {this.props.navigation.state.params.isEditing ? (
               <Text style={styles.displaySelection}>
                 Selected date:
@@ -423,20 +332,7 @@ class RegisterVehicleForm extends React.Component {
                 {moment(this.state.insurStartDate).format('MMMM D, YYYY')}
               </Text>
             )}
-            {/* <View style={{ flex: 1 }}>
-              <TouchableOpacity onPress={this._showDateTimePicker}>
-                <Text>Show DatePicker</Text>
-              </TouchableOpacity>
-              <DateTimePicker
-                isVisible={this.state.isDateTimePickerVisible}
-                onConfirm={this._handleDatePicked}
-                onCancel={this._hideDateTimePicker}
-                value={new Date() || new Date(insurance_stop)}
-                // onChange={this.setEndDate}
-              />
-            </View> */}
-            {/* {this.popUpDate()} */}
-            {/* {this.DateTimePopUp()} */}
+
             <Text></Text>
 
             <View style={styles.section}>
@@ -446,19 +342,12 @@ class RegisterVehicleForm extends React.Component {
                 </Text>
               </View>
             </View>
-            {/* <Button title="Pick a Date" onPress={this.showPicker2} /> */}
 
             <DatePickerView
               value={new Date() || new Date(insurance_stop)}
               setDate={this.setEndDate}
             />
 
-            {picker2 && (
-              <DateTimePicker
-                value={new Date() || new Date(insurance_stop)}
-                onChange={this.setEndDate}
-              />
-            )}
             {this.props.navigation.state.params.isEditing ? (
               <Text style={styles.displaySelection}>
                 Selected date:
@@ -481,7 +370,6 @@ class RegisterVehicleForm extends React.Component {
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>
-      // </View>
     );
   }
 }
