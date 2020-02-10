@@ -8,6 +8,7 @@ import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import Block from '../../components/Block';
 import { SkipButton, CancelButton } from '../../components/Button';
 import styles from './styles';
+import api from '../../api/api';
 
 export default class RideView extends Component {
   constructor(props) {
@@ -119,12 +120,19 @@ export default class RideView extends Component {
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
 
-    if (rideId && token) {
-      // Alert.alert('Now Waiting');
-      console.log('waiting');
-    } else {
-      // Alert.alert('Unable to wait');
-    }
+    API.waitingForRide(rideId, token)
+      .then(result => {
+        console.log('WAITING', result);
+      })
+      .catch(err => {
+        console.log('UNABLE TO WAIT');
+      });
+    // if (rideId && token) {
+    //   // Alert.alert('Now Waiting');
+    //   console.log('waiting');
+    // } else {
+    //   // Alert.alert('Unable to wait');
+    // }
   };
 
   onReturnPickingUpPress = () => {
@@ -132,13 +140,21 @@ export default class RideView extends Component {
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
 
-    if (rideId && token) {
-      // Alert.alert('On your way back');
-      console.log('on the way back');
-    } else {
-      // Alert.alert('Unable to go back');
-      console.log('cant go back');
-    }
+    API.returnPickUp(rideId, token)
+      .then(result => {
+        console.log('PICKING UP: ', result);
+      })
+      .catch(err => {
+        console.log('UNABLE 2 PICK UP: ', err);
+      });
+
+    // if (rideId && token) {
+    //   // Alert.alert('On your way back');
+    //   console.log('on the way back');
+    // } else {
+    //   // Alert.alert('Unable to go back');
+    //   console.log('cant go back');
+    // }
   };
 
   onReturnDroppingOffPress = () => {
@@ -146,13 +162,20 @@ export default class RideView extends Component {
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
 
-    if (rideId && token) {
-      // Alert.alert('Dropping off at inital location');
-      console.log('dropped off at pick up');
-    } else {
-      // Alert.alert('Unable to drop off');
-      console.log('couldnt drop off at pick up');
-    }
+    API.returnDropOff(rideId, token)
+      .then(result => {
+        console.log('DROPPING OFF: ', result);
+      })
+      .catch(err => {
+        console.log('UNABLE 2 DROP OFF: ', result);
+      });
+    // if (rideId && token) {
+    //   // Alert.alert('Dropping off at inital location');
+    //   console.log('dropped off at pick up');
+    // } else {
+    //   // Alert.alert('Unable to drop off');
+    //   console.log('couldnt drop off at pick up');
+    // }
   };
 
   onCompletePress = () => {
@@ -189,23 +212,37 @@ export default class RideView extends Component {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
-
-    API.pickUpRide(rideId, token)
+    console.log(
+      'navigationn, ',
+      navigation,
+      ' token: ',
+      token,
+      ' rideId: ',
+      rideId
+    );
+    API.completeRide(rideId, token)
       .then(result => {
-        console.log('Picked UP');
-        API.dropOffRide(rideId, token).then(result => {
-          console.log('Dropped');
-          API.completeRide(rideId, token).then(result => {
-            console.log('Complete');
-            Alert.alert('Ride Complete');
-            navigation.navigate('MainView');
-          });
-        });
+        Alert.alert('Ride Complete');
       })
       .catch(err => {
         Alert.alert('Could not Complete Ride');
-        navigation.navigate('MainView');
       });
+    // API.pickUpRide(rideId, token)
+    //   .then(result => {
+    //     console.log('Picked UP');
+    //     API.dropOffRide(rideId, token).then(result => {
+    //       console.log('Dropped');
+    //       API.completeRide(rideId, token).then(result => {
+    //         console.log('Complete');
+    //         Alert.alert('Ride Complete');
+    //         navigation.navigate('MainView');
+    //       });
+    //     });
+    //   })
+    //   .catch(err => {
+    //     Alert.alert('Could not Complete Ride');
+    //     navigation.navigate('MainView');
+    //   });
   };
 
   onPress = () => {
@@ -291,9 +328,13 @@ export default class RideView extends Component {
       //   {
       //     text: 'Ready for prior Destination',
       //     onPress: () => {
+      this.setState({
+        textValue: 'Ready 2 go back'
+      });
+    } else if (textValue === 'Ready 2 go back') {
       this.onReturnPickingUpPress();
       this.setState({
-        textValue: 'Tap to return'
+        textValue: 'Ready to return'
       });
       //     }
       //   },
@@ -305,11 +346,15 @@ export default class RideView extends Component {
       //     }
       //   }
       // ]);
-    } else if (textValue === 'Tap to return') {
+    } else if (textValue === 'Ready to return') {
       // Alert.alert('Dropping Off?', '', [
       //   {
       //     text: 'Did you Drop off',
       //     onPress: () => {
+      this.setState({
+        textValue: 'Tap when Returned'
+      });
+    } else if (textValue === 'Tap when Returned') {
       this.onReturnDroppingOffPress();
       this.onCompletePress();
       this.setState({
@@ -355,10 +400,19 @@ export default class RideView extends Component {
         />
       );
     }
-    if (textValue == 'Tap to return') {
+    if (textValue === 'Ready 2 go back') {
       return (
         <RideOverviewCard
-          title="Pick up"
+          title="Return to Drop Off: "
+          address={endLocation.join(', ')}
+          onPress={this.handleDropOffDirections}
+        />
+      );
+    }
+    if (textValue == 'Tap when Returned') {
+      return (
+        <RideOverviewCard
+          title="Return to the Pick up: "
           address={startLocation.join(',')}
           onPress={this.handlePickUpDirections}
         />
@@ -401,22 +455,22 @@ export default class RideView extends Component {
             </Text>
             {/* <Button onPress={this.handleGetDirections} title="Get Directions" /> */}
           </Block>
-          {textValue === 'Go to pickup' && (
-            <View
-              row
-              center
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                marginBottom: 10
-              }}
-            >
-              <SkipButton onPress={this.onSkipPress} title="Skip" />
-              <CancelButton onPress={this.onCancelPress} title="Stop" />
-            </View>
-          )}
+          {/* {textValue === 'Go to pickup' && ( */}
+          <View
+            row
+            center
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              marginBottom: 10
+            }}
+          >
+            <SkipButton onPress={this.onCompletePress} title="Skip" />
+            <CancelButton onPress={this.onCancelPress} title="Stop" />
+          </View>
+          {/* )} */}
         </View>
         <View style={{ flex: 3 }}>
           <Popup
