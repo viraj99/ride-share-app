@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Animated
+  Animated,
+  SafeAreaView
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
@@ -19,7 +20,7 @@ import variables from '../../utils/variables';
 import API from '../../api/api';
 import NavFooter from '../../components/NavFooter/NavFooter';
 
-export default class MainView extends Component<Props> {
+class MainView extends React.Component {
   scrollX = new Animated.Value(0);
   constructor(props) {
     super(props);
@@ -35,6 +36,12 @@ export default class MainView extends Component<Props> {
       token: ''
     };
   }
+
+  componentDidMount() {
+    this.handleToken();
+    this.ridesRequests();
+  }
+
   handleToken = async () => {
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
@@ -222,20 +229,20 @@ export default class MainView extends Component<Props> {
       );
     } else {
       return (
-        <View style={styles.sectionHeader}>
+        <View style={{ flex: 2 }}>
           <View style={styles.titleWrapper}>
-            <View style={styles.upcomingHeader}>
+            <View style={{ alignItems: 'flex-start' }}>
               <Text style={styles.upcomingSubTitle}>Your Scheduled Rides</Text>
-
-              {numRides > 3 ? (
-                <View style={{ alignItems: 'flex-start' }}>
-                  <TouchableOpacity onPress={this.navigateToDriverSchedule}>
-                    <Text style={styles.seeAllText}>{seeAll}</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : null}
             </View>
+            {numRides > 3 ? (
+              <View style={{ alignItems: 'flex-end' }}>
+                <TouchableOpacity onPress={this.navigateToDriverSchedule}>
+                  <Text style={styles.seeAllText}>{seeAll}</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
           </View>
+          <View style={styles.seperator} />
           <FlatList
             horizontal
             pagingEnabled
@@ -246,7 +253,7 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={scheduledRides.slice(0, 3)}
-            keyExtractor={item => `${item.id}`} // id is not showing up in response
+            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
@@ -481,11 +488,12 @@ export default class MainView extends Component<Props> {
   };
   navigateToCalendar = () => {
     const { navigation } = this.props;
-    navigation.navigate('AgendaView');
+    navigation.navigate('AgendaView', { navigation });
   };
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
     const { scheduledRides } = this.state;
+    console.log('in main view fx to nav to driversched: ', scheduledRides);
     const { navigation } = this.props;
     const { token } = this.state;
     // console.log('in navigate to driver', scheduledRides);
@@ -493,12 +501,13 @@ export default class MainView extends Component<Props> {
     navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
   render() {
+    let rideSched = this.state.scheduledRides;
+    console.log('in main view final render: ', rideSched);
     const { isLoading } = this.state;
-    console.log('SCHEDULED RIDES: ', this.state.scheduledRides);
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={() => this.handleToken()} />
-        <StatusBar barStyle="light-content" backgroundColor="#3a556a" />
+        <StatusBar barStyle="light-content" backgroundColor="#475c67" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (
           this.renderLoader()
@@ -516,7 +525,7 @@ export default class MainView extends Component<Props> {
         <NavFooter
           navigation={this.props.navigation}
           token={this.state.token}
-          scheduledRides={this.state.scheduledRides}
+          scheduledRides={rideSched}
         />
         {/* <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
@@ -525,3 +534,5 @@ export default class MainView extends Component<Props> {
     );
   }
 }
+
+export default MainView;

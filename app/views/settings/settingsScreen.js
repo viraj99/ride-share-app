@@ -12,12 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/AntDesign';
 import { AddButton } from '../../components/Button';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-import { NavigationEvents } from 'react-navigation';
-import { Header } from '../../components/Header';
-import { List, ListItem } from 'react-native-elements';
 import User from 'react-native-vector-icons/SimpleLineIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
@@ -25,9 +20,7 @@ import styles from './settingsStyle.js';
 import API from '../../api/api';
 import { VehicleCard } from '../../components/Card';
 import Animated from 'react-native-reanimated';
-import variables from '../../utils/variables';
-import { DeleteButton } from '../../components/Button';
-import Container from '../../components/Container';
+import NavFooter from '../../components/NavFooter/NavFooter';
 
 class Settings extends Component {
   _isMounted = false;
@@ -512,6 +505,10 @@ class Settings extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.props.token}
+        />
       </View>
     );
   }

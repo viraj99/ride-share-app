@@ -1,7 +1,6 @@
 import React from 'react';
-import { Text, ScrollView, Picker, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import API from '../../api/api';
@@ -10,9 +9,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 class NavFooter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      scheduledRides: []
-    };
+    // this.state = {
+    //   scheduledRides: []
+    // };
   }
 
   componentDidMount() {
@@ -23,7 +22,7 @@ class NavFooter extends React.Component {
         ride => ride.status === 'scheduled'
       );
       this.setState({
-        scheduledRides
+        scheduledRides: scheduledRides
       });
     });
   }
@@ -50,7 +49,7 @@ class NavFooter extends React.Component {
 
   render() {
     const navigation = this.props.navigation;
-    console.log('whats up with the nav? ', navigation);
+    // console.log('whats up with the nav? ', navigation);
     return (
       <View style={styles.navFooterContainer}>
         <TouchableOpacity style={styles.navFooterItem}>

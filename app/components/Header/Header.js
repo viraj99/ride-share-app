@@ -12,19 +12,12 @@ const Header = ({ onPress }) => (
     end={{ x: 1, y: 0 }}
     colors={
       Platform.OS === 'ios'
-        ? ['#15a76a', '#15a76a', '#11a461']
+        ? ['#5A7786', '#3a556a', '#5A7786']
         : ['#3a556a', '#3a556a']
     }
-    style={styles.headerContainer}
+    style={styles.welcomeContainer}
   >
-    <View style={styles.leftContainer}>
-      <Text style={styles.titleText}>Welcome</Text>
-    </View>
-    <View style={styles.rightContainer}>
-      <TouchableOpacity onPress={onPress}>
-        <Icon color="white" name="settings" size={30} />
-      </TouchableOpacity>
-    </View>
+    <Text style={styles.welcomeText}>Welcome</Text>
   </LinearGradient>
 );
 

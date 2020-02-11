@@ -34,7 +34,7 @@ export default {
   getRider(id, token) {
     return apiWrapper({
       path: RIDER,
-      params: `/${id}`,
+      params: `${id}`,
       token
     }).then(res => res.json());
   },
@@ -90,7 +90,7 @@ export default {
     return apiWrapper({
       path: AVAILABILITIES,
       method: 'GET',
-      token,
+      token
     }).then(res => res.json());
   },
   deleteAvailability(token, eventID) {
@@ -98,47 +98,49 @@ export default {
       path: AVAILABILITIES,
       params: eventID,
       method: 'DELETE',
-      token,
-    }).then(res => { alert("Your availability has been deleted"), res.json() })
+      token
+    }).then(res => {
+      alert('Your availability has been deleted'), res.json();
+    });
   },
   editAvailability(token, eventID, userEntries, recurring, endDate) {
-    let recurringParsed = JSON.parse(recurring)
+    let recurringParsed = JSON.parse(recurring);
     if (recurring === 'true') {
-      let startDateArray = userEntries.start_time.split(" ")
-      let startDate = startDateArray[0]
+      let startDateArray = userEntries.start_time.split(' ');
+      let startDate = startDateArray[0];
       const availability = {
-        "start_date": startDate,
-        "end_date": endDate,
-        "start_time": userEntries.start_time,
-        "end_time": userEntries.end_time,
-        "is_recurring": recurringParsed,
-        "location_id": userEntries.location_id,
-        "id": eventID,
-      }
+        start_date: startDate,
+        end_date: endDate,
+        start_time: userEntries.start_time,
+        end_time: userEntries.end_time,
+        is_recurring: recurringParsed,
+        location_id: userEntries.location_id,
+        id: eventID
+      };
       return apiWrapper({
         path: AVAILABILITIES,
         token,
         body: availability,
         method: 'PUT',
-        params: eventID,
+        params: eventID
       }).then(res => console.log(res.json()));
     } else {
-      let avail = userEntries
+      let avail = userEntries;
       avail = {
-        "start_date": avail.start_time,
-        "end_date": avail.end_time,
-        "start_time": avail.start_time,
-        "end_time": avail.end_time,
-        "is_recurring": recurringParsed,
-        "location_id": userEntries.location_id,
-        "id": eventID,
-      }
+        start_date: avail.start_time,
+        end_date: avail.end_time,
+        start_time: avail.start_time,
+        end_time: avail.end_time,
+        is_recurring: recurringParsed,
+        location_id: userEntries.location_id,
+        id: eventID
+      };
       return apiWrapper({
         path: AVAILABILITIES,
         token,
         body: avail,
         method: 'PUT',
-        params: eventID,
+        params: eventID
       }).then(res => console.log(res.json()));
     }
   },
@@ -220,7 +222,7 @@ export default {
   getOrgs() {
     return apiWrapper({
       path: ORGANIZATIONS,
-      method: 'GET',
+      method: 'GET'
     }).then(res => res.json());
   },
   createDriver(data) {

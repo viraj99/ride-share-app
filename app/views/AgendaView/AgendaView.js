@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
 import { NavigationEvents } from 'react-navigation';
+import NavFooter from '../../components/NavFooter/NavFooter';
 
 class AgendaView extends React.Component {
   constructor(props) {
@@ -201,6 +202,11 @@ class AgendaView extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.props.token}
+        />
       </Container>
     );
   }
