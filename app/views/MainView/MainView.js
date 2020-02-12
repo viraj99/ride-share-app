@@ -114,6 +114,14 @@ export default class MainView extends Component<Props> {
       item.end_location.state
     ];
     const reason = item.reason;
+    const round_trip = item.round_trip;
+    const expected_wait_time = item.expected_wait_time;
+    console.log(
+      'round trip ',
+      round_trip,
+      ' & wait time: ',
+      expected_wait_time
+    );
     return (
       <UpcomingRideCard
         key={item.driver_id}
@@ -125,7 +133,9 @@ export default class MainView extends Component<Props> {
             startLocation,
             endLocation,
             date,
-            reason
+            reason,
+            round_trip,
+            expected_wait_time
           });
         }}
         date={item.pick_up_time}
