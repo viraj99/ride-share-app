@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Alert, Text, View, TouchableOpacity } from 'react-native';
-import { Avatar, Button, Icon, ThemeProvider } from 'react-native-elements';
+import { Alert, Text, View } from 'react-native';
+import { Avatar, Button } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
-import getDirections from 'react-native-google-maps-directions';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
+import moment from 'moment';
 import Block from '../../components/Block';
 import { SkipButton, CancelButton } from '../../components/Button';
 import styles from './styles';
-import api from '../../api/api';
 
 export default class RideView extends Component {
   constructor(props) {
@@ -122,17 +121,11 @@ export default class RideView extends Component {
 
     API.waitingForRide(rideId, token)
       .then(result => {
-        console.log('WAITING', result);
+        console.log('WAITING', result.ride.expected_wait_time);
       })
       .catch(err => {
         console.log('UNABLE TO WAIT');
       });
-    // if (rideId && token) {
-    //   // Alert.alert('Now Waiting');
-    //   console.log('waiting');
-    // } else {
-    //   // Alert.alert('Unable to wait');
-    // }
   };
 
   onReturnPickingUpPress = () => {
@@ -143,18 +136,16 @@ export default class RideView extends Component {
     API.returnPickUp(rideId, token)
       .then(result => {
         console.log('PICKING UP: ', result);
+        const latitude = result.ride.end_location.latitude;
+        const longitude = result.ride.end_location.longitude;
+        this.setState({
+          latitude,
+          longitude
+        });
       })
       .catch(err => {
         console.log('UNABLE 2 PICK UP: ', err);
       });
-
-    // if (rideId && token) {
-    //   // Alert.alert('On your way back');
-    //   console.log('on the way back');
-    // } else {
-    //   // Alert.alert('Unable to go back');
-    //   console.log('cant go back');
-    // }
   };
 
   onReturnDroppingOffPress = () => {
@@ -165,17 +156,16 @@ export default class RideView extends Component {
     API.returnDropOff(rideId, token)
       .then(result => {
         console.log('DROPPING OFF: ', result);
+        const latitude = result.ride.end_location.latitude;
+        const longitude = result.ride.end_location.longitude;
+        this.setState({
+          latitude,
+          longitude
+        });
       })
       .catch(err => {
         console.log('UNABLE 2 DROP OFF: ', result);
       });
-    // if (rideId && token) {
-    //   // Alert.alert('Dropping off at inital location');
-    //   console.log('dropped off at pick up');
-    // } else {
-    //   // Alert.alert('Unable to drop off');
-    //   console.log('couldnt drop off at pick up');
-    // }
   };
 
   onCompletePress = () => {
@@ -227,151 +217,86 @@ export default class RideView extends Component {
       .catch(err => {
         Alert.alert('Could not Complete Ride');
       });
-    // API.pickUpRide(rideId, token)
-    //   .then(result => {
-    //     console.log('Picked UP');
-    //     API.dropOffRide(rideId, token).then(result => {
-    //       console.log('Dropped');
-    //       API.completeRide(rideId, token).then(result => {
-    //         console.log('Complete');
-    //         Alert.alert('Ride Complete');
-    //         navigation.navigate('MainView');
-    //       });
-    //     });
-    //   })
-    //   .catch(err => {
-    //     Alert.alert('Could not Complete Ride');
-    //     navigation.navigate('MainView');
-    //   });
   };
 
   onPress = () => {
     const { textValue } = this.state;
     const { navigation } = this.props;
-
-    if (textValue === 'Go to pickup') {
-      // this.onPress = () => {
-      this.onPickUpPress();
-      this.setState({
-        textValue: 'Tap to arrive'
-      });
-      // };
-      // Alert.alert('Head to Pick Up', '', [
-      //   {
-      //     text: 'Picking Up?',
-      //     onPress: () => {
-      //       this.onPickUpPress();
-      //       this.setState({
-      //         textValue: 'Tap to arrive'
-      //       });
-      //     }
-      //   }
-      // ]);
-    } else if (textValue === 'Tap to arrive') {
-      // Alert.alert('All set?', '', [
-      // {
-      // text: 'Ready',
-      // onPress: () => {
-      this.setState({
-        textValue: 'Ready'
-      });
-      // }
-      // },
-      // {
-      // text: 'cancel',
-      // style: 'cancel',
-      // onPress: () => {
-      // this.onCancelPress();
-      // }
-      // }
-      // ]);
-    } else if (textValue === 'Ready') {
-      // Alert.alert('Drop Off Destination', '', [
-      // {
-      //   text: 'Go to Drop off',
-      //   onPress: () => {
-      this.onDropOffPress();
-      this.setState({
-        textValue: 'Drop off'
-      });
-      //     }
-      //   },
-      //   {
-      //     text: 'cancel',
-      //     style: 'cancel',
-      //     onPress: () => {
-      //       this.onCancelPress();
-      //     }
-      //   }
-      // ]);
-    } else if (textValue === 'Drop off') {
-      // Alert.alert('Did you drop-off?', '', [
-      //   {
-      //     text: 'Confirm drop-off',
-      //     onPress: () => {
-      this.onWaitingPress();
-      this.setState({
-        textValue: 'Now Waiting'
-      });
-      //     }
-      //   },
-      //   {
-      //     text: 'cancel',
-      //     style: 'cancel',
-      //     onPress: () => {
-      //       this.onCancelPress();
-      //     }
-      //   }
-      // ]);
-    } else if (textValue === 'Now Waiting') {
-      // Alert.alert('Done Waiting?', '', [
-      //   {
-      //     text: 'Ready for prior Destination',
-      //     onPress: () => {
-      this.setState({
-        textValue: 'Ready 2 go back'
-      });
-    } else if (textValue === 'Ready 2 go back') {
-      this.onReturnPickingUpPress();
-      this.setState({
-        textValue: 'Ready to return'
-      });
-      //     }
-      //   },
-      //   {
-      //     text: 'cancel',
-      //     style: 'cancel',
-      //     onPress: () => {
-      //       this.onCancelPress();
-      //     }
-      //   }
-      // ]);
-    } else if (textValue === 'Ready to return') {
-      // Alert.alert('Dropping Off?', '', [
-      //   {
-      //     text: 'Did you Drop off',
-      //     onPress: () => {
-      this.setState({
-        textValue: 'Tap when Returned'
-      });
-    } else if (textValue === 'Tap when Returned') {
-      this.onReturnDroppingOffPress();
-      this.onCompletePress();
-      this.setState({
-        textValue: 'Returned'
-      });
-      navigation.navigate('MainView');
+    const round_trip = navigation.state.params.round_trip;
+    const expected_wait_time = navigation.state.params.expected_wait_time;
+    const convertsion = mins => {
+      let hours = Math.floor(mins / 60);
+      let minutes = mins % 60;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return `${hours}hrs and ${minutes}mins`;
+    };
+    // console.log(
+    //   'expected wait time: ',
+    //   expected_wait_time,
+    //   'and convertsion: ',
+    //   convertsion(expected_wait_time)
+    // );
+    if (round_trip) {
+      if (textValue === 'Go to pickup') {
+        this.onPickUpPress();
+        this.setState({
+          textValue: 'Tap to arrive'
+        });
+      } else if (textValue === 'Tap to arrive') {
+        this.setState({
+          textValue: 'Ready'
+        });
+      } else if (textValue === 'Ready') {
+        this.onDropOffPress();
+        this.setState({
+          textValue: 'Drop off'
+        });
+      } else if (textValue === 'Drop off') {
+        this.onWaitingPress();
+        this.setState({
+          textValue: 'Waiting ' + convertsion(expected_wait_time)
+        });
+      } else if (textValue === 'Waiting ' + convertsion(expected_wait_time)) {
+        this.setState({
+          textValue: 'Ready 2 go back'
+        });
+      } else if (textValue === 'Ready 2 go back') {
+        this.onReturnPickingUpPress();
+        this.setState({
+          textValue: 'Ready to return'
+        });
+      } else if (textValue === 'Ready to return') {
+        this.setState({
+          textValue: 'Tap when Returned'
+        });
+      } else if (textValue === 'Tap when Returned') {
+        this.onReturnDroppingOffPress();
+        this.onCompletePress();
+        this.setState({
+          textValue: 'Returned'
+        });
+        navigation.navigate('MainView');
+      }
+    } else {
+      if (textValue === 'Go to pickup') {
+        this.onPickUpPress();
+        this.setState({
+          textValue: 'Tap to arrive'
+        });
+      } else if (textValue === 'Tap to arrive') {
+        this.setState({
+          textValue: 'Ready'
+        });
+      } else if (textValue === 'Ready') {
+        this.onDropOffPress();
+        this.setState({
+          textValue: 'Drop off'
+        });
+      } else if (textValue === 'Drop off') {
+        this.onCompletePress();
+        navigation.navigate('MainView');
+      }
     }
-    //     },
-    //     {
-    //       text: 'cancel',
-    //       style: 'cancel',
-    //       onPress: () => {
-    //         this.onCancelPress();
-    //       }
-    //     }
-    //   ]);
-    // }
   };
 
   renderOverview = () => {
@@ -432,8 +357,6 @@ export default class RideView extends Component {
     const { textValue, isVisible, latitude, longitude } = this.state;
     const { navigation } = this.props;
     console.log('trying to get location: ', latitude, '&', longitude);
-
-    // ?const name = navigation.getParam('name');
 
     return (
       <View style={styles.container}>
