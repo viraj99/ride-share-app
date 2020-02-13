@@ -19,8 +19,11 @@ const InitOverviewCard = ({
     <Block style={[styles.cardContainer, styles.shadow]}>
       <Block row space="between">
         <Text style={styles.date}>{moment(date).format('MMM D')}</Text>
+        {console.log('data from date raw: ', date)}
+        {console.log('data from date MMM D: ', moment(date).format('MMM D'))}
         <Text style={styles.date}>pick up by</Text>
-        <Text style={styles.date}>{moment(date).format('h:mm A')}</Text>
+        {console.log('data from date hh:mm ', moment.utc(date).format('hh:mm'))}
+        <Text style={styles.date}>{moment.utc(date).format('hh:mm')}</Text>
       </Block>
       <Block row center>
         <Badge
