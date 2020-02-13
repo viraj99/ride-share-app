@@ -3,41 +3,34 @@ import { View, FlatList } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { RideListItem } from '../../components/RideListItem';
 import AsyncStorage from '@react-native-community/async-storage';
+import NavFooter from '../../components/NavFooter/NavFooter';
 
-const DriverScheduleView = props => {
-  handleToken = async () => {
-    const value = await AsyncStorage.getItem('token');
-    const parsedValue = JSON.parse(value);
-    const realToken = parsedValue.token;
-    this.setState({
-      token: realToken
-    });
-    console.log('inside handleToken', token);
-    this.navigateToRideView();
-  };
+class DriverScheduleView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  // handleToken = async () => {
+  //   const value = await AsyncStorage.getItem('token');
+  //   const parsedValue = JSON.parse(value);
+  //   const realToken = parsedValue.token;
+  //   this.setState({
+  //     token: realToken
+  //   });
+  //   console.log('inside handleToken', token);
+  //   this.navigateToRideView();
+  // };
 
   // componentDidMount = () => {
   //   this.handleToken();
   // }
 
-  const { navigation } = props;
-
-  const scheduledRides = navigation.getParam('scheduledRides');
-  const token = navigation.getParam('token');
-  //console.log('scheduledRides', scheduledRides);
-  //console.log('token in driverSchedule', token);
-
-  keyExtractor = item => {
-    return item.id.toString(); //&& item.token.toString();
-  };
-
-  // console.log('keyExtractor item:', keyExtractor);
-  navigateToRideView = item => {
+  navigateToRideView = (item, token) => {
     console.log('click on schedule', item);
     // const token = navigation.getParam('token');
     // const { navigation } = props;
     // const { token } = navigation.getParam('token');
-    console.log('tokem', token);
+    console.log('token', token);
 
     const date = item.pick_up_time;
     const reason = item.reason;
@@ -81,21 +74,41 @@ const DriverScheduleView = props => {
         time={time}
         address={address}
         underlayColor={underlayColor}
-        onPress={() => this.navigateToRideView(item)}
+        onPress={() => this.navigateToRideView(item, token)}
       />
     );
   };
 
-  return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <NavigationEvents onDidFocus={() => this.handleToken()} />
-      <FlatList
-        data={scheduledRides}
-        renderItem={this.renderRideList}
-        keyExtractor={this.keyExtractor}
-      />
-    </View>
-  );
-};
+  render() {
+    const { navigation } = this.props;
+    const scheduledRides = this.props.navigation.state.params.scheduledRides;
+    console.log('RIDES: ', scheduledRides);
+    const token = this.props.token;
+    //console.log('scheduledRides', scheduledRides);
+    //console.log('token in driverSchedule', token);
+    // console.log('keyExtractor item:', keyExtractor);
+
+    const keyExtractor = item => {
+      return item.id.toString(); //&& item.token.toString();
+    };
+
+    return (
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        {/* <NavigationEvents onDidFocus={() => this.handleToken()} /> */}
+        <FlatList
+          data={scheduledRides}
+          renderItem={this.renderRideList}
+          keyExtractor={keyExtractor}
+        />
+
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.props.token}
+          scheduledRides={this.props.scheduledRides}
+        />
+      </View>
+    );
+  }
+}
 
 export default DriverScheduleView;

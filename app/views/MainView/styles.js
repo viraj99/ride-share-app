@@ -32,24 +32,38 @@ export default StyleSheet.create({
     marginTop: 15,
     marginBottom: 3
   },
-  seeAllText: {
-    textAlign: 'center',
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#e56353'
-  },
   titlesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 15
   },
+  sectionHeader: {
+    flex: 2
+  },
   titleWrapper: {
-    marginTop: 15,
-    marginHorizontal: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#e56353'
+  },
+  upcomingHeader: {
+    flex: 2,
+    flexDirection: 'row'
+  },
+  upcomingSubTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff'
+  },
+  seeAllText: {
+    textAlign: 'right',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+    paddingLeft: 110
   },
   viewMoreContainer: {
     flex: 1,
@@ -109,11 +123,19 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 50
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
+  showAllText: {
+    textAlign: 'right',
+    fontSize: 18,
     fontWeight: '700',
-    paddingVertical: 10
+    color: '#fff',
+    paddingLeft: 50
+  },
+  hideAllText: {
+    textAlign: 'right',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+    paddingLeft: 140
   },
   noSchedText: {
     fontSize: 20,
@@ -123,7 +145,7 @@ export default StyleSheet.create({
     marginRight: 20,
     marginTop: 15,
     marginBottom: 25,
-    paddingBottom: 15,
+    paddingVertical: 15,
     borderBottomWidth: 2,
     borderColor: '#475c67'
   },
@@ -135,8 +157,11 @@ export default StyleSheet.create({
     marginRight: 20,
     marginTop: 0,
     marginBottom: 25,
-    paddingBottom: 25,
+    paddingVertical: 25,
     borderBottomWidth: 2,
     borderColor: '#475c67'
+  },
+  reqRidesContainer: {
+    paddingBottom: 40
   }
 });
