@@ -19,8 +19,9 @@ import styles from './styles';
 import variables from '../../utils/variables';
 import API from '../../api/api';
 import NavFooter from '../../components/NavFooter/NavFooter';
+type Props = {};
 
-class MainView extends React.Component {
+export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
   constructor(props) {
     super(props);
@@ -35,11 +36,6 @@ class MainView extends React.Component {
       isLoading: true,
       token: ''
     };
-  }
-
-  componentDidMount() {
-    this.handleToken();
-    this.ridesRequests();
   }
 
   handleToken = async () => {
@@ -535,4 +531,4 @@ class MainView extends React.Component {
   }
 }
 
-export default MainView;
+// export default MainView;
