@@ -1,66 +1,86 @@
-import {Platform, StyleSheet} from 'react-native';
-import {getBottomSpace} from '../../components/Header/StatusBar';
+import { Platform, StyleSheet } from 'react-native';
+import { getBottomSpace } from '../../components/Header/StatusBar';
 import variables from '../../utils/variables';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff'
   },
   footer: {
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 15 : 0,
-    backgroundColor: '#fcfcf6',
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   subTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#475c67',
+    color: '#475c67'
   },
   seperator: {
     borderWidth: 0.5,
     borderColor: '#D8D8D8',
     marginHorizontal: 15,
     marginTop: 15,
-    marginBottom: 3,
+    marginBottom: 3
   },
   seeAllText: {
     textAlign: 'center',
     fontSize: 13,
     fontWeight: '700',
-    color: '#ff8262',
+    color: '#e56353'
   },
   titlesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 15
+  },
+  sectionHeader: {
+    flex: 2
   },
   titleWrapper: {
-    marginTop: 15,
-    marginHorizontal: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#e56353'
+  },
+  upcomingHeader: {
+    flex: 2,
+    flexDirection: 'row'
+  },
+  upcomingSubTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff'
+  },
+  seeAllText: {
+    textAlign: 'right',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+    paddingLeft: 110
   },
   viewMoreContainer: {
     flex: 1,
     justifyContent: 'center',
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   loader: {
     paddingVertical: 20,
     borderTopWidth: 1,
     borderColor: '#CED0CE',
-    flex: 2,
+    flex: 2
   },
   dots: {
     width: 10,
@@ -69,13 +89,13 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 6,
     backgroundColor: variables.colors.gray,
-    borderColor: 'transparent',
+    borderColor: 'transparent'
   },
   activeDot: {
     width: 12.5,
     height: 12.5,
     borderRadius: 6.25,
-    borderColor: variables.colors.darkgray,
+    borderColor: variables.colors.darkgray
   },
   dotContainer: {
     flex: 1,
@@ -83,7 +103,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: 5,
+    marginTop: 5
   },
   buttonBar: {
     alignItems: 'center',
@@ -97,23 +117,31 @@ export default StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.25,
     shadowRadius: 2.62,
-    elevation: 4,
+    elevation: 4
   },
   buttonWrapper: {
     // mainly used in calendar btn
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 50,
+    paddingHorizontal: 50
   },
-  buttonText: {
+  showAllText: {
+    textAlign: 'right',
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    paddingVertical: 10,
+    paddingLeft: 50
+  },
+  hideAllText: {
+    textAlign: 'right',
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    paddingLeft: 140
   },
   noSchedText: {
     fontSize: 20,
@@ -123,9 +151,9 @@ export default StyleSheet.create({
     marginRight: 20,
     marginTop: 15,
     marginBottom: 25,
-    paddingBottom: 15,
+    paddingVertical: 15,
     borderBottomWidth: 2,
-    borderColor: '#475c67',
+    borderColor: '#475c67'
   },
   noAvailText: {
     fontSize: 20,
@@ -135,8 +163,11 @@ export default StyleSheet.create({
     marginRight: 20,
     marginTop: 0,
     marginBottom: 25,
-    paddingBottom: 25,
+    paddingVertical: 25,
     borderBottomWidth: 2,
-    borderColor: '#475c67',
+    borderColor: '#475c67'
+  },
+  reqRidesContainer: {
+    paddingBottom: 40
   }
 });

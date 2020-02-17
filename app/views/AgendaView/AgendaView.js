@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
 import { NavigationEvents } from 'react-navigation';
+import NavFooter from '../../components/NavFooter/NavFooter';
 
 class AgendaView extends React.Component {
   constructor(props) {
@@ -113,16 +114,8 @@ class AgendaView extends React.Component {
     return (
       <View style={[styles.availListItem]}>
         <View style={styles.leftList}>
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate('RegisterAvailability', {
-                editItem: item,
-                isEditing: true,
-                endDate: ending
-              })
-            }
-          >
-            <Icon color={'#ff8262'} name="pencil" size={30} />
+          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
+            <Icon color={'#e56353'} name="pencil" size={30} />
           </TouchableOpacity>
         </View>
 
@@ -139,11 +132,16 @@ class AgendaView extends React.Component {
 
         <View style={styles.rightList}>
           <TouchableOpacity onPress={() => this.deleteAvail(id)}>
-            <Icon color={'#ff8262'} name="delete" size={30} />
+            <Icon color={'#e56353'} name="delete" size={30} />
           </TouchableOpacity>
         </View>
       </View>
     );
+  };
+
+  redirectToAddAvail = item => {
+    const { navigation } = this.props;
+    navigation.navigate('AvailabilityView', { item });
   };
 
   deleteAvail = eventId => {
@@ -199,13 +197,7 @@ class AgendaView extends React.Component {
           <View style={styles.footer}>
             <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={() =>
-                this.props.navigation.navigate('RegisterAvailability', {
-                  editItem: noItem,
-                  isEditing: true,
-                  endDate: new Date()
-                })
-              }
+              onPress={() => this.redirectToAddAvail(noItem)}
             >
               <View style={styles.buttonWrapper}>
                 <Text style={styles.buttonText}>Add Availability</Text>
@@ -213,6 +205,11 @@ class AgendaView extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.props.token}
+        />
       </Container>
     );
   }

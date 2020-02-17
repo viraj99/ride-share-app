@@ -1,5 +1,5 @@
 // Calendar Button styles
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -12,26 +12,42 @@ export default StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
     shadowOpacity: 0.25,
     shadowRadius: 2.62,
-    elevation: 4,
+    elevation: 4
+  },
+  containerRed: {
+    alignItems: 'center',
+    backgroundColor: '#e56353',
+    borderWidth: 2,
+    borderColor: '#e56353',
+    borderRadius: 25,
+    marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2.62,
+    elevation: 4
   },
   wrapper: {
     // mainly used in calendar btn
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 100,
+    paddingHorizontal: 100
   },
   icon: {
     width: 19,
-    marginRight: 11,
+    marginRight: 11
   },
   text: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
-    paddingVertical: 10,
-  },
+    paddingVertical: 10
+  }
 });

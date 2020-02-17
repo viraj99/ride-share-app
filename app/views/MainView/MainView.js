@@ -18,7 +18,9 @@ import { CalendarButton } from '../../components/Button';
 import styles from './styles';
 import variables from '../../utils/variables';
 import API from '../../api/api';
+import NavFooter from '../../components/NavFooter/NavFooter';
 type Props = {};
+
 export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
   constructor(props) {
@@ -30,11 +32,12 @@ export default class MainView extends Component<Props> {
       withinAvailRides: [],
       hasReqRidesInAvail: false,
       showAllRides: false,
-      toggleButtonText: 'Show All Requested Rides',
+      toggleButtonText: 'Show All',
       isLoading: true,
       token: ''
     };
   }
+
   handleToken = async () => {
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
@@ -209,9 +212,10 @@ export default class MainView extends Component<Props> {
   };
   renderUpcomingRides = () => {
     const { scheduledRides } = this.state;
-    console.log('render upcomming', scheduledRides);
+    console.log('render upcoming', scheduledRides);
     const numRides = scheduledRides.length;
     const seeAll = `See all (${numRides})`;
+    //If you don't have any rides on your schedule...
     if (scheduledRides.length === 0) {
       return (
         <View>
@@ -220,12 +224,13 @@ export default class MainView extends Component<Props> {
           </Text>
         </View>
       );
+      //If you do have scheduled rides...
     } else {
       return (
         <View style={{ flex: 2 }}>
           <View style={styles.titleWrapper}>
             <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>Upcoming Schedule</Text>
+              <Text style={styles.upcomingSubTitle}>Your Scheduled Rides</Text>
             </View>
             {numRides > 3 ? (
               <View style={{ alignItems: 'flex-end' }}>
@@ -360,13 +365,7 @@ export default class MainView extends Component<Props> {
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
     return (
-      <View>
-        <View style={styles.titlesContainer}>
-          <View style={{ alignItems: 'flex-start' }}>
-            <Text style={styles.subTitle}>Requested Rides</Text>
-          </View>
-        </View>
-        <View style={styles.seperator} />
+      <View style={styles.reqRidesContainer}>
         <FlatList
           pagingEnabled
           scrollEnabled
@@ -376,7 +375,7 @@ export default class MainView extends Component<Props> {
           snapToAlignment="center"
           style={{ overflow: 'visible' }}
           data={approvedRides}
-          keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+          keyExtractor={item => `${item.id}`} // id is not showing up in response
           onScroll={Animated.event([
             { nativeEvent: { contentOffset: { x: this.scrollX } } }
           ])}
@@ -389,35 +388,57 @@ export default class MainView extends Component<Props> {
   renderFilteredRides = () => {
     const { withinAvailRides } = this.state;
     console.log('whats in the withinAvailRides state? ', withinAvailRides);
-    if (withinAvailRides.length === 0) {
+    //If there are no requested rides within availability and user hasn't clicked to show all rides....
+    if (
+      withinAvailRides.length === 0 &&
+      this.state.toggleButtonText === 'Show All'
+    ) {
       return (
         <View>
-          <Text style={styles.noAvailText}>
-            There currently are no requested rides within your availability.
-          </Text>
-          <TouchableOpacity
-            style={styles.buttonBar}
-            onPress={this.showAllRides}
-          >
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.buttonText}>
-                {this.state.toggleButtonText}
-              </Text>
+          <View style={styles.sectionHeader}>
+            <View style={styles.titleWrapper}>
+              <View style={styles.upcomingHeader}>
+                <Text style={styles.upcomingSubTitle}>
+                  Requested Rides in Availability
+                </Text>
+                <TouchableOpacity onPress={this.showAllRides}>
+                  <Text style={styles.showAllText}>
+                    {this.state.toggleButtonText}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.noAvailText}>
+              There currently are no requested rides within your availability.
+            </Text>
+          </View>
         </View>
       );
+      //If there are no requested rides within availability and the user HAS clicked to show all requested rides...
+    } else if (
+      withinAvailRides.length === 0 &&
+      this.state.toggleButtonText === 'Hide All'
+    ) {
+      return (
+        <View style={styles.sectionHeader}>
+          <View style={styles.titleWrapper}>
+            <View style={styles.upcomingHeader}>
+              <Text style={styles.upcomingSubTitle}>All Requested Rides</Text>
+              <TouchableOpacity onPress={this.showAllRides}>
+                <Text style={styles.hideAllText}>
+                  {this.state.toggleButtonText}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
+      //This displays all requested rides...
     } else {
       return (
         <View>
-          <View style={styles.titlesContainer}>
-            <View style={{ alignItems: 'flex-start' }}>
-              <Text style={styles.subTitle}>
-                Requested rides within my availability:
-              </Text>
-            </View>
-          </View>
-          <View style={styles.seperator} />
           <FlatList
             pagingEnabled
             scrollEnabled
@@ -427,7 +448,7 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={withinAvailRides}
-            keyExtractor={(item, index) => `${item.id}`} // id is not showing up in response
+            keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { x: this.scrollX } } }
             ])}
@@ -452,12 +473,12 @@ export default class MainView extends Component<Props> {
     if (this.state.showAllRides === false) {
       this.setState({
         showAllRides: true,
-        toggleButtonText: 'Hide All Requested Rides'
+        toggleButtonText: 'Hide All'
       });
     } else {
       this.setState({
         showAllRides: false,
-        toggleButtonText: 'Show All Requested Rides'
+        toggleButtonText: 'Show All'
       });
     }
   };
@@ -480,11 +501,12 @@ export default class MainView extends Component<Props> {
     navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
   render() {
+    let rideSched = this.state.scheduledRides;
     const { isLoading } = this.state;
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={() => this.handleToken()} />
-        <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
+        <StatusBar barStyle="light-content" backgroundColor="#475c67" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (
           this.renderLoader()
@@ -499,9 +521,14 @@ export default class MainView extends Component<Props> {
             {this.state.showAllRides && this.renderRequestedRides()}
           </ScrollView>
         )}
-        <View style={styles.footer}>
+        <NavFooter
+          navigation={this.props.navigation}
+          token={this.state.token}
+          scheduledRides={rideSched}
+        />
+        {/* <View style={styles.footer}>
           <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
-        </View>
+        </View> */}
       </View>
     );
   }

@@ -1,17 +1,18 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, Image} from 'react-native';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
 // import PropTypes from 'prop-types';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './styles';
 
-const StartButton = ({title, onPress}) => (
+const StartButton = ({ title, onPress }) => (
   <LinearGradient
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-    colors={['#f9a4a4', '#ff9d84', '#ff8262']}
-    style={styles.linearGradient}>
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    colors={['#EFA198', '#EA8275', '#e56353']}
+    style={styles.linearGradient}
+  >
     <View style={styles.buttonWrapper}>
       <View style={styles.startTextContainer}>
         <Text style={styles.buttonText}>{title}</Text>
@@ -19,10 +20,10 @@ const StartButton = ({title, onPress}) => (
       <TouchableOpacity onPress={onPress}>
         <View style={styles.circleButtonContainer}>
           <ArrowIcon
-            color="#ff8262"
+            color="#e56353"
             name="arrowright"
             size={20}
-            style={{alignSelf: 'center'}}
+            style={{ alignSelf: 'center' }}
           />
         </View>
       </TouchableOpacity>

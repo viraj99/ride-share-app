@@ -80,7 +80,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1EAA70',
+    backgroundColor: '#475c67',
     height: Platform.OS == 'ios' ? 120 : 80,
     marginTop: Platform.OS == 'android' ? 0 : 0
   },
