@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Text, View, Linking } from 'react-native';
 import { Avatar, Button } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
+import CountDown from 'react-native-countdown-component';
+import Sound from 'react-native-sound';
 import moment from 'moment';
 import Block from '../../components/Block';
 import { SkipButton, CancelButton } from '../../components/Button';
 import styles from './styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class RideView extends Component {
   constructor(props) {
@@ -24,6 +27,11 @@ export default class RideView extends Component {
     this.requestRider();
   };
 
+  sound = new Sound('pacman_death.mp3');
+
+  playSound = () => {
+    this.sound.play();
+  };
   requestRider = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
@@ -33,6 +41,7 @@ export default class RideView extends Component {
       this.setState({
         first: response.json.rider.first_name,
         last: response.json.rider.last_name,
+        phone: response.json.rider.phone,
         isLoading: false
       });
     });
@@ -254,9 +263,9 @@ export default class RideView extends Component {
       } else if (textValue === 'Drop off') {
         this.onWaitingPress();
         this.setState({
-          textValue: 'Waiting ' + convertsion(expected_wait_time)
+          textValue: 'Waiting'
         });
-      } else if (textValue === 'Waiting ' + convertsion(expected_wait_time)) {
+      } else if (textValue === 'Waiting') {
         this.setState({
           textValue: 'Ready 2 go back'
         });
@@ -306,6 +315,9 @@ export default class RideView extends Component {
     const endLocation = navigation.getParam('endLocation');
     const date = navigation.getParam('date');
     const reason = navigation.getParam('reason');
+    const expected_wait_time = navigation.state.params.expected_wait_time;
+    const phone = this.state.phone;
+    console.log('phone: ', phone);
 
     if (textValue === 'Tap to arrive') {
       return (
@@ -323,6 +335,95 @@ export default class RideView extends Component {
           address={endLocation.join(', ')}
           onPress={this.handleDropOffDirections}
         />
+      );
+    }
+    if (textValue === 'Waiting') {
+      return (
+        <View>
+          <View
+            style={{
+              // flex: 1,
+              // alignContent: 'center',
+              // justifyContent: 'center',
+              marginTop: 10,
+              marginBottom: 10,
+              paddingTop: 15,
+              paddingBottom: 35,
+              marginLeft: 15,
+              marginRight: 15,
+              backgroundColor: '#475c67',
+              borderRadius: 40,
+              borderWidth: 1,
+              borderColor: '#fff'
+            }}
+          >
+            <View
+              style={{
+                // flex: 1,
+                // justifyContent: 'center',
+                // alignContent: 'center',
+                backgroundColor: '#475c67',
+                // fontSize: 40,
+                paddingLeft: 45,
+                // marginLeft: 8,
+                marginRight: 18,
+                marginBottom: 10,
+                borderRadius: 15,
+                // borderTopLeftRadius: 15,
+                // borderTopRightRadius: 15,
+                borderTopWidth: 20,
+                borderBottomWidth: 20,
+                // borderRadius: 0,
+                borderWidth: 1,
+                borderColor: '#475c67'
+                // borderEndColor: '#8ea0ad'
+              }}
+            >
+              <Text style={{ fontSize: 40, color: '#fcfcf6' }}>
+                WAITING TIMER
+              </Text>
+            </View>
+            <CountDown
+              size={45}
+              until={expected_wait_time * 60}
+              onFinish={
+                () =>
+                  this.setState({
+                    textValue: 'Ready 2 go back'
+                  })
+                // SoundPlayer.playSoundFile('pacman_death', 'mp3')
+              }
+              onPress={this.playSound()}
+              digitStyle={{
+                backgroundColor: '#475c67',
+                borderWidth: 1,
+                borderColor: '#475c67'
+              }}
+              digitTxtStyle={{ color: '#fcfcf6' }}
+              timeLabelStyle={{ color: '#fcfcf6' }} //make time labels invisible
+              separatorStyle={{ color: '#fcfcf6', paddingBottom: 40 }}
+              timeToShow={['H', 'M', 'S']}
+              timeLabels={{ h: 'hrs', m: 'mins', s: 'secs' }}
+              showSeparator
+            />
+            {/* <Text>{this.state.phone}</Text> */}
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(`tel:${phone}`);
+            }}
+            style={styles.buttonsContainer}
+          >
+            <Button
+              title={phone}
+              containerStyle={styles.startRideContainer}
+              titleStyle={styles.startRideTitle}
+              buttonStyle={styles.phoneButton}
+              onPress={this.onPress}
+              raised
+            />
+          </TouchableOpacity>
+        </View>
       );
     }
     if (textValue === 'Ready 2 go back') {
