@@ -39,6 +39,10 @@ target 'RideShareApp' do
 
   pod 'ReactNativeDarkMode', :path => '../node_modules/react-native-dark-mode'
 
+  pod 'RNSoundPlayer', :path => '../node_modules/react-native-sound-player'
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'RideShareAppTests' do
     inherit! :search_paths
     # Pods for testing
