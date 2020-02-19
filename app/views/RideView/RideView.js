@@ -6,6 +6,8 @@ import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import CountDown from 'react-native-countdown-component';
 import Sound from 'react-native-sound';
+import { TextMask } from 'react-native-masked-text';
+import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import Block from '../../components/Block';
 import { SkipButton, CancelButton } from '../../components/Button';
@@ -48,7 +50,7 @@ export default class RideView extends Component {
   };
 
   handlePickUpDirections = () => {
-    console.log('item with location:', item => item);
+    // console.log('item with location:', item => item);
     // console.log('RideView PickUp', latitude, ' & ', longitude);
     this.setState({
       isVisible: true
@@ -232,13 +234,13 @@ export default class RideView extends Component {
     const { textValue } = this.state;
     const { navigation } = this.props;
     const round_trip = navigation.state.params.round_trip;
-    const expected_wait_time = navigation.state.params.expected_wait_time;
-    const convertsion = mins => {
-      let hours = Math.floor(mins / 60);
-      let minutes = mins % 60;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return `${hours}hrs and ${minutes}mins`;
-    };
+    // const expected_wait_time = navigation.state.params.expected_wait_time;
+    // const convertsion = mins => {
+    //   let hours = Math.floor(mins / 60);
+    //   let minutes = mins % 60;
+    //   minutes = minutes < 10 ? '0' + minutes : minutes;
+    //   return `${hours}hrs and ${minutes}mins`;
+    // };
     // console.log(
     //   'expected wait time: ',
     //   expected_wait_time,
@@ -342,9 +344,6 @@ export default class RideView extends Component {
         <View>
           <View
             style={{
-              // flex: 1,
-              // alignContent: 'center',
-              // justifyContent: 'center',
               marginTop: 10,
               marginBottom: 10,
               paddingTop: 15,
@@ -357,41 +356,16 @@ export default class RideView extends Component {
               borderColor: '#fff'
             }}
           >
-            <View
-              style={{
-                // flex: 1,
-                // justifyContent: 'center',
-                // alignContent: 'center',
-                backgroundColor: '#475c67',
-                // fontSize: 40,
-                paddingLeft: 45,
-                // marginLeft: 8,
-                marginRight: 18,
-                marginBottom: 10,
-                borderRadius: 15,
-                // borderTopLeftRadius: 15,
-                // borderTopRightRadius: 15,
-                borderTopWidth: 20,
-                borderBottomWidth: 20,
-                // borderRadius: 0,
-                borderWidth: 1,
-                borderColor: '#475c67'
-                // borderEndColor: '#8ea0ad'
-              }}
-            >
-              <Text style={{ fontSize: 40, color: '#fcfcf6' }}>
-                WAITING TIMER
-              </Text>
+            <View style={styles.timerContainer}>
+              <Text style={styles.timerText}>WAITING TIMER</Text>
             </View>
             <CountDown
-              size={45}
+              size={42}
               until={expected_wait_time * 60}
-              onFinish={
-                () =>
-                  this.setState({
-                    textValue: 'Ready 2 go back'
-                  })
-                // SoundPlayer.playSoundFile('pacman_death', 'mp3')
+              onFinish={() =>
+                this.setState({
+                  textValue: 'Ready 2 go back'
+                })
               }
               onPress={this.playSound()}
               digitStyle={{
@@ -406,22 +380,45 @@ export default class RideView extends Component {
               timeLabels={{ h: 'hrs', m: 'mins', s: 'secs' }}
               showSeparator
             />
-            {/* <Text>{this.state.phone}</Text> */}
           </View>
+
           <TouchableOpacity
             onPress={() => {
               Linking.openURL(`tel:${phone}`);
             }}
             style={styles.buttonsContainer}
           >
-            <Button
-              title={phone}
-              containerStyle={styles.startRideContainer}
-              titleStyle={styles.startRideTitle}
-              buttonStyle={styles.phoneButton}
-              onPress={this.onPress}
-              raised
-            />
+            <View style={styles.phoneStyle}>
+              <Icon
+                name="telephone"
+                size={22}
+                color="#fcfcf6"
+                // reverse
+                // raised
+                type="foundation"
+              />
+              <TextMask
+                type={'custom'}
+                options={{
+                  mask: '(999) 999-9999'
+                }}
+                style={styles.textMask}
+                value={phone}
+                onChangeText={text => {
+                  this.setState({
+                    phone: text
+                  });
+                }}
+              />
+              {/* <Icon
+                name="phone"
+                size={22}
+                color="#fcfcf6"
+                // reverse
+                // raised
+                type="material-community"
+              /> */}
+            </View>
           </TouchableOpacity>
         </View>
       );

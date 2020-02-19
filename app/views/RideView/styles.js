@@ -39,10 +39,40 @@ export default StyleSheet.create({
   startRideTitle: {
     fontSize: 22,
     fontWeight: '600'
+    // backgroundColor: 'black'
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  timerContainer: {
+    backgroundColor: '#475c67',
+    paddingLeft: 45,
+    marginRight: 18,
+    marginBottom: 10,
+    borderRadius: (width - 40) / 2,
+    borderTopWidth: 20,
+    borderBottomWidth: 20,
+    borderWidth: 1,
+    borderColor: '#475c67'
+  },
+  timerText: {
+    fontSize: 35,
+    color: '#fcfcf6'
+  },
+  textMask: {
+    color: '#fcfcf6',
+    fontSize: 22,
+    fontWeight: '600'
+  },
+  phoneStyle: {
+    borderRadius: (width - 40) / 2,
+    backgroundColor: '#1EAA70',
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: width - 90
   }
 });

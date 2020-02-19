@@ -33,15 +33,10 @@ target 'RideShareApp' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-  pod 'react-native-appearance', :path => '../node_modules/react-native-appearance'
 
-  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
-  pod 'ReactNativeDarkMode', :path => '../node_modules/react-native-dark-mode'
 
-  pod 'RNSoundPlayer', :path => '../node_modules/react-native-sound-player'
 
-  pod 'RNSound', :path => '../node_modules/react-native-sound'
 
   target 'RideShareAppTests' do
     inherit! :search_paths
