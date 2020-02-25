@@ -50,8 +50,6 @@ export default class RideView extends Component {
   };
 
   handlePickUpDirections = () => {
-    // console.log('item with location:', item => item);
-    // console.log('RideView PickUp', latitude, ' & ', longitude);
     this.setState({
       isVisible: true
     });
@@ -59,9 +57,6 @@ export default class RideView extends Component {
   };
 
   handleDropOffDirections = () => {
-    // let latitude = this.props.navigation.state.params.endLocation.latitude;
-    // let longitude = this.props.navigation.state.params.endLocation.longitude;
-    // console.log('RideView Drop Off', latitude, ' & ', longitude);
     this.setState({
       isVisible: true
     });
