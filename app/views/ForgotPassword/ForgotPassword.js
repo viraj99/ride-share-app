@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput, Text } from 'react-native';
 import styles from './styles';
 import { CalendarButton } from '../../components/Button';
+import API from '../../api/api';
 
 class ForgotPassword extends Component {
   state = {
@@ -10,11 +11,20 @@ class ForgotPassword extends Component {
   };
 
   handleResetPress = email => {
-    if (email) {
-      console.log('email submitted:', email);
-    } else {
-      console.log('NO Email collected');
-    }
+    const { navigation } = this.props;
+    API.passwordReset(email)
+      .then(result => {
+        console.log('result', result);
+        navigation.navigate('Login');
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+    // if (email) {
+    //   console.log('email submitted:', email);
+    // } else {
+    //   console.log('NO Email collected');
+    // }
   };
 
   render() {

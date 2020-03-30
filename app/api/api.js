@@ -25,6 +25,17 @@ export default {
       return res.json();
     });
   },
+  passwordReset(email) {
+    console.log('data wihthin passwordReset', email);
+    return apiWrapper({
+      path: REGISTER,
+      params: 'password_reset',
+      body: { email },
+      method: 'POST'
+    }).then(res => {
+      return res.json();
+    });
+  },
   getRides(token) {
     return apiWrapper({
       path: RIDES,
