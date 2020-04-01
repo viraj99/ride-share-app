@@ -120,30 +120,7 @@ class RegisterVehicleForm extends React.Component {
         .catch(err => {
           console.log('FAILED HORRIBLY');
         });
-    }
-    //else if (this.props.navigation.state.params.isAdding) {
-    //   console.log('inside if of is isAdding');
-    //   console.log('userinput', userEntries);
-    //   // let user = this.state.userEntries;
-    //   // user.vehicle.car_make = this.state.car_make;
-    //   // user.vehicle.car_model = this.state.car_model;
-    //   // user.vehicle.car_year = this.state.car_year;
-    //   // user.vehicle.car_color = this.state.car_color;
-    //   // user.vehicle.car_plate = this.state.car_plate;
-    //   // user.vehicle.seat_belt_num = this.state.seat_belt_num;
-    //   // user.vehicle.insurance_provider = this.state.insurance_provider;
-    //   // user.vehicle.insurance_start = this.state.insurance_start;
-    //   // user.vehicle.insurance_stop = this.state.insurance_stop;
-    //   // console.log('user', user);
-    //   API.createVehicle(userEntries, token.token)
-    //     .then(this.props.navigation.navigate('Settings'))
-    //     .catch(error => {
-    //       console.warn(
-    //         'There has been a problem with your operation: ' + error.message
-    //       );
-    //       throw error;
-    //     });
-    else {
+    } else {
       API.createVehicle(userEntries, token.token)
         .then(() => {
           if (this.props.navigation.state.params.isAdding) {
@@ -175,6 +152,7 @@ class RegisterVehicleForm extends React.Component {
         insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD')
       }
     };
+
     const {
       car_make,
       car_model,
@@ -188,19 +166,11 @@ class RegisterVehicleForm extends React.Component {
       picker1,
       picker2
     } = this.state;
-    // console.log('car_make', car_make);
-    // car_makecar_make,
+
     return (
-      // <View></View>
       <ScrollView>
         <Block middle>
           <KeyboardAwareScrollView>
-            {/* <Block style={styles.scrollContainer}> */}
-            {/* <Text style={styles.title}>Vehicle Info</Text> */}
-            {/* <Text style={styles.labelStyleAlt}>
-                  Continue with vehicle information
-                </Text> */}
-            {/* </Block> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>
@@ -319,13 +289,8 @@ class RegisterVehicleForm extends React.Component {
               returnKeyType={'done'}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-              // onSubmitEditing={() => {this.carBelts.focus();}}
-              // blurOnSubmit={false}
             ></TextInput>
 
-            {/* <Text style={styles.labelStyleAlt}>
-                Insurance Coverage Start Date:
-              </Text> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>
