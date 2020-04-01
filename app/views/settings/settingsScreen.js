@@ -12,12 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/AntDesign';
 import { AddButton } from '../../components/Button';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-import { NavigationEvents } from 'react-navigation';
-import { Header } from '../../components/Header';
-import { List, ListItem } from 'react-native-elements';
 import User from 'react-native-vector-icons/SimpleLineIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
@@ -25,9 +20,6 @@ import styles from './settingsStyle.js';
 import API from '../../api/api';
 import { VehicleCard } from '../../components/Card';
 import Animated from 'react-native-reanimated';
-import variables from '../../utils/variables';
-import { DeleteButton } from '../../components/Button';
-import Container from '../../components/Container';
 
 class Settings extends Component {
   _isMounted = false;
@@ -39,7 +31,6 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // is_mounting: false,
       editable: false,
       active: true,
       buttonTitle: false,
@@ -66,7 +57,6 @@ class Settings extends Component {
     this.handleActive = this.handleActive.bind(this);
     this.handleEmailNotification = this.handleEmailNotification.bind(this);
     this.handlePhoneNotification = this.handlePhoneNotification.bind(this);
-    // this.handleBackButton = this.handleBackButton.bind(this);
     this.handleFirstName = this.handleFirstName.bind(this);
     this.handleLastName = this.handleLastName.bind(this);
     this.handleModel = this.handleModel.bind(this);
@@ -322,16 +312,8 @@ class Settings extends Component {
     }
   };
 
-  // componentWillUnmount() {
-  // this.setState({
-  // is_mounting: false,
-  // })
-  // }
-
   render() {
-    // console.log('in render this.state.vehicles', this.state.vehicles);
     const { token } = this.state;
-    // console.log('in render this.state = token', token);
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -434,36 +416,7 @@ class Settings extends Component {
                   />
                 </View>
               </View>
-              <View style={styles.inputContainer}>
-                {/* <View>
-                  <Text style={styles.inputTitle}>Email</Text>
-                  <Text style={styles.notificationDescription}>
-                    Turn off/on email notifications
-                  </Text>
-                </View>
-                <View style={styles.switchStyle}>
-                  <Switch
-                    disabled={!this.state.editable}
-                    onValueChange={this.handleEmailNotification}
-                    value={this.state.allowEmailNotification}
-                  />
-                </View>
-              </View>
-              <View style={styles.inputContainer}>
-                <View>
-                  <Text style={styles.inputTitle}>Phone </Text>
-                  <Text style={styles.notificationDescription}>
-                    Turn off/on phone notifications
-                  </Text>
-                </View>
-                <View style={styles.switchStyle}>
-                  <Switch
-                    disabled={!this.state.editable}
-                    onValueChange={this.handlePhoneNotification}
-                    value={this.state.allowPhoneNotification}
-                  />
-                </View> */}
-              </View>
+              <View style={styles.inputContainer}></View>
             </View>
             <View style={styles.buttonSection}>
               <TouchableOpacity
@@ -475,15 +428,22 @@ class Settings extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.buttonSection}>
+              <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={this.handleLogout}
+              >
+                <Text style={styles.buttonTitle}>Log out</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+
           <View style={styles.section}>
             <View style={styles.sectionTitleContainer}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between'
-                  // padding: 5,
-                  // borderRadius: 5
                 }}
               >
                 <Text style={styles.sectionTitle}>Vehicles</Text>
@@ -502,14 +462,6 @@ class Settings extends Component {
               </View>
             </View>
             {this.state.vehicles && <View>{this.renderVehicles()}</View>}
-          </View>
-          <View style={styles.buttonSection}>
-            <TouchableOpacity
-              style={styles.logoutButton}
-              onPress={this.handleLogout}
-            >
-              <Text style={styles.buttonTitle}>Log out</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>

@@ -136,10 +136,6 @@ class RegisterDriverForm extends React.Component {
       <ScrollView>
         <Block middle>
           <KeyboardAwareScrollView>
-            {/* <Block style={styles.scrollContainer}>
-              <Text style={styles.title}>Sign Up</Text>
-              <Text style={styles.subTitle}>{this.props.subTitle}</Text>
-            </Block> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Sign Up</Text>
@@ -150,6 +146,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>First Name:</Text>
             <TextInput
               onChangeText={text => this.setState({ first_name: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="First Name"
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -164,6 +161,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Last Name:</Text>
             <TextInput
               onChangeText={text => this.setState({ last_name: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="Last Name"
               ref={input => {
                 this.lastName = input;
@@ -181,6 +179,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Phone Number:</Text>
             <TextInput
               onChangeText={text => this.setState({ phone: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="9195551234"
               ref={input => {
                 this.phone = input;
@@ -199,6 +198,7 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Email:</Text>
             <TextInput
               onChangeText={text => this.setState({ email: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="example@example.com"
               ref={input => {
                 this.email = input;
@@ -216,20 +216,17 @@ class RegisterDriverForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Create a Password:</Text>
             <TextInput
               onChangeText={text => this.setState({ password: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="password"
               ref={input => {
                 this.password = input;
               }}
               returnKeyType={'done'}
-              // onSubmitEditing={() => {this.password.focus();}}
-              // blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
               autoCapitalize="none"
               secureTextEntry
             ></TextInput>
-
-            {/* <Text style={styles.labelStyleAvail}>Volunteering for:</Text> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>Volunteering for:</Text>
@@ -256,9 +253,6 @@ class RegisterDriverForm extends React.Component {
               {orgsList}
             </Picker>
 
-            {/* <Text style={styles.labelStyleAvail}>
-              Distance available to drive:
-            </Text> */}
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
                 <Text style={styles.sectionTitle}>

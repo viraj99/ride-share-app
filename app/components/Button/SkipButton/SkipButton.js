@@ -1,10 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-// import PropTypes from 'prop-types';
-// import ArrowIcon from 'react-native-vector-icons/AntDesign';
 import { Icon } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-
 import styles from './styles';
 
 const SkipButton = ({ title, onPress }) => (
@@ -33,10 +30,5 @@ const SkipButton = ({ title, onPress }) => (
     </View>
   </LinearGradient>
 );
-
-// SkipButton.propTypes = {
-//   text: PropTypes.string,
-//   onPress: PropTypes.func,
-// };
 
 export default SkipButton;

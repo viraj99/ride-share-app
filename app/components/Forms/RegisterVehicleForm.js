@@ -1,13 +1,13 @@
-import React from 'react';
-import { Text, ScrollView, View, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import { Text, ScrollView, View, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import DatePickerView from '../../views/DatePickerView/DatePickerView';
 
 class RegisterVehicleForm extends React.Component {
   constructor(props) {
@@ -31,6 +31,10 @@ class RegisterVehicleForm extends React.Component {
   }
 
   componentDidMount = () => {
+    this.isItEditing();
+  };
+
+  isItEditing = () => {
     if (this.props.navigation.state.params.isEditing) {
       const vehicle = this.props.navigation.state.params.vehicle.item;
       this.setState({
@@ -52,28 +56,23 @@ class RegisterVehicleForm extends React.Component {
     }
   };
 
-  setStartDate = (event, date) => {
+  setStartDate = date => {
     date = date || this.state.insurance_start;
-
     this.setState({
       show: Platform.OS === 'ios' ? true : false,
       insurance_start: date,
       insurStartDate: date,
       picker1: false
     });
-    this.hidePicker1();
-    console.log('Startdate: ', this.state.insurance_start);
   };
 
-  setEndDate = (event, date) => {
+  setEndDate = date => {
     date = date || this.state.insurance_stop;
     this.setState({
       insurance_stop: date,
       insurEndDate: date,
       picker2: false
     });
-    this.hidePicker2();
-    console.log('Stopdate: ', this.state.insurance_stop);
   };
 
   showPicker1 = () => {
@@ -182,6 +181,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Make:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_make: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Toyota"
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -196,6 +196,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Model:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_model: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Camry"
               ref={input => {
                 this.carModel = input;
@@ -213,6 +214,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Car Year:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_year: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="YYYY"
               ref={input => {
                 this.carYear = input;
@@ -230,6 +232,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
             <TextInput
               onChangeText={text => this.setState({ seat_belt_num: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="#"
               ref={input => {
                 this.carBelts = input;
@@ -247,6 +250,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Color:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_color: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Black"
               ref={input => {
                 this.carColor = input;
@@ -264,6 +268,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>License Plate:</Text>
             <TextInput
               onChangeText={text => this.setState({ car_plate: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. PEG-1234"
               ref={input => {
                 this.carPlate = input;
@@ -281,6 +286,7 @@ class RegisterVehicleForm extends React.Component {
             <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
             <TextInput
               onChangeText={text => this.setState({ insurance_provider: text })}
+              placeholderTextColor="#C0C0C0"
               placeholder="ex. Geico"
               ref={input => {
                 this.carInsur = input;
@@ -299,17 +305,11 @@ class RegisterVehicleForm extends React.Component {
               </View>
             </View>
 
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker1}
-              color="#475c67"
+            <DatePickerView
+              value={new Date() || new Date(insurance_start)}
+              setDate={this.setStartDate}
             />
-            {picker1 && (
-              <DateTimePicker
-                value={new Date() || new Date(insurance_start)}
-                onChange={this.setStartDate}
-              />
-            )}
+
             {this.props.navigation.state.params.isEditing ? (
               <Text style={styles.displaySelection}>
                 Selected date:
@@ -331,17 +331,12 @@ class RegisterVehicleForm extends React.Component {
                 </Text>
               </View>
             </View>
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker2}
-              color="#475c67"
+
+            <DatePickerView
+              value={new Date() || new Date(insurance_stop)}
+              setDate={this.setEndDate}
             />
-            {picker2 && (
-              <DateTimePicker
-                value={new Date() || new Date(insurance_stop)}
-                onChange={this.setEndDate}
-              />
-            )}
+
             {this.props.navigation.state.params.isEditing ? (
               <Text style={styles.displaySelection}>
                 Selected date:
@@ -364,7 +359,6 @@ class RegisterVehicleForm extends React.Component {
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>
-      // </View>
     );
   }
 }
