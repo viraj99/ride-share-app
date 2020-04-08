@@ -19,6 +19,9 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "RideShareApp.xcodeproj")
+    get_certificates          
+    get_provisioning_profile 
+      build_app(export_xcargs: "-allowProvisioningUpdates") 
     build_app(workspace: "RideShareApp.xcworkspace", scheme: "RideShareApp")
     upload_to_testflight
   end
