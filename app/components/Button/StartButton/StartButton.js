@@ -9,7 +9,7 @@ const StartButton = ({ title, onPress }) => (
   <LinearGradient
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 0 }}
-    colors={['#f9a4a4', '#ff9d84', '#ff8262']}
+    colors={['#f9a4a4', '#ff9d84', '#e56353']}
     style={styles.linearGradient}
   >
     <View style={styles.buttonWrapper}>
@@ -19,7 +19,7 @@ const StartButton = ({ title, onPress }) => (
       <TouchableOpacity onPress={onPress}>
         <View style={styles.circleButtonContainer}>
           <ArrowIcon
-            color="#ff8262"
+            color="#e56353"
             name="arrowright"
             size={20}
             style={{ alignSelf: 'center' }}

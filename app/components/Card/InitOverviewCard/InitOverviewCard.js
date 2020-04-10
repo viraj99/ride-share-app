@@ -31,7 +31,7 @@ const InitOverviewCard = ({
           size={14}
           style={{ marginRight: 8 }}
         >
-          <Badge color="#1EAA70" size={8} />
+          <Badge color="#3a556a" size={8} />
         </Badge>
         <TouchableOpacity>
           <Text numberOfLines={1} style={styles.location}>

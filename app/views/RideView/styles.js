@@ -6,7 +6,7 @@ const { height, width } = Dimensions.get('window');
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fcfcf6'
+    backgroundColor: '#ffffff'
   },
   avatarContainer: {
     borderWidth: 3,
@@ -21,13 +21,13 @@ export default StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 10 : 10
   },
   startRideButton: {
-    backgroundColor: '#ff8262',
+    backgroundColor: '#e56353',
     borderRadius: (width - 40) / 2,
     width: width - 90,
     paddingVertical: 15
   },
   phoneButton: {
-    backgroundColor: '#1eaa70',
+    backgroundColor: '#3a556a',
     borderRadius: (width - 40) / 2,
     width: width - 90,
     paddingVertical: 15
@@ -59,16 +59,16 @@ export default StyleSheet.create({
   },
   timerText: {
     fontSize: 35,
-    color: '#fcfcf6'
+    color: '#ffffff'
   },
   textMask: {
-    color: '#fcfcf6',
+    color: '#ffffff',
     fontSize: 22,
     fontWeight: '600'
   },
   phoneStyle: {
     borderRadius: (width - 40) / 2,
-    backgroundColor: '#1EAA70',
+    backgroundColor: '#3a556a',
     padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-around',

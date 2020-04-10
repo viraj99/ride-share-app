@@ -368,9 +368,9 @@ export default class RideView extends Component {
                 borderWidth: 1,
                 borderColor: '#475c67'
               }}
-              digitTxtStyle={{ color: '#fcfcf6' }}
-              timeLabelStyle={{ color: '#fcfcf6' }} //make time labels invisible
-              separatorStyle={{ color: '#fcfcf6', paddingBottom: 40 }}
+              digitTxtStyle={{ color: '#ffffff' }}
+              timeLabelStyle={{ color: '#ffffff' }} //make time labels invisible
+              separatorStyle={{ color: '#ffffff', paddingBottom: 40 }}
               timeToShow={['H', 'M', 'S']}
               timeLabels={{ h: 'hrs', m: 'mins', s: 'secs' }}
               showSeparator
@@ -387,7 +387,7 @@ export default class RideView extends Component {
               <Icon
                 name="telephone"
                 size={22}
-                color="#fcfcf6"
+                color="#ffffff"
                 // reverse
                 // raised
                 type="foundation"
@@ -408,7 +408,7 @@ export default class RideView extends Component {
               {/* <Icon
                 name="phone"
                 size={22}
-                color="#fcfcf6"
+                color="#ffffff"
                 // reverse
                 // raised
                 type="material-community"

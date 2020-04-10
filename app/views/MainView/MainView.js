@@ -442,7 +442,7 @@ export default class MainView extends Component<Props> {
     return (
       <View style={styles.container}>
         <NavigationEvents onDidFocus={() => this.handleToken()} />
-        <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
+        <StatusBar barStyle="light-content" backgroundColor="#3a556a" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (
           this.renderLoader()

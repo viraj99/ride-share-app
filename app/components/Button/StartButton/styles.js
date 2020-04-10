@@ -1,8 +1,8 @@
 // Start Button styles
-import {Platform, StyleSheet, Dimensions} from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 
-const {height, width} = Dimensions.get('window');
-// #ff8262 start base
+const { height, width } = Dimensions.get('window');
+// #e56353 start base
 // #ff6272 final choice will be this pink use for resume change of state
 
 export default StyleSheet.create({
@@ -12,7 +12,7 @@ export default StyleSheet.create({
     height: 50,
     width: width / 2,
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   circleButtonContainer: {
     backgroundColor: '#fff',
@@ -26,25 +26,25 @@ export default StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-    elevation: 6,
+    elevation: 6
   },
   buttonWrapper: {
     paddingHorizontal: 20,
     flexDirection: 'row',
-    alignContent: 'center',
+    alignContent: 'center'
   },
   buttonText: {
     color: '#fff',
     fontWeight: '600',
-    fontSize: 22,
+    fontSize: 22
   },
   startTextContainer: {
     flex: 2,
     alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });

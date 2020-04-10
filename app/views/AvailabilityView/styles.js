@@ -46,10 +46,10 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   flatlistContainer: {
-    backgroundColor: '#fcfcf6'
+    backgroundColor: '#ffffff'
   },
   formButton: {
-    backgroundColor: '#ff8262'
+    backgroundColor: '#e56353'
   },
   inputRow: {
     flexDirection: 'row',

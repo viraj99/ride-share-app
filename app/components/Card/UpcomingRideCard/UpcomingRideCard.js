@@ -21,7 +21,7 @@ const UpcomingRideCard = ({
     <Block color="gray3" style={styles.hLine} />
     <Block row center>
       <Badge color="rgba(30,170,112,0.2)" size={14} style={{ marginRight: 8 }}>
-        <Badge color="#1EAA70" size={8} />
+        <Badge color="#3a556a" size={8} />
       </Badge>
       <Text style={styles.location}>{pickupLocation}</Text>
     </Block>

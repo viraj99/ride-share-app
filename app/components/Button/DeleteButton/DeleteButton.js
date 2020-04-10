@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DeleteButton = ({ title, deleteVehicle, vehicleId, token }) => (
   <View>
     <TouchableOpacity onPress={() => deleteVehicle(vehicleId, token)}>
-      <Icon color="#ff8262" name="delete" size={25} />
+      <Icon color="#e56353" name="delete" size={25} />
     </TouchableOpacity>
   </View>
 );

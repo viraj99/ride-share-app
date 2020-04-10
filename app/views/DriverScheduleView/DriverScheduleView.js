@@ -87,7 +87,7 @@ const DriverScheduleView = props => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fcfcf6' }}>
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <NavigationEvents onDidFocus={() => this.handleToken()} />
       <FlatList
         data={scheduledRides}

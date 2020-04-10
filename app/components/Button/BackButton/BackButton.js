@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const BackButton = ({ title, onPress, editVehicle, vehicleId, token }) => (
   <View>
     <TouchableOpacity onPress={onPress}>
-      <Icon color="#ff8262" name="ios-arrow-back" size={30} marginLeft={10} />
+      <Icon color="#e56353" name="ios-arrow-back" size={30} marginLeft={10} />
     </TouchableOpacity>
   </View>
 );

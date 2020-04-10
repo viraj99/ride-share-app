@@ -13,7 +13,7 @@ const Header = ({ onPress }) => (
     colors={
       Platform.OS === 'ios'
         ? ['#15a76a', '#15a76a', '#11a461']
-        : ['#1EAA70', '#1EAA70']
+        : ['#3a556a', '#3a556a']
     }
     style={styles.headerContainer}
   >

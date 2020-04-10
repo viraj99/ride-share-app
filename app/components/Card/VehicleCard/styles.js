@@ -49,10 +49,10 @@ export default StyleSheet.create({
     fontSize: 20,
     paddingLeft: 3
     // borderBottomWidth: 1,
-    // borderBottomColor: '#ff8262'
+    // borderBottomColor: '#e56353'
   },
   bottomBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ff8262'
+    borderBottomColor: '#e56353'
   }
 });

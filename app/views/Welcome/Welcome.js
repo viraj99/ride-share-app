@@ -11,7 +11,8 @@ const Welcome = ({ navigation }) => (
     <StatusBar backgroundColor="#fff" barStyle="dark-content" />
     <View style={styles.header}>
       <View>
-        <Text style={styles.title}>Ride Share</Text>
+        <Text style={styles.title}>CRSN</Text>
+        <Text style={styles.title}>Community Ride Share Network</Text>
       </View>
       <View style={styles.image}>
         <Image source={logo} />

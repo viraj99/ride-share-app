@@ -48,7 +48,7 @@ const MainViewStack = createStackNavigator(
       navigationOptions: {
         headerTitle: 'Ride Overview',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#3a556a'
         },
         headerTintColor: '#fff'
       }
@@ -58,7 +58,7 @@ const MainViewStack = createStackNavigator(
       navigationOptions: {
         headerTitle: 'Scheduled Rides',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#3a556a'
         },
         headerTintColor: '#fff'
       }
@@ -68,7 +68,7 @@ const MainViewStack = createStackNavigator(
       navigationOptions: {
         headerTitle: 'Requested Ride Details',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#3a556a'
         },
         headerTintColor: '#fff'
       }

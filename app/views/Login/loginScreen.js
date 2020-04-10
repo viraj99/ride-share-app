@@ -20,18 +20,13 @@ class Login extends Component {
     this.state = {
       user: '',
       pass: '',
-      errorMessage: '',
-      location: ''
+      errorMessage: ''
     };
 
     this.focusNextField = this.focusNextField.bind(this);
     this.inputs = {};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateUsername = this.validateUsername.bind(this);
-  }
-
-  componentDidMount() {
-    this.findCoord();
   }
 
   handleUsername = text => {
@@ -88,37 +83,6 @@ class Login extends Component {
     console.log('login token: ', AsyncStorage.getItem('token'));
   }
 
-  findCoord = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const long = JSON.stringify(position.coords.longitude);
-        const lat = JSON.stringify(position.coords.latitude);
-        let home = { lat: lat, lng: long };
-        this.changeAddy(home);
-        this.setState({ location: home });
-      },
-      error => Alert.alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  };
-
-  changeAddy = position => {
-    console.log('position in changeaddy fx: ', position);
-    let numLat = parseInt(position.lat);
-    let numLong = parseInt(position.lng);
-    let numPos = { lat: numLat, lng: numLong };
-    Geocoder.geocodePosition(numPos).then(res => {
-      console.log('result in changeAddy: ', res);
-      let resultsArray = [];
-      const result = Object.keys(res).map(i => resultsArray.push(res[i]));
-      console.log('results converted', resultsArray[0].formattedAddress);
-      this.setState({
-        address: resultsArray[0].formattedAddress
-      });
-      console.log('address', result);
-    });
-  };
-
   render() {
     const { navigation } = this.props;
     return (
@@ -127,12 +91,6 @@ class Login extends Component {
           <View style={styles.container}>
             <View style={styles.formContainer}>
               <View style={styles.formTitleContainer}>
-                <Text>
-                  location here: {this.state.location.lat} by
-                  {this.state.location.lng}
-                  And Location in UF Format:
-                  {this.state.address}
-                </Text>
                 <Text style={styles.formTitle}>Sign in</Text>
               </View>
               <View style={styles.errorContainer}>
