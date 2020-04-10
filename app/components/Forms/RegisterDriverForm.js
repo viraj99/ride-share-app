@@ -6,14 +6,17 @@ import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoder';
 
 class RegisterDriverForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       orgs: [],
-      orgNum: 1,
-      radius: 0
+      orgNum: 0,
+      radius: 0,
+      location: ''
     };
   }
 
@@ -24,6 +27,7 @@ class RegisterDriverForm extends React.Component {
     });
     //call getOrganizations fx which handles API call and retrieves list of orgs
     this.getOrganizations();
+    this.findCoord();
   }
 
   getOrganizations() {
@@ -34,6 +38,7 @@ class RegisterDriverForm extends React.Component {
         this.setState({
           orgs: res.organization
         });
+        console.log('orgs are: ', res);
       })
       //if error performing API fetch for getting orgs, show error
       .catch(error => {
@@ -43,6 +48,41 @@ class RegisterDriverForm extends React.Component {
         throw error;
       });
   }
+
+  findCoord = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const long = JSON.stringify(position.coords.longitude);
+        const lat = JSON.stringify(position.coords.latitude);
+
+        let home = { lat: lat, lng: long };
+        this.changeAddy(home);
+        this.setState({ location: home });
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  };
+
+  changeAddy = position => {
+    console.log('position in changeaddy fx: ', position);
+    let numLat = parseInt(position.lat);
+    let numLong = parseInt(position.lng);
+    let numPos = { lat: numLat, lng: numLong };
+    Geocoder.geocodePosition(numPos).then(res => {
+      console.log('result in changeAddy: ', res);
+      let resultsArray = [];
+      const result = Object.keys(res).map(i => resultsArray.push(res[i]));
+      console.log('results converted', resultsArray[0].formattedAddress);
+      this.setState({
+        address: resultsArray[0].formattedAddress
+      });
+      console.log('address', result);
+    });
+    Geocoder.geocodeAddress(
+      '1533 Green Edge Trail, Wake Forest, NC 27587, USA'
+    ).then(res => console.log('address instead: ', res));
+  };
 
   handleUserSubmit = () => {
     let userData = {
@@ -127,6 +167,7 @@ class RegisterDriverForm extends React.Component {
     //then map through each org name in list, create a Picker Item, use split to show only org name as label
     //and store id number of corresponding org in the value
     // console.log('isEditing: ', this.props.navigation.state.params);
+    console.log('state is: ', this.state);
     const orgsList = this.state.orgs.map(eachOrg => (
       <Picker.Item label={eachOrg.name} value={eachOrg.id} key={eachOrg} />
     ));
@@ -165,6 +206,74 @@ class RegisterDriverForm extends React.Component {
               placeholder="Last Name"
               ref={input => {
                 this.lastName = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.street.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
+
+            <Text style={styles.labelStyleAlt}>Street Address:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ street: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="123 Main Street"
+              ref={input => {
+                this.street = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.city.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
+
+            <Text style={styles.labelStyleAlt}>City:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ city: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="Chapel Hill"
+              ref={input => {
+                this.city = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.state.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
+
+            <Text style={styles.labelStyleAlt}>State:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ state: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="NC"
+              ref={input => {
+                this.state = input;
+              }}
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.zip.focus();
+              }}
+              blurOnSubmit={false}
+              style={[styles.saeInputAlt]}
+              inputStyle={styles.saeTextAlt}
+            ></TextInput>
+
+            <Text style={styles.labelStyleAlt}>Zip Code:</Text>
+            <TextInput
+              onChangeText={text => this.setState({ zip: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="27514"
+              ref={input => {
+                this.zip = input;
               }}
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -245,7 +354,7 @@ class RegisterDriverForm extends React.Component {
               //shows which item in list user has selected
               selectedValue={this.state.orgNum}
               //set the item value (which will be the org_id number) to state so it can be passed to API post
-              value={() => this.setState({ orgNum: 1 })}
+              onValueChange={orgVal => this.setState({ orgNum: orgVal })}
             >
               {/* default to instruct user what to do */}
               <Picker.Item label="Select an organization" value="orgNum" />

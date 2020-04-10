@@ -11,8 +11,6 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import styles from './loginStyle';
 import API from '../../api/api';
 import Container from '../../components/Container';
-import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoder';
 
 class Login extends Component {
   constructor(props) {
