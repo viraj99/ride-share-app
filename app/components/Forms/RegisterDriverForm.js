@@ -94,6 +94,10 @@ class RegisterDriverForm extends React.Component {
         password: this.state.password,
         first_name: this.state.first_name,
         last_name: this.state.last_name,
+        street: this.state.street,
+        city: this.state.city,
+        state: this.state.locState,
+        zip: this.state.zip,
         phone: this.state.phone,
         is_active: true,
         radius: parseInt(this.state.radius)
@@ -153,6 +157,8 @@ class RegisterDriverForm extends React.Component {
           //if API call for autologin upon driver data submit successful, store auth_token in local storage
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log('in autoLogin: ', AsyncStorage.getItem('token'));
+          console.log('location data correct format?', userEntries);
+          API.createLocation(userEntries);
           //redirect to vehicle registation
           this.props.navigation.navigate('RegisterVehicle', {
             isAdding: false,

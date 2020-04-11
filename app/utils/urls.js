@@ -8,6 +8,7 @@ export const AVAILABILITIES = 'availabilities';
 export const ORGANIZATIONS = 'organizations';
 export const REGISTER = 'drivers';
 export const VEHICLES = 'vehicles';
+export const LOCATIONS = 'locations';
 
 // params
 export const driverRides = '?driver_specific=true';

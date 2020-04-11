@@ -8,7 +8,8 @@ import {
   REGISTER,
   VEHICLE,
   VEHICLES,
-  ORGANIZATIONS
+  ORGANIZATIONS,
+  LOCATIONS
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 //TODO get the ride id not the rider id from the API to accept the correct response
@@ -282,6 +283,26 @@ export default {
         Accept: 'application/json'
       },
       body: driver
+    }).then(res => res.json());
+  },
+  createLocation(data) {
+    console.log('location data', data);
+    const location = {
+      location: {
+        street: data.driver.street,
+        city: data.driver.city,
+        state: data.driver.state,
+        zip: data.driver.zip
+      }
+    };
+    console.log('data to API: ', location);
+    return apiWrapper({
+      path: LOCATIONS,
+      method: 'POST',
+      headers: {
+        Accept: 'application/json'
+      },
+      body: location
     }).then(res => res.json());
   },
   createVehicle(vehicleData, token) {
