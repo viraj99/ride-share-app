@@ -84,10 +84,12 @@ class RegisterDriverForm extends React.Component {
     ).then(res => console.log('address instead: ', res));
   };
 
-  handleUserSubmit = () => {
+  handleUserSubmit() {
+    console.log('continue clicked');
+    console.log('whats happening here?', this.state);
     let userData = {
       driver: {
-        organization_id: parseInt(this.state.orgNum),
+        organization_id: this.state.orgNum,
         email: this.state.email,
         password: this.state.password,
         first_name: this.state.first_name,
@@ -104,6 +106,10 @@ class RegisterDriverForm extends React.Component {
         .then(res => {
           this.autoLogin(userData);
         })
+        // .then(res => {
+        //   // API.createLocation();
+        //   console.log('creating location in database');
+        // })
         //if error performing API fetch for posting driver, show error
         .catch(error => {
           console.warn(
@@ -127,7 +133,7 @@ class RegisterDriverForm extends React.Component {
           });
       });
     }
-  };
+  }
 
   autoLogin = userEntries => {
     console.log('testing in driver form: ', this.props.navigation);
@@ -243,7 +249,7 @@ class RegisterDriverForm extends React.Component {
               }}
               returnKeyType={'next'}
               onSubmitEditing={() => {
-                this.state.focus();
+                this.locState.focus();
               }}
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
@@ -252,11 +258,11 @@ class RegisterDriverForm extends React.Component {
 
             <Text style={styles.labelStyleAlt}>State:</Text>
             <TextInput
-              onChangeText={text => this.setState({ state: text })}
+              onChangeText={text => this.setState({ locState: text })}
               placeholderTextColor="#C0C0C0"
               placeholder="NC"
               ref={input => {
-                this.state = input;
+                this.locState = input;
               }}
               returnKeyType={'next'}
               onSubmitEditing={() => {
@@ -354,10 +360,10 @@ class RegisterDriverForm extends React.Component {
               //shows which item in list user has selected
               selectedValue={this.state.orgNum}
               //set the item value (which will be the org_id number) to state so it can be passed to API post
-              onValueChange={orgVal => this.setState({ orgNum: orgVal })}
+              onValueChange={itemValue => this.setState({ orgNum: itemValue })}
             >
               {/* default to instruct user what to do */}
-              <Picker.Item label="Select an organization" value="orgNum" />
+              <Picker.Item label="Select an organization" value="0" />
               {/* uses the orgsList const at beginning of render to display a picker item for each org*/}
               {orgsList}
             </Picker>
@@ -393,7 +399,7 @@ class RegisterDriverForm extends React.Component {
                 title="Continue"
                 onPress={
                   //pass the data (user inputs including orgID and radius), nav info for redirect to handleUserInput fx above
-                  this.handleUserSubmit
+                  () => this.handleUserSubmit(this.state.userData)
                 }
               />
             </Block>
