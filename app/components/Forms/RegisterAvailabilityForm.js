@@ -232,7 +232,6 @@ class RegisterAvailabilityForm extends React.Component {
                   labelStyle={styles.labelStyle}
                   inputPadding={16}
                   labelHeight={24}
-                  // active border height
                   borderHeight={2}
                   borderColor="#475c67"
                   style={[styles.saeInput]}
