@@ -275,7 +275,10 @@ class AddAvailability extends React.Component {
                 )}
 
                 <Text style={styles.labelStyleAvail}>
-                  Is this availability recurring?{' '}
+                  Is this availability recurring?
+                </Text>
+                <Text>
+                  {'    '}NOTE: Recurring availabilities default to WEEKLY
                 </Text>
                 <ModalDropdown
                   defaultValue="Select One"
@@ -435,7 +438,10 @@ class AddAvailability extends React.Component {
                 </Text>
 
                 <Text style={styles.labelStyleAvail}>
-                  Is this availability recurring?{' '}
+                  Is this availability recurring?
+                </Text>
+                <Text>
+                  {'    '}NOTE: Recurring availabilities default to WEEKLY
                 </Text>
                 <Text style={styles.labelStyleAvail}>
                   Current selection: {editItem.isRecurring ? 'Yes' : 'No'}
