@@ -227,7 +227,7 @@ PODS:
     - React
   - RNDateTimePicker (2.2.1):
     - React
-  - RNGestureHandler (1.5.3):
+  - RNGestureHandler (1.5.1):
     - React
   - RNReanimated (1.4.0):
     - React
@@ -404,4 +404,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8365e92d9735bc606de78b964e93efb1ea232e81
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.8.3
