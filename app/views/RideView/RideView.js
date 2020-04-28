@@ -187,6 +187,23 @@ export default class RideView extends Component {
         Alert.alert('Could not Complete Ride');
       });
   };
+
+  cancelRideAlert = () => {
+    Alert.alert(
+      'Cancel Ride',
+      'Are you sure?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {return},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: this.onCancelPress},
+      ],
+      {cancelable: false},
+    );
+  }
+
   onCancelPress = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
@@ -484,7 +501,7 @@ export default class RideView extends Component {
             }}
           >
             <SkipButton onPress={this.onCompletePress} title="Skip" />
-            <CancelButton onPress={this.onCancelPress} title="Stop" />
+            <CancelButton onPress={this.cancelRideAlert} title="Stop" />
           </View>
           {/* )} */}
         </View>
