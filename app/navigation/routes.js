@@ -114,7 +114,8 @@ const RegisterStack = createStackNavigator(
       navigationOptions: {
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
-        headerLeft: null
+        headerLeft: null,
+        gesturesEnabled: false
       }
     }
   },

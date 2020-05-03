@@ -87,175 +87,182 @@ class VehicleSettingsForm extends React.Component {
 
     return (
       <ScrollView>
-        <Block middle>
-          <KeyboardAwareScrollView>
-            <Block style={styles.scrollContainer}>
-              <Text style={styles.title}>Vehicle Info</Text>
-              <Text style={styles.subTitle}>
-                Continue with vehicle information
-              </Text>
-            </Block>
+        <View style={{ flex: 1 }}>
+          <Block middle>
+            <KeyboardAwareScrollView
+              scrollEnabled={true}
+            >
+              <View>
+                <Block style={styles.scrollContainer}>
+                  <Text style={styles.title}>Vehicle Info</Text>
+                  <Text style={styles.subTitle}>
+                    Continue with vehicle information
+                  </Text>
+                </Block>
 
-            <Text style={styles.labelStyleAlt}>Car Make:</Text>
-            <TextInput
-              value={text => this.setState({ car_make: text })}
-              onChangeText={text => this.setState({ car_make: text })}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carModel.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Car Make:</Text>
+                <TextInput
+                  value={text => this.setState({ car_make: text })}
+                  onChangeText={text => this.setState({ car_make: text })}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carModel.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>Car Model:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_model: text })}
-              placeholder="ex. Camry"
-              ref={input => {
-                this.carModel = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carYear.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Car Model:</Text>
+                <TextInput
+                  onChangeText={text => this.setState({ car_model: text })}
+                  placeholder="ex. Camry"
+                  ref={input => {
+                    this.carModel = input;
+                  }}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carYear.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>Car Year:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_year: text })}
-              placeholder="YYYY"
-              ref={input => {
-                this.carYear = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carBelts.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Car Year:</Text>
+                <TextInput
+                  onChangeText={text => this.setState({ car_year: text })}
+                  placeholder="YYYY"
+                  ref={input => {
+                    this.carYear = input;
+                  }}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carBelts.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ item4: text })}
-              placeholder="#"
-              ref={input => {
-                this.carBelts = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carColor.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
+                <TextInput
+                  onChangeText={text => this.setState({ item4: text })}
+                  placeholder="#"
+                  ref={input => {
+                    this.carBelts = input;
+                  }}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carColor.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>Color:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_color: text })}
-              placeholder="ex. Black"
-              ref={input => {
-                this.carColor = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carPlate.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Color:</Text>
+                <TextInput
+                  onChangeText={text => this.setState({ car_color: text })}
+                  placeholder="ex. Black"
+                  ref={input => {
+                    this.carColor = input;
+                  }}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carPlate.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>License Plate:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_plate: text })}
-              placeholder="ex. PEG-1234"
-              ref={input => {
-                this.carPlate = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carInsur.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>License Plate:</Text>
+                <TextInput
+                  onChangeText={text => this.setState({ car_plate: text })}
+                  placeholder="ex. PEG-1234"
+                  ref={input => {
+                    this.carPlate = input;
+                  }}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => {
+                    this.carInsur.focus();
+                  }}
+                  blurOnSubmit={false}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
 
-            <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ insurance_provider: text })}
-              placeholder="ex. Geico"
-              ref={input => {
-                this.carInsur = input;
-              }}
-              returnKeyType={'done'}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+                <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
+                <TextInput
+                  onChangeText={text =>
+                    this.setState({ insurance_provider: text })
+                  }
+                  placeholder="ex. Geico"
+                  ref={input => {
+                    this.carInsur = input;
+                  }}
+                  returnKeyType={'done'}
+                  style={[styles.saeInputAlt]}
+                  inputStyle={styles.saeTextAlt}
+                />
+              </View>
 
-            <Text style={styles.labelStyleAlt}>
-              Insurance Coverage Start Date:
-            </Text>
+              <View>
+                <Text style={styles.labelStyleAlt}>
+                  Insurance Coverage Start Date:
+                </Text>
 
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker1}
-              color="#475c67"
-            />
-            {picker1 && (
-              <DateTimePicker
-                value={new Date()}
-                display="default"
-                onChange={this.setStartDate}
-              />
-            )}
-            <Text style={styles.displaySelection}>
-              Selected date:{' '}
-              {moment(this.state.insurStartDate).format('YYYY-MM-DD')}
-            </Text>
+                <Button
+                  title="Pick a Date"
+                  onPress={this.showPicker1}
+                  color="#475c67"
+                />
+                {picker1 && (
+                  <DateTimePicker
+                    value={new Date()}
+                    display="default"
+                    onChange={this.setStartDate}
+                  />
+                )}
+                <Text style={styles.displaySelection}>
+                  Selected date:{' '}
+                  {moment(this.state.insurStartDate).format('YYYY-MM-DD')}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.labelStyleAlt}>
+                  Insurance Coverage End Date:
+                </Text>
+                <Button
+                  title="Pick a Date"
+                  onPress={this.showPicker2}
+                  color="#475c67"
+                />
+                {picker2 && (
+                  <DateTimePicker
+                    value={new Date()}
+                    display="default"
+                    onChange={this.setEndDate}
+                  />
+                )}
+                <Text style={styles.displaySelection}>
+                  Selected date:{' '}
+                  {moment(this.state.insurEndDate).format('YYYY-MM-DD')}
+                </Text>
+              </View>
 
-            <Text></Text>
-
-            <Text style={styles.labelStyleAlt}>
-              Insurance Coverage End Date:
-            </Text>
-            <Button
-              title="Pick a Date"
-              onPress={this.showPicker2}
-              color="#475c67"
-            />
-            {picker2 && (
-              <DateTimePicker
-                value={new Date()}
-                display="default"
-                onChange={this.setEndDate}
-              />
-            )}
-            <Text style={styles.displaySelection}>
-              Selected date:{' '}
-              {moment(this.state.insurEndDate).format('YYYY-MM-DD')}
-            </Text>
-
-            <Text></Text>
-
-            <Block style={styles.footer}>
-              <CalendarButton
-                title="Continue"
-                onPress={() =>
-                  this.handleUserSubmit(userEntries, this.props.navigation)
-                }
-              />
-            </Block>
-          </KeyboardAwareScrollView>
-        </Block>
+              <Block style={styles.footer}>
+                <CalendarButton
+                  title="Continue"
+                  onPress={() =>
+                    this.handleUserSubmit(userEntries, this.props.navigation)
+                  }
+                />
+              </Block>
+            </KeyboardAwareScrollView>
+          </Block>
+        </View>
       </ScrollView>
     );
   }

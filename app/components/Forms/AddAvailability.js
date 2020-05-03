@@ -17,6 +17,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Container from '../Container';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 class AddAvailability extends React.Component {
   constructor(props) {
@@ -214,8 +215,6 @@ class AddAvailability extends React.Component {
                   {moment(this.state.startDate).format('MMMM D, YYYY')}
                 </Text>
 
-                <Text></Text>
-
                 <Text style={styles.labelStyleAvail}>
                   Availability Start Time:
                 </Text>
@@ -239,8 +238,6 @@ class AddAvailability extends React.Component {
                   Selected time: {moment(this.state.startTime).format('h:mm A')}
                 </Text>
 
-                <Text></Text>
-
                 <Text style={styles.labelStyleAvail}>
                   Availability End Time:
                 </Text>
@@ -263,29 +260,21 @@ class AddAvailability extends React.Component {
                   Selected time: {moment(this.state.endTime).format('h:mm A')}
                 </Text>
 
-                <Text></Text>
-
                 <Text style={styles.labelStyleAvail}>
                   Is this availability recurring?{' '}
                 </Text>
-                <Picker
-                  label="Recurring"
-                  key={availabilitySelectors}
-                  inputPadding={16}
-                  labelHeight={24}
-                  borderHeight={2}
-                  borderColor="#475c67"
-                  blurOnSubmit={false}
-                  selectedValue={this.state.is_recurring}
-                  //set the item value (which will be the radius mileage) to state so it can be passed to API post; default to instruct user what to do
-                  onValueChange={itemValue =>
-                    this.setState({ is_recurring: itemValue })
-                  }
-                >
-                  <Picker.Item label="Select One" value="null" />
-                  <Picker.Item label="Yes" value="true" />
-                  <Picker.Item label="No" value="false" />
-                </Picker>
+                <ModalDropdown
+                  defaultValue="Select One"
+                  onSelect={i => {
+                    const values = ['true', 'false'];
+                    this.setState({ is_recurring: values[i] });
+                  }}
+                  options={['Yes', 'No']}
+                  textStyle={[styles.sectionTitle, { color: '#475c67' }]}
+                  dropdownStyle={styles.dropdownStyle}
+                  dropdownTextStyle={styles.dropdownTextStyle}
+                  style={styles.modalDropdown}
+                />
 
                 {this.state.is_recurring === 'true' && (
                   <View>
@@ -308,8 +297,6 @@ class AddAvailability extends React.Component {
                       Selected date:{' '}
                       {moment(this.state.endDate).format('MMMM D, YYYY')}
                     </Text>
-
-                    <Text></Text>
                   </View>
                 )}
 
@@ -386,8 +373,6 @@ class AddAvailability extends React.Component {
                   {moment(this.state.startDate).format('MMM D, YYYY')}
                 </Text>
 
-                <Text></Text>
-
                 <Text style={styles.labelStyleAvail}>
                   Availability Start Time:
                   <Text> {editStartTime}</Text>
@@ -412,8 +397,6 @@ class AddAvailability extends React.Component {
                   Selected time: {moment(this.state.startTime).format('h:mm A')}
                 </Text>
 
-                <Text></Text>
-
                 <Text style={styles.labelStyleAvail}>
                   Availability End Time:
                   <Text> {editEndTime}</Text>
@@ -436,8 +419,6 @@ class AddAvailability extends React.Component {
                 <Text style={styles.displaySelection}>
                   Selected time: {moment(this.state.endTime).format('h:mm A')}
                 </Text>
-
-                <Text></Text>
 
                 <Text style={styles.labelStyleAvail}>
                   Is this availability recurring?{' '}
@@ -486,8 +467,6 @@ class AddAvailability extends React.Component {
                       Selected date:{' '}
                       {moment(this.state.endDate).format('MMM D, YYYY')}
                     </Text>
-
-                    <Text></Text>
                   </View>
                 )}
 
