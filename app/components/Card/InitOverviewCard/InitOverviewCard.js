@@ -13,7 +13,9 @@ const InitOverviewCard = ({
   pickupAddress,
   dropoffAddress,
   date,
-  note
+  note,
+  pickup_to_dropoff,
+  pickup_to_dropoff_time
 }) => (
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
@@ -61,6 +63,19 @@ const InitOverviewCard = ({
         <Block>
           <Text style={styles.title}>Reason For Ride</Text>
           <Text style={styles.noteText}>{note}</Text>
+          <Text style={styles.noteText}>
+            Distance from pickup To dropoff is approximately {pickup_to_dropoff}{' '}
+            mile(s)
+          </Text>
+          {pickup_to_dropoff_time === null ? (
+            <Text style={styles.noteText}>No approximate wait time</Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate wait time is {pickup_to_dropoff_time}
+            </Text>
+          )}
+
+          {/* <Text style={styles.noteText}></Text> */}
         </Block>
         {/* </ScrollView> */}
       </Block>

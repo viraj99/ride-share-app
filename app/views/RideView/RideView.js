@@ -5,7 +5,6 @@ import { Popup } from 'react-native-map-link';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import CountDown from 'react-native-countdown-component';
-import Sound from 'react-native-sound';
 import { TextMask } from 'react-native-masked-text';
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
@@ -29,11 +28,6 @@ export default class RideView extends Component {
     this.requestRider();
   };
 
-  sound = new Sound('pacman_death.mp3');
-
-  playSound = () => {
-    this.sound.play();
-  };
   requestRider = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
@@ -78,6 +72,8 @@ export default class RideView extends Component {
         );
         const latitude = result.ride.start_location.latitude;
         const longitude = result.ride.start_location.longitude;
+        const pickup_to_dropoff = result.ride.pick_up_to_drop_off;
+        console.log('pickup2dropoff', pickup_to_dropoff);
         this.setState({
           latitude,
           longitude
@@ -330,8 +326,14 @@ export default class RideView extends Component {
     const date = navigation.getParam('date');
     const reason = navigation.getParam('reason');
     const expected_wait_time = navigation.state.params.expected_wait_time;
+    const pickup_to_dropoff =
+      navigation.state.params.pick_up_to_drop_off_distance;
+    const pickup_to_dropoff_time =
+      navigation.state.params.pick_up_to_drop_off_time;
+
     const phone = this.state.phone;
-    console.log('phone: ', phone);
+    console.log('pickup_to_dropoff: ', pickup_to_dropoff);
+    console.log('pickup_to_dropoff_time: ', pickup_to_dropoff_time);
 
     if (textValue === 'Tap to arrive') {
       return (
@@ -459,6 +461,8 @@ export default class RideView extends Component {
         dropoffAddress={endLocation.join(', ')}
         date={date}
         note={reason}
+        pickup_to_dropoff={pickup_to_dropoff}
+        pickup_to_dropoff_time={pickup_to_dropoff_time}
       />
     );
   };
@@ -500,6 +504,7 @@ export default class RideView extends Component {
               marginBottom: 10
             }}
           >
+            <Text>{this.state.pickup_to_dropoff}</Text>
             <SkipButton onPress={this.onCompletePress} title="Skip" />
             <CancelButton onPress={this.cancelRideAlert} title="Stop" />
           </View>
