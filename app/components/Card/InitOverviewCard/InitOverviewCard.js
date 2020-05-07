@@ -63,15 +63,24 @@ const InitOverviewCard = ({
         <Block>
           <Text style={styles.title}>Reason For Ride</Text>
           <Text style={styles.noteText}>{note}</Text>
-          <Text style={styles.noteText}>
-            Distance from pickup To dropoff is approximately {pickup_to_dropoff}{' '}
-            mile(s)
-          </Text>
-          {pickup_to_dropoff_time === null ? (
-            <Text style={styles.noteText}>No approximate wait time</Text>
+          {pickup_to_dropoff >= 0 ? (
+            <Text style={styles.noteText}>
+              Distance from pickup To dropoff is approximately{' '}
+              {pickup_to_dropoff} mile(s)
+            </Text>
           ) : (
             <Text style={styles.noteText}>
+              Approximate Distance will be displayed when you have accepted the
+              Ride
+            </Text>
+          )}
+          {pickup_to_dropoff_time >= 0 ? (
+            <Text style={styles.noteText}>
               Approximate wait time is {pickup_to_dropoff_time}
+            </Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate wait time to be Determined
             </Text>
           )}
 
