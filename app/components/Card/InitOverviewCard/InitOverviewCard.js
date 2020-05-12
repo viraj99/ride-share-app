@@ -14,8 +14,9 @@ const InitOverviewCard = ({
   dropoffAddress,
   date,
   note,
-  pickup_to_dropoff,
-  pickup_to_dropoff_time
+  pickup_to_dropoff_distance,
+  pickup_to_dropoff_time,
+  default_to_pickup_distance
 }) => (
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
@@ -63,10 +64,21 @@ const InitOverviewCard = ({
         <Block>
           <Text style={styles.title}>Reason For Ride</Text>
           <Text style={styles.noteText}>{note}</Text>
-          {pickup_to_dropoff >= 0 ? (
+          {default_to_pickup_distance >= 0 ? (
+            <Text style={styles.noteText}>
+              Distance from default to pickup is approximately{' '}
+              {default_to_pickup_distance} mile(s)
+            </Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate Distance will be displayed when you have accepted the
+              Ride
+            </Text>
+          )}
+          {pickup_to_dropoff_distance >= 0 ? (
             <Text style={styles.noteText}>
               Distance from pickup To dropoff is approximately{' '}
-              {pickup_to_dropoff} mile(s)
+              {pickup_to_dropoff_distance} mile(s)
             </Text>
           ) : (
             <Text style={styles.noteText}>
@@ -76,14 +88,14 @@ const InitOverviewCard = ({
           )}
           {pickup_to_dropoff_time >= 0 ? (
             <Text style={styles.noteText}>
-              Approximate wait time is {pickup_to_dropoff_time}
+              Approximate time to arrive from pickup to dropoff{' '}
+              {pickup_to_dropoff_time} mins
             </Text>
           ) : (
             <Text style={styles.noteText}>
-              Approximate wait time to be Determined
+              Approximate time it will take to be Determined
             </Text>
           )}
-
           {/* <Text style={styles.noteText}></Text> */}
         </Block>
         {/* </ScrollView> */}

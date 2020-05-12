@@ -326,14 +326,16 @@ export default class RideView extends Component {
     const date = navigation.getParam('date');
     const reason = navigation.getParam('reason');
     const expected_wait_time = navigation.state.params.expected_wait_time;
-    const pickup_to_dropoff =
-      navigation.state.params.pick_up_to_drop_off_distance;
+    const pickup_to_dropoff_distance =
+      navigation.state.params.pickup_to_dropoff_distance;
     const pickup_to_dropoff_time =
       navigation.state.params.pick_up_to_drop_off_time;
-
+    const default_to_pickup_distance =
+      navigation.state.params.default_to_pickup_distance;
     const phone = this.state.phone;
-    console.log('pickup_to_dropoff: ', pickup_to_dropoff);
+    console.log('pickup_to_dropoff_distance: ', pickup_to_dropoff_distance);
     console.log('pickup_to_dropoff_time: ', pickup_to_dropoff_time);
+    console.log('default_to_pickup_distance', default_to_pickup_distance);
 
     if (textValue === 'Tap to arrive') {
       return (
@@ -461,8 +463,9 @@ export default class RideView extends Component {
         dropoffAddress={endLocation.join(', ')}
         date={date}
         note={reason}
-        pickup_to_dropoff={pickup_to_dropoff}
+        pickup_to_dropoff_distance={pickup_to_dropoff_distance}
         pickup_to_dropoff_time={pickup_to_dropoff_time}
+        default_to_pickup_distance={default_to_pickup_distance}
       />
     );
   };
