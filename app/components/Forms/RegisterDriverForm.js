@@ -110,10 +110,8 @@ class RegisterDriverForm extends React.Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log('in autoLogin: ', AsyncStorage.getItem('token'));
           //redirect to vehicle registation
-          this.props.navigation.navigate('RegisterVehicleForm', {
-            isAdding: false,
-            isEditing: false,
-            isCreating: true,
+          this.props.navigation.navigate('MainView', {
+            isRegistering: true,
           });
         }
       })
