@@ -110,10 +110,10 @@ class RegisterDriverForm extends React.Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log('in autoLogin: ', AsyncStorage.getItem('token'));
           //redirect to vehicle registation
-          this.props.navigation.navigate('RegisterVehicle', {
+          this.props.navigation.navigate('RegisterVehicleForm', {
             isAdding: false,
             isEditing: false,
-            isCreating: true
+            isCreating: true,
           });
         }
       })
@@ -163,7 +163,7 @@ class RegisterDriverForm extends React.Component {
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-              ></TextInput>
+              />
 
               {/* Input for Volunteer Driver's Last Name */}
               <Text style={styles.labelStyleAlt}>Last Name:</Text>
@@ -181,7 +181,7 @@ class RegisterDriverForm extends React.Component {
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-              ></TextInput>
+              />
 
               {/* Input for Volunteer Driver's Phone Number */}
               <Text style={styles.labelStyleAlt}>Phone Number:</Text>
@@ -199,7 +199,7 @@ class RegisterDriverForm extends React.Component {
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-              ></TextInput>
+              />
 
               {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
@@ -218,7 +218,7 @@ class RegisterDriverForm extends React.Component {
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
                 inputStyle={styles.saeTextAlt}
-              ></TextInput>
+              />
 
               {/* Input for Volunteer Driver's Password */}
               <Text style={styles.labelStyleAlt}>Create a Password:</Text>
@@ -234,7 +234,7 @@ class RegisterDriverForm extends React.Component {
                 inputStyle={styles.saeTextAlt}
                 autoCapitalize="none"
                 secureTextEntry
-              ></TextInput>
+              />
             </View>
             <View>
               <View style={styles.section}>
