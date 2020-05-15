@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
-  Animated
+  Animated,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
@@ -31,17 +32,27 @@ export default class MainView extends Component<Props> {
       showAllRides: false,
       toggleButtonText: 'Show All Requested Rides',
       isLoading: true,
-      token: ''
+      isNewRegistered: props.navigation.state.params.isRegistering || false,
+      token: '',
     };
   }
+
+  componentDidMount() {
+    this.state.isNewRegistered ? this.newRegistrationAlert() : null;
+  }
+
   handleToken = async () => {
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
-    this.setState({
-      token: realToken
-    });
-    this.ridesRequests();
+    this.setState(
+      {
+        token: realToken,
+      },
+      () => {
+        this.ridesRequests();
+      }
+    );
   };
 
   ridesRequests = () => {
@@ -49,38 +60,47 @@ export default class MainView extends Component<Props> {
     this.setState({ isLoading: true });
     API.getAvailabilities(token).then(result => {
       this.setState({
-        availabilities: result.json
+        availabilities: result.json,
       }),
         console.log('in getAvail: ', result.json);
     });
     API.getDriver(token)
       .then(result => {
-        const driverId = result.driver.id;
-        API.getRides(token).then(result => {
-          console.log('all rides: ', result.rides);
-          const rides = result.rides;
-          const myRides = rides.filter(ride => ride.driver_id === driverId);
-          console.log('just my rides: ', myRides);
-          const scheduledRides = myRides.filter(
-            ride => ride.status === 'scheduled'
-          );
-          console.log('scheduled rides: ', scheduledRides);
-          const approvedRides = rides.filter(
-            ride => ride.status === 'approved'
-          );
-          console.log('approved rides: ', approvedRides);
-          const withinAvailRides = this.withinMyAvail(
-            rides.filter(ride => ride.status === 'approved')
-          );
-          console.log('approved rides in my avail: ', withinAvailRides);
+        console.log('after GETDRIVER: ', result);
+        // const driverId = result.driver.id;
+        // Check application_state is "accepted", background_check => true
+        const { id, application_state, background_check } = result.driver;
+        if (application_state === 'accepted' && background_check) {
+          API.getRides(token).then(result => {
+            console.log('all rides: ', result.rides);
+            const rides = result.rides;
+            const myRides = rides.filter(ride => ride.driver_id === id);
+            console.log('just my rides: ', myRides);
+            const scheduledRides = myRides.filter(
+              ride => ride.status === 'scheduled'
+            );
+            console.log('scheduled rides: ', scheduledRides);
+            const approvedRides = rides.filter(
+              ride => ride.status === 'approved'
+            );
+            console.log('approved rides: ', approvedRides);
+            const withinAvailRides = this.withinMyAvail(
+              rides.filter(ride => ride.status === 'approved')
+            );
+            console.log('approved rides in my avail: ', withinAvailRides);
 
-          this.setState({
-            scheduledRides,
-            approvedRides,
-            withinAvailRides,
-            isLoading: false
+            this.setState({
+              scheduledRides,
+              approvedRides,
+              withinAvailRides,
+              isLoading: false,
+            });
           });
-        });
+        } else {
+          this.setState({
+            isLoading: false,
+          });
+        }
       })
       .catch(err => {
         console.log('request ride err', err);
@@ -106,12 +126,12 @@ export default class MainView extends Component<Props> {
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state
+      item.start_location.state,
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state
+      item.end_location.state,
     ];
     const phone = item.phone;
     const reason = item.reason;
@@ -139,7 +159,7 @@ export default class MainView extends Component<Props> {
             reason,
             phone,
             round_trip,
-            expected_wait_time
+            expected_wait_time,
           });
         }}
         date={item.pick_up_time}
@@ -157,7 +177,7 @@ export default class MainView extends Component<Props> {
           const borderWidth = dotPosition.interpolate({
             inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
-            extrapolate: 'clamp'
+            extrapolate: 'clamp',
           });
           return (
             <Animated.View
@@ -210,7 +230,7 @@ export default class MainView extends Component<Props> {
             data={scheduledRides.slice(0, 3)}
             keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } }
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
             ])}
             renderItem={({ item }) => this.upcomingScheduledRide(item)}
           />
@@ -225,12 +245,12 @@ export default class MainView extends Component<Props> {
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state
+      item.start_location.state,
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state
+      item.end_location.state,
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
@@ -249,7 +269,7 @@ export default class MainView extends Component<Props> {
             endLocation,
             date,
             name,
-            reason
+            reason,
           });
         }}
         name={name}
@@ -282,12 +302,12 @@ export default class MainView extends Component<Props> {
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
-      item.start_location.state
+      item.start_location.state,
     ];
     const endLocation = [
       item.end_location.street,
       item.end_location.city,
-      item.end_location.state
+      item.end_location.state,
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
@@ -306,7 +326,7 @@ export default class MainView extends Component<Props> {
             endLocation,
             date,
             name,
-            reason
+            reason,
           });
         }}
         name={name}
@@ -338,7 +358,7 @@ export default class MainView extends Component<Props> {
           data={approvedRides}
           keyExtractor={item => `${item.id}`} // id is not showing up in response
           onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } }
+            { nativeEvent: { contentOffset: { x: this.scrollX } } },
           ])}
           renderItem={({ item }) => this.requestedRide(item)}
         />
@@ -389,7 +409,7 @@ export default class MainView extends Component<Props> {
             data={withinAvailRides}
             keyExtractor={item => `${item.id}`} // id is not showing up in response
             onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } }
+              { nativeEvent: { contentOffset: { x: this.scrollX } } },
             ])}
             renderItem={({ item }) => this.filteredRide(item)}
           />
@@ -412,12 +432,12 @@ export default class MainView extends Component<Props> {
     if (this.state.showAllRides === false) {
       this.setState({
         showAllRides: true,
-        toggleButtonText: 'Hide All Requested Rides'
+        toggleButtonText: 'Hide All Requested Rides',
       });
     } else {
       this.setState({
         showAllRides: false,
-        toggleButtonText: 'Show All Requested Rides'
+        toggleButtonText: 'Show All Requested Rides',
       });
     }
   };
@@ -437,6 +457,37 @@ export default class MainView extends Component<Props> {
     const { token } = this.state;
     navigation.navigate('DriverScheduleView', { scheduledRides, token });
   };
+  newRegistrationAlert = () => {
+    console.log('New Registration!!?!?...');
+    const { isNewRegistered } = this.state;
+    isNewRegistered
+      ? Alert.alert(
+          'You have been Registered!',
+          'Next step is to add a vehicle, do you want to add one now?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {
+                return;
+              },
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                this.props.navigation.navigate('RegisterVehicle', {
+                  isAdding: true,
+                  isEditing: false,
+                  isCreating: false,
+                });
+              },
+            },
+          ],
+          { cancelable: false }
+        )
+      : null;
+  };
+
   render() {
     const { isLoading } = this.state;
     return (
