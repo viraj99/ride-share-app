@@ -23,6 +23,11 @@ export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
   constructor(props) {
     super(props);
+    // debugger;
+    let isNewRegistered =
+      'params' in props.navigation.state
+        ? props.navigation.state.params.isRegistering
+        : false;
     this.state = {
       scheduledRides: [],
       hasScheduledRides: false,
@@ -32,7 +37,8 @@ export default class MainView extends Component<Props> {
       showAllRides: false,
       toggleButtonText: 'Show All Requested Rides',
       isLoading: true,
-      isNewRegistered: props.navigation.state.params.isRegistering || false,
+      isNewRegistered: isNewRegistered,
+      driverApproved: false,
       token: '',
     };
   }
@@ -50,6 +56,7 @@ export default class MainView extends Component<Props> {
         token: realToken,
       },
       () => {
+        // Make sure state was updated before running this function.
         this.ridesRequests();
       }
     );
@@ -61,8 +68,8 @@ export default class MainView extends Component<Props> {
     API.getAvailabilities(token).then(result => {
       this.setState({
         availabilities: result.json,
-      }),
-        console.log('in getAvail: ', result.json);
+      });
+      console.log('in getAvail: ', result.json);
     });
     API.getDriver(token)
       .then(result => {
@@ -94,11 +101,16 @@ export default class MainView extends Component<Props> {
               approvedRides,
               withinAvailRides,
               isLoading: false,
+              driverApproved: true,
             });
           });
         } else {
           this.setState({
             isLoading: false,
+            driverInformation: {
+              applicationState: application_state,
+              backgroundCheck: background_check,
+            },
           });
         }
       })
@@ -197,9 +209,11 @@ export default class MainView extends Component<Props> {
     if (scheduledRides.length === 0) {
       return (
         <View>
-          <Text style={styles.noSchedText}>
-            You do not currently have any scheduled rides.
-          </Text>
+          <View>
+            <Text style={styles.noSchedText}>
+              You do not currently have any scheduled rides.
+            </Text>
+          </View>
         </View>
       );
     } else {
@@ -505,6 +519,11 @@ export default class MainView extends Component<Props> {
           >
             {this.renderUpcomingRides()}
             {this.renderFilteredRides()}
+            <View style={styles.statusBar}>
+              {!this.state.driverApproved ? (
+                <Text>Waiting to be approved by the administrators</Text>
+              ) : null}
+            </View>
             {this.state.showAllRides && this.renderRequestedRides()}
           </ScrollView>
         )}
