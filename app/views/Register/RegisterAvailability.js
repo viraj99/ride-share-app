@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Keyboard } from 'react-native';
+import { Keyboard, SafeAreaView } from 'react-native';
 import styles from './styles';
 import Container from '../../components/Container';
 import {RegisterHeader} from '../../components/Header';
@@ -47,7 +47,7 @@ class RegisterAvailability extends Component {
 
     return(
       <Container>
-        <View styles={[styles.signup, styles.headerPadding]}>
+        <SafeAreaView styles={[styles.signup, styles.headerPadding]}>
           <RegisterAvailabilityForm
             navigation={navigation}
             handleChange={this.handleChange}
@@ -55,10 +55,10 @@ class RegisterAvailability extends Component {
             handleSubmitEditing={this.handleSubmitEditing}
             userEntries={this.state.availData}
           />
-        </View>
+        </SafeAreaView>
       </Container>
     )
   }
 }
-   
+
 export default RegisterAvailability;

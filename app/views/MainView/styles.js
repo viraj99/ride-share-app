@@ -138,5 +138,10 @@ export default StyleSheet.create({
     paddingBottom: 25,
     borderBottomWidth: 2,
     borderColor: '#475c67',
-  }
+  },
+  statusBar: {
+    backgroundColor: 'yellow',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
 });
