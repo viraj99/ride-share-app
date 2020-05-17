@@ -40,6 +40,15 @@ const MainViewStack = createStackNavigator(
         header: () => null
       }
     },
+    RegisterAvailability: {
+      screen: RegisterAvailability,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+        headerLeft: null,
+        gesturesEnabled: false
+      }
+    },
     Settings: {
       screen: Settings
     },

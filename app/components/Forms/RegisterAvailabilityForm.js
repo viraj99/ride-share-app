@@ -51,11 +51,10 @@ class RegisterAvailabilityForm extends React.Component {
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async (userEntries, recurring) => {
     console.log('in handlesubmit: ', recurring);
-    console.log('what type of info? ', typeof recurring);
 
-    alert(
-      'Thank you for registering! You will receive an email regarding next steps within _ business days.'
-    );
+    // alert(
+    //   'Thank you for registering! You will receive an email regarding next steps within _ business days.'
+    // );
     let token = await AsyncStorage.getItem('token');
     token = JSON.parse(token);
 
@@ -65,23 +64,7 @@ class RegisterAvailabilityForm extends React.Component {
 
     //use API file, createAvailability fx to send user's availability to database; token required
     API.createAvailability(userEntries, recurring, endDate, token.token)
-      .then(
-        //logout after submission complete, but this will change as registration expands to include availability, and redirect won't be to logout but to alt mainview which will display driver's approval/pending status
-        API.logout(token.token)
-          .then(res => {
-            const loggedOut = res.json.Success;
-            if (loggedOut == 'Logged Out') {
-              AsyncStorage.removeItem('token');
-              this.props.navigation.navigate('Welcome');
-            } else {
-              Alert.alert('Unable to Logout', 'Please try again.');
-            }
-          })
-          .catch(error => {
-            AsyncStorage.removeItem('token');
-            this.props.navigation.navigate('Welcome');
-          })
-      )
+      .then(this.props.navigation.navigate('AgendaView'))
       .catch(err => {
         this.setState({
           errorMessage: 'Invalid username or password.'

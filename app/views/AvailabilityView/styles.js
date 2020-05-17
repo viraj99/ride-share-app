@@ -56,5 +56,31 @@ export default StyleSheet.create({
     margin: 5,
     justifyContent: 'space-evenly',
     alignItems: 'center'
-  }
+  },
+  mainContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1EAA70',
+    height: Platform.OS == 'ios' ? 120 : 80,
+    marginTop: Platform.OS == 'android' ? 0 : 0
+  },
+  componentsContainer: {
+    paddingTop: Platform.OS == 'ios' ? 55 : 0,
+    flexDirection: 'row',
+    flex: 3
+  },
+  backButtonContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 10
+  },
+  headerTextContainer: {
+    flex: 2
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: '#ffffff'
+  },
 });
