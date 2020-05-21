@@ -53,34 +53,37 @@ class Login extends Component {
     });
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     const { user, pass } = this.state;
     const { navigation } = this.props;
 
     API.login(user, pass)
       .then(res => {
-        const obj = {
-          token: res.json.auth_token
+        const token = res.json.auth_token;
+        const userInfo = {
+          userIsActive: res.json.active,
+          userIsApproved: res.json.approved,
         };
-        //console.log('login token', token);
-        if (obj.token === undefined) {
+        if (token === undefined) {
           this.setState({
-            errorMessage: 'Invalid username or password.'
+            errorMessage: 'Invalid username or password.',
           });
         } else {
-          AsyncStorage.setItem('token', JSON.stringify(obj));
+          AsyncStorage.setItem('token', JSON.stringify({ token }));
           navigation.navigate('MainView', {
             isRegistering: false,
+            ...userInfo,
           });
         }
-        console.log('login token', asynStorage.getItem('token'));
+        // console.log('login token', asynStorage.getItem('token'));
       })
       .catch(err => {
+        console.log('ERR', err);
         this.setState({
           errorMessage: 'Invalid username or password.'
         });
       });
-    console.log('login token: ', AsyncStorage.getItem('token'));
+    // console.log('login token: ', AsyncStorage.getItem('token'));
   }
 
   render() {
@@ -133,9 +136,7 @@ class Login extends Component {
                     placeholder="Password"
                     value={this.state.password}
                     onChangeText={this.handlePassword}
-                    onSubmitEditing={() => {
-                      this.handleSubmit();
-                    }}
+                    onSubmitEditing={this.handleSubmit}
                     ref={input => {
                       this.inputs.two = input;
                     }}
