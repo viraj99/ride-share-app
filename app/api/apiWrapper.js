@@ -46,9 +46,9 @@ const apiWrapper = async request => {
   console.log('fetchconfig:', fetchConfig);
   console.log('response:', response);
   if (response.ok) {
-    return response;
+    return await response.json();
   }
-  throw response;
+  throw await response.json();
 };
 
 
