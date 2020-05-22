@@ -21,8 +21,6 @@ export default {
       path: LOGIN,
       body: { email, password },
       method: 'POST'
-    }).then(res => {
-      return res.json();
     });
   },
   passwordReset(email) {
@@ -332,7 +330,7 @@ export default {
         token,
         body: availability,
         method: 'POST'
-      }).then(res => console.log(res.json()));
+      });
     } else {
       const availability = {
         start_time: availData.start_time,
