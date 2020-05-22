@@ -69,7 +69,9 @@ class Login extends Component {
           });
         } else {
           AsyncStorage.setItem('token', JSON.stringify(obj));
-          navigation.navigate('MainView');
+          navigation.navigate('MainView', {
+            isRegistering: false,
+          });
         }
         console.log('login token', asynStorage.getItem('token'));
       })

@@ -16,7 +16,7 @@ import {
   RegisterVehicle,
   RegisterAvailability,
   ForgotPassword,
-  Welcome
+  Welcome,
 } from '../views';
 // import VehicleSettings from '../views/settings/VehicleSettings'
 
@@ -38,6 +38,15 @@ const MainViewStack = createStackNavigator(
       screen: AvailabilityView,
       navigationOptions: {
         header: () => null
+      }
+    },
+    RegisterAvailability: {
+      screen: RegisterAvailability,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+        headerLeft: null,
+        gesturesEnabled: false
       }
     },
     Settings: {
@@ -72,12 +81,22 @@ const MainViewStack = createStackNavigator(
         },
         headerTintColor: '#fff'
       }
-    }
+    },
+    RegisterVehicle: {
+      screen: RegisterVehicle,
+      navigationOptions: {
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+        headerLeft: null,
+      },
+    },
   },
 
   {
     headerMode: 'screen',
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
+    initialRouteKey: 'MainView',
+    initialRouteName: 'MainView',
   }
 );
 
@@ -99,24 +118,8 @@ const RegisterStack = createStackNavigator(
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
         headerLeft: null
-      }
+      },
     },
-    RegisterVehicle: {
-      screen: RegisterVehicle,
-      navigationOptions: {
-        headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-        headerLeft: null
-      }
-    },
-    RegisterAvailability: {
-      screen: RegisterAvailability,
-      navigationOptions: {
-        headerTransparent: true,
-        headerTintColor: '#C5CCD6',
-        headerLeft: null
-      }
-    }
   },
   {
     headerBackTitleVisible: false

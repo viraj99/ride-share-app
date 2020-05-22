@@ -162,8 +162,6 @@ class RegisterVehicleForm extends React.Component {
       seat_belt_num,
       insurance_start,
       insurance_stop,
-      picker1,
-      picker2
     } = this.state;
 
     return (
@@ -191,7 +189,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>Car Model:</Text>
             <TextInput
@@ -209,7 +207,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>Car Year:</Text>
             <TextInput
@@ -227,7 +225,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
             <TextInput
@@ -245,7 +243,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>Color:</Text>
             <TextInput
@@ -263,7 +261,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>License Plate:</Text>
             <TextInput
@@ -281,7 +279,7 @@ class RegisterVehicleForm extends React.Component {
               blurOnSubmit={false}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
             <TextInput
@@ -295,7 +293,7 @@ class RegisterVehicleForm extends React.Component {
               returnKeyType={'done'}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
-            ></TextInput>
+            />
 
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
@@ -322,7 +320,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
             )}
 
-            <Text></Text>
+            <Text />
 
             <View style={styles.section}>
               <View style={styles.sectionTitleContainer}>
@@ -349,7 +347,7 @@ class RegisterVehicleForm extends React.Component {
               </Text>
             )}
 
-            <Text></Text>
+            <Text />
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"

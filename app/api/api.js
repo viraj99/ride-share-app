@@ -271,7 +271,8 @@ export default {
         last_name: data.driver.last_name,
         phone: data.driver.phone,
         is_active: true,
-        radius: data.driver.radius
+        radius: data.driver.radius,
+        admin_sign_up: data.driver.admin_sign_up
       }
     };
     console.log('data to API: ', driver);

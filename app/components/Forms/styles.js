@@ -4,7 +4,9 @@ import { getBottomSpace } from '../Header/StatusBar';
 
 export default StyleSheet.create({
   scrollContainer: {
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    margin: 20
   },
   title: {
     fontWeight: 'bold',
@@ -12,7 +14,6 @@ export default StyleSheet.create({
     color: '#475c67'
   },
   titleAvail: {
-    marginTop: 40,
     fontWeight: 'bold',
     fontSize: 26,
     color: '#475c67'
@@ -23,7 +24,8 @@ export default StyleSheet.create({
   },
   subTitleAvail: {
     fontWeight: '400',
-    fontSize: 20
+    fontSize: 20,
+    marginTop: 20
   },
   labelStyle: {
     color: '#2F2F2F',
@@ -110,16 +112,32 @@ export default StyleSheet.create({
   },
   section: {
     padding: 5,
+    paddingTop: 10,
     justifyContent: 'space-around'
   },
   sectionTitleContainer: {
     padding: 5,
     backgroundColor: '#ff8262',
-    borderRadius: 5
+    borderRadius: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   sectionTitle: {
     padding: 5,
     fontSize: 20,
     color: '#ffffff'
+  },
+  dropdownTextStyle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    display: 'flex'
+  },
+  modalStyle: {
+    padding: 3
+  },
+  dropdownStyle: {
+    display: 'flex',
+    width: '100%'
   }
 });

@@ -6,6 +6,7 @@ import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 class RegisterDriverForm extends React.Component {
   constructor(props) {
@@ -54,7 +55,8 @@ class RegisterDriverForm extends React.Component {
         last_name: this.state.last_name,
         phone: this.state.phone,
         is_active: true,
-        radius: parseInt(this.state.radius)
+        radius: parseInt(this.state.radius),
+        admin_sign_up: false
       }
     };
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
@@ -108,10 +110,8 @@ class RegisterDriverForm extends React.Component {
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log('in autoLogin: ', AsyncStorage.getItem('token'));
           //redirect to vehicle registation
-          this.props.navigation.navigate('RegisterVehicle', {
-            isAdding: false,
-            isEditing: false,
-            isCreating: true
+          this.props.navigation.navigate('MainView', {
+            isRegistering: true,
           });
         }
       })
@@ -120,6 +120,12 @@ class RegisterDriverForm extends React.Component {
           errorMessage: 'Invalid username or password.'
         });
       });
+  };
+
+  getOrganizationId = name => {
+    const selectedOrg = this.state.orgs.find(org => org.name === name);
+    console.log(selectedOrg);
+    this.setState({ orgNum: selectedOrg.id });
   };
 
   render() {
@@ -141,144 +147,127 @@ class RegisterDriverForm extends React.Component {
                 <Text style={styles.sectionTitle}>Sign Up</Text>
               </View>
             </View>
+            <View>
+              {/* Input for Volunteer Driver's First Name */}
+              <Text style={styles.labelStyleAlt}>First Name:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ first_name: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="First Name"
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.lastName.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
 
-            {/* Input for Volunteer Driver's First Name */}
-            <Text style={styles.labelStyleAlt}>First Name:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ first_name: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="First Name"
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.lastName.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+              {/* Input for Volunteer Driver's Last Name */}
+              <Text style={styles.labelStyleAlt}>Last Name:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ last_name: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="Last Name"
+                ref={input => {
+                  this.lastName = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.phone.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
 
-            {/* Input for Volunteer Driver's Last Name */}
-            <Text style={styles.labelStyleAlt}>Last Name:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ last_name: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="Last Name"
-              ref={input => {
-                this.lastName = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.phone.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+              {/* Input for Volunteer Driver's Phone Number */}
+              <Text style={styles.labelStyleAlt}>Phone Number:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ phone: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="9195551234"
+                ref={input => {
+                  this.phone = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.email.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
 
-            {/* Input for Volunteer Driver's Phone Number */}
-            <Text style={styles.labelStyleAlt}>Phone Number:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ phone: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="9195551234"
-              ref={input => {
-                this.phone = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.email.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
-
-            {/* Input for Volunteer Driver's Email Address; 
+              {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
-            <Text style={styles.labelStyleAlt}>Email:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ email: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="example@example.com"
-              ref={input => {
-                this.email = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.password.focus();
-              }}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            ></TextInput>
+              <Text style={styles.labelStyleAlt}>Email:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ email: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="example@example.com"
+                ref={input => {
+                  this.email = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.password.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
 
-            {/* Input for Volunteer Driver's Password */}
-            <Text style={styles.labelStyleAlt}>Create a Password:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ password: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="password"
-              ref={input => {
-                this.password = input;
-              }}
-              returnKeyType={'done'}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-              autoCapitalize="none"
-              secureTextEntry
-            ></TextInput>
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>Volunteering for:</Text>
-              </View>
+              {/* Input for Volunteer Driver's Password */}
+              <Text style={styles.labelStyleAlt}>Create a Password:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ password: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="password"
+                ref={input => {
+                  this.password = input;
+                }}
+                returnKeyType={'done'}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+                autoCapitalize="none"
+                secureTextEntry
+              />
             </View>
-
-            {/* Picker selector for org volunteer works with */}
-            <Picker
-              label="OrgName"
-              key={orgsList}
-              inputPadding={16}
-              labelHeight={24}
-              borderHeight={2}
-              borderColor="#475c67"
-              blurOnSubmit={false}
-              //shows which item in list user has selected
-              selectedValue={this.state.orgNum}
-              //set the item value (which will be the org_id number) to state so it can be passed to API post
-              value={() => this.setState({ orgNum: 1 })}
-            >
-              {/* default to instruct user what to do */}
-              <Picker.Item label="Select an organization" value="orgNum" />
-              {/* uses the orgsList const at beginning of render to display a picker item for each org*/}
-              {orgsList}
-            </Picker>
-
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>
-                  Distance available to drive:
-                </Text>
+            <View>
+              <View style={styles.section}>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitle}>Volunteering for:</Text>
+                </View>
               </View>
+              <ModalDropdown
+                defaultValue="Select an organization"
+                onSelect={(i, val) => this.getOrganizationId(val)}
+                options={this.state.orgs.map(org => org.name)}
+                textStyle={[styles.sectionTitle, { color: '#475c67' }]}
+                dropdownStyle={styles.dropdownStyle}
+                dropdownTextStyle={styles.dropdownTextStyle}
+                style={styles.modalStyle}
+              />
             </View>
-            <Picker
-              label="Radius"
-              key={mileage}
-              inputPadding={16}
-              labelHeight={24}
-              borderHeight={2}
-              borderColor="#475c67"
-              blurOnSubmit={false}
-              selectedValue={this.state.radius}
-              //set the item value (which will be the radius mileage) to state so it can be passed to API post
-              onValueChange={itemValue => this.setState({ radius: itemValue })}
-            >
-              {/* default to instruct user what to do */}
-              <Picker.Item label="Select a mileage" value="0" />
-              <Picker.Item label="10 miles" value="10" />
-              <Picker.Item label="25 miles" value="25" />
-              <Picker.Item label="50 miles" value="50" />
-            </Picker>
-
+            <View>
+              <View style={styles.section}>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitle}>
+                    Distance available to drive:
+                  </Text>
+                </View>
+              </View>
+              <ModalDropdown
+                defaultValue="Select a Mileage"
+                onSelect={i => this.setState({ radius: (Number(i) + 1) * 10 })}
+                options={['10 Miles', '20 Miles', '30 Miles']}
+                textStyle={[styles.sectionTitle, { color: '#475c67' }]}
+                dropdownStyle={styles.dropdownStyle}
+                dropdownTextStyle={styles.dropdownTextStyle}
+                style={styles.modalDropdown}
+              />
+            </View>
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"
