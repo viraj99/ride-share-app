@@ -21,8 +21,6 @@ export default {
       path: LOGIN,
       body: { email, password },
       method: 'POST'
-    }).then(res => {
-      return res.json();
     });
   },
   passwordReset(email) {
@@ -40,21 +38,21 @@ export default {
     return apiWrapper({
       path: RIDES,
       token
-    }).then(res => res.json());
+    });
   },
   getRider(id, token) {
     return apiWrapper({
       path: RIDER,
       params: `/${id}`,
       token
-    }).then(res => res.json());
+    });
   },
   getDriver(token) {
     return apiWrapper({
       path: REGISTER,
       method: 'GET',
       token
-    }).then(res => res.json());
+    });
   },
   //////////////////////////////////
   acceptRide(id, token) {
@@ -63,15 +61,15 @@ export default {
       params: `/${id}/accept`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   completeRide(id, token) {
     return apiWrapper({
       path: RIDES,
-      params: `/${id}/complete`,
+      params: `${id}/complete`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   pickUpRide(id, token) {
     return apiWrapper({
@@ -79,7 +77,7 @@ export default {
       params: `/${id}/picking-up`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   dropOffRide(id, token) {
     return apiWrapper({
@@ -87,7 +85,7 @@ export default {
       params: `/${id}/dropping-off`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   waitingForRide(id, token) {
     return apiWrapper({
@@ -95,7 +93,7 @@ export default {
       params: `/${id}/waiting`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   returnPickUp(id, token) {
     return apiWrapper({
@@ -119,14 +117,14 @@ export default {
       params: `/${id}/cancel`,
       method: 'POST',
       token
-    }).then(res => res.json());
+    });
   },
   getAvailabilities(token) {
     return apiWrapper({
       path: AVAILABILITIES,
       method: 'GET',
       token
-    }).then(res => res.json());
+    });
   },
   deleteAvailability(token, eventID) {
     return apiWrapper({
@@ -184,13 +182,13 @@ export default {
       path: LOGOUT,
       method: 'POST',
       headers: { token }
-    }).then(res => res.json());
+    });
   },
   getSettingInfo(token) {
     return apiWrapper({
       path: SETTINGS,
       headers: { token }
-    }).then(res => res.json());
+    });
   },
   updateSettingsDriver(data, token) {
     const driverData = {
@@ -209,7 +207,7 @@ export default {
       headers: { token },
       body: driverData,
       method: 'PUT'
-    }).then(res => res.json());
+    });
   },
 
   updateSettingsVehicle(id, vehicleData, token) {
@@ -235,7 +233,7 @@ export default {
       // params: `?id=${id}`,
       body: vehicle,
       method: 'PUT'
-    }).then(res => res.json());
+    });
   },
 
   getVehicle(token) {
@@ -244,7 +242,7 @@ export default {
       method: 'GET',
       // params: `?id=${id}`,
       headers: { token }
-    }).then(res => res.json());
+    });
   },
   deleteVehicle(id, token) {
     return apiWrapper({
@@ -252,13 +250,13 @@ export default {
       method: 'DELETE',
       params: `?id=${id}`,
       headers: { token }
-    }).then(res => res.json());
+    });
   },
   getOrgs() {
     return apiWrapper({
       path: ORGANIZATIONS,
       method: 'GET'
-    }).then(res => res.json());
+    });
   },
   createDriver(data) {
     console.log('data', data);
@@ -283,7 +281,7 @@ export default {
         Accept: 'application/json'
       },
       body: driver
-    }).then(res => res.json());
+    });
   },
   createVehicle(vehicleData, token) {
     const vehicle = {
@@ -332,7 +330,7 @@ export default {
         token,
         body: availability,
         method: 'POST'
-      }).then(res => console.log(res.json()));
+      });
     } else {
       const availability = {
         start_time: availData.start_time,
@@ -344,8 +342,8 @@ export default {
         path: AVAILABILITIES,
         token,
         body: availability,
-        method: 'POST'
-      }).then(res => console.log(res.json()));
+        method: 'POST',
+      });
     }
   }
 };

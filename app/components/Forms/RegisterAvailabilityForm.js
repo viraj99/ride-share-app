@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 class RegisterAvailabilityForm extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class RegisterAvailabilityForm extends React.Component {
       endDate: new Date(),
       startTime: new Date(),
       endTime: new Date(),
-      availData: {}
+      availData: {},
     };
   }
 
@@ -26,25 +27,25 @@ class RegisterAvailabilityForm extends React.Component {
 
   setStartDate = date => {
     this.setState({
-      startDate: date
+      startDate: date,
     });
   };
 
   setStartTime = time => {
     this.setState({
-      startTime: time
+      startTime: time,
     });
   };
 
   setEndTime = time => {
     this.setState({
-      endTime: time
+      endTime: time,
     });
   };
 
   setEndDate = date => {
     this.setState({
-      endDate: date
+      endDate: date,
     });
   };
 
@@ -64,11 +65,24 @@ class RegisterAvailabilityForm extends React.Component {
 
     //use API file, createAvailability fx to send user's availability to database; token required
     API.createAvailability(userEntries, recurring, endDate, token.token)
-      .then(this.props.navigation.navigate('AgendaView'))
+      .then(response => {
+        console.log('AVAILABILLITY RES: ', response);
+        this.props.navigation.navigate('AgendaView', { response: response });
+      })
       .catch(err => {
-        this.setState({
-          errorMessage: 'Invalid username or password.'
-        });
+        console.log('AVAILABILLITY RES: ', err);
+        this.setState(
+          {
+            errorMessage: err,
+          },
+          () => {
+            showMessage({
+              message: 'There was an error: ',
+              description: this.state.errorMessage.error,
+              type: 'danger',
+            });
+          }
+        );
       });
   };
 
@@ -85,7 +99,8 @@ class RegisterAvailabilityForm extends React.Component {
       is_recurring: this.state.is_recurring,
       end_date: moment(this.state.endDate).format('YYYY-MM-DD'),
       //below values need to be changed, place-holding for now
-      location_id: 1
+      // Must pass a location from the driver.
+      location_id: 1,
     };
 
     let availabilitySelectors;

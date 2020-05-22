@@ -16,11 +16,12 @@ class AgendaView extends React.Component {
   }
 
   componentDidMount = async () => {
+    //TODO: Refactor
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
     this.setState({
-      token: realToken
+      token: realToken,
     });
     this.getAvailability();
   };
@@ -41,7 +42,7 @@ class AgendaView extends React.Component {
           startTime: item.startTime,
           endTime: item.endTime,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd')
+          day: moment(item.startTime).format('dddd'),
         });
       } else {
         map.set(item.eventId, true);
@@ -50,12 +51,12 @@ class AgendaView extends React.Component {
           startTime: item.startTime,
           endTime: item.endTime,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd')
+          day: moment(item.startTime).format('dddd'),
         });
       }
       this.setState({
         response: result,
-        others: others
+        others: others,
       });
     }
   };
@@ -101,7 +102,7 @@ class AgendaView extends React.Component {
     let date = moment(item.startTime).format('MMMM D, YYYY');
     let start = moment.utc(item.startTime).format('h:mm A');
     let end = moment.utc(item.endTime).format('h:mm A');
-    let day = moment(item.startTime).format('dddd') + 's';
+    let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
     console.log('what happens now? ', endDate);
     let ending = moment(endDate).format('MMMM D, YYYY');
@@ -116,7 +117,7 @@ class AgendaView extends React.Component {
         </View>
 
         <View style={styles.centerList}>
-          {item.isRecurring && <Text style={styles.flatListText}>{day}</Text>}
+          {item.isRecurring && <Text style={styles.flatListText}>Every {day}</Text>}
           {!item.isRecurring && <Text style={styles.flatListText}>{date}</Text>}
           <Text style={styles.flatListText}>
             {start} to {end}
@@ -176,31 +177,29 @@ class AgendaView extends React.Component {
           </View>
         </View>
 
-        <ScrollView>
-          {this.state.response ? (
-            <FlatList
-              data={this.state.response}
-              renderItem={({ item }) => this.renderItem(item)}
-              keyExtractor={item => item.eventId}
-            />
-          ) : (
+        {this.state.response ? (
+          <FlatList
+            data={this.state.response}
+            renderItem={({ item }) => this.renderItem(item)}
+            keyExtractor={item => item.id}
+          />
+        ) : (
             <Text style={styles.noAvailText}>
-              There is no availability in your schedule, to add availability
-              click the button below:
+              There is no availability in your schedule, to add availability click
+              the button below:
             </Text>
           )}
 
-          <View style={styles.footer}>
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={() => this.redirectToAddAvail(noItem)}
-            >
-              <View style={styles.buttonWrapper}>
-                <Text style={styles.buttonText}>Add Availability</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => this.redirectToAddAvail(noItem)}
+          >
+            <View style={styles.buttonWrapper}>
+              <Text style={styles.buttonText}>Add Availability</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </Container>
     );
   }
