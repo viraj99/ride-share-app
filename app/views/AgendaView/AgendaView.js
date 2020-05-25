@@ -29,7 +29,7 @@ class AgendaView extends React.Component {
   getAvailability = async () => {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
-    console.log('from API: ', avails);
+    // console.log('from API: ', avails);
 
     const result = [];
     const others = [];
@@ -63,21 +63,21 @@ class AgendaView extends React.Component {
 
   testAMatch = item => {
     if (item.isRecurring === true) {
-      console.log('starting test a match');
+      // console.log('starting test a match');
       let { response, others } = this.state;
-      console.log('in test a match fx: ', response);
-      console.log('in test a match fx: ', others);
+      //console.log('in test a match fx: ', response);
+      //console.log('in test a match fx: ', others);
       let updatedRecur;
 
       for (const each of response) {
         const arrayOfMatchingDates = [];
         const lastDate = [];
         if (each.isRecurring === true) {
-          console.log('testing a match');
+          //console.log('testing a match');
           const testItem = each.id;
-          console.log('match is for item #: ', testItem);
+          //console.log('match is for item #: ', testItem);
           others.map(eachItem => {
-            console.log("eachItem I'm testing is: ", eachItem);
+            //console.log("eachItem I'm testing is: ", eachItem);
             if (eachItem.id === testItem) {
               // arrayOfMatchingDates.push(eachItem.startTime)
               // console.log("new array of matching:", arrayOfMatchingDates)
@@ -90,7 +90,7 @@ class AgendaView extends React.Component {
             // return endOfRecurrence
           });
           updatedRecur = lastDate[lastDate.length - 1];
-          console.log('Good! ', lastDate[lastDate.length - 1]);
+          //console.log('Good! ', lastDate[lastDate.length - 1]);
           return updatedRecur;
         }
       }
@@ -100,13 +100,13 @@ class AgendaView extends React.Component {
   renderItem = item => {
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
-    let start = moment.utc(item.startTime).format('h:mm A');
-    let end = moment.utc(item.endTime).format('h:mm A');
+    let start = moment(item.startTime).format('h:mm A');
+    let end = moment(item.endTime).format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
-    console.log('what happens now? ', endDate);
+    //console.log('what happens now? ', endDate);
     let ending = moment(endDate).format('MMMM D, YYYY');
-    console.log('maybe? ', ending);
+    //console.log('maybe? ', ending);
 
     return (
       <View style={[styles.availListItem]}>
@@ -153,8 +153,8 @@ class AgendaView extends React.Component {
 
   render() {
     let noItem = { id: null };
-    console.log('items from API call: ', this.state.response);
-    console.log('recurrences in API call: ', this.state.others);
+    // //console.log('items from API call: ', this.state.response);
+    // console.log('recurrences in API call: ', this.state.others);
     return (
       <Container>
         <NavigationEvents onDidFocus={() => this.getAvailability()} />
