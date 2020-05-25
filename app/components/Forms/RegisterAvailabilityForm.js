@@ -12,46 +12,63 @@ import DatePickerView from '../../views/DatePickerView/DatePickerView';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 
 class RegisterAvailabilityForm extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      startDate: new Date(),
-      endDate: new Date(),
-      startTime: new Date(),
-      endTime: new Date(),
-      availData: {},
+      isRecurring: false,
+      availData: {
+        startDate: new Date(),
+        endDate: new Date(),
+        startTime: new Date(),
+        endTime: new Date(),
+      },
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   setStartDate = date => {
     this.setState({
-      startDate: date,
+      availData: {
+        ...this.state.availData,
+        startDate: date,
+      },
     });
   };
 
   setStartTime = time => {
     this.setState({
-      startTime: time,
+      availData: {
+        ...this.state.availData,
+        startTime: time,
+      },
     });
   };
 
   setEndTime = time => {
     this.setState({
-      endTime: time,
+      availData: {
+        ...this.state.availData,
+        endTime: time,
+      },
     });
   };
 
   setEndDate = date => {
     this.setState({
-      endDate: date,
+      availData: {
+        ...this.state.availData,
+        endDate: date,
+      },
     });
   };
 
   //async await needed for proper Promise handling during submit function
-  handleUserSubmit = async (userEntries, recurring) => {
-    console.log('in handlesubmit: ', recurring);
+  handleUserSubmit = async () => {
+
+    const { availData, isRecurring } = this.state;
+    console.log('in handlesubmit: ', isRecurring);
 
     // alert(
     //   'Thank you for registering! You will receive an email regarding next steps within _ business days.'
@@ -59,52 +76,64 @@ class RegisterAvailabilityForm extends React.Component {
     let token = await AsyncStorage.getItem('token');
     token = JSON.parse(token);
 
-    console.log('right before createAvail API: ', userEntries);
+    console.log('right before createAvail API: ', availData);
 
-    let endDate = userEntries.end_date;
+    let endDate = availData.endDate;
 
-    //use API file, createAvailability fx to send user's availability to database; token required
-    API.createAvailability(userEntries, recurring, endDate, token.token)
-      .then(response => {
-        console.log('AVAILABILLITY RES: ', response);
-        this.props.navigation.navigate('AgendaView', { response: response });
-      })
-      .catch(err => {
-        console.log('AVAILABILLITY RES: ', err);
-        this.setState(
-          {
-            errorMessage: err,
-          },
-          () => {
-            showMessage({
-              message: 'There was an error: ',
-              description: this.state.errorMessage.error,
-              type: 'danger',
-            });
-          }
-        );
-      });
-  };
+    function convertToUTC(date, time) {
+      if (arguments.length > 1) {
+        const startTimeFormatted =
+          moment(date).format('ddd MMM DD YYYY') +
+          ' ' +
+          moment(time).format('HH:mm Z');
 
-  render() {
+        var newDate = new Date(startTimeFormatted);
+
+        const dateToUTC = moment.utc(newDate).format('YYYY-MM-DD HH:mm');
+        return dateToUTC;
+      }
+      return moment(date).format('YYYY-MM-DD');
+    }
+
+    // Convert entries to UTC for backend handling.
     const userEntries = {
-      start_time:
-        moment(this.state.startDate).format('YYYY-MM-DD') +
-        ' ' +
-        moment(this.state.startTime).format('HH:mm'),
-      end_time:
-        moment(this.state.startDate).format('YYYY-MM-DD') +
-        ' ' +
-        moment(this.state.endTime).format('HH:mm'),
-      is_recurring: this.state.is_recurring,
-      end_date: moment(this.state.endDate).format('YYYY-MM-DD'),
+      start_time: convertToUTC(availData.startDate, availData.startTime),
+      end_time: convertToUTC(availData.startDate, availData.endTime),
+      is_recurring: isRecurring,
+      end_date: convertToUTC(endDate),
       //below values need to be changed, place-holding for now
       // Must pass a location from the driver.
       location_id: 1,
     };
 
-    let availabilitySelectors;
-    let { startDate, startTime, endTime, endDate } = this.state;
+    //use API file, createAvailability fx to send user's availability to database; token required
+    try {
+      const response = await API.createAvailability(userEntries, isRecurring, endDate, token.token);
+      showMessage({
+        message: 'Availability Added. ',
+        description: 'Thank you for volunteering!',
+        type: 'info',
+      });
+      this.props.navigation.navigate('AgendaView', { response: { ...response, message: "Availabilty " } });
+    } catch (err) {
+      console.log('AVAILABILLITY ERR RES: ', err);
+      this.setState(
+        {
+          errorMessage: err,
+        },
+        () => {
+          showMessage({
+            message: 'There was an error: ',
+            description: this.state.errorMessage.error,
+            type: 'danger',
+          });
+        }
+      );
+    }
+  };
+
+  render() {
+    let { startDate, startTime, endTime, endDate } = this.state.availData;
 
     return (
       <ScrollView>
@@ -120,7 +149,6 @@ class RegisterAvailabilityForm extends React.Component {
             <Text style={styles.labelStyleAvail}>Availability Start Date:</Text>
             <View>
               <DatePickerView
-                value={startDate}
                 display="default"
                 mode="date"
                 setDate={this.setStartDate}
@@ -128,14 +156,13 @@ class RegisterAvailabilityForm extends React.Component {
 
               <Text style={styles.displaySelection}>
                 Selected date:
-                {moment(this.state.startDate).format('MMMM D, YYYY')}
+                {moment(startDate).format('MMMM D, YYYY')}
               </Text>
             </View>
 
             <Text style={styles.labelStyleAvail}>Availability Start Time:</Text>
             <View>
               <DatePickerView
-                value={startTime}
                 display="default"
                 mode="time"
                 display="spinner"
@@ -145,14 +172,13 @@ class RegisterAvailabilityForm extends React.Component {
             </View>
 
             <Text style={styles.displaySelection}>
-              Selected time: {moment(this.state.startTime).format('h:mm A')}
+              Selected time: {moment(startTime).format('h:mm A')}
             </Text>
 
             <Text style={styles.labelStyleAvail}>Availability End Time:</Text>
 
             <View>
               <DatePickerView
-                value={endTime}
                 display="default"
                 mode="time"
                 display="spinner"
@@ -162,43 +188,42 @@ class RegisterAvailabilityForm extends React.Component {
             </View>
 
             <Text style={styles.displaySelection}>
-              Selected time: {moment(this.state.endTime).format('h:mm  A')}
+              Selected time: {moment(endTime).format('h:mm  A')}
             </Text>
 
             <Text style={styles.labelStyleAvail}>
-              Is this availability recurring?{' '}
+              Is this a weekly recurring?{' '}
             </Text>
             <ModalDropdown
               defaultValue="Select One"
-              onSelect={i => {
-                const values = ['true', 'false'];
-                this.setState({ is_recurring: values[i] });
+              onSelect={(i, v) => {
+                const values = ['false', 'true'];
+                if (values.includes('true', 'false')) {
+                  return this.setState({ isRecurring: values[i] });
+                }
+                this.setState({ isRecurring: 'false' });
               }}
-              options={['Yes', 'No']}
+              options={['No', 'Yes']}
               textStyle={[styles.sectionTitle, { color: '#475c67' }]}
               dropdownStyle={styles.dropdownStyle}
               dropdownTextStyle={styles.dropdownTextStyle}
               style={styles.modalDropdown}
             />
 
-            {this.state.is_recurring === 'true' && (
+            {this.state.isRecurring === 'true' && (
               <View>
                 <Text style={styles.labelStyleAvail}>
                   Date to End Recurring Availability:
                 </Text>
-                <DatePickerView
-                  value={endDate}
-                  display="default"
-                  setDate={this.setEndDate}
-                />
+                <DatePickerView display="default" setDate={this.setEndDate} />
                 <Text style={styles.displaySelection}>
                   Selected date:{' '}
-                  {moment(this.state.endDate).format('MMMM D, YYYY')}
+                  {moment(endDate).format('MMMM D, YYYY')}
                 </Text>
               </View>
             )}
 
-            {/* {this.state.is_recurring === 'true' && 
+            {/* {this.state.isRecurring === 'true' && 
               <Sae 
                   label="End Recurring Schedule Date (YYYY-MM-DD)"
                   labelStyle={styles.labelStyle}
@@ -222,7 +247,7 @@ class RegisterAvailabilityForm extends React.Component {
               <CalendarButton
                 title="Submit"
                 onPress={() =>
-                  this.handleUserSubmit(userEntries, this.state.is_recurring)
+                  this.handleUserSubmit()
                 }
               />
             </Block>
