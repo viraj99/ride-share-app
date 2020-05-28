@@ -14,14 +14,14 @@ class RegisterDriverForm extends React.Component {
     this.state = {
       orgs: [],
       orgNum: 1,
-      radius: 0
+      radius: 0,
     };
   }
 
   componentDidMount() {
     //make sure there aren't any orgs in cache that will duplicate list
     this.setState({
-      orgs: []
+      orgs: [],
     });
     //call getOrganizations fx which handles API call and retrieves list of orgs
     this.getOrganizations();
@@ -33,7 +33,7 @@ class RegisterDriverForm extends React.Component {
       .then(res => {
         //store full list of all orgs in local state
         this.setState({
-          orgs: res.organization
+          orgs: res.organization,
         });
       })
       //if error performing API fetch for getting orgs, show error
@@ -56,15 +56,16 @@ class RegisterDriverForm extends React.Component {
         phone: this.state.phone,
         is_active: true,
         radius: parseInt(this.state.radius),
-        admin_sign_up: false
-      }
+        admin_sign_up: false,
+      },
     };
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
     if (this.props.navigation.state.params === undefined) {
       API.createDriver(userData)
         .then(res => {
-          this.autoLogin(userData);
+          const firstTime = true;
+          this.autoLogin(userData, firstTime);
         })
         //if error performing API fetch for posting driver, show error
         .catch(error => {
@@ -91,7 +92,7 @@ class RegisterDriverForm extends React.Component {
     }
   };
 
-  autoLogin = userEntries => {
+  autoLogin = (userEntries, setLocation) => {
     console.log('testing in driver form: ', this.props.navigation);
     //use API file, login fx to create a token in order to add vehicle data to driver
     //login fx requries email and password as params
@@ -99,16 +100,37 @@ class RegisterDriverForm extends React.Component {
       //after sending email and pword, get auth_token
       .then(res => {
         const obj = {
-          token: res.json.auth_token
+          token: res.json.auth_token,
         };
         if (obj.token === undefined) {
           this.setState({
-            errorMessage: 'Invalid username or password.'
+            errorMessage: 'Invalid username or password.',
           });
         } else {
           //if API call for autologin upon driver data submit successful, store auth_token in local storage
           AsyncStorage.setItem('token', JSON.stringify(obj));
           console.log('in autoLogin: ', AsyncStorage.getItem('token'));
+
+          if (setLocation) {
+            //first time logining, set location from registration data
+            let data = {
+              location: {
+                street: this.state.street,
+                city: this.state.city,
+                state: this.state.state_initials,
+                zip: this.state.zip_code,
+              },
+            };
+            //call location api with data
+            API.createLocation(
+              data,
+              setLocation,
+              AsyncStorage.getItem('token')
+            ).then(res => {
+              console.log('loction set', res);
+            });
+          }
+
           //redirect to vehicle registation
           this.props.navigation.navigate('MainView', {
             isRegistering: true,
@@ -117,12 +139,13 @@ class RegisterDriverForm extends React.Component {
       })
       .catch(err => {
         this.setState({
-          errorMessage: 'Invalid username or password.'
+          errorMessage: 'Invalid username or password.',
         });
       });
   };
 
   getOrganizationId = name => {
+    console.log('getOrg', this.state.orgs);
     const selectedOrg = this.state.orgs.find(org => org.name === name);
     console.log(selectedOrg);
     this.setState({ orgNum: selectedOrg.id });
@@ -189,6 +212,72 @@ class RegisterDriverForm extends React.Component {
                 placeholder="9195551234"
                 ref={input => {
                   this.phone = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.street.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
+
+              {/*Input for Volunteer Driver's Address */}
+              <Text style={styles.labelStyleAlt}>Address:</Text>
+              <TextInput
+                onChangeText={text => this.setState({ street: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="Street"
+                ref={input => {
+                  this.street = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.city.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
+
+              <TextInput
+                onChangeText={text => this.setState({ city: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="City"
+                ref={input => {
+                  this.city = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.state_initials.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
+
+              <TextInput
+                onChangeText={text => this.setState({ state_initials: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="State"
+                ref={input => {
+                  this.state_initials = input;
+                }}
+                returnKeyType={'next'}
+                onSubmitEditing={() => {
+                  this.zip_code.focus();
+                }}
+                blurOnSubmit={false}
+                style={[styles.saeInputAlt]}
+                inputStyle={styles.saeTextAlt}
+              />
+
+              <TextInput
+                onChangeText={text => this.setState({ zip_code: text })}
+                placeholderTextColor="#C0C0C0"
+                placeholder="Zip Code"
+                ref={input => {
+                  this.zip_code = input;
                 }}
                 returnKeyType={'next'}
                 onSubmitEditing={() => {
