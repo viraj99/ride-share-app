@@ -112,6 +112,7 @@ class RegisterAvailabilityForm extends React.Component {
     };
 
     //use API file, createAvailability fx to send user's availability to database; token required
+    // TODO: Use editAvailability api method here depending if user is editing entry.
     try {
       const response = await API.createAvailability(userEntries, isRecurring, endDate, token.token);
       showMessage({
