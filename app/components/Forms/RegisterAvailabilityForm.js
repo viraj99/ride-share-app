@@ -15,13 +15,18 @@ class RegisterAvailabilityForm extends React.Component {
 
   constructor(props) {
     super(props);
+    const isNewItem = props.navigation.state.params.item.id === null;
+    console.log('isNewItem', isNewItem);
+    if (!isNewItem) {
+      var { params } = props.navigation.state;
+    }
     this.state = {
-      isRecurring: false,
+      isRecurring: isNewItem ? false : params.item.isRecurring,
       availData: {
-        startDate: new Date(),
-        endDate: new Date(),
-        startTime: new Date(),
-        endTime: new Date(),
+        startDate: isNewItem ? new Date() : params.item.startDate,
+        endDate: isNewItem ? new Date() : params.item.endDate,
+        startTime: isNewItem ? new Date() : params.item.startTime,
+        endTime: isNewItem ? new Date() : params.item.endTime,
       },
     };
   }
@@ -89,10 +94,10 @@ class RegisterAvailabilityForm extends React.Component {
 
         var newDate = new Date(startTimeFormatted);
 
-        const dateToUTC = moment.utc(newDate).format('YYYY-MM-DD HH:mm');
+        const dateToUTC = moment.utc(newDate).format('YYYY-MM-DD HH:mm Z');
         return dateToUTC;
       }
-      return moment(date).format('YYYY-MM-DD');
+      return moment.utc(date).format('YYYY-MM-DD Z');
     }
 
     // Convert entries to UTC for backend handling.
@@ -114,21 +119,14 @@ class RegisterAvailabilityForm extends React.Component {
         description: 'Thank you for volunteering!',
         type: 'info',
       });
-      this.props.navigation.navigate('AgendaView', { response: { ...response, message: "Availabilty " } });
+      this.props.navigation.navigate('AgendaView', { response: { ...response } });
     } catch (err) {
       console.log('AVAILABILLITY ERR RES: ', err);
-      this.setState(
-        {
-          errorMessage: err,
-        },
-        () => {
-          showMessage({
-            message: 'There was an error: ',
-            description: this.state.errorMessage.error,
-            type: 'danger',
-          });
-        }
-      );
+      showMessage({
+        message: 'There was an error: ',
+        description: this.state.errorMessage.error,
+        type: 'danger',
+      });
     }
   };
 
@@ -149,6 +147,7 @@ class RegisterAvailabilityForm extends React.Component {
             <Text style={styles.labelStyleAvail}>Availability Start Date:</Text>
             <View>
               <DatePickerView
+                dateProp={startDate}
                 display="default"
                 mode="date"
                 setDate={this.setStartDate}
@@ -163,6 +162,7 @@ class RegisterAvailabilityForm extends React.Component {
             <Text style={styles.labelStyleAvail}>Availability Start Time:</Text>
             <View>
               <DatePickerView
+                dateProp={startTime}
                 display="default"
                 mode="time"
                 display="spinner"
@@ -179,6 +179,7 @@ class RegisterAvailabilityForm extends React.Component {
 
             <View>
               <DatePickerView
+                dateProp={endTime}
                 display="default"
                 mode="time"
                 display="spinner"
@@ -196,12 +197,13 @@ class RegisterAvailabilityForm extends React.Component {
             </Text>
             <ModalDropdown
               defaultValue="Select One"
+              defaultIndex={this.state.isRecurring ? 1 : 0}
               onSelect={(i, v) => {
-                const values = ['false', 'true'];
-                if (values.includes('true', 'false')) {
+                const values = [false, true];
+                if (values.includes(true, false)) {
                   return this.setState({ isRecurring: values[i] });
                 }
-                this.setState({ isRecurring: 'false' });
+                this.setState({ isRecurring: false });
               }}
               options={['No', 'Yes']}
               textStyle={[styles.sectionTitle, { color: '#475c67' }]}
@@ -210,12 +212,12 @@ class RegisterAvailabilityForm extends React.Component {
               style={styles.modalDropdown}
             />
 
-            {this.state.isRecurring === 'true' && (
+            {this.state.isRecurring && (
               <View>
                 <Text style={styles.labelStyleAvail}>
                   Date to End Recurring Availability:
                 </Text>
-                <DatePickerView display="default" setDate={this.setEndDate} />
+                <DatePickerView dateProp={endDate} display="default" setDate={this.setEndDate} />
                 <Text style={styles.displaySelection}>
                   Selected date:{' '}
                   {moment(endDate).format('MMMM D, YYYY')}

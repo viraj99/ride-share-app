@@ -40,7 +40,9 @@ class AgendaView extends React.Component {
         result.push({
           id: item.eventId,
           startTime: item.startTime,
+          startDate: item.startDate,
           endTime: item.endTime,
+          endDate: item.endDate,
           isRecurring: item.isRecurring,
           day: moment(item.startTime).format('dddd'),
         });
@@ -49,7 +51,9 @@ class AgendaView extends React.Component {
         others.push({
           id: item.eventId,
           startTime: item.startTime,
+          startDate: item.startDate,
           endTime: item.endTime,
+          endDate: item.endDate,
           isRecurring: item.isRecurring,
           day: moment(item.startTime).format('dddd'),
         });
@@ -159,35 +163,38 @@ class AgendaView extends React.Component {
       <Container>
         <NavigationEvents onDidFocus={() => this.getAvailability()} />
 
-        <View style={[styles.headerContainer]}>
-          <View style={styles.mainContainer}>
-            <View style={styles.componentsContainer}>
-              <View style={styles.backButtonContainer}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('MainView')}
-                >
-                  <Icon name="chevron-left" size={36} color="#ffffff" />
-                </TouchableOpacity>
-              </View>
+        <View style={styles.mainContainer}>
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('MainView')}
+            >
+              <Icon name="chevron-left" size={36} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.componentsContainer}>
 
-              <View style={styles.headerTextContainer}>
-                <Text style={styles.headerText}>Availability</Text>
-              </View>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerText}>Availability</Text>
             </View>
           </View>
         </View>
 
         {this.state.response ? (
-          <FlatList
-            data={this.state.response}
-            renderItem={({ item }) => this.renderItem(item)}
-            keyExtractor={item => item.id}
-          />
+          <View>
+            <FlatList
+              scrollEnabled
+              data={this.state.response}
+              renderItem={({ item }) => this.renderItem(item)}
+              keyExtractor={item => '' + item.id}
+            />
+          </View>
         ) : (
-            <Text style={styles.noAvailText}>
-              There is no availability in your schedule, to add availability click
-              the button below:
+            <View styles={styles.flatlistContainer}>
+              <Text style={styles.noAvailText}>
+                There is no availability in your schedule, to add availability the
+                button below:
             </Text>
+            </View>
           )}
 
         <View style={styles.footer}>
