@@ -14,14 +14,14 @@ class RegisterDriverForm extends React.Component {
     this.state = {
       orgs: [],
       orgNum: 1,
-      radius: 0
+      radius: 0,
     };
   }
 
   componentDidMount() {
     //make sure there aren't any orgs in cache that will duplicate list
     this.setState({
-      orgs: []
+      orgs: [],
     });
     //call getOrganizations fx which handles API call and retrieves list of orgs
     this.getOrganizations();
@@ -33,7 +33,7 @@ class RegisterDriverForm extends React.Component {
       .then(res => {
         //store full list of all orgs in local state
         this.setState({
-          orgs: res.organization
+          orgs: res.organization,
         });
       })
       //if error performing API fetch for getting orgs, show error
@@ -56,14 +56,15 @@ class RegisterDriverForm extends React.Component {
         phone: this.state.phone,
         is_active: true,
         radius: parseInt(this.state.radius),
-        admin_sign_up: false
-      }
+        admin_sign_up: false,
+      },
     };
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
     if (this.props.navigation.state.params === undefined) {
       API.createDriver(userData)
         .then(res => {
+          console.log("response", res);
           this.autoLogin(userData);
         })
         //if error performing API fetch for posting driver, show error
@@ -91,35 +92,37 @@ class RegisterDriverForm extends React.Component {
     }
   };
 
-  autoLogin = userEntries => {
+  autoLogin = async userEntries => {
     console.log('testing in driver form: ', this.props.navigation);
     //use API file, login fx to create a token in order to add vehicle data to driver
     //login fx requries email and password as params
-    API.login(userEntries.driver.email, userEntries.driver.password)
+    try {
+      const token = await API.login(
+        userEntries.driver.email.toLowerCase(),
+        userEntries.driver.password
+      );
       //after sending email and pword, get auth_token
-      .then(res => {
-        const obj = {
-          token: res.json.auth_token
-        };
-        if (obj.token === undefined) {
-          this.setState({
-            errorMessage: 'Invalid username or password.'
-          });
-        } else {
-          //if API call for autologin upon driver data submit successful, store auth_token in local storage
-          AsyncStorage.setItem('token', JSON.stringify(obj));
-          console.log('in autoLogin: ', AsyncStorage.getItem('token'));
-          //redirect to vehicle registation
-          this.props.navigation.navigate('MainView', {
-            isRegistering: true,
-          });
-        }
-      })
-      .catch(err => {
+      const obj = {
+        token: token.json.auth_token,
+      };
+      if (obj.token === undefined) {
         this.setState({
-          errorMessage: 'Invalid username or password.'
+          errorMessage: 'Invalid username or password.',
         });
+      } else {
+        //if API call for autologin upon driver data submit successful, store auth_token in local storage
+        AsyncStorage.setItem('token', JSON.stringify(obj));
+        console.log('in autoLogin: ', AsyncStorage.getItem('token'));
+        //redirect to vehicle registation
+        this.props.navigation.navigate('MainView', {
+          isRegistering: true,
+        });
+      }
+    } catch (error) {
+      this.setState({
+        errorMessage: 'Invalid username or password.',
       });
+    }
   };
 
   getOrganizationId = name => {

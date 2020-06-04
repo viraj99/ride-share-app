@@ -30,8 +30,6 @@ export default {
       params: 'password_reset',
       body: { email },
       method: 'POST'
-    }).then(res => {
-      return res.json();
     });
   },
   getRides(token) {
@@ -155,8 +153,8 @@ export default {
         token,
         body: availability,
         method: 'PUT',
-        params: eventID
-      }).then(res => console.log(res.json()));
+        params: eventID,
+      });
     } else {
       let avail = userEntries;
       avail = {
@@ -173,8 +171,8 @@ export default {
         token,
         body: avail,
         method: 'PUT',
-        params: eventID
-      }).then(res => console.log(res.json()));
+        params: eventID,
+      });
     }
   },
   logout(token) {
@@ -303,8 +301,8 @@ export default {
       path: VEHICLES,
       token,
       body: vehicle,
-      method: 'POST'
-    }).then(res => console.log(res.json()));
+      method: 'POST',
+    });
   },
   createAvailability(availData, recurring, endDate, token) {
     console.log('before parsing: ', recurring);
