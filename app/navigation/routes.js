@@ -14,10 +14,12 @@ import {
   Settings,
   Register,
   RegisterVehicle,
+
   RegisterAvailability,
   ForgotPassword,
   Welcome,
 } from '../views';
+import LocationScreen from '../views/settings/LocationScreen'
 // import VehicleSettings from '../views/settings/VehicleSettings'
 
 const MainViewStack = createStackNavigator(
@@ -90,8 +92,24 @@ const MainViewStack = createStackNavigator(
         headerLeft: null,
       },
     },
-  },
+    LocationScreen: {
+      screen: LocationScreen,
+      navigationOptions: {
+        headerTitle: 'Add Location',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 25,
+        },
+        headerStyle: {
+          backgroundColor: '#1EAA70',
+          
+        },
+        headerTintColor: '#fff',
 
+      }
+    },
+  },
+ 
   {
     headerMode: 'screen',
     headerBackTitleVisible: false,

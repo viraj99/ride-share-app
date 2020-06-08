@@ -9,7 +9,7 @@ import {
   VEHICLE,
   VEHICLES,
   ORGANIZATIONS,
-  LOCATIONS
+  LOCATIONS,
 } from '../utils/urls';
 import apiWrapper from './apiWrapper';
 //TODO get the ride id not the rider id from the API to accept the correct response
@@ -21,7 +21,7 @@ export default {
     return apiWrapper({
       path: LOGIN,
       body: { email, password },
-      method: 'POST'
+      method: 'POST',
     });
   },
   passwordReset(email) {
@@ -30,7 +30,7 @@ export default {
       path: REGISTER,
       params: 'password_reset',
       body: { email },
-      method: 'POST'
+      method: 'POST',
     }).then(res => {
       return res.json();
     });
@@ -38,21 +38,21 @@ export default {
   getRides(token) {
     return apiWrapper({
       path: RIDES,
-      token
+      token,
     });
   },
   getRider(id, token) {
     return apiWrapper({
       path: RIDER,
       params: `/${id}`,
-      token
+      token,
     });
   },
   getDriver(token) {
     return apiWrapper({
       path: REGISTER,
       method: 'GET',
-      token
+      token,
     });
   },
   //////////////////////////////////
@@ -61,7 +61,7 @@ export default {
       path: RIDES,
       params: `/${id}/accept`,
       method: 'POST',
-      token
+      token,
     });
   },
   completeRide(id, token) {
@@ -69,7 +69,7 @@ export default {
       path: RIDES,
       params: `${id}/complete`,
       method: 'POST',
-      token
+      token,
     });
   },
   pickUpRide(id, token) {
@@ -77,7 +77,7 @@ export default {
       path: RIDES,
       params: `/${id}/picking-up`,
       method: 'POST',
-      token
+      token,
     });
   },
   dropOffRide(id, token) {
@@ -85,7 +85,7 @@ export default {
       path: RIDES,
       params: `/${id}/dropping-off`,
       method: 'POST',
-      token
+      token,
     });
   },
   waitingForRide(id, token) {
@@ -93,7 +93,7 @@ export default {
       path: RIDES,
       params: `/${id}/waiting`,
       method: 'POST',
-      token
+      token,
     });
   },
   returnPickUp(id, token) {
@@ -101,7 +101,7 @@ export default {
       path: RIDES,
       params: `/${id}/return-picking-up`,
       method: 'POST',
-      token
+      token,
     });
   },
   returnDropOff(id, token) {
@@ -109,7 +109,7 @@ export default {
       path: RIDES,
       params: `/${id}/return-dropping-off`,
       method: 'POST',
-      token
+      token,
     });
   },
   cancelRide(id, token) {
@@ -117,14 +117,14 @@ export default {
       path: RIDES,
       params: `/${id}/cancel`,
       method: 'POST',
-      token
+      token,
     });
   },
   getAvailabilities(token) {
     return apiWrapper({
       path: AVAILABILITIES,
       method: 'GET',
-      token
+      token,
     });
   },
   deleteAvailability(token, eventID) {
@@ -132,7 +132,7 @@ export default {
       path: AVAILABILITIES,
       params: eventID,
       method: 'DELETE',
-      token
+      token,
     }).then(res => {
       alert('Your availability has been deleted'), res.json();
     });
@@ -149,14 +149,14 @@ export default {
         end_time: userEntries.end_time,
         is_recurring: recurringParsed,
         location_id: userEntries.location_id,
-        id: eventID
+        id: eventID,
       };
       return apiWrapper({
         path: AVAILABILITIES,
         token,
         body: availability,
         method: 'PUT',
-        params: eventID
+        params: eventID,
       }).then(res => console.log(res.json()));
     } else {
       let avail = userEntries;
@@ -167,14 +167,14 @@ export default {
         end_time: avail.end_time,
         is_recurring: recurringParsed,
         location_id: userEntries.location_id,
-        id: eventID
+        id: eventID,
       };
       return apiWrapper({
         path: AVAILABILITIES,
         token,
         body: avail,
         method: 'PUT',
-        params: eventID
+        params: eventID,
       }).then(res => console.log(res.json()));
     }
   },
@@ -182,13 +182,13 @@ export default {
     return apiWrapper({
       path: LOGOUT,
       method: 'POST',
-      headers: { token }
+      headers: { token },
     });
   },
   getSettingInfo(token) {
     return apiWrapper({
       path: SETTINGS,
-      headers: { token }
+      headers: { token },
     });
   },
   updateSettingsDriver(data, token) {
@@ -200,14 +200,14 @@ export default {
         email: data.email,
         phone: data.phone,
         radius: data.radius,
-        is_active: data.is_active
-      }
+        is_active: data.is_active,
+      },
     };
     return apiWrapper({
       path: SETTINGS,
       headers: { token },
       body: driverData,
-      method: 'PUT'
+      method: 'PUT',
     });
   },
 
@@ -223,8 +223,8 @@ export default {
         seat_belt_num: vehicleData.vehicle.seat_belt_num,
         insurance_provider: vehicleData.vehicle.insurance_provider,
         insurance_start: vehicleData.vehicle.insurance_start,
-        insurance_stop: vehicleData.vehicle.insurance_stop
-      }
+        insurance_stop: vehicleData.vehicle.insurance_stop,
+      },
     };
     console.log('data to carReg API: ', vehicle);
     console.log('token to carReg API: ', token);
@@ -233,7 +233,7 @@ export default {
       headers: { token },
       // params: `?id=${id}`,
       body: vehicle,
-      method: 'PUT'
+      method: 'PUT',
     });
   },
 
@@ -242,7 +242,7 @@ export default {
       path: VEHICLES,
       method: 'GET',
       // params: `?id=${id}`,
-      headers: { token }
+      headers: { token },
     });
   },
   deleteVehicle(id, token) {
@@ -250,13 +250,13 @@ export default {
       path: VEHICLES,
       method: 'DELETE',
       params: `?id=${id}`,
-      headers: { token }
+      headers: { token },
     });
   },
   getOrgs() {
     return apiWrapper({
       path: ORGANIZATIONS,
-      method: 'GET'
+      method: 'GET',
     });
   },
   createDriver(data) {
@@ -271,20 +271,21 @@ export default {
         phone: data.driver.phone,
         is_active: true,
         radius: data.driver.radius,
-        admin_sign_up: data.driver.admin_sign_up
-      }
+        admin_sign_up: data.driver.admin_sign_up,
+      },
     };
     console.log('data to API: ', driver);
     return apiWrapper({
       path: REGISTER,
       method: 'POST',
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
       },
-      body: driver
+      body: driver,
     });
   },
   createVehicle(vehicleData, token) {
+    console.log('vehicle token', token);
     const vehicle = {
       vehicle: {
         car_make: vehicleData.vehicle.car_make,
@@ -295,8 +296,8 @@ export default {
         seat_belt_num: parseInt(vehicleData.vehicle.seat_belt_num),
         insurance_provider: vehicleData.vehicle.insurance_provider,
         insurance_start: vehicleData.vehicle.insurance_start,
-        insurance_stop: vehicleData.vehicle.insurance_stop
-      }
+        insurance_stop: vehicleData.vehicle.insurance_stop,
+      },
     };
     console.log('data to carReg API: ', vehicle);
     console.log('token to carReg API: ', token);
@@ -304,7 +305,7 @@ export default {
       path: VEHICLES,
       token,
       body: vehicle,
-      method: 'POST'
+      method: 'POST',
     }).then(res => console.log(res.json()));
   },
   createAvailability(availData, recurring, endDate, token) {
@@ -322,7 +323,7 @@ export default {
         start_time: availData.start_time,
         end_time: availData.end_time,
         is_recurring: recurringParsed,
-        location_id: availData.location_id
+        location_id: availData.location_id,
       };
       console.log('data to availReg API: ', availability);
       console.log('token to availReg API: ', token);
@@ -330,14 +331,14 @@ export default {
         path: AVAILABILITIES,
         token,
         body: availability,
-        method: 'POST'
+        method: 'POST',
       });
     } else {
       const availability = {
         start_time: availData.start_time,
         end_time: availData.end_time,
         is_recurring: recurringParsed,
-        location_id: availData.location_id
+        location_id: availData.location_id,
       };
       return apiWrapper({
         path: AVAILABILITIES,
@@ -347,24 +348,61 @@ export default {
       });
     }
   },
-  createLocation(locationData, setDefault, token){
+  getLocations(token) {
+    return apiWrapper({
+      path: LOCATIONS,
+      token,
+      method: 'GET',
+    });
+  },
+  createLocation(locationData, setDefault, token) {
     const location = {
       location: {
         street: locationData.location.street,
         city: locationData.location.city,
         state: locationData.location.state,
         zip: locationData.location.zip,
-        notes: null,
-        default: setDefault
-      }
-    }
+        notes: locationData.location.notes ? locationData.location.notes : null,
+      },
+      default_location: {
+        default: setDefault,
+      },
+    };
 
     return apiWrapper({
       path: LOCATIONS,
       token,
       body: location,
-      method: 'POST'
-    })
-
-  }
+      method: 'POST',
+    });
+  },
+  editLocation(locationData, id, setDefault, token) {
+    const location = {
+      location: {
+        street: locationData.location.street,
+        city: locationData.location.city,
+        state: locationData.location.state,
+        zip: locationData.location.zip,
+        notes: locationData.location.notes ? locationData.location.notes : null,
+      },
+      default_location: {
+        default: setDefault,
+      },
+    };
+    return apiWrapper({
+      path: LOCATIONS,
+      token,
+      body: location,
+      params: `${id}`,
+      method: 'PUT',
+    });
+  },
+  deleteLocation(id, token) {
+    return apiWrapper({
+      path: LOCATIONS,
+      token,
+      params: `${id}`,
+      method: 'DELETE',
+    });
+  },
 };

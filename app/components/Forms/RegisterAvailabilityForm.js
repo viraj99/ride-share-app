@@ -8,6 +8,7 @@ import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import ModalDropdown from 'react-native-modal-dropdown';
+import { Dropdown } from 'react-native-material-dropdown';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 
@@ -20,11 +21,46 @@ class RegisterAvailabilityForm extends React.Component {
       startTime: new Date(),
       endTime: new Date(),
       availData: {},
+      locations: [],
+      locationData: [],
+      selectedLocation: {},
     };
   }
 
-  componentDidMount() {}
+  componentDidMount = async () => {
+    let token = await AsyncStorage.getItem('token');
+    token = JSON.parse(token);
+    console.log('token', token);
+    API.getLocations(token.token).then(res => {
+      const locations = res.locations;
+      let locationData = [...this.state.locationData];
+      locations.map(location => {
+        const value = {
+          value:
+            location.street +
+            ' ' +
+            location.city +
+            ', ' +
+            location.state +
+            ' ' +
+            location.zip,
+        };
+        locationData.push(value);
+      });
+      this.setState({ locationData });
+      this.setState({ locations }, () => {
+        console.log('state for locations', this.state.locations);
+      });
+    });
+  };
 
+  handleLocationChange = (location, index) => {
+    console.log('inside location change', index);
+    const { locations } = this.state;
+    const selectedLocation = locations[index].id;
+    this.setState({ selectedLocation });
+    console.log('id', selectedLocation);
+  };
   setStartDate = date => {
     this.setState({
       startDate: date,
@@ -49,6 +85,12 @@ class RegisterAvailabilityForm extends React.Component {
     });
   };
 
+  handleRecurringChange = value => {
+    if (value === 'Yes') {
+      this.setState({ is_recurring: 'true' });
+    } else this.setState({ is_recurring: 'false' });
+  };
+
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async (userEntries, recurring) => {
     console.log('in handlesubmit: ', recurring);
@@ -60,6 +102,8 @@ class RegisterAvailabilityForm extends React.Component {
     token = JSON.parse(token);
 
     console.log('right before createAvail API: ', userEntries);
+    userEntries.location_id = this.state.selectedLocation;
+    console.log('changing id', userEntries);
 
     let endDate = userEntries.end_date;
 
@@ -110,95 +154,100 @@ class RegisterAvailabilityForm extends React.Component {
       <ScrollView>
         <Block middle>
           <KeyboardAwareScrollView>
-            <Block style={styles.scrollContainer}>
-              <Text style={styles.titleAvail}>Availability Info</Text>
-              <Text style={styles.subTitleAvail}>
-                Continue with availability information
-              </Text>
-            </Block>
-
-            <Text style={styles.labelStyleAvail}>Availability Start Date:</Text>
-            <View>
-              <DatePickerView
-                value={startDate}
-                display="default"
-                mode="date"
-                setDate={this.setStartDate}
-              />
-
-              <Text style={styles.displaySelection}>
-                Selected date:
-                {moment(this.state.startDate).format('MMMM D, YYYY')}
-              </Text>
-            </View>
-
-            <Text style={styles.labelStyleAvail}>Availability Start Time:</Text>
-            <View>
-              <DatePickerView
-                value={startTime}
-                display="default"
-                mode="time"
-                display="spinner"
-                setDate={this.setStartTime} //setDate is a prop used for both date and date-time.
-                title="Pick a Time"
-              />
-            </View>
-
-            <Text style={styles.displaySelection}>
-              Selected time: {moment(this.state.startTime).format('h:mm A')}
-            </Text>
-
-            <Text style={styles.labelStyleAvail}>Availability End Time:</Text>
-
-            <View>
-              <DatePickerView
-                value={endTime}
-                display="default"
-                mode="time"
-                display="spinner"
-                setDate={this.setEndTime}
-                title="Pick a Time"
-              />
-            </View>
-
-            <Text style={styles.displaySelection}>
-              Selected time: {moment(this.state.endTime).format('h:mm  A')}
-            </Text>
-
-            <Text style={styles.labelStyleAvail}>
-              Is this availability recurring?{' '}
-            </Text>
-            <ModalDropdown
-              defaultValue="Select One"
-              onSelect={i => {
-                const values = ['true', 'false'];
-                this.setState({ is_recurring: values[i] });
-              }}
-              options={['Yes', 'No']}
-              textStyle={[styles.sectionTitle, { color: '#475c67' }]}
-              dropdownStyle={styles.dropdownStyle}
-              dropdownTextStyle={styles.dropdownTextStyle}
-              style={styles.modalDropdown}
-            />
-
-            {this.state.is_recurring === 'true' && (
-              <View>
-                <Text style={styles.labelStyleAvail}>
-                  Date to End Recurring Availability:
+            <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+              <Block style={styles.scrollContainer}>
+                <Text style={styles.titleAvail}>Availability Info</Text>
+                <Text style={styles.subTitleAvail}>
+                  Continue with availability information
                 </Text>
+              </Block>
+
+              <Text style={styles.labelStyleAvail}>
+                Availability Start Date:
+              </Text>
+              <View>
                 <DatePickerView
-                  value={endDate}
+                  value={startDate}
                   display="default"
-                  setDate={this.setEndDate}
+                  mode="date"
+                  setDate={this.setStartDate}
                 />
+
                 <Text style={styles.displaySelection}>
-                  Selected date:{' '}
-                  {moment(this.state.endDate).format('MMMM D, YYYY')}
+                  Selected date:
+                  {moment(this.state.startDate).format('MMMM D, YYYY')}
                 </Text>
               </View>
-            )}
 
-            {/* {this.state.is_recurring === 'true' && 
+              <Text style={styles.labelStyleAvail}>
+                Availability Start Time:
+              </Text>
+              <View>
+                <DatePickerView
+                  value={startTime}
+                  display="default"
+                  mode="time"
+                  display="spinner"
+                  setDate={this.setStartTime} //setDate is a prop used for both date and date-time.
+                  title="Pick a Time"
+                />
+              </View>
+
+              <Text style={styles.displaySelection}>
+                Selected time: {moment(this.state.startTime).format('h:mm A')}
+              </Text>
+
+              <Text style={styles.labelStyleAvail}>Availability End Time:</Text>
+
+              <View>
+                <DatePickerView
+                  value={endTime}
+                  display="default"
+                  mode="time"
+                  display="spinner"
+                  setDate={this.setEndTime}
+                  title="Pick a Time"
+                />
+              </View>
+
+              <Text style={styles.displaySelection}>
+                Selected time: {moment(this.state.endTime).format('h:mm  A')}
+              </Text>
+
+              <Text style={styles.labelStyleAvail}>
+                Is this availability recurring?{' '}
+              </Text>
+              <Dropdown
+                data={[{ value: 'Yes' }, { value: 'No' }]}
+                label="Picked"
+                value="Select Option"
+                containerStyle={{
+                  bottom: 15,
+                  paddingLeft: 15,
+                  paddingRight: 15,
+                }}
+                fontSize={18}
+                onChangeText={value => this.handleRecurringChange(value)}
+              />
+
+              {this.state.is_recurring === 'true' && (
+                <View>
+                  <Text style={styles.labelStyleAvail}>
+                    Date to End Recurring Availability:
+                  </Text>
+                  <DatePickerView
+                    value={endDate}
+                    display="default"
+                    setDate={this.setEndDate}
+                  />
+                  <Text style={styles.displaySelection}>
+                    Selected date:{' '}
+                    {moment(this.state.endDate).format('MMMM D, YYYY')}
+                  </Text>
+                </View>
+              )}
+
+              {/* {this.state.is_recurring === 'true' && 
               <Sae 
                   label="End Recurring Schedule Date (YYYY-MM-DD)"
                   labelStyle={styles.labelStyle}
@@ -218,14 +267,31 @@ class RegisterAvailabilityForm extends React.Component {
               />
             } */}
 
-            <Block style={styles.footer}>
-              <CalendarButton
-                title="Submit"
-                onPress={() =>
-                  this.handleUserSubmit(userEntries, this.state.is_recurring)
+              <Text style={styles.labelStyleAvail}>Set Location</Text>
+              <Dropdown
+                data={this.state.locationData}
+                label="Location"
+                value="Select location"
+                containerStyle={{
+                  bottom: 15,
+                  paddingLeft: 15,
+                  paddingRight: 15,
+                }}
+                fontSize={18}
+                onChangeText={(location, index) =>
+                  this.handleLocationChange(location, index)
                 }
               />
-            </Block>
+
+              <Block style={styles.footer}>
+                <CalendarButton
+                  title="Submit"
+                  onPress={() =>
+                    this.handleUserSubmit(userEntries, this.state.is_recurring)
+                  }
+                />
+              </Block>
+            </View>
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>

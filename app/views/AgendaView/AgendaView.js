@@ -35,6 +35,7 @@ class AgendaView extends React.Component {
     const others = [];
     const map = new Map();
     for (const item of avails.json) {
+      console.log('item of vail', item);
       if (!map.has(item.eventId)) {
         map.set(item.eventId, true);
         result.push({
@@ -98,6 +99,7 @@ class AgendaView extends React.Component {
   };
 
   renderItem = item => {
+    console.log('item in avail', item);
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
     let start = moment.utc(item.startTime).format('h:mm A');
@@ -117,7 +119,9 @@ class AgendaView extends React.Component {
         </View>
 
         <View style={styles.centerList}>
-          {item.isRecurring && <Text style={styles.flatListText}>Every {day}</Text>}
+          {item.isRecurring && (
+            <Text style={styles.flatListText}>Every {day}</Text>
+          )}
           {!item.isRecurring && <Text style={styles.flatListText}>{date}</Text>}
           <Text style={styles.flatListText}>
             {start} to {end}
@@ -184,11 +188,11 @@ class AgendaView extends React.Component {
             keyExtractor={item => item.id}
           />
         ) : (
-            <Text style={styles.noAvailText}>
-              There is no availability in your schedule, to add availability click
-              the button below:
-            </Text>
-          )}
+          <Text style={styles.noAvailText}>
+            There is no availability in your schedule, to add availability click
+            the button below:
+          </Text>
+        )}
 
         <View style={styles.footer}>
           <TouchableOpacity

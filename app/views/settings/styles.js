@@ -12,4 +12,8 @@ export default StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() + 50 : 50,
     paddingBottom: Platform.OS === 'ios' ? getBottomSpace() : 0,
   },
+  container: {
+    flex: 1,
+    backgroundColor: '#fcfcf6',
+  },
 });

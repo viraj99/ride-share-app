@@ -6,6 +6,7 @@ import AddAvailability from '../../components/Forms/AddAvailability';
 import styles from '../AvailabilityView/styles';
 import RegisterAvailabilityForm from '../../components/Forms/RegisterAvailabilityForm';
 
+
 class AvailabilityView extends Component {
   constructor(props) {
     super(props);
