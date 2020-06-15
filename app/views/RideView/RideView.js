@@ -21,7 +21,7 @@ export default class RideView extends Component {
       isVisible: false,
       latitude: 0,
       longitude: 0,
-      isLoading: true
+      isLoading: true,
     };
   }
   componentDidMount = () => {
@@ -38,21 +38,21 @@ export default class RideView extends Component {
         first: response.json.rider.first_name,
         last: response.json.rider.last_name,
         phone: response.json.rider.phone,
-        isLoading: false
+        isLoading: false,
       });
     });
   };
 
   handlePickUpDirections = () => {
     this.setState({
-      isVisible: true
+      isVisible: true,
     });
     // console.log('RideView PickUp after setState:', latitude, ' & ', longitude);
   };
 
   handleDropOffDirections = () => {
     this.setState({
-      isVisible: true
+      isVisible: true,
     });
   };
   onPickUpPress = () => {
@@ -76,7 +76,7 @@ export default class RideView extends Component {
         console.log('pickup2dropoff', pickup_to_dropoff);
         this.setState({
           latitude,
-          longitude
+          longitude,
         });
       })
       .catch(err => {
@@ -106,7 +106,7 @@ export default class RideView extends Component {
         const longitude = result.ride.end_location.longitude;
         this.setState({
           latitude,
-          longitude
+          longitude,
         });
       })
       .catch(err => {
@@ -142,7 +142,7 @@ export default class RideView extends Component {
         const longitude = result.ride.end_location.longitude;
         this.setState({
           latitude,
-          longitude
+          longitude,
         });
       })
       .catch(err => {
@@ -162,7 +162,7 @@ export default class RideView extends Component {
         const longitude = result.ride.end_location.longitude;
         this.setState({
           latitude,
-          longitude
+          longitude,
         });
       })
       .catch(err => {
@@ -191,14 +191,16 @@ export default class RideView extends Component {
       [
         {
           text: 'Cancel',
-          onPress: () => {return},
+          onPress: () => {
+            return;
+          },
           style: 'cancel',
         },
-        {text: 'OK', onPress: this.onCancelPress},
+        { text: 'OK', onPress: this.onCancelPress },
       ],
-      {cancelable: false},
+      { cancelable: false }
     );
-  }
+  };
 
   onCancelPress = () => {
     const { navigation } = this.props;
@@ -259,40 +261,40 @@ export default class RideView extends Component {
       if (textValue === 'Go to pickup') {
         this.onPickUpPress();
         this.setState({
-          textValue: 'Tap to arrive'
+          textValue: 'Tap to arrive',
         });
       } else if (textValue === 'Tap to arrive') {
         this.setState({
-          textValue: 'Ready'
+          textValue: 'Ready',
         });
       } else if (textValue === 'Ready') {
         this.onDropOffPress();
         this.setState({
-          textValue: 'Drop off'
+          textValue: 'Drop off',
         });
       } else if (textValue === 'Drop off') {
         this.onWaitingPress();
         this.setState({
-          textValue: 'Waiting'
+          textValue: 'Waiting',
         });
       } else if (textValue === 'Waiting') {
         this.setState({
-          textValue: 'Ready 2 go back'
+          textValue: 'Ready 2 go back',
         });
       } else if (textValue === 'Ready 2 go back') {
         this.onReturnPickingUpPress();
         this.setState({
-          textValue: 'Ready to return'
+          textValue: 'Ready to return',
         });
       } else if (textValue === 'Ready to return') {
         this.setState({
-          textValue: 'Tap when Returned'
+          textValue: 'Tap when Returned',
         });
       } else if (textValue === 'Tap when Returned') {
         this.onReturnDroppingOffPress();
         this.onCompletePress();
         this.setState({
-          textValue: 'Returned'
+          textValue: 'Returned',
         });
         navigation.navigate('MainView');
       }
@@ -300,16 +302,16 @@ export default class RideView extends Component {
       if (textValue === 'Go to pickup') {
         this.onPickUpPress();
         this.setState({
-          textValue: 'Tap to arrive'
+          textValue: 'Tap to arrive',
         });
       } else if (textValue === 'Tap to arrive') {
         this.setState({
-          textValue: 'Ready'
+          textValue: 'Ready',
         });
       } else if (textValue === 'Ready') {
         this.onDropOffPress();
         this.setState({
-          textValue: 'Drop off'
+          textValue: 'Drop off',
         });
       } else if (textValue === 'Drop off') {
         this.onCompletePress();
@@ -369,7 +371,7 @@ export default class RideView extends Component {
               backgroundColor: '#475c67',
               borderRadius: 40,
               borderWidth: 1,
-              borderColor: '#fff'
+              borderColor: '#fff',
             }}
           >
             <View style={styles.timerContainer}>
@@ -380,14 +382,14 @@ export default class RideView extends Component {
               until={expected_wait_time * 60}
               onFinish={() =>
                 this.setState({
-                  textValue: 'Ready 2 go back'
+                  textValue: 'Ready 2 go back',
                 })
               }
               onPress={this.playSound()}
               digitStyle={{
                 backgroundColor: '#475c67',
                 borderWidth: 1,
-                borderColor: '#475c67'
+                borderColor: '#475c67',
               }}
               digitTxtStyle={{ color: '#fcfcf6' }}
               timeLabelStyle={{ color: '#fcfcf6' }} //make time labels invisible
@@ -416,13 +418,13 @@ export default class RideView extends Component {
               <TextMask
                 type={'custom'}
                 options={{
-                  mask: '(999) 999-9999'
+                  mask: '(999) 999-9999',
                 }}
                 style={styles.textMask}
                 value={phone}
                 onChangeText={text => {
                   this.setState({
-                    phone: text
+                    phone: text,
                   });
                 }}
               />
@@ -484,7 +486,7 @@ export default class RideView extends Component {
               rounded
               source={{
                 uri:
-                  'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg'
+                  'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
               }}
               containerStyle={styles.avatarContainer}
             />
@@ -504,7 +506,7 @@ export default class RideView extends Component {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-evenly',
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             <Text>{this.state.pickup_to_dropoff}</Text>
@@ -527,12 +529,12 @@ export default class RideView extends Component {
               'waze',
               'yandex',
               'moovit',
-              'yandex-maps'
+              'yandex-maps',
             ]}
             modalProps={{ animationIn: 'slideInUp' }}
             options={{
               latitude,
-              longitude
+              longitude,
             }}
           />
           {this.renderOverview()}
