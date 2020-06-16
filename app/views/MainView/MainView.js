@@ -16,6 +16,7 @@ import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
 import { CalendarButton } from '../../components/Button';
 import styles from './styles';
+import moment from 'moment';
 import variables from '../../utils/variables';
 import API from '../../api/api';
 type Props = {};
@@ -150,13 +151,20 @@ export default class MainView extends Component<Props> {
     const reason = item.reason;
     const round_trip = item.round_trip;
     const expected_wait_time = item.expected_wait_time;
+    const pickup_to_dropoff_distance = item.pickup_to_dropoff_distance;
+    const pick_up_to_drop_off_time = item.pick_up_to_drop_off_time;
+    const default_to_pickup_distance = item.default_to_pickup_distance;
     console.log(
       'round trip ',
       round_trip,
       ', wait time: ',
       expected_wait_time,
-      ' & phone: ',
-      item
+      'pickup_to_dropoff_distance: ',
+      pickup_to_dropoff_distance,
+      ' & default_to_pickup_distance: ',
+      item.default_to_pickup_distance
+      // pickup_to_dropoff_distance,
+      // ' = PUTDOD'
     );
     return (
       <UpcomingRideCard
@@ -173,6 +181,9 @@ export default class MainView extends Component<Props> {
             phone,
             round_trip,
             expected_wait_time,
+            pickup_to_dropoff_distance,
+            pick_up_to_drop_off_time,
+            default_to_pickup_distance
           });
         }}
         date={item.pick_up_time}
