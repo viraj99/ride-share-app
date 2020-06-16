@@ -115,7 +115,7 @@ class RegisterVehicleForm extends React.Component {
       console.log('this is b4 Api entries', edited);
       API.updateSettingsVehicle(id, edited, token.token)
         .then(() => {
-          this.props.navigation.navigate('Settings');
+          this.props.navigation.navigate('Settings', { updatedVehicle: true });
           console.log('worked SO HARD');
         })
         .catch(err => {
