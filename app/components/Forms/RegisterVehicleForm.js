@@ -32,6 +32,7 @@ class RegisterVehicleForm extends React.Component {
   }
 
   componentDidMount = () => {
+    console.log(this.props);
     this.isItEditing();
   };
 
@@ -121,6 +122,7 @@ class RegisterVehicleForm extends React.Component {
           console.log('FAILED HORRIBLY');
         });
     } else {
+      console.log('inside the if statement of create  vehicle');
       API.createVehicle(userEntries, token.token).then(res => {
         console.log('resp from create Vehicle', res);
 
@@ -130,7 +132,7 @@ class RegisterVehicleForm extends React.Component {
         }
 
         if (this.props.navigation.state.params.isAdding) {
-          this.props.navigation.navigate('Settings');
+          this.props.navigation.navigate('Settings', { addedVehicle: true });
         } else {
           this.props.navigation.navigate('RegisterAvailability');
         }

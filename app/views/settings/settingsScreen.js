@@ -18,7 +18,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
 import styles from './settingsStyle.js';
 import API from '../../api/api';
-import { VehicleCard } from '../../components/Card';
+import { VehicleCard, LocationCard } from '../../components/Card';
 
 import Animated from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -84,6 +84,14 @@ class Settings extends Component {
           console.log('state for locations', this.state.locations);
         });
       });
+
+      API.getVehicle(token.token).then(response => {
+        const vehicles = response.vehicle;
+        console.log('vehicles from API :', vehicles);
+        this.setState({
+          vehicles,
+        });
+      });
     }
   };
 
@@ -116,13 +124,12 @@ class Settings extends Component {
             this.setState({
               vehicles,
             });
+          });
 
-            //SET LOCATION
-            API.getLocations(tokenValue).then(res => {
-              const locations = res.locations;
-              this.setState({ locations }, () => {
-                console.log('state for locations', this.state.locations);
-              });
+          API.getLocations(tokenValue).then(res => {
+            const locations = res.locations;
+            this.setState({ locations }, () => {
+              console.log('state for locations', this.state.locations);
             });
           });
         })
@@ -317,77 +324,77 @@ class Settings extends Component {
     }
   };
 
-  renderLocations = () => {
-    const { navigation } = this.props;
-    return (
-      <FlatList
-        data={this.state.locations}
-        renderItem={item => {
-          console.log('rendering flatlist', item);
-          return (
-            <View
-              style={{
-                padding: 5,
-                paddingLeft: 10,
-                paddingTop: 10,
-                flex: 1,
-                flexDirection: 'row',
-              }}
-            >
-              <Text style={{ fontSize: 16, color: '#475c67' }}>
-                {item.item.street}
-              </Text>
-              <Text style={{ fontSize: 16, color: '#475c67' }}>
-                , {item.item.city}
-              </Text>
-              <Text style={{ fontSize: 16, color: '#475c67' }}>
-                , {item.item.state}
-              </Text>
-              <Text style={{ fontSize: 16, color: '#475c67' }}>
-                {' '}
-                {item.item.zip}
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'absolute',
-                  right: 0,
-                  paddingTop: 5,
-                }}
-              >
-                {item.item.default_location && (
-                  <View>
-                    <Icon color="#ff8262" name="check-bold" size={25}></Icon>
-                  </View>
-                )}
-                <View style={{ paddingLeft: 10 }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log('pressed edit');
-                      navigation.navigate('LocationScreen', {
-                        location: item.item,
-                        edit: true,
-                      });
-                    }}
-                  >
-                    <Icon color="#ff8262" name="pencil" size={25}></Icon>
-                  </TouchableOpacity>
-                </View>
-                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                  <TouchableOpacity
-                    onPress={() => this.handleDeleteLocation(item.item.id)}
-                  >
-                    <Icon color="#ff8262" name="delete" size={25} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          );
-        }}
-        keyExtractor={item => item.id.toString()}
-      />
-    );
-  };
+  // renderLocations = () => {
+  //   const { navigation } = this.props;
+  //   return (
+  //     <FlatList
+  //       data={this.state.locations}
+  //       renderItem={item => {
+  //         console.log('rendering flatlist', item);
+  //         return (
+  //           <View
+  //             style={{
+  //               padding: 5,
+  //               paddingLeft: 10,
+  //               paddingTop: 10,
+  //               flex: 1,
+  //               flexDirection: 'row',
+  //             }}
+  //           >
+  //             <Text style={{ fontSize: 16, color: '#475c67' }}>
+  //               {item.item.street}
+  //             </Text>
+  //             <Text style={{ fontSize: 16, color: '#475c67' }}>
+  //               , {item.item.city}
+  //             </Text>
+  //             <Text style={{ fontSize: 16, color: '#475c67' }}>
+  //               , {item.item.state}
+  //             </Text>
+  //             <Text style={{ fontSize: 16, color: '#475c67' }}>
+  //               {' '}
+  //               {item.item.zip}
+  //             </Text>
+  //             <View
+  //               style={{
+  //                 flexDirection: 'row',
+  //                 position: 'absolute',
+  //                 right: 0,
+  //                 paddingTop: 5,
+  //               }}
+  //             >
+  //               {item.item.default_location && (
+  //                 <View>
+  //                   <Icon color="#ff8262" name="check-bold" size={25}></Icon>
+  //                 </View>
+  //               )}
+  //               <View style={{ paddingLeft: 10 }}>
+  //                 <TouchableOpacity
+  //                   onPress={() => {
+  //                     console.log('pressed edit');
+  //                     navigation.navigate('LocationScreen', {
+  //                       location: item.item,
+  //                       edit: true,
+  //                     });
+  //                   }}
+  //                 >
+  //                   <Icon color="#ff8262" name="pencil" size={25}></Icon>
+  //                 </TouchableOpacity>
+  //               </View>
+  //               <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+  //                 <TouchableOpacity
+  //                   onPress={() => this.handleDeleteLocation(item.item.id)}
+  //                 >
+  //                   <Icon color="#ff8262" name="delete" size={25} />
+  //                 </TouchableOpacity>
+  //               </View>
+  //             </View>
+  //           </View>
+  //         );
+  //       }}
+  //       keyExtractor={item => item.id.toString()}
+  //     />
+  //   );
+  // };
 
   deleteVehicle = id => {
     Alert.alert('Delete this Vehicle?', '', [
@@ -404,12 +411,12 @@ class Settings extends Component {
           console.log('Number of times this runs');
           API.deleteVehicle(id, realToken)
             .then(result => {
-              newVehicles = [...this.state.vehicles];
-              updatedVehicleArray = newVehicles.filter(
-                vehicle => vehicle.id !== id
-              );
-              this.setState({
-                vehicles: updatedVehicleArray,
+              API.getVehicle(realToken).then(response => {
+                const vehicles = response.vehicle;
+                console.log('vehicles from API :', vehicles);
+                this.setState({
+                  vehicles,
+                });
               });
             })
             .catch(err => {
@@ -457,6 +464,7 @@ class Settings extends Component {
       return (
         <View>
           <FlatList
+            nestedScrollEnabled={true}
             data={this.state.vehicles}
             extraData={this.state}
             renderItem={item => this.Vehicles(item)}
@@ -476,7 +484,7 @@ class Settings extends Component {
     return (
       <View style={styles.container}>
         <SettingHeader onPress={this.handleBackButton} />
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}>
           <View>
             <View style={styles.settingSection} stickyHeaderIndices={[0]}>
               <View style={styles.section}>
@@ -648,7 +656,13 @@ class Settings extends Component {
                   </View>
                 </View>
               </View>
-              {this.state.locations && <View>{this.renderLocations()}</View>}
+              {this.state.locations && (
+                <LocationCard
+                  locations={this.state.locations}
+                  navigation={this.props.navigation}
+                  handleDeleteLocation={this.handleDeleteLocation}
+                />
+              )}
             </View>
           </View>
         </ScrollView>
@@ -658,3 +672,7 @@ class Settings extends Component {
 }
 
 export default Settings;
+
+{
+  /*  */
+}
