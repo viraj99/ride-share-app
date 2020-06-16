@@ -125,12 +125,7 @@ class RegisterVehicleForm extends React.Component {
           if (this.props.navigation.state.params.isAdding) {
             this.props.navigation.navigate('Settings');
           } else {
-            const editItem = {
-              id: null
-            };
-            this.props.navigation.navigate('RegisterAvailability', {
-              editItem
-            });
+            this.props.navigation.navigate('RegisterAvailability');
           }
         })
         .catch(error => {
@@ -223,7 +218,6 @@ class RegisterVehicleForm extends React.Component {
                 this.carYear = input;
               }}
               returnKeyType={'next'}
-              keyboardType={'number-pad'}
               onSubmitEditing={() => {
                 this.carBelts.focus();
               }}
@@ -242,7 +236,6 @@ class RegisterVehicleForm extends React.Component {
                 this.carBelts = input;
               }}
               returnKeyType={'next'}
-              keyboardType={'number-pad'}
               onSubmitEditing={() => {
                 this.carColor.focus();
               }}
@@ -297,7 +290,7 @@ class RegisterVehicleForm extends React.Component {
                 this.carInsur = input;
               }}
               value={insurance_provider}
-              returnKeyType={'next'}
+              returnKeyType={'done'}
               style={[styles.saeInputAlt]}
               inputStyle={styles.saeTextAlt}
             />
@@ -316,39 +309,15 @@ class RegisterVehicleForm extends React.Component {
             />
 
             {this.props.navigation.state.params.isEditing ? (
-              <View>
-                <Button
-                  title={moment(insurance_start).format('MMMM D, YYYY')}
-                  onPress={this.showPicker1}
-                  color="#475c67"
-                />
-                {picker1 && (
-                  <DateTimePicker
-                    value={new Date(insurance_start)}
-                    display="default"
-                    mode="date"
-                    onChange={this.setStartDate}
-                  />
-                )}
-              </View>
+              <Text style={styles.displaySelection}>
+                Selected date:
+                {moment(insurance_start).format('MMMM D, YYYY')}
+              </Text>
             ) : (
-              <View>
-                <Button
-                  title={moment(this.state.insurStartDate).format(
-                    'MMMM D, YYYY'
-                  )}
-                  onPress={this.showPicker1}
-                  color="#475c67"
-                />
-                {picker1 && (
-                  <DateTimePicker
-                    value={new Date()}
-                    display="default"
-                    mode="date"
-                    onChange={this.setStartDate}
-                  />
-                )}
-              </View>
+              <Text style={styles.displaySelection}>
+                Selected date:{' '}
+                {moment(this.state.insurStartDate).format('MMMM D, YYYY')}
+              </Text>
             )}
 
             <Text />
@@ -367,37 +336,15 @@ class RegisterVehicleForm extends React.Component {
             />
 
             {this.props.navigation.state.params.isEditing ? (
-              <View>
-                <Button
-                  title={moment(insurance_stop).format('MMMM D, YYYY')}
-                  onPress={this.showPicker2}
-                  color="#475c67"
-                />
-                {picker2 && (
-                  <DateTimePicker
-                    value={new Date(insurance_stop)}
-                    display="default"
-                    mode="date"
-                    onChange={this.setEndDate}
-                  />
-                )}
-              </View>
+              <Text style={styles.displaySelection}>
+                Selected date:
+                {moment(insurance_stop).format('MMMM D, YYYY')}
+              </Text>
             ) : (
-              <View>
-                <Button
-                  title={moment(this.state.insurEndDate).format('MMMM D, YYYY')}
-                  onPress={this.showPicker2}
-                  color="#475c67"
-                />
-                {picker2 && (
-                  <DateTimePicker
-                    value={new Date()}
-                    display="default"
-                    mode="date"
-                    onChange={this.setEndDate}
-                  />
-                )}
-              </View>
+              <Text style={styles.displaySelection}>
+                Selected date:{' '}
+                {moment(this.state.insurEndDate).format('MMMM D, YYYY')}
+              </Text>
             )}
 
             <Text />

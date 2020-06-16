@@ -33,10 +33,7 @@ class AddAvailability extends React.Component {
   componentDidMount() {}
 
   setStartDate = (event, date) => {
-    date = date || this.state.start_date;
-
     this.setState({
-      start_date: date,
       startDate: date,
       stDatePicker: false
     });
@@ -44,10 +41,7 @@ class AddAvailability extends React.Component {
   };
 
   setStartTime = (event, time) => {
-    time = time || this.state.start_time;
-
     this.setState({
-      start_time: time,
       startTime: time,
       stTimePicker: false
     });
@@ -55,10 +49,7 @@ class AddAvailability extends React.Component {
   };
 
   setEndTime = (event, time) => {
-    time = time || this.state.end_time;
-
     this.setState({
-      end_time: time,
       endTime: time,
       endTimePicker: false
     });
@@ -66,10 +57,7 @@ class AddAvailability extends React.Component {
   };
 
   setEndDate = (event, date) => {
-    date = date || this.state.end_date;
-
     this.setState({
-      end_date: date,
       endDate: date,
       endDatePicker: false
     });
@@ -175,17 +163,12 @@ class AddAvailability extends React.Component {
 
     let availabilitySelectors;
     let {
-      start_date,
-      start_time,
-      end_time,
-      end_date,
       stDatePicker,
       stTimePicker,
       endTimePicker,
       endDatePicker
     } = this.state;
     const { navigation } = this.props;
-    const current = new Date();
 
     if (editItem.id === null) {
       return (
@@ -214,7 +197,7 @@ class AddAvailability extends React.Component {
                 </Text>
 
                 <Button
-                  title={moment(this.state.startDate).format('MMMM D, YYYY')}
+                  title="Pick a Date"
                   onPress={this.showStDatePicker}
                   color="#475c67"
                 />
@@ -237,13 +220,13 @@ class AddAvailability extends React.Component {
                 </Text>
 
                 <Button
-                  title={moment(this.state.startTime).format('h:mm A')}
+                  title="Pick a Time"
                   onPress={this.showStTimePicker}
                   color="#475c67"
                 />
                 {stTimePicker && (
                   <DateTimePicker
-                    value={new Date(current.setHours(12, 0, 0, 0))}
+                    value={new Date()}
                     display="default"
                     mode="time"
                     display="spinner"
@@ -260,25 +243,25 @@ class AddAvailability extends React.Component {
                 </Text>
 
                 <Button
-                  title={moment(this.state.endTime).format('h:mm A')}
+                  title="Pick a Time"
                   onPress={this.showEndTimePicker}
                   color="#475c67"
                 />
                 {endTimePicker && (
                   <DateTimePicker
-                    value={new Date(current.setHours(12, 0, 0, 0))}
+                    value={new Date()}
                     display="default"
                     mode="time"
                     display="spinner"
                     onChange={this.setEndTime}
                   />
                 )}
+                <Text style={styles.displaySelection}>
+                  Selected time: {moment(this.state.endTime).format('h:mm A')}
+                </Text>
 
                 <Text style={styles.labelStyleAvail}>
-                  Is this availability recurring?
-                </Text>
-                <Text>
-                  {'    '}NOTE: Recurring availabilities default to WEEKLY
+                  Is this availability recurring?{' '}
                 </Text>
                 <ModalDropdown
                   defaultValue="Select One"
@@ -299,7 +282,7 @@ class AddAvailability extends React.Component {
                       Date to End Recurring Availability:
                     </Text>
                     <Button
-                      title={moment(this.state.endDate).format('MMMM D, YYYY')}
+                      title="Pick a Date"
                       onPress={this.showEndDatePicker}
                       color="#475c67"
                     />
@@ -438,10 +421,7 @@ class AddAvailability extends React.Component {
                 </Text>
 
                 <Text style={styles.labelStyleAvail}>
-                  Is this availability recurring?
-                </Text>
-                <Text>
-                  {'    '}NOTE: Recurring availabilities default to WEEKLY
+                  Is this availability recurring?{' '}
                 </Text>
                 <Text style={styles.labelStyleAvail}>
                   Current selection: {editItem.isRecurring ? 'Yes' : 'No'}
