@@ -16,7 +16,7 @@ const InitOverviewCard = ({
   note,
   pickup_to_dropoff_distance,
   pickup_to_dropoff_time,
-  default_to_pickup_distance
+  default_to_pickup_distance,
 }) => (
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
@@ -96,21 +96,9 @@ const InitOverviewCard = ({
               Approximate time it will take to be Determined
             </Text>
           )}
-          {/* <Text style={styles.noteText}></Text> */}
         </Block>
-        {/* </ScrollView> */}
       </Block>
     </View>
-    {/* <View style={[styles.cardContainer, styles.noteContainer, styles.shadow]}>
-      <Block style={styles.noteCard}>
-        <ScrollView>
-          <Block>
-            <Text style={styles.title}>Notes For Ride</Text>
-            <Text style={styles.noteText}>{note}</Text>
-          </Block>
-        </ScrollView>
-      </Block>
-    </View> */}
   </Block>
 );
 export default InitOverviewCard;
