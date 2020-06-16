@@ -15,6 +15,7 @@ class RegisterDriverForm extends React.Component {
       orgs: [],
       orgNum: 1,
       radius: 0,
+      error: '',
     };
   }
 
@@ -62,18 +63,15 @@ class RegisterDriverForm extends React.Component {
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
     if (this.props.navigation.state.params === undefined) {
-      API.createDriver(userData)
-        .then(res => {
-          const firstTime = true;
-          this.autoLogin(userData, firstTime);
-        })
-        //if error performing API fetch for posting driver, show error
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
+      API.createDriver(userData).then(res => {
+        console.log('response from creating driver', res);
+
+        if (res.error) {
+          this.setState({ error: res.error });
+        }
+        this.autoLogin(userData);
+      });
+      //if error performing API fetch for posting driver, show err
     } else {
       console.log('params defined', this.props.navigation.state.params);
       AsyncStorage.getItem('token', (err, result) => {
@@ -92,11 +90,14 @@ class RegisterDriverForm extends React.Component {
     }
   };
 
-  autoLogin = (userEntries, setLocation) => {
+  autoLogin = userEntries => {
     console.log('testing in driver form: ', this.props.navigation);
     //use API file, login fx to create a token in order to add vehicle data to driver
     //login fx requries email and password as params
-    API.login(userEntries.driver.email.toLowerCase(), userEntries.driver.password)
+    API.login(
+      userEntries.driver.email.toLowerCase(),
+      userEntries.driver.password
+    )
       //after sending email and pword, get auth_token
       .then(res => {
         const obj = {
@@ -190,6 +191,7 @@ class RegisterDriverForm extends React.Component {
                 onChangeText={text => this.setState({ phone: text })}
                 placeholderTextColor="#C0C0C0"
                 placeholder="9195551234"
+                keyboardType="phone-pad"
                 ref={input => {
                   this.phone = input;
                 }}
@@ -202,7 +204,6 @@ class RegisterDriverForm extends React.Component {
                 inputStyle={styles.saeTextAlt}
               />
 
-
               {/* Input for Volunteer Driver's Email Address; 
             NOTE: IF AN EMAIL IS A DUPLICATE TO ONE ALREADY IN ANY ORG, IT WILL NOT SUBMIT! */}
               <Text style={styles.labelStyleAlt}>Email:</Text>
@@ -210,6 +211,7 @@ class RegisterDriverForm extends React.Component {
                 onChangeText={text => this.setState({ email: text })}
                 placeholderTextColor="#C0C0C0"
                 placeholder="example@example.com"
+                keyboardType="email-address"
                 ref={input => {
                   this.email = input;
                 }}
@@ -227,7 +229,8 @@ class RegisterDriverForm extends React.Component {
               <TextInput
                 onChangeText={text => this.setState({ password: text })}
                 placeholderTextColor="#C0C0C0"
-                placeholder="password"
+                multiline="true"
+                placeholder="8 characters long and must contain UPPER CASE, lower case, symbol (e.g !@#$%)"
                 ref={input => {
                   this.password = input;
                 }}
@@ -272,7 +275,14 @@ class RegisterDriverForm extends React.Component {
                 style={styles.modalDropdown}
               />
             </View>
-            <Block style={styles.footer}>
+            {this.state.error != '' && (
+              <View
+                style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 10 }}
+              >
+                <Text style={styles.errorMessage}>{this.state.error}</Text>
+              </View>
+            )}
+            <View style={styles.footer}>
               <CalendarButton
                 title="Continue"
                 onPress={
@@ -280,7 +290,7 @@ class RegisterDriverForm extends React.Component {
                   this.handleUserSubmit
                 }
               />
-            </Block>
+            </View>
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>

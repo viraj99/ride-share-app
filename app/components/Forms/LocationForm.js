@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Switch } from 'react-native';
-import { CalendarButton } from '../../components/Button';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Switch,
+  Keyboard,
+} from 'react-native';
+import { CalendarButton } from '../Button';
 import API from '../../api/api';
-import styles from './locationStyle.js';
+import styles from './locationStyles.js';
 import AsyncStorage from '@react-native-community/async-storage';
 
-class LocationScreen extends Component {
+class LocationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,7 +125,7 @@ class LocationScreen extends Component {
           placeholder="Street"
           returnKeyType={'next'}
           onSubmitEditing={() => {
-            this.street.focus();
+            this.city.focus();
           }}
           value={street}
           blurOnSubmit={false}
@@ -131,8 +138,9 @@ class LocationScreen extends Component {
           placeholderTextColor="#C0C0C0"
           placeholder="City"
           returnKeyType={'next'}
+          ref={input => (this.city = input)}
           onSubmitEditing={() => {
-            this.city.focus();
+            this.state_initials.focus();
           }}
           value={city}
           blurOnSubmit={false}
@@ -146,8 +154,11 @@ class LocationScreen extends Component {
           placeholderTextColor="#C0C0C0"
           placeholder="State"
           returnKeyType={'next'}
+          ref={input => {
+            this.state_initials = input;
+          }}
           onSubmitEditing={() => {
-            this.state_initials.focus();
+            this.zip_code.focus();
           }}
           value={state_initials}
           blurOnSubmit={false}
@@ -161,6 +172,9 @@ class LocationScreen extends Component {
           placeholderTextColor="#C0C0C0"
           placeholder="Zip Code"
           returnKeyType={'next'}
+          ref={input => {
+            this.zip_code = input;
+          }}
           onSubmitEditing={() => {
             this.zip_code.focus();
           }}
@@ -177,12 +191,9 @@ class LocationScreen extends Component {
           placeholderTextColor="#C0C0C0"
           placeholder="Notes"
           returnKeyType={'next'}
-          onSubmitEditing={() => {
-            this.notes.focus();
-          }}
           multiline={true}
           value={notes}
-          blurOnSubmit={false}
+          blurOnSubmit={true}
           style={styles.inputStyle}
           inputStyle={styles.onInputStyle}
         />
@@ -210,4 +221,4 @@ class LocationScreen extends Component {
   }
 }
 
-export default LocationScreen;
+export default LocationForm;

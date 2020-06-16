@@ -14,12 +14,11 @@ import {
   Settings,
   Register,
   RegisterVehicle,
-
   RegisterAvailability,
   ForgotPassword,
   Welcome,
 } from '../views';
-import LocationScreen from '../views/settings/LocationScreen'
+import LocationForm from '../components/Forms/LocationForm';
 // import VehicleSettings from '../views/settings/VehicleSettings'
 
 const MainViewStack = createStackNavigator(
@@ -27,20 +26,20 @@ const MainViewStack = createStackNavigator(
     MainView: {
       screen: MainView,
       navigationOptions: {
-        header: () => null
-      }
+        header: () => null,
+      },
     },
     AgendaView: {
       screen: AgendaView,
       navigationOptions: {
-        header: () => null
-      }
+        header: () => null,
+      },
     },
     AvailabilityView: {
       screen: AvailabilityView,
       navigationOptions: {
-        header: () => null
-      }
+        header: () => null,
+      },
     },
     RegisterAvailability: {
       screen: RegisterAvailability,
@@ -48,41 +47,41 @@ const MainViewStack = createStackNavigator(
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
         headerLeft: null,
-        gesturesEnabled: false
-      }
+        gesturesEnabled: false,
+      },
     },
     Settings: {
-      screen: Settings
+      screen: Settings,
     },
     RideView: {
       screen: RideView,
       navigationOptions: {
         headerTitle: 'Ride Overview',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#1EAA70',
         },
-        headerTintColor: '#fff'
-      }
+        headerTintColor: '#fff',
+      },
     },
     DriverScheduleView: {
       screen: DriverScheduleView,
       navigationOptions: {
         headerTitle: 'Scheduled Rides',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#1EAA70',
         },
-        headerTintColor: '#fff'
-      }
+        headerTintColor: '#fff',
+      },
     },
     RequestedRidesDetails: {
       screen: RequestedRidesDetails,
       navigationOptions: {
         headerTitle: 'Requested Ride Details',
         headerStyle: {
-          backgroundColor: '#1EAA70'
+          backgroundColor: '#1EAA70',
         },
-        headerTintColor: '#fff'
-      }
+        headerTintColor: '#fff',
+      },
     },
     RegisterVehicle: {
       screen: RegisterVehicle,
@@ -93,7 +92,7 @@ const MainViewStack = createStackNavigator(
       },
     },
     LocationScreen: {
-      screen: LocationScreen,
+      screen: LocationForm,
       navigationOptions: {
         headerTitle: 'Add Location',
         headerTitleStyle: {
@@ -102,14 +101,12 @@ const MainViewStack = createStackNavigator(
         },
         headerStyle: {
           backgroundColor: '#1EAA70',
-          
         },
         headerTintColor: '#fff',
-
-      }
+      },
     },
   },
- 
+
   {
     headerMode: 'screen',
     headerBackTitleVisible: false,
@@ -123,8 +120,8 @@ const AppStack = createStackNavigator(
   {
     headerMode: 'none',
     navigationOptions: {
-      headerVisible: false
-    }
+      headerVisible: false,
+    },
   }
 );
 
@@ -135,12 +132,12 @@ const RegisterStack = createStackNavigator(
       navigationOptions: {
         headerTransparent: true,
         headerTintColor: '#C5CCD6',
-        headerLeft: null
+        headerLeft: null,
       },
     },
   },
   {
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
   }
 );
 
@@ -149,32 +146,32 @@ const AuthStack = createStackNavigator(
     Welcome: {
       screen: Welcome,
       navigationOptions: {
-        header: () => null
-      }
+        header: () => null,
+      },
     },
     Login: {
       screen: Login,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6'
-      }
+        headerTintColor: '#C5CCD6',
+      },
     },
     ForgotPassword: {
       screen: ForgotPassword,
       navigationOptions: {
         headerTransparent: true,
-        headerTintColor: '#C5CCD6'
-      }
+        headerTintColor: '#C5CCD6',
+      },
     },
     Register: {
       screen: RegisterStack,
       navigationOptions: {
-        header: () => null
-      }
-    }
+        header: () => null,
+      },
+    },
   },
   {
-    headerBackTitleVisible: false
+    headerBackTitleVisible: false,
   }
 );
 
@@ -182,10 +179,10 @@ const AppStackNavigator = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: AppStack,
-    Auth: AuthStack
+    Auth: AuthStack,
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: 'AuthLoading',
   }
 );
 

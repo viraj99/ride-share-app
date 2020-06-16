@@ -142,4 +142,11 @@ export default StyleSheet.create({
   dropdownStyle: {
     width: '100%',
   },
+  errorMessage: {
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight: 10,
+    fontSize: 18,
+    color: '#D8000C',
+  },
 });

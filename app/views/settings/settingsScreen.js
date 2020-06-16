@@ -475,8 +475,8 @@ class Settings extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
+        <SettingHeader onPress={this.handleBackButton} />
         <ScrollView>
-          <SettingHeader onPress={this.handleBackButton} />
           <View>
             <View style={styles.settingSection} stickyHeaderIndices={[0]}>
               <View style={styles.section}>

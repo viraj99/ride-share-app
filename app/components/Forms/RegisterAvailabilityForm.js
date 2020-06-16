@@ -24,17 +24,42 @@ class RegisterAvailabilityForm extends React.Component {
       locations: [],
       locationData: [],
       selectedLocation: {},
+      is_recurring: 'false',
     };
   }
 
   componentDidMount = async () => {
+    const { item } = this.props.navigation.state.params;
     let token = await AsyncStorage.getItem('token');
     token = JSON.parse(token);
     console.log('token', token);
+    console.log(
+      'avail item inside edit',
+      this.props.navigation.state.params.item
+    );
+
+    if (item.id !== null) {
+      console.log('setting state for form');
+      if (item.isRecurring) {
+        //set recurring data in state
+      }
+
+      // set props data to state
+      this.setState(
+        {
+          startDate: item.day,
+          startTime: item.startTime,
+          endTime: item.endTime,
+        },
+        () => console.log('this is state', this.state)
+      );
+    }
+
     API.getLocations(token.token).then(res => {
       const locations = res.locations;
       let locationData = [...this.state.locationData];
       locations.map(location => {
+        console.log('locations', location);
         const value = {
           value:
             location.street +
@@ -45,6 +70,11 @@ class RegisterAvailabilityForm extends React.Component {
             ' ' +
             location.zip,
         };
+
+        if (location.default_location) {
+          value.value += ' (Default)';
+        }
+
         locationData.push(value);
       });
       this.setState({ locationData });
@@ -108,26 +138,18 @@ class RegisterAvailabilityForm extends React.Component {
     let endDate = userEntries.end_date;
 
     //use API file, createAvailability fx to send user's availability to database; token required
-    API.createAvailability(userEntries, recurring, endDate, token.token)
-      .then(response => {
+    API.createAvailability(userEntries, recurring, endDate, token.token).then(
+      response => {
         console.log('AVAILABILLITY RES: ', response);
+
+        if (response.error) {
+          this.setState({ error: response.error });
+          return;
+        }
+
         this.props.navigation.navigate('AgendaView', { response: response });
-      })
-      .catch(err => {
-        console.log('AVAILABILLITY RES: ', err);
-        this.setState(
-          {
-            errorMessage: err,
-          },
-          () => {
-            showMessage({
-              message: 'There was an error: ',
-              description: this.state.errorMessage.error,
-              type: 'danger',
-            });
-          }
-        );
-      });
+      }
+    );
   };
 
   render() {
@@ -220,7 +242,7 @@ class RegisterAvailabilityForm extends React.Component {
               <Dropdown
                 data={[{ value: 'Yes' }, { value: 'No' }]}
                 label="Picked"
-                value="Select Option"
+                value="No"
                 containerStyle={{
                   bottom: 15,
                   paddingLeft: 15,
@@ -266,31 +288,59 @@ class RegisterAvailabilityForm extends React.Component {
                 //   blurOnSubmit={false}>
               />
             } */}
+              {this.state.locationData.length > 0 && (
+                <View>
+                  <Text style={styles.labelStyleAvail}>Set Location</Text>
+                  <Dropdown
+                    data={this.state.locationData}
+                    label="Location"
+                    value="Select location"
+                    containerStyle={{
+                      bottom: 15,
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                    }}
+                    fontSize={18}
+                    onChangeText={(location, index) =>
+                      this.handleLocationChange(location, index)
+                    }
+                  />
+                </View>
+              )}
 
-              <Text style={styles.labelStyleAvail}>Set Location</Text>
-              <Dropdown
-                data={this.state.locationData}
-                label="Location"
-                value="Select location"
-                containerStyle={{
-                  bottom: 15,
-                  paddingLeft: 15,
-                  paddingRight: 15,
-                }}
-                fontSize={18}
-                onChangeText={(location, index) =>
-                  this.handleLocationChange(location, index)
-                }
-              />
+              {this.state.locationData.length === 0 && (
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    paddingLeft: 15,
+                    paddingRight: 10,
+                    fontSize: 18,
+                    color: '#D8000C',
+                  }}
+                >
+                  Please add a location to submit availability
+                </Text>
+              )}
 
-              <Block style={styles.footer}>
-                <CalendarButton
-                  title="Submit"
-                  onPress={() =>
-                    this.handleUserSubmit(userEntries, this.state.is_recurring)
-                  }
-                />
-              </Block>
+              {this.state.error != '' && (
+                <View>
+                  <Text style={styles.errorMessage}>{this.state.error}</Text>
+                </View>
+              )}
+
+              {this.state.locationData.length > 0 && (
+                <Block style={styles.footer}>
+                  <CalendarButton
+                    title="Submit"
+                    onPress={() =>
+                      this.handleUserSubmit(
+                        userEntries,
+                        this.state.is_recurring
+                      )
+                    }
+                  />
+                </Block>
+              )}
             </View>
           </KeyboardAwareScrollView>
         </Block>

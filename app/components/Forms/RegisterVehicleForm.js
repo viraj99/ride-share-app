@@ -14,7 +14,7 @@ class RegisterVehicleForm extends React.Component {
     super(props);
     this.state = {
       editedEntries: {
-        vehicle: {}
+        vehicle: {},
       },
       picker1: false,
       picker2: false,
@@ -26,7 +26,8 @@ class RegisterVehicleForm extends React.Component {
       seat_belt_num: '',
       insurance_provider: '',
       insurance_start: '',
-      insurance_stop: ''
+      insurance_stop: '',
+      error: '',
     };
   }
 
@@ -39,7 +40,7 @@ class RegisterVehicleForm extends React.Component {
       const vehicle = this.props.navigation.state.params.vehicle.item;
       this.setState({
         editedEntries: {
-          vehicle: {}
+          vehicle: {},
         },
         car_make: vehicle.car_make,
         car_model: vehicle.car_model,
@@ -49,7 +50,7 @@ class RegisterVehicleForm extends React.Component {
         seat_belt_num: vehicle.seat_belt_num,
         insurance_provider: vehicle.insurance_provider,
         insurance_start: vehicle.insurance_start,
-        insurance_stop: vehicle.insurance_stop
+        insurance_stop: vehicle.insurance_stop,
       });
     } else {
       return null;
@@ -62,7 +63,7 @@ class RegisterVehicleForm extends React.Component {
       show: Platform.OS === 'ios' ? true : false,
       insurance_start: date,
       insurStartDate: date,
-      picker1: false
+      picker1: false,
     });
   };
 
@@ -71,7 +72,7 @@ class RegisterVehicleForm extends React.Component {
     this.setState({
       insurance_stop: date,
       insurEndDate: date,
-      picker2: false
+      picker2: false,
     });
   };
 
@@ -120,20 +121,20 @@ class RegisterVehicleForm extends React.Component {
           console.log('FAILED HORRIBLY');
         });
     } else {
-      API.createVehicle(userEntries, token.token)
-        .then(() => {
-          if (this.props.navigation.state.params.isAdding) {
-            this.props.navigation.navigate('Settings');
-          } else {
-            this.props.navigation.navigate('RegisterAvailability');
-          }
-        })
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
+      API.createVehicle(userEntries, token.token).then(res => {
+        console.log('resp from create Vehicle', res);
+
+        if (res.error) {
+          this.setState({ error: res.error });
+          return;
+        }
+
+        if (this.props.navigation.state.params.isAdding) {
+          this.props.navigation.navigate('Settings');
+        } else {
+          this.props.navigation.navigate('RegisterAvailability');
+        }
+      });
     }
   };
 
@@ -148,8 +149,8 @@ class RegisterVehicleForm extends React.Component {
         seat_belt_num: this.state.seat_belt_num,
         insurance_provider: this.state.insurance_provider,
         insurance_start: moment(this.state.insurStartDate).format('YYYY-MM-DD'),
-        insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD')
-      }
+        insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD'),
+      },
     };
 
     const {
@@ -214,6 +215,7 @@ class RegisterVehicleForm extends React.Component {
               onChangeText={text => this.setState({ car_year: text })}
               placeholderTextColor="#C0C0C0"
               placeholder="YYYY"
+              keyboardType="numeric"
               ref={input => {
                 this.carYear = input;
               }}
@@ -235,6 +237,7 @@ class RegisterVehicleForm extends React.Component {
               ref={input => {
                 this.carBelts = input;
               }}
+              keyboardType="numeric"
               returnKeyType={'next'}
               onSubmitEditing={() => {
                 this.carColor.focus();
@@ -348,6 +351,12 @@ class RegisterVehicleForm extends React.Component {
             )}
 
             <Text />
+
+            {this.state.error !== '' && (
+              <View>
+                <Text style={styles.errorMessage}>{this.state.error}</Text>
+              </View>
+            )}
             <Block style={styles.footer}>
               <CalendarButton
                 title="Continue"

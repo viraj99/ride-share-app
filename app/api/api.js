@@ -306,7 +306,7 @@ export default {
       token,
       body: vehicle,
       method: 'POST',
-    }).then(res => console.log(res.json()));
+    });
   },
   createAvailability(availData, recurring, endDate, token) {
     console.log('before parsing: ', recurring);

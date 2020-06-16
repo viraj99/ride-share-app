@@ -43,7 +43,8 @@ class AgendaView extends React.Component {
           startTime: item.startTime,
           endTime: item.endTime,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd'),
+          day: item.startTime,
+          location: item.location,
         });
       } else {
         map.set(item.eventId, true);
@@ -52,7 +53,7 @@ class AgendaView extends React.Component {
           startTime: item.startTime,
           endTime: item.endTime,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd'),
+          day: item.startTime,
         });
       }
       this.setState({
@@ -142,6 +143,7 @@ class AgendaView extends React.Component {
 
   redirectToAddAvail = item => {
     const { navigation } = this.props;
+    console.log('item being passed to form', item);
     navigation.navigate('AvailabilityView', { item });
   };
 
