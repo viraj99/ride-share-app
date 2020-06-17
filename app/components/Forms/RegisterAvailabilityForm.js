@@ -39,7 +39,7 @@ class RegisterAvailabilityForm extends React.Component {
     );
 
     if (item.id !== null) {
-      console.log('setting state for form');
+      console.log('setting state for form', item);
       if (item.isRecurring) {
         //set recurring data in state
       }
@@ -48,8 +48,8 @@ class RegisterAvailabilityForm extends React.Component {
       this.setState(
         {
           startDate: item.day,
-          startTime: item.startTime,
-          endTime: item.endTime,
+          startTime: moment.utc(item.startTime).format('llll'),
+          endTime: moment.utc(item.endTime).format('llll'),
         },
         () => console.log('this is state', this.state)
       );
@@ -98,6 +98,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setStartTime = time => {
+    console.log('time', time);
     this.setState({
       startTime: time,
     });

@@ -104,6 +104,7 @@ class AgendaView extends React.Component {
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
     let start = moment.utc(item.startTime).format('h:mm A');
+    console.log('start', start);
     let end = moment.utc(item.endTime).format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
