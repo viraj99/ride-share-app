@@ -7,26 +7,24 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#1EAA70',
     height: Platform.OS == 'ios' ? 120 : 80,
-    marginTop: Platform.OS == 'android' ? 0 : 0
+    marginTop: Platform.OS == 'android' ? 0 : 0,
   },
   componentsContainer: {
     paddingTop: Platform.OS == 'ios' ? 55 : 0,
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
   },
   backButtonContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   headerTextContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingRight: 120
+    flex: 3,
+    paddingLeft: 20,
   },
   headerText: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: '#ffffff'
-  }
+    color: '#ffffff',
+  },
 });

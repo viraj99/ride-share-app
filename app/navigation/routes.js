@@ -94,15 +94,9 @@ const MainViewStack = createStackNavigator(
     LocationScreen: {
       screen: LocationForm,
       navigationOptions: {
-        headerTitle: 'Add Location',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 25,
-        },
-        headerStyle: {
-          backgroundColor: '#1EAA70',
-        },
-        headerTintColor: '#fff',
+        headerTransparent: true,
+        headerTintColor: '#C5CCD6',
+        headerLeft: null,
       },
     },
   },

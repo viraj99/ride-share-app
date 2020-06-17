@@ -45,9 +45,11 @@ export default class MainView extends Component<Props> {
 
   componentDidMount() {
     this.state.isNewRegistered ? this.newRegistrationAlert() : null;
+    console.log('main view');
   }
 
   handleToken = async () => {
+    console.log('handle token called');
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
