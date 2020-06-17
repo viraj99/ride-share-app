@@ -33,7 +33,7 @@
     "react-native-map-link": "^2.5.2",
     "react-native-masked-text": "1.13.0",
     "react-native-modal-datetime-picker": "8.1.2",
-    "react-native-modal-dropdown": "0.7.0",
+    "react-native-modal-dropdown": "git+https://github.com/siemiatj/react-native-modal-dropdown.git",
     "react-native-open-maps": "^0.3.4",
     "react-native-reanimated": "^1.4.0",
     "react-native-screens": "1.0.0-alpha.23",
