@@ -4,13 +4,14 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/AntDesign';
 import styles from './loginStyle';
 import API from '../../api/api';
 import Container from '../../components/Container';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Login extends Component {
     this.state = {
       user: '',
       pass: '',
-      errorMessage: ''
+      errorMessage: '',
     };
 
     this.focusNextField = this.focusNextField.bind(this);
@@ -29,13 +30,13 @@ class Login extends Component {
 
   handleUsername = text => {
     this.setState({
-      user: text
+      user: text,
     });
   };
 
   handlePassword = text => {
     this.setState({
-      pass: text
+      pass: text,
     });
   };
 
@@ -49,7 +50,7 @@ class Login extends Component {
       return null;
     }
     this.setState({
-      errorMessage: 'Please enter a valid email.'
+      errorMessage: 'Please enter a valid email.',
     });
   }
 
@@ -57,32 +58,26 @@ class Login extends Component {
     const { user, pass } = this.state;
     const { navigation } = this.props;
 
-    API.login(user, pass)
-      .then(res => {
-        const token = res.json.auth_token;
-        const userInfo = {
-          userIsActive: res.json.active,
-          userIsApproved: res.json.approved,
-        };
-        if (token === undefined) {
-          this.setState({
-            errorMessage: 'Invalid username or password.',
-          });
-        } else {
-          AsyncStorage.setItem('token', JSON.stringify({ token }));
-          navigation.navigate('MainView', {
-            isRegistering: false,
-            ...userInfo,
-          });
-        }
-        // console.log('login token', asynStorage.getItem('token'));
-      })
-      .catch(err => {
-        console.log('ERR', err);
+    API.login(user.toLowerCase(), pass).then(res => {
+      console.log('response from login', res);
+      const token = res.json.auth_token;
+      const userInfo = {
+        userIsActive: res.json.active,
+        userIsApproved: res.json.approved,
+      };
+      if (token === undefined) {
         this.setState({
-          errorMessage: 'Invalid username or password.'
+          errorMessage: 'Invalid username or password.',
         });
-      });
+      } else {
+        AsyncStorage.setItem('token', JSON.stringify({ token }));
+        navigation.navigate('MainView', {
+          isRegistering: false,
+          ...userInfo,
+        });
+      }
+      // console.log('login token', asynStorage.getItem('token'));
+    });
     // console.log('login token: ', AsyncStorage.getItem('token'));
   }
 
@@ -161,7 +156,7 @@ class Login extends Component {
                   <Text
                     style={{
                       textAlign: 'center',
-                      textDecorationLine: 'underline'
+                      textDecorationLine: 'underline',
                     }}
                   >
                     Forgot password?

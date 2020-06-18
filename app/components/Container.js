@@ -12,9 +12,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Container = ({children}) => (
+const Container = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.container}>{children}</View>
+    <View style={styles.container} >
+      {children}
+    </View>
   </TouchableWithoutFeedback>
 );
 

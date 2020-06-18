@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { apiBaseUrl } from '../utils/urls';
 
-
 const buildHeaders = (additionalHeaders, token) => {
   const authHeaders = token
     ? {
-      token: `${token}`,
-    }
+        token: `${token}`,
+      }
     : {};
   return {
     Accept: 'application/json',
@@ -31,25 +30,28 @@ const apiWrapper = async request => {
     headers: suppliedHeaders = {},
     token = null,
   } = request;
-
-  if (!path) {
-    throw new Error("'path' property not specified for fetch call");
+  try {
+    if (!path) {
+      throw new Error("'path' property not specified for fetch call");
+    }
+    const url = buildUrl(path, params);
+    const fetchConfig = {
+      method,
+      headers: buildHeaders(suppliedHeaders, token),
+      body: JSON.stringify(body),
+    };
+    const response = await fetch(url, fetchConfig);
+    console.log('url:', url);
+    console.log('fetchconfig:', fetchConfig);
+    console.log('response:', response);
+    if (response.ok) {
+      return await response.json();
+    }
+    throw await response.json();
+  } catch (err) {
+    console.log('inside error of api wrapper', err);
+    return err;
   }
-  const url = buildUrl(path, params);
-  const fetchConfig = {
-    method,
-    headers: buildHeaders(suppliedHeaders, token),
-    body: JSON.stringify(body),
-  };
-  const response = await fetch(url, fetchConfig);
-  console.log('url:', url);
-  console.log('fetchconfig:', fetchConfig);
-  console.log('response:', response);
-  if (response.ok) {
-    return await response.json();
-  }
-  throw await response.json();
 };
-
 
 export default apiWrapper;

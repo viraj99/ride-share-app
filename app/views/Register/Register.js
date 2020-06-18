@@ -8,7 +8,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: []
+      errors: [],
     };
   }
   handleBackButton = () => {
@@ -22,6 +22,7 @@ class Register extends Component {
     return (
       <Container>
         <RegisterHeader onPress={this.handleBackButton} title={'Driver Info'} />
+
         <RegisterDriverForm subTitle={subTitle} navigation={navigation} />
       </Container>
     );

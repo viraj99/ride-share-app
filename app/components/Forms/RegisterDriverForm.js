@@ -15,6 +15,7 @@ class RegisterDriverForm extends React.Component {
       orgs: [],
       orgNum: 1,
       radius: 0,
+      error: '',
     };
   }
 
@@ -62,18 +63,15 @@ class RegisterDriverForm extends React.Component {
     // console.log('isEditing', this.props.navigation.state.params.isEditing);
     //use API file, createDriver fx to send user inputs to database
     if (this.props.navigation.state.params === undefined) {
-      API.createDriver(userData)
-        .then(res => {
-          console.log("response", res);
-          this.autoLogin(userData);
-        })
-        //if error performing API fetch for posting driver, show error
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
+      API.createDriver(userData).then(res => {
+        console.log('response from creating driver', res);
+
+        if (res.error) {
+          this.setState({ error: res.error });
+        }
+        this.autoLogin(userData);
+      });
+      //if error performing API fetch for posting driver, show err
     } else {
       console.log('params defined', this.props.navigation.state.params);
       AsyncStorage.getItem('token', (err, result) => {
@@ -96,36 +94,39 @@ class RegisterDriverForm extends React.Component {
     console.log('testing in driver form: ', this.props.navigation);
     //use API file, login fx to create a token in order to add vehicle data to driver
     //login fx requries email and password as params
-    try {
-      const token = await API.login(
-        userEntries.driver.email.toLowerCase(),
-        userEntries.driver.password
-      );
+    API.login(
+      userEntries.driver.email.toLowerCase(),
+      userEntries.driver.password
+    )
       //after sending email and pword, get auth_token
-      const obj = {
-        token: token.json.auth_token,
-      };
-      if (obj.token === undefined) {
+      .then(res => {
+        const obj = {
+          token: res.json.auth_token,
+        };
+        if (obj.token === undefined) {
+          this.setState({
+            errorMessage: 'Invalid username or password.',
+          });
+        } else {
+          //if API call for autologin upon driver data submit successful, store auth_token in local storage
+          AsyncStorage.setItem('token', JSON.stringify(obj));
+          console.log('in autoLogin: ', AsyncStorage.getItem('token'));
+
+          //redirect to vehicle registation
+          this.props.navigation.navigate('MainView', {
+            isRegistering: true,
+          });
+        }
+      })
+      .catch(err => {
         this.setState({
           errorMessage: 'Invalid username or password.',
         });
-      } else {
-        //if API call for autologin upon driver data submit successful, store auth_token in local storage
-        AsyncStorage.setItem('token', JSON.stringify(obj));
-        console.log('in autoLogin: ', AsyncStorage.getItem('token'));
-        //redirect to vehicle registation
-        this.props.navigation.navigate('MainView', {
-          isRegistering: true,
-        });
-      }
-    } catch (error) {
-      this.setState({
-        errorMessage: 'Invalid username or password.',
       });
-    }
   };
 
   getOrganizationId = name => {
+    console.log('getOrg', this.state.orgs);
     const selectedOrg = this.state.orgs.find(org => org.name === name);
     console.log(selectedOrg);
     this.setState({ orgNum: selectedOrg.id });
@@ -190,12 +191,13 @@ class RegisterDriverForm extends React.Component {
                 onChangeText={text => this.setState({ phone: text })}
                 placeholderTextColor="#C0C0C0"
                 placeholder="9195551234"
+                keyboardType="phone-pad"
                 ref={input => {
                   this.phone = input;
                 }}
                 returnKeyType={'next'}
                 onSubmitEditing={() => {
-                  this.email.focus();
+                  this.street.focus();
                 }}
                 blurOnSubmit={false}
                 style={[styles.saeInputAlt]}
@@ -209,6 +211,7 @@ class RegisterDriverForm extends React.Component {
                 onChangeText={text => this.setState({ email: text })}
                 placeholderTextColor="#C0C0C0"
                 placeholder="example@example.com"
+                keyboardType="email-address"
                 ref={input => {
                   this.email = input;
                 }}
@@ -226,7 +229,8 @@ class RegisterDriverForm extends React.Component {
               <TextInput
                 onChangeText={text => this.setState({ password: text })}
                 placeholderTextColor="#C0C0C0"
-                placeholder="password"
+                multiline="true"
+                placeholder="8 characters long and must contain UPPER CASE, lower case, symbol (e.g !@#$%)"
                 ref={input => {
                   this.password = input;
                 }}
@@ -271,7 +275,14 @@ class RegisterDriverForm extends React.Component {
                 style={styles.modalDropdown}
               />
             </View>
-            <Block style={styles.footer}>
+            {this.state.error != '' && (
+              <View
+                style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 10 }}
+              >
+                <Text style={styles.errorMessage}>{this.state.error}</Text>
+              </View>
+            )}
+            <View style={styles.footer}>
               <CalendarButton
                 title="Continue"
                 onPress={
@@ -279,7 +290,7 @@ class RegisterDriverForm extends React.Component {
                   this.handleUserSubmit
                 }
               />
-            </Block>
+            </View>
           </KeyboardAwareScrollView>
         </Block>
       </ScrollView>
