@@ -33,6 +33,8 @@ class RegisterAvailabilityForm extends React.Component {
           : moment.utc(params.item.endTime).format('llll'),
       },
       locationData: [],
+      locations: [],
+      selectedLocation: {},
     };
   }
 
@@ -120,7 +122,7 @@ class RegisterAvailabilityForm extends React.Component {
 
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async () => {
-    const { availData, isRecurring } = this.state;
+    const { availData, isRecurring, selectedLocation } = this.state;
     console.log('in handlesubmit: ', isRecurring);
 
     // alert(
@@ -129,9 +131,7 @@ class RegisterAvailabilityForm extends React.Component {
     let token = await AsyncStorage.getItem('token');
     token = JSON.parse(token);
 
-    console.log('right before createAvail API: ', userEntries);
-    userEntries.location_id = this.state.selectedLocation;
-    console.log('changing id', userEntries);
+    console.log('right before createAvail API: ', availData);
 
     let endDate = availData.endDate;
 
@@ -158,7 +158,7 @@ class RegisterAvailabilityForm extends React.Component {
       end_date: convertToUTC(endDate),
       //below values need to be changed, place-holding for now
       // Must pass a location from the driver.
-      location_id: 1,
+      location_id: selectedLocation,
     };
 
     // //use API file, createAvailability fx to send user's availability to database; token required
@@ -178,12 +178,19 @@ class RegisterAvailabilityForm extends React.Component {
     //use API file, createAvailability fx to send user's availability to database; token required
     // TODO: Use editAvailability api method here depending if user is editing entry.
     try {
+      console.log('uyser entries', userEntries);
       const response = await API.createAvailability(
         userEntries,
         isRecurring,
         endDate,
         token.token
       );
+
+      if (response.error) {
+        this.setState({ error: response.error });
+        return;
+      }
+
       showMessage({
         message: 'Availability Added. ',
         description: 'Thank you for volunteering!',
@@ -229,14 +236,6 @@ class RegisterAvailabilityForm extends React.Component {
             Selected date:
             {moment(startDate).format('MMMM D, YYYY')}
           </Text>
-          <View>
-            <DatePickerView
-              value={startDate}
-              display="default"
-              mode="date"
-              setDate={this.setStartDate}
-            />
-          </View>
 
           <Text style={styles.labelStyleAvail}>Availability Start Time:</Text>
           <View>
@@ -252,10 +251,6 @@ class RegisterAvailabilityForm extends React.Component {
 
           <Text style={styles.displaySelection}>
             Selected time: {moment(startTime).format('h:mm A')}
-          </Text>
-
-          <Text style={styles.displaySelection}>
-            Selected time: {moment(this.state.startTime).format('h:mm A')}
           </Text>
 
           <View>
@@ -372,9 +367,7 @@ class RegisterAvailabilityForm extends React.Component {
             <Block style={styles.footer}>
               <CalendarButton
                 title="Submit"
-                onPress={() =>
-                  this.handleUserSubmit(userEntries, this.state.is_recurring)
-                }
+                onPress={() => this.handleUserSubmit()}
               />
             </Block>
           )}
