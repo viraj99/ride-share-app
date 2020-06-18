@@ -487,25 +487,3 @@ class AddAvailability extends React.Component {
 }
 
 export default AddAvailability;
-
-//OLD CODE FOR APP USING CUSTOM BUILT SAE COMPONENT FOR INPUTS.....
-//
-//  {this.state.is_recurring === 'true' &&
-//    <Sae
-//      label="End Recurring Schedule Date (YYYY-MM-DD)"
-//      labelStyle={styles.labelStyle}
-//      inputPadding={16}
-//      labelHeight={24}
-//      // active border height
-//      borderHeight={2}
-//      borderColor="#475c67"
-//      style={[styles.saeInput]}
-//      inputStyle={styles.saeText}
-//      // TextInput props
-//      returnKeyType="next"
-//      onChangeText={text => this.props.handleChange(text, 'end_date')}
-//      ref={input => this.props.innerRef(input, 'EndDate')}
-//      onSubmitEditing={() => this.props.handleSubmitEditing('EndDate')}
-//      //   blurOnSubmit={false}>
-//      />
-//  }

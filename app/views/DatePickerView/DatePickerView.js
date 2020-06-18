@@ -3,7 +3,7 @@ import { Button, View } from 'react-native';
 import { Appearance } from 'react-native-appearance';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const DatePickerView = ({ setDate, mode, title }) => {
+const DatePickerView = ({ setDate, mode, title, dateProp }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -20,6 +20,14 @@ const DatePickerView = ({ setDate, mode, title }) => {
     setDate(date);
     hideDatePicker();
   };
+
+  // If is a string means comes from the backend, we should convert it to a Date.
+  let date = dateProp;
+  if (typeof date === 'string') {
+    console.log('INSIDE edit of string DATE');
+    date = new Date(dateProp);
+  }
+
   const colorScheme = Appearance.getColorScheme();
   return (
     <View>
@@ -33,7 +41,7 @@ const DatePickerView = ({ setDate, mode, title }) => {
         isVisible={isDatePickerVisible}
         isDarkModeEnabled={colorScheme === 'light' ? false : true}
         mode={mode}
-        date={new Date()}
+        date={date}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

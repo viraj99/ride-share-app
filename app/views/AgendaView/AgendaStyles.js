@@ -125,17 +125,20 @@ export default StyleSheet.create({
   componentsContainer: {
     paddingTop: Platform.OS == 'ios' ? 55 : 0,
     flexDirection: 'row',
-    flex: 1
   },
   backButtonContainer: {
-    flex: 1,
     alignItems: 'flex-start',
-    paddingLeft: 10
+    paddingLeft: 10,
+    position: 'absolute',
+    left: 5,
+    bottom: 10,
+    zIndex: 20,
   },
   headerTextContainer: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 120
+    justifyContent: 'center',
   },
   headerText: {
     fontWeight: 'bold',

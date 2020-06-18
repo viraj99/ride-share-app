@@ -13,7 +13,10 @@ const InitOverviewCard = ({
   pickupAddress,
   dropoffAddress,
   date,
-  note
+  note,
+  pickup_to_dropoff_distance,
+  pickup_to_dropoff_time,
+  default_to_pickup_distance,
 }) => (
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
@@ -61,20 +64,41 @@ const InitOverviewCard = ({
         <Block>
           <Text style={styles.title}>Reason For Ride</Text>
           <Text style={styles.noteText}>{note}</Text>
+          {default_to_pickup_distance >= 0 ? (
+            <Text style={styles.noteText}>
+              Distance from default to pickup is approximately{' '}
+              {default_to_pickup_distance} mile(s)
+            </Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate Distance will be displayed when you have accepted the
+              Ride
+            </Text>
+          )}
+          {pickup_to_dropoff_distance >= 0 ? (
+            <Text style={styles.noteText}>
+              Distance from pickup To dropoff is approximately{' '}
+              {pickup_to_dropoff_distance} mile(s)
+            </Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate Distance will be displayed when you have accepted the
+              Ride
+            </Text>
+          )}
+          {pickup_to_dropoff_time >= 0 ? (
+            <Text style={styles.noteText}>
+              Approximate time to arrive from pickup to dropoff{' '}
+              {pickup_to_dropoff_time} mins
+            </Text>
+          ) : (
+            <Text style={styles.noteText}>
+              Approximate time it will take to be Determined
+            </Text>
+          )}
         </Block>
-        {/* </ScrollView> */}
       </Block>
     </View>
-    {/* <View style={[styles.cardContainer, styles.noteContainer, styles.shadow]}>
-      <Block style={styles.noteCard}>
-        <ScrollView>
-          <Block>
-            <Text style={styles.title}>Notes For Ride</Text>
-            <Text style={styles.noteText}>{note}</Text>
-          </Block>
-        </ScrollView>
-      </Block>
-    </View> */}
   </Block>
 );
 export default InitOverviewCard;

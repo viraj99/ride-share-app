@@ -30,9 +30,7 @@ export default {
       path: REGISTER,
       params: 'password_reset',
       body: { email },
-      method: 'POST',
-    }).then(res => {
-      return res.json();
+      method: 'POST'
     });
   },
   getRides(token) {
@@ -157,7 +155,7 @@ export default {
         body: availability,
         method: 'PUT',
         params: eventID,
-      }).then(res => console.log(res.json()));
+      });
     } else {
       let avail = userEntries;
       avail = {
@@ -175,7 +173,7 @@ export default {
         body: avail,
         method: 'PUT',
         params: eventID,
-      }).then(res => console.log(res.json()));
+      });
     }
   },
   logout(token) {

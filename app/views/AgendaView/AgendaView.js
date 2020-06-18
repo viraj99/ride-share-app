@@ -46,7 +46,9 @@ class AgendaView extends React.Component {
         result.push({
           id: item.eventId,
           startTime: item.startTime,
+          startDate: item.startDate,
           endTime: item.endTime,
+          endDate: item.endDate,
           isRecurring: item.isRecurring,
           day: item.startTime,
           location: item.location,
@@ -56,7 +58,9 @@ class AgendaView extends React.Component {
         others.push({
           id: item.eventId,
           startTime: item.startTime,
+          startDate: item.startDate,
           endTime: item.endTime,
+          endDate: item.endDate,
           isRecurring: item.isRecurring,
           day: item.startTime,
         });
@@ -71,21 +75,21 @@ class AgendaView extends React.Component {
 
   testAMatch = item => {
     if (item.isRecurring === true) {
-      console.log('starting test a match');
+      // console.log('starting test a match');
       let { response, others } = this.state;
-      console.log('in test a match fx: ', response);
-      console.log('in test a match fx: ', others);
+      //console.log('in test a match fx: ', response);
+      //console.log('in test a match fx: ', others);
       let updatedRecur;
 
       for (const each of response) {
         const arrayOfMatchingDates = [];
         const lastDate = [];
         if (each.isRecurring === true) {
-          console.log('testing a match');
+          //console.log('testing a match');
           const testItem = each.id;
-          console.log('match is for item #: ', testItem);
+          //console.log('match is for item #: ', testItem);
           others.map(eachItem => {
-            console.log("eachItem I'm testing is: ", eachItem);
+            //console.log("eachItem I'm testing is: ", eachItem);
             if (eachItem.id === testItem) {
               // arrayOfMatchingDates.push(eachItem.startTime)
               // console.log("new array of matching:", arrayOfMatchingDates)
@@ -98,7 +102,7 @@ class AgendaView extends React.Component {
             // return endOfRecurrence
           });
           updatedRecur = lastDate[lastDate.length - 1];
-          console.log('Good! ', lastDate[lastDate.length - 1]);
+          //console.log('Good! ', lastDate[lastDate.length - 1]);
           return updatedRecur;
         }
       }
@@ -114,9 +118,9 @@ class AgendaView extends React.Component {
     let end = moment.utc(item.endTime).format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
-    console.log('what happens now? ', endDate);
+    //console.log('what happens now? ', endDate);
     let ending = moment(endDate).format('MMMM D, YYYY');
-    console.log('maybe? ', ending);
+    //console.log('maybe? ', ending);
 
     return (
       <View
@@ -169,26 +173,24 @@ class AgendaView extends React.Component {
 
   render() {
     let noItem = { id: null };
-    console.log('items from API call: ', this.state.response);
-    console.log('recurrences in API call: ', this.state.others);
+    // //console.log('items from API call: ', this.state.response);
+    // console.log('recurrences in API call: ', this.state.others);
     return (
       <Container>
         <NavigationEvents onDidFocus={() => this.getAvailability()} />
 
-        <View style={[styles.headerContainer]}>
-          <View style={styles.mainContainer}>
-            <View style={styles.componentsContainer}>
-              <View style={styles.backButtonContainer}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('MainView')}
-                >
-                  <Icon name="chevron-left" size={36} color="#ffffff" />
-                </TouchableOpacity>
-              </View>
+        <View style={styles.mainContainer}>
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('MainView')}
+            >
+              <Icon name="chevron-left" size={36} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.componentsContainer}>
 
-              <View style={styles.headerTextContainer}>
-                <Text style={styles.headerText}>Availability</Text>
-              </View>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerText}>Availability</Text>
             </View>
           </View>
         </View>
