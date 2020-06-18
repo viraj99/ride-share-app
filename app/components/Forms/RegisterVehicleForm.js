@@ -169,7 +169,7 @@ class RegisterVehicleForm extends React.Component {
 
     return (
       <ScrollView>
-        <Block middle>
+        <View onStartShouldSetResponder={() => true}>
           <View style={styles.section}>
             <View style={styles.sectionTitleContainer}>
               <Text style={styles.sectionTitle}>
@@ -364,7 +364,7 @@ class RegisterVehicleForm extends React.Component {
               onPress={() => this.handleUserSubmit(userEntries)}
             />
           </Block>
-        </Block>
+        </View>
       </ScrollView>
     );
   }

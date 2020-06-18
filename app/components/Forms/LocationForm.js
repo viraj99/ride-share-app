@@ -120,7 +120,7 @@ class LocationForm extends Component {
 
     const { street, city, state_initials, zip_code, notes } = this.state;
     return (
-      <Container style={styles.container}>
+      <Container>
         <LocationHeader
           onPress={this.handleBackButton}
           title={'Add Location'}

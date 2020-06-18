@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import styles from './loginStyle';
 import API from '../../api/api';
 import Container from '../../components/Container';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class Login extends Component {
   constructor(props) {
@@ -68,7 +69,7 @@ class Login extends Component {
         this.setState({
           errorMessage: 'Invalid username or password.',
         });
-      } else  {
+      } else {
         AsyncStorage.setItem('token', JSON.stringify({ token }));
         navigation.navigate('MainView', {
           isRegistering: false,

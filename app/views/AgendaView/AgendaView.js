@@ -30,6 +30,12 @@ class AgendaView extends React.Component {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
     console.log('from API: ', avails.json);
+
+    if (avails.json.length === 0) {
+      this.setState({ renderAvails: false });
+      return;
+    }
+
     const result = [];
     const others = [];
     const map = new Map();
@@ -58,6 +64,7 @@ class AgendaView extends React.Component {
       this.setState({
         response: result,
         others: others,
+        renderAvails: true,
       });
     }
   };
@@ -112,7 +119,10 @@ class AgendaView extends React.Component {
     console.log('maybe? ', ending);
 
     return (
-      <View style={[styles.availListItem]}>
+      <View
+        style={[styles.availListItem]}
+        onStartShouldSetResponder={() => true}
+      >
         <View style={styles.leftList}>
           <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
             <Icon color={'#ff8262'} name="pencil" size={30} />
@@ -183,7 +193,7 @@ class AgendaView extends React.Component {
           </View>
         </View>
 
-        {this.state.response ? (
+        {this.state.renderAvails ? (
           <FlatList
             data={this.state.response}
             renderItem={({ item }) => this.renderItem(item)}
