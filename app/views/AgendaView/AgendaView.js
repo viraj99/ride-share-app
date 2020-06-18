@@ -29,8 +29,7 @@ class AgendaView extends React.Component {
   getAvailability = async () => {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
-    console.log('from API: ', avails);
-
+    console.log('from API: ', avails.json);
     const result = [];
     const others = [];
     const map = new Map();
