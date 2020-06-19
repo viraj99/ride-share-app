@@ -229,7 +229,7 @@ class RegisterDriverForm extends React.Component {
               <TextInput
                 onChangeText={text => this.setState({ password: text })}
                 placeholderTextColor="#C0C0C0"
-                multiline="true"
+                multiline={true}
                 placeholder="8 characters long and must contain UPPER CASE, lower case, symbol (e.g !@#$%)"
                 ref={input => {
                   this.password = input;
