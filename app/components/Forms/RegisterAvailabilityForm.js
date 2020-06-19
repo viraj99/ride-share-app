@@ -8,7 +8,6 @@ import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import ModalDropdown from 'react-native-modal-dropdown';
-import { Dropdown } from 'react-native-material-dropdown';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 
