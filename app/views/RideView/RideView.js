@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Text, View, Linking,Modal, TouchableOpacity as TouchableOpacity2} from 'react-native';
 import { Avatar, Button,Badge } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
+import openMap from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 import CountDown from 'react-native-countdown-component';
@@ -68,14 +69,17 @@ export default class RideView extends Component {
 
   };
 
-  handlePickUpDirections = () => {
-    this.setState({
-      isVisible: true,
-    });
-    // console.log('RideView PickUp after setState:', latitude, ' & ', longitude);
-  };
+  // handlePickUpDirections = address => {
+  //   // openMap({});
+  //   // this.setState({
+  //   //   isVisible: true,
+  //   // });
+  //   console.log('RideView PickUp after setState:', address);
+  // };
 
   handleDropOffDirections = () => {
+    // const { navigation } = this.props;
+
     this.setState({
       isVisible: true,
     });
@@ -97,11 +101,13 @@ export default class RideView extends Component {
         );
         const latitude = result.ride.start_location.latitude;
         const longitude = result.ride.start_location.longitude;
+        const startLocation = result.ride.start_location;
         const pickup_to_dropoff = result.ride.pick_up_to_drop_off;
         console.log('pickup2dropoff', pickup_to_dropoff);
         this.setState({
           latitude,
           longitude,
+          startLocation,
         });
       })
       .catch(err => {
@@ -110,6 +116,7 @@ export default class RideView extends Component {
         console.log('err pick up token', token);
         console.log(err, 'result', result);
       });
+    openMap({ latitude: this.latitude, longitude: this.longitude });
   };
   onDropOffPress = () => {
     const { navigation } = this.props;
@@ -269,19 +276,6 @@ export default class RideView extends Component {
     const { textValue } = this.state;
     const { navigation } = this.props;
     const round_trip = navigation.state.params.round_trip;
-    // const expected_wait_time = navigation.state.params.expected_wait_time;
-    // const convertsion = mins => {
-    //   let hours = Math.floor(mins / 60);
-    //   let minutes = mins % 60;
-    //   minutes = minutes < 10 ? '0' + minutes : minutes;
-    //   return `${hours}hrs and ${minutes}mins`;
-    // };
-    // console.log(
-    //   'expected wait time: ',
-    //   expected_wait_time,
-    //   'and convertsion: ',
-    //   convertsion(expected_wait_time)
-    // );
     if (round_trip) {
       if (textValue === 'Go to pickup') {
         this.onPickUpPress();
@@ -345,6 +339,13 @@ export default class RideView extends Component {
     }
   };
 
+  gotoMaps = () => {
+    const { navigation } = this.props;
+    const startLoc = navigation.getParam('startLocation');
+    console.log('start :', startLoc);
+    openMap({ startLoc });
+  };
+
   renderOverview = () => {
     const { textValue } = this.state;
     const { navigation } = this.props;
@@ -360,7 +361,7 @@ export default class RideView extends Component {
     const default_to_pickup_distance =
       navigation.state.params.default_to_pickup_distance;
     const phone = this.state.phone;
-    console.log('pickup_to_dropoff_distance: ', pickup_to_dropoff_distance);
+    console.log('startLocation ', startLocation);
     console.log('pickup_to_dropoff_time: ', pickup_to_dropoff_time);
     console.log('default_to_pickup_distance', default_to_pickup_distance);
 
@@ -369,121 +370,130 @@ export default class RideView extends Component {
         <RideOverviewCard
           title="Pick up"
           address={startLocation.join(', ')}
-          onPress={this.handlePickUpDirections}
+          // onPress={this.onPickUpPress}
         />
       );
     }
-    if (textValue === 'Drop off') {
-      return (
-        <RideOverviewCard
-          title="Drop off"
-          address={endLocation.join(', ')}
-          onPress={this.handleDropOffDirections}
-        />
-      );
-    }
-    if (textValue === 'Waiting') {
-      return (
-        <View>
-          <View
-            style={{
-              marginTop: 10,
-              marginBottom: 10,
-              paddingTop: 15,
-              paddingBottom: 35,
-              marginLeft: 15,
-              marginRight: 15,
-              backgroundColor: '#475c67',
-              borderRadius: 40,
-              borderWidth: 1,
-              borderColor: '#fff',
-            }}
-          >
-            <View style={styles.timerContainer}>
-              <Text style={styles.timerText}>WAITING TIMER</Text>
-            </View>
-            <CountDown
-              size={42}
-              until={expected_wait_time * 60}
-              onFinish={() =>
-                this.setState({
-                  textValue: 'Ready 2 go back',
-                })
-              }
-              onPress={this.playSound()}
-              digitStyle={{
-                backgroundColor: '#475c67',
-                borderWidth: 1,
-                borderColor: '#475c67',
-              }}
-              digitTxtStyle={{ color: '#fcfcf6' }}
-              timeLabelStyle={{ color: '#fcfcf6' }} //make time labels invisible
-              separatorStyle={{ color: '#fcfcf6', paddingBottom: 40 }}
-              timeToShow={['H', 'M', 'S']}
-              timeLabels={{ h: 'hrs', m: 'mins', s: 'secs' }}
-              showSeparator
-            />
-          </View>
+    // if (textValue === 'Tap to arrive') {
+    //   return (
+    //     <RideOverviewCard
+    //       title="Pick up"
+    //       address={startLocation.join(', ')}
+    //       onPress={this.handlePickUpDirections}
+    //     />
+    //   );
+    // }
+    // if (textValue === 'Drop off') {
+    //   return (
+    //     <RideOverviewCard
+    //       title="Drop off"
+    //       address={endLocation.join(', ')}
+    //       onPress={this.handleDropOffDirections}
+    //     />
+    //   );
+    // }
+    // if (textValue === 'Waiting') {
+    //   return (
+    //     <View>
+    //       {/* <View
+    //         style={{
+    //           marginTop: 10,
+    //           marginBottom: 10,
+    //           paddingTop: 15,
+    //           paddingBottom: 35,
+    //           marginLeft: 15,
+    //           marginRight: 15,
+    //           backgroundColor: '#475c67',
+    //           borderRadius: 40,
+    //           borderWidth: 1,
+    //           borderColor: '#fff',
+    //         }}
+    //       >
+    //         <View style={styles.timerContainer}>
+    //           <Text style={styles.timerText}>WAITING TIMER</Text>
+    //         </View>
+    //         <CountDown
+    //           size={42}
+    //           until={expected_wait_time * 60}
+    //           onFinish={() =>
+    //             this.setState({
+    //               textValue: 'Ready 2 go back',
+    //             })
+    //           }
+    //           onPress={this.playSound()}
+    //           digitStyle={{
+    //             backgroundColor: '#475c67',
+    //             borderWidth: 1,
+    //             borderColor: '#475c67',
+    //           }}
+    //           digitTxtStyle={{ color: '#fcfcf6' }}
+    //           timeLabelStyle={{ color: '#fcfcf6' }} //make time labels invisible
+    //           separatorStyle={{ color: '#fcfcf6', paddingBottom: 40 }}
+    //           timeToShow={['H', 'M', 'S']}
+    //           timeLabels={{ h: 'hrs', m: 'mins', s: 'secs' }}
+    //           showSeparator
+    //         />
+    //       </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(`tel:${phone}`);
-            }}
-            style={styles.buttonsContainer}
-          >
-            <View style={styles.phoneStyle}>
-              <Icon
-                name="telephone"
-                size={22}
-                color="#fcfcf6"
-                // reverse
-                // raised
-                type="foundation"
-              />
-              <TextMask
-                type={'custom'}
-                options={{
-                  mask: '(999) 999-9999',
-                }}
-                style={styles.textMask}
-                value={phone}
-                onChangeText={text => {
-                  this.setState({
-                    phone: text,
-                  });
-                }}
-              />
-              {/* <Icon
-                name="phone"
-                size={22}
-                color="#fcfcf6"
-                // reverse
-                // raised
-                type="material-community"
-              /> */}
-            </View>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-    if (textValue === 'Ready 2 go back') {
-      return (
-        <RideOverviewCard
-          title="Return to Drop Off: "
-          address={endLocation.join(', ')}
-          onPress={this.handleDropOffDirections}
-        />
-      );
-    }
-    if (textValue == 'Tap when Returned') {
-      return (
-        <RideOverviewCard
-          title="Return to the Pick up: "
-          address={startLocation.join(',')}
-          onPress={this.handlePickUpDirections}
-        />
-      );
-    }
+    //       <TouchableOpacity
+    //         onPress={() => {
+    //           Linking.openURL(`tel:${phone}`);
+    //         }}
+    //         style={styles.buttonsContainer}
+    //       >
+    //         <View style={styles.phoneStyle}>
+    //           <Icon
+    //             name="telephone"
+    //             size={22}
+    //             color="#fcfcf6"
+    //             // reverse
+    //             // raised
+    //             type="foundation"
+    //           />
+    //           <TextMask
+    //             type={'custom'}
+    //             options={{
+    //               mask: '(999) 999-9999',
+    //             }}
+    //             style={styles.textMask}
+    //             value={phone}
+    //             onChangeText={text => {
+    //               this.setState({
+    //                 phone: text,
+    //               });
+    //             }}
+    //           />
+    //           {/* <Icon
+    //             name="phone"
+    //             size={22}
+    //             color="#fcfcf6"
+    //             // reverse
+    //             // raised
+    //             type="material-community"
+    //           /> */}
+    //         </View>
+    //       </TouchableOpacity>
+    //     </View>
+    //   ); */}
+    // }
+    // if (textValue === 'Ready 2 go back') {
+    //   return (
+    //     <RideOverviewCard
+    //       title="Return to Drop Off: "
+    //       address={endLocation.join(', ')}
+    //       onPress={this.handleDropOffDirections}
+    //     />
+    //   );
+    // }
+    // if (textValue == 'Tap when Returned') {
+    //   return (
+    //     <RideOverviewCard
+    //       title="Return to the Pick up: "
+    //       address={startLocation.join(',')}
+    //       onPress={this.handlePickUpDirections}
+    //     />
+    // );
+    // }
     return (
       <InitOverviewCard
         pickupAddress={startLocation.join(', ')}
@@ -660,7 +670,7 @@ export default class RideView extends Component {
 
         </View>
         <View style={{ flex: 3 }}>
-          <Popup
+          {/* <Popup
             isVisible={isVisible}
             onCancelPressed={() => this.setState({ isVisible: false })}
             onAppPressed={() => this.setState({ isVisible: false })}
@@ -680,7 +690,7 @@ export default class RideView extends Component {
               latitude,
               longitude,
             }}
-          />
+          /> */}
           {this.renderOverview()}
         </View>
         <View style={styles.buttonsContainer}>

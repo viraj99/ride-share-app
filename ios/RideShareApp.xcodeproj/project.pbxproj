@@ -340,11 +340,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = LN2WF7HK5J;
+						DevelopmentTeam = C2WNM92PMR;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = LN2WF7HK5J;
+						DevelopmentTeam = C2WNM92PMR;
 						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
@@ -740,7 +740,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				DEVELOPMENT_TEAM = LN2WF7HK5J;
+				DEVELOPMENT_TEAM = C2WNM92PMR;
+				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -771,7 +772,8 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = LN2WF7HK5J;
+				DEVELOPMENT_TEAM = C2WNM92PMR;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RideShareAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -800,7 +802,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = LN2WF7HK5J;
+				DEVELOPMENT_TEAM = C2WNM92PMR;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RideShareApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_CFLAGS = (
@@ -812,7 +815,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.CodeTheDream.crsn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CodeTheDream.Osbaldo.crsn;
 				PRODUCT_NAME = CRSN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RideShareApp-Bridging-Header.h";
@@ -829,7 +832,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LN2WF7HK5J;
+				DEVELOPMENT_TEAM = C2WNM92PMR;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RideShareApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_CFLAGS = (
@@ -841,7 +845,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.CodeTheDream.crsn;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CodeTheDream.Osbaldo.crsn;
 				PRODUCT_NAME = CRSN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RideShareApp-Bridging-Header.h";
