@@ -42,27 +42,33 @@ class RegisterAvailabilityForm extends React.Component {
     const token = JSON.parse(value);
     API.getLocations(token.token).then(res => {
       const locations = res.locations;
+      console.log('get locatins', locations);
+
       let locationData = [...this.state.locationData];
       locations.map(location => {
         console.log('locations', location);
-        const value = {
-          value:
-            location.street +
-            ' ' +
-            location.city +
-            ', ' +
-            location.state +
-            ' ' +
-            location.zip,
-        };
-
+        let value = ''.concat(
+          location.street,
+          ' ',
+          location.city,
+          ' ',
+          location.state,
+          ' ',
+          location.zip
+        );
         if (location.default_location) {
-          value.value += ' (Default)';
+          console.log('default true');
+          let newVal = value.concat(' ', '(Default)');
+          console.log('after adding default', newVal);
+          locationData.push(newVal);
+        } else {
+          console.log('string put together', value);
+          locationData.push(value);
         }
-
-        locationData.push(value);
       });
-      this.setState({ locationData });
+      this.setState({ locationData }, () => {
+        console.log('state for locationData', locationData);
+      });
       this.setState({ locations }, () => {
         console.log('state for locations', this.state.locations);
       });
@@ -70,6 +76,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   handleLocationChange = (location, index) => {
+    console.log('location', location);
     console.log('inside location change', index);
     const { locations } = this.state;
     const selectedLocation = locations[index].id;
@@ -209,8 +216,14 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   render() {
-    let { startDate, startTime, endTime, endDate } = this.state.availData;
-
+    let {
+      startDate,
+      startTime,
+      endTime,
+      endDate,
+      locationData,
+    } = this.state.availData;
+    console.log('render', locationData);
     return (
       <ScrollView>
         <View onStartShouldSetResponder={() => true}>
@@ -325,19 +338,17 @@ class RegisterAvailabilityForm extends React.Component {
           {this.state.locationData.length > 0 && (
             <View>
               <Text style={styles.labelStyleAvail}>Set Location</Text>
-              <Dropdown
-                data={this.state.locationData}
-                label="Location"
-                value="Select location"
-                containerStyle={{
-                  bottom: 15,
-                  paddingLeft: 15,
-                  paddingRight: 15,
+
+              <ModalDropdown
+                defaultValue="Select location"
+                onSelect={(i, v) => {
+                  this.handleLocationChange(v, i);
                 }}
-                fontSize={18}
-                onChangeText={(location, index) =>
-                  this.handleLocationChange(location, index)
-                }
+                options={this.state.locationData}
+                textStyle={[styles.sectionTitle, { color: '#475c67' }]}
+                dropdownStyle={styles.dropdownStyle}
+                dropdownTextStyle={styles.dropdownTextStyle}
+                style={styles.modalDropdown}
               />
             </View>
           )}
