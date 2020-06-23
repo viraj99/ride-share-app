@@ -39,6 +39,14 @@ export default {
       token,
     });
   },
+  getRide(token, id) {
+    return apiWrapper({
+      path: RIDES,
+      token,
+      params: `/${id}`,
+      method: 'GET',
+    });
+  },
   getRider(id, token) {
     return apiWrapper({
       path: RIDER,
