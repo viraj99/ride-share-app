@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Text, View, Linking } from 'react-native';
-import { Avatar, Button } from 'react-native-elements';
+import { Alert, Text, View, Linking,Modal, TouchableOpacity as TouchableOpacity2} from 'react-native';
+import { Avatar, Button,Badge } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
@@ -22,6 +22,9 @@ export default class RideView extends Component {
       latitude: 0,
       longitude: 0,
       isLoading: true,
+      riderInfo: {},
+      visible:false,
+      showNote:false,
     };
   }
   componentDidMount = () => {
@@ -41,6 +44,24 @@ export default class RideView extends Component {
         isLoading: false,
       });
     });
+
+    const rideId = navigation.getParam('rideId');
+    API.getRide(token,rideId)
+      .then( response =>{
+        console.log("-------------------- rider info--------------");
+        console.log(response.ride.rider);
+        let rider = {
+          first_name : response.ride.rider.first_name,
+          last_name : response.ride.rider.last_name,
+          note : response.ride.rider.note,
+          phone : response.ride.rider.phone,
+          uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg'
+        }
+        this.setState({
+          riderInfo : rider
+        })
+      });
+
   };
 
   handlePickUpDirections = () => {
@@ -472,6 +493,32 @@ export default class RideView extends Component {
     );
   };
 
+    printBadgeNotes = () =>{
+      if(this.state.riderInfo.note){
+        return(
+          <Badge
+             value="1"
+             status="error"
+            containerStyle={{ position: 'absolute', top: 10, right: -4 }}
+          >
+          </Badge>
+      );
+      }
+    }
+    printNote = () => {
+        if (this.state.riderInfo.note) {
+          return(
+            <Text style = {styles.note}>" {this.state.riderInfo.note} "</Text>
+          );
+        }
+    }
+
+    closeModal = () =>{
+      this.setState({
+        visible:false
+      });
+    }
+
   render() {
     const { textValue, isVisible, latitude, longitude } = this.state;
     const { navigation } = this.props;
@@ -479,41 +526,134 @@ export default class RideView extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <Block center style={{ marginTop: 10 }}>
+        <View style={{ flex: 1}}>
+          <View style ={styles.userInfo}>
+          <View>
+          <TouchableOpacity2
+            onPress={() => {this.setState({showNote : true})}}>
             <Avatar
               size="large"
               rounded
               source={{
-                uri:
-                  'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+              uri: this.state.riderInfo.uri
               }}
               containerStyle={styles.avatarContainer}
             />
-          </Block>
-          <Block center space="evenly">
-            <Text numberOfLines={3} style={styles.nameText}>
-              {this.state.first} {this.state.last}
-            </Text>
-            {/* <Button onPress={this.handleGetDirections} title="Get Directions" /> */}
-          </Block>
-          {/* {textValue === 'Go to pickup' && ( */}
-          <View
-            row
-            center
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              marginBottom: 10,
-            }}
-          >
-            <Text>{this.state.pickup_to_dropoff}</Text>
-            <SkipButton onPress={this.onCompletePress} title="Skip" />
-            <CancelButton onPress={this.cancelRideAlert} title="Stop" />
+            {this.printBadgeNotes()}
+            </TouchableOpacity2>
           </View>
-          {/* )} */}
+
+            <View style = {styles.information}>
+              <Text style ={styles.nameText}>{this.state.riderInfo.first_name} {this.state.riderInfo.last_name}</Text>
+            </View>
+            <View style ={styles.grow}>
+              <TouchableOpacity2
+                        onPress={() => {
+                        Linking.openURL(`tel:${this.state.riderInfo.phone}`);
+                        }}>
+                      <View style={styles.call}>
+                        <Icon
+                        name="telephone"
+                        size={22}
+                        color="#475c67"
+                        type="foundation"
+                        />
+                      </View>
+              </TouchableOpacity2>
+            </View>
+            <View>
+              <TouchableOpacity2
+                onPress={() => {this.setState({visible : true})}}>
+                  <View style={styles.arrow}>
+                    <Icon
+                      name="more-horizontal"
+                      size={30}
+                      color="#475c67"
+                      type="feather"
+                      />
+                  </View>
+              </TouchableOpacity2>
+            </View>
+          </View>
+
+          <Modal
+            animated
+            animationType="slideInUp"
+            visible={this.state.showNote}
+            transparent
+            >
+
+            <View style={styles.overlayNote}>
+              <View style ={styles.riderNote}>
+              <View style={{ position: 'absolute', top: 10, right: 10 }}>
+              <TouchableOpacity2
+                onPress={() => {this.setState({showNote : false})}}>
+                    <Icon
+                      name="close"
+                      size={30}
+                      color="#475c67"
+                      type="antDesign"
+                      />
+              </TouchableOpacity2>
+              </View>
+                <Avatar
+                  size="large"
+                  rounded
+                  source={{
+                  uri: this.state.riderInfo.uri
+                  }}
+                  containerStyle={styles.avatarContainer}
+                />
+                <Text style ={styles.nameText}>{this.state.riderInfo.first_name} {this.state.riderInfo.last_name}</Text>
+                {this.printNote()}
+              </View>
+            </View>
+          </Modal>
+
+
+          <Modal
+            animated
+            animationType="slideInUp"
+            visible={this.state.visible}
+            transparent
+            >
+            <View style={styles.overlay}>
+              <View style = {styles.modalview}>
+              <View style ={styles.modalblock}>
+                <Icon
+                name="more-horizontal"
+                size={30}
+                color="#475c67"
+                type="feather"
+                />
+                <Button
+                title="Skip Ride"
+                containerStyle={styles.startRideContainer}
+                titleStyle={styles.modalTitle}
+                buttonStyle={styles.modalButton}
+                onPress={this.onCompletePress}
+                />
+                <Button
+                title="Cancel Ride"
+                containerStyle={styles.startRideContainer}
+                titleStyle={styles.modalTitle}
+                buttonStyle={styles.modalButton}
+                onPress={this.cancelRideAlert}
+                />
+              </View>
+              <View style ={styles.modalblock} >
+              <Button
+              title="Close"
+              containerStyle={styles.startRideContainer}
+              titleStyle={styles.modalTitle}
+              buttonStyle={styles.modalButton}
+              onPress={this.closeModal}
+              />
+              </View>
+              </View>
+            </View>
+          </Modal>
+
         </View>
         <View style={{ flex: 3 }}>
           <Popup
