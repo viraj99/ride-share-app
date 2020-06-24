@@ -1,6 +1,6 @@
 import {Platform, StyleSheet, Dimensions} from 'react-native';
 import {getBottomSpace} from '../../components/Header/StatusBar';
-
+import variables from '../../utils/variables';
 const {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
@@ -38,12 +38,16 @@ export default StyleSheet.create({
     width: width - 100,
   },
   cardContainer: {
-    flex: 3,
+    flex: 4,
+    paddingVertical: variables.sizes.padding * 0.5,
   },
   profileContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginHorizontal: variables.sizes.margin,
+    paddingVertical: variables.sizes.padding * 0.3,
+    borderBottomWidth: 2,
+    borderColor: 'rgba(80, 69, 68, 0.28)',
   },
   buttonsContainer: {
     flexDirection: 'row',

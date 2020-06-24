@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Text, View, ScrollView} from 'react-native';
 import { Button, ThemeConsumer } from 'react-native-elements';
 import { InitOverviewCard } from '../../components/Card';
 import styles from './styles';
@@ -36,14 +36,14 @@ export default class RequestedRidesDetails extends Component<Props> {
   requestRider = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
-    const riderId = navigation.getParam('riderId');
-    API.getRider(riderId, token)
+    const rideId = navigation.getParam('rideId');
+    API.getRide(token,rideId)
       .then(res => {
         console.log('res', res);
         this.setState({
-          firstName: res.json.rider.first_name,
-          lastName: res.json.rider.last_name,
-          isLoading: false,
+          firstName: res.ride.rider.first_name,
+          lastName: res.ride.rider.last_name,
+          isLoading: false
         });
       })
       .catch(err => {
@@ -92,6 +92,10 @@ export default class RequestedRidesDetails extends Component<Props> {
     console.log('in RequestRideDetails endLocat:', endLocation);
     return (
       <View style={styles.container}>
+        <ScrollView
+        scrollsToTop
+        showsVerticalScrollIndicator={false}
+         >
         <View style={styles.profileContainer}>
           <Text numberOfLines={3} style={styles.nameText}>
             Picking up:
@@ -109,6 +113,7 @@ export default class RequestedRidesDetails extends Component<Props> {
             note={reason}
           />
         </View>
+        </ScrollView>
 
         <View style={styles.buttonsContainer}>
           <Button
