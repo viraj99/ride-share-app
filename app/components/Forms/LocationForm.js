@@ -13,6 +13,7 @@ import styles from './locationStyles.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import Container from '../Container';
 import LocationHeader from '../Header/LocationHeader';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class LocationForm extends Component {
   constructor(props) {
@@ -125,112 +126,114 @@ class LocationForm extends Component {
           onPress={this.handleBackButton}
           title={'Add Location'}
         />
-        <View style={{ paddingTop: 10, paddingLeft: 5, paddingRight: 5 }}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionHeaderText}>Address</Text>
-          </View>
-          <Text style={styles.inputLabel}>Street</Text>
-          <TextInput
-            onChangeText={text => this.setState({ street: text })}
-            placeholderTextColor="#C0C0C0"
-            placeholder="Street"
-            returnKeyType={'next'}
-            onSubmitEditing={() => {
-              this.city.focus();
-            }}
-            value={street}
-            blurOnSubmit={false}
-            style={styles.inputStyle}
-            inputStyle={styles.onInputStyle}
-          />
-          <Text style={styles.inputLabel}>City</Text>
-          <TextInput
-            onChangeText={text => this.setState({ city: text })}
-            placeholderTextColor="#C0C0C0"
-            placeholder="City"
-            returnKeyType={'next'}
-            ref={input => (this.city = input)}
-            onSubmitEditing={() => {
-              this.state_initials.focus();
-            }}
-            value={city}
-            blurOnSubmit={false}
-            style={styles.inputStyle}
-            inputStyle={styles.onInputStyle}
-          />
+        <ScrollView>
+          <View style={{ paddingTop: 10, paddingLeft: 5, paddingRight: 5 }}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>Address</Text>
+            </View>
+            <Text style={styles.inputLabel}>Street</Text>
+            <TextInput
+              onChangeText={text => this.setState({ street: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="Street"
+              returnKeyType={'next'}
+              onSubmitEditing={() => {
+                this.city.focus();
+              }}
+              value={street}
+              blurOnSubmit={false}
+              style={styles.inputStyle}
+              inputStyle={styles.onInputStyle}
+            />
+            <Text style={styles.inputLabel}>City</Text>
+            <TextInput
+              onChangeText={text => this.setState({ city: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="City"
+              returnKeyType={'next'}
+              ref={input => (this.city = input)}
+              onSubmitEditing={() => {
+                this.state_initials.focus();
+              }}
+              value={city}
+              blurOnSubmit={false}
+              style={styles.inputStyle}
+              inputStyle={styles.onInputStyle}
+            />
 
-          <Text style={styles.inputLabel}>State</Text>
-          <TextInput
-            onChangeText={text => this.setState({ state_initials: text })}
-            placeholderTextColor="#C0C0C0"
-            placeholder="State"
-            returnKeyType={'next'}
-            ref={input => {
-              this.state_initials = input;
-            }}
-            onSubmitEditing={() => {
-              this.zip_code.focus();
-            }}
-            value={state_initials}
-            blurOnSubmit={false}
-            style={styles.inputStyle}
-            inputStyle={styles.onInputStyle}
-          />
+            <Text style={styles.inputLabel}>State</Text>
+            <TextInput
+              onChangeText={text => this.setState({ state_initials: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="State"
+              returnKeyType={'next'}
+              ref={input => {
+                this.state_initials = input;
+              }}
+              onSubmitEditing={() => {
+                this.zip_code.focus();
+              }}
+              value={state_initials}
+              blurOnSubmit={false}
+              style={styles.inputStyle}
+              inputStyle={styles.onInputStyle}
+            />
 
-          <Text style={styles.inputLabel}>Zip Code</Text>
-          <TextInput
-            onChangeText={text => this.handleZipCode(text)}
-            placeholderTextColor="#C0C0C0"
-            placeholder="Zip Code"
-            returnKeyType={'next'}
-            ref={input => {
-              this.zip_code = input;
-            }}
-            onSubmitEditing={() => {
-              this.zip_code.focus();
-            }}
-            keyboardType="numeric"
-            value={zip_code}
-            blurOnSubmit={false}
-            style={styles.inputStyle}
-            inputStyle={styles.onInputStyle}
-          />
+            <Text style={styles.inputLabel}>Zip Code</Text>
+            <TextInput
+              onChangeText={text => this.handleZipCode(text)}
+              placeholderTextColor="#C0C0C0"
+              placeholder="Zip Code"
+              returnKeyType={'next'}
+              ref={input => {
+                this.zip_code = input;
+              }}
+              onSubmitEditing={() => {
+                this.zip_code.focus();
+              }}
+              keyboardType="numeric"
+              value={zip_code}
+              blurOnSubmit={false}
+              style={styles.inputStyle}
+              inputStyle={styles.onInputStyle}
+            />
 
-          <Text style={styles.inputLabel}>Notes</Text>
-          <TextInput
-            onChangeText={text => this.setState({ notes: text })}
-            placeholderTextColor="#C0C0C0"
-            placeholder="Notes"
-            returnKeyType={'next'}
-            multiline={true}
-            value={notes}
-            blurOnSubmit={true}
-            style={styles.inputStyle}
-            inputStyle={styles.onInputStyle}
-          />
-          <View style={styles.defaultLocationContainer}>
-            <Text style={styles.inputLabel}>Set as default location?</Text>
-            <View style={styles.toggleContainer}>
-              <Switch
-                onValueChange={this.handleToggle}
-                value={this.state.default_location}
+            <Text style={styles.inputLabel}>Notes</Text>
+            <TextInput
+              onChangeText={text => this.setState({ notes: text })}
+              placeholderTextColor="#C0C0C0"
+              placeholder="Notes"
+              returnKeyType={'next'}
+              multiline={true}
+              value={notes}
+              blurOnSubmit={true}
+              style={styles.inputStyle}
+              inputStyle={styles.onInputStyle}
+            />
+            <View style={styles.defaultLocationContainer}>
+              <Text style={styles.inputLabel}>Set as default location?</Text>
+              <View style={styles.toggleContainer}>
+                <Switch
+                  onValueChange={this.handleToggle}
+                  value={this.state.default_location}
+                />
+              </View>
+            </View>
+
+            {this.state.error !== '' && (
+              <View>
+                <Text style={styles.errorMessage}>{this.state.error}</Text>
+              </View>
+            )}
+
+            <View style={styles.buttonContainer}>
+              <CalendarButton
+                title="Submit"
+                onPress={this.handleLocationSubmit}
               />
             </View>
           </View>
-
-          {this.state.error !== '' && (
-            <View>
-              <Text style={styles.errorMessage}>{this.state.error}</Text>
-            </View>
-          )}
-
-          <View style={styles.buttonContainer}>
-            <CalendarButton
-              title="Submit"
-              onPress={this.handleLocationSubmit}
-            />
-          </View>
-        </View>
+        </ScrollView>
       </Container>
     );
   }

@@ -37,6 +37,10 @@ export default class RideView extends Component {
     const riderId = navigation.getParam('riderId');
     API.getRider(riderId, token).then(response => {
       console.log('response: ', response);
+
+      if (response.error) {
+        return;
+      }
       this.setState({
         first: response.json.rider.first_name,
         last: response.json.rider.last_name,
@@ -230,7 +234,7 @@ export default class RideView extends Component {
     API.cancelRide(rideId, token)
       .then(result => {
         Alert.alert('Ride Cancelled');
-        navigation.navigate('MainView');
+        navigation.navigate('MainView', { stoppedRide: true });
         console.log('rideId from cancel press', rideId);
         console.log('accept API call', result);
       })

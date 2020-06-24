@@ -9,7 +9,7 @@ const RequestedRidesCard = ({
   onPress,
   date,
   pickupLocation,
-  dropoffLocation
+  dropoffLocation,
 }) => (
   <View style={styles.cardContainer}>
     <TouchableOpacity onPress={onPress}>
