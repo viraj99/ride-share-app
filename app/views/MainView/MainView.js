@@ -44,12 +44,20 @@ export default class MainView extends Component<Props> {
     };
   }
 
+  componentDidUpdate = prevProps => {
+    if (prevProps.navigation !== this.props.navigation) {
+      this.handleToken();
+    }
+  };
+
   componentDidMount() {
     this.handleToken();
     this.state.isNewRegistered ? this.newRegistrationAlert() : null;
+    console.log('main view');
   }
 
   handleToken = async () => {
+    console.log('handle token called');
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
@@ -83,13 +91,21 @@ export default class MainView extends Component<Props> {
           API.getRides(token).then(result => {
             console.log('all rides: ', result.rides);
             const rides = result.rides;
-            const myRides = rides.filter(ride => ride.driver_id === id);
+
+            //grab all rides and sort by date then check for scheduled and approved rides and sort / save seperately
+
+            const ridesReady = rides.filter(ride => {
+              return new Date(ride.pick_up_time) >= new Date();
+            });
+            console.log('befpre state', ridesReady);
+
+            const myRides = ridesReady.filter(ride => ride.driver_id === id);
             console.log('just my rides: ', myRides);
             const scheduledRides = myRides.filter(
               ride => ride.status === 'scheduled'
             );
             console.log('scheduled rides: ', scheduledRides);
-            const approvedRides = rides.filter(
+            const approvedRides = ridesReady.filter(
               ride => ride.status === 'approved'
             );
             console.log('approved rides: ', approvedRides);
@@ -183,7 +199,7 @@ export default class MainView extends Component<Props> {
             expected_wait_time,
             pickup_to_dropoff_distance,
             pick_up_to_drop_off_time,
-            default_to_pickup_distance
+            default_to_pickup_distance,
           });
         }}
         date={item.pick_up_time}

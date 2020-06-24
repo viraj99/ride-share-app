@@ -9,7 +9,7 @@ export default StyleSheet.create({
     paddingRight: 20,
     fontWeight: 'bold',
     fontSize: 26,
-    color: '#475c67'
+    color: '#475c67',
   },
   availListItem: {
     borderColor: 'gray',
@@ -17,10 +17,10 @@ export default StyleSheet.create({
     marginTop: 10,
     paddingBottom: 10,
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
   },
   flatListText: {
-    fontSize: 18
+    fontSize: 18,
   },
   // footer: {
   //   marginTop: 20,
@@ -34,28 +34,28 @@ export default StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-    elevation: 6
+    elevation: 6,
   },
   datePicker: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   flatlistContainer: {
-    backgroundColor: '#fcfcf6'
+    backgroundColor: '#fcfcf6',
   },
   formButton: {
-    backgroundColor: '#ff8262'
+    backgroundColor: '#ff8262',
   },
   inputRow: {
     flexDirection: 'row',
     margin: 5,
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   mainContainer: {
     flexDirection: 'row',
@@ -63,24 +63,24 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#1EAA70',
     height: Platform.OS == 'ios' ? 120 : 80,
-    marginTop: Platform.OS == 'android' ? 0 : 0
+    marginTop: Platform.OS == 'android' ? 0 : 0,
   },
   componentsContainer: {
     paddingTop: Platform.OS == 'ios' ? 55 : 0,
     flexDirection: 'row',
-    flex: 3
+    flex: 3,
   },
   backButtonContainer: {
     flex: 1,
     alignItems: 'flex-start',
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   headerTextContainer: {
-    flex: 2
+    flex: 2,
   },
   headerText: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: '#ffffff'
+    color: '#ffffff',
   },
 });

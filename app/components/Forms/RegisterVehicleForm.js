@@ -14,7 +14,7 @@ class RegisterVehicleForm extends React.Component {
     super(props);
     this.state = {
       editedEntries: {
-        vehicle: {}
+        vehicle: {},
       },
       picker1: false,
       picker2: false,
@@ -26,11 +26,13 @@ class RegisterVehicleForm extends React.Component {
       seat_belt_num: '',
       insurance_provider: '',
       insurance_start: '',
-      insurance_stop: ''
+      insurance_stop: '',
+      error: '',
     };
   }
 
   componentDidMount = () => {
+    console.log(this.props);
     this.isItEditing();
   };
 
@@ -39,7 +41,7 @@ class RegisterVehicleForm extends React.Component {
       const vehicle = this.props.navigation.state.params.vehicle.item;
       this.setState({
         editedEntries: {
-          vehicle: {}
+          vehicle: {},
         },
         car_make: vehicle.car_make,
         car_model: vehicle.car_model,
@@ -49,7 +51,7 @@ class RegisterVehicleForm extends React.Component {
         seat_belt_num: vehicle.seat_belt_num,
         insurance_provider: vehicle.insurance_provider,
         insurance_start: vehicle.insurance_start,
-        insurance_stop: vehicle.insurance_stop
+        insurance_stop: vehicle.insurance_stop,
       });
     } else {
       return null;
@@ -62,7 +64,7 @@ class RegisterVehicleForm extends React.Component {
       show: Platform.OS === 'ios' ? true : false,
       insurance_start: date,
       insurStartDate: date,
-      picker1: false
+      picker1: false,
     });
   };
 
@@ -71,7 +73,7 @@ class RegisterVehicleForm extends React.Component {
     this.setState({
       insurance_stop: date,
       insurEndDate: date,
-      picker2: false
+      picker2: false,
     });
   };
 
@@ -113,27 +115,28 @@ class RegisterVehicleForm extends React.Component {
       console.log('this is b4 Api entries', edited);
       API.updateSettingsVehicle(id, edited, token.token)
         .then(() => {
-          this.props.navigation.navigate('Settings');
+          this.props.navigation.navigate('Settings', { updatedVehicle: true });
           console.log('worked SO HARD');
         })
         .catch(err => {
           console.log('FAILED HORRIBLY');
         });
     } else {
-      API.createVehicle(userEntries, token.token)
-        .then(() => {
-          if (this.props.navigation.state.params.isAdding) {
-            this.props.navigation.navigate('Settings');
-          } else {
-            this.props.navigation.navigate('RegisterAvailability');
-          }
-        })
-        .catch(error => {
-          console.warn(
-            'There has been a problem with your operation: ' + error.message
-          );
-          throw error;
-        });
+      console.log('inside the if statement of create  vehicle');
+      API.createVehicle(userEntries, token.token).then(res => {
+        console.log('resp from create Vehicle', res);
+
+        if (res.error) {
+          this.setState({ error: res.error });
+          return;
+        }
+
+        if (this.props.navigation.state.params.isAdding) {
+          this.props.navigation.navigate('Settings', { addedVehicle: true });
+        } else {
+          this.props.navigation.navigate('RegisterAvailability');
+        }
+      });
     }
   };
 
@@ -148,8 +151,8 @@ class RegisterVehicleForm extends React.Component {
         seat_belt_num: this.state.seat_belt_num,
         insurance_provider: this.state.insurance_provider,
         insurance_start: moment(this.state.insurStartDate).format('YYYY-MM-DD'),
-        insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD')
-      }
+        insurance_stop: moment(this.state.insurEndDate).format('YYYY-MM-DD'),
+      },
     };
 
     const {
@@ -166,196 +169,202 @@ class RegisterVehicleForm extends React.Component {
 
     return (
       <ScrollView>
-        <Block middle>
-          <KeyboardAwareScrollView>
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>
-                  Fill out with Vehicle information
-                </Text>
-              </View>
+        <View onStartShouldSetResponder={() => true}>
+          <View style={styles.section}>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitle}>
+                Fill out with Vehicle information
+              </Text>
             </View>
+          </View>
 
-            <Text style={styles.labelStyleAlt}>Car Make:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_make: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="ex. Toyota"
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carModel.focus();
-              }}
-              value={car_make}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Car Make:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ car_make: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="ex. Toyota"
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carModel.focus();
+            }}
+            value={car_make}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>Car Model:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_model: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="ex. Camry"
-              ref={input => {
-                this.carModel = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carYear.focus();
-              }}
-              value={car_model}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Car Model:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ car_model: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="ex. Camry"
+            ref={input => {
+              this.carModel = input;
+            }}
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carYear.focus();
+            }}
+            value={car_model}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>Car Year:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_year: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="YYYY"
-              ref={input => {
-                this.carYear = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carBelts.focus();
-              }}
-              value={car_year.toString()}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Car Year:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ car_year: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="YYYY"
+            keyboardType="numeric"
+            ref={input => {
+              this.carYear = input;
+            }}
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carBelts.focus();
+            }}
+            value={car_year.toString()}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ seat_belt_num: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="#"
-              ref={input => {
-                this.carBelts = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carColor.focus();
-              }}
-              value={seat_belt_num.toString()}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Number of Seatbelts:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ seat_belt_num: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="#"
+            ref={input => {
+              this.carBelts = input;
+            }}
+            keyboardType="numeric"
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carColor.focus();
+            }}
+            value={seat_belt_num.toString()}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>Color:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_color: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="ex. Black"
-              ref={input => {
-                this.carColor = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carPlate.focus();
-              }}
-              value={car_color}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Color:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ car_color: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="ex. Black"
+            ref={input => {
+              this.carColor = input;
+            }}
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carPlate.focus();
+            }}
+            value={car_color}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>License Plate:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ car_plate: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="ex. PEG-1234"
-              ref={input => {
-                this.carPlate = input;
-              }}
-              returnKeyType={'next'}
-              onSubmitEditing={() => {
-                this.carInsur.focus();
-              }}
-              value={car_plate}
-              blurOnSubmit={false}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>License Plate:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ car_plate: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="ex. PEG-1234"
+            ref={input => {
+              this.carPlate = input;
+            }}
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this.carInsur.focus();
+            }}
+            value={car_plate}
+            blurOnSubmit={false}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
-            <TextInput
-              onChangeText={text => this.setState({ insurance_provider: text })}
-              placeholderTextColor="#C0C0C0"
-              placeholder="ex. Geico"
-              ref={input => {
-                this.carInsur = input;
-              }}
-              value={insurance_provider}
-              returnKeyType={'done'}
-              style={[styles.saeInputAlt]}
-              inputStyle={styles.saeTextAlt}
-            />
+          <Text style={styles.labelStyleAlt}>Insurance Provider:</Text>
+          <TextInput
+            onChangeText={text => this.setState({ insurance_provider: text })}
+            placeholderTextColor="#C0C0C0"
+            placeholder="ex. Geico"
+            ref={input => {
+              this.carInsur = input;
+            }}
+            value={insurance_provider}
+            returnKeyType={'done'}
+            style={[styles.saeInputAlt]}
+            inputStyle={styles.saeTextAlt}
+          />
 
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>
-                  Insurance Coverage Start Date:{' '}
-                </Text>
-              </View>
+          <View style={styles.section}>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitle}>
+                Insurance Coverage Start Date:{' '}
+              </Text>
             </View>
+          </View>
 
-            <DatePickerView
-              value={new Date() || new Date(insurance_start)}
-              setDate={this.setStartDate}
-            />
+          <DatePickerView
+            value={new Date() || new Date(insurance_start)}
+            setDate={this.setStartDate}
+          />
 
-            {this.props.navigation.state.params.isEditing ? (
-              <Text style={styles.displaySelection}>
-                Selected date:
-                {moment(insurance_start).format('MMMM D, YYYY')}
+          {this.props.navigation.state.params.isEditing ? (
+            <Text style={styles.displaySelection}>
+              Selected date:
+              {moment(insurance_start).format('MMMM D, YYYY')}
+            </Text>
+          ) : (
+            <Text style={styles.displaySelection}>
+              Selected date:{' '}
+              {moment(this.state.insurStartDate).format('MMMM D, YYYY')}
+            </Text>
+          )}
+
+          <Text />
+
+          <View style={styles.section}>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitle}>
+                Insurance Coverage End Date:{' '}
               </Text>
-            ) : (
-              <Text style={styles.displaySelection}>
-                Selected date:{' '}
-                {moment(this.state.insurStartDate).format('MMMM D, YYYY')}
-              </Text>
-            )}
-
-            <Text />
-
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>
-                  Insurance Coverage End Date:{' '}
-                </Text>
-              </View>
             </View>
+          </View>
 
-            <DatePickerView
-              value={new Date() || new Date(insurance_stop)}
-              setDate={this.setEndDate}
+          <DatePickerView
+            value={new Date() || new Date(insurance_stop)}
+            setDate={this.setEndDate}
+          />
+
+          {this.props.navigation.state.params.isEditing ? (
+            <Text style={styles.displaySelection}>
+              Selected date:
+              {moment(insurance_stop).format('MMMM D, YYYY')}
+            </Text>
+          ) : (
+            <Text style={styles.displaySelection}>
+              Selected date:{' '}
+              {moment(this.state.insurEndDate).format('MMMM D, YYYY')}
+            </Text>
+          )}
+
+          <Text />
+
+          {this.state.error !== '' && (
+            <View>
+              <Text style={styles.errorMessage}>{this.state.error}</Text>
+            </View>
+          )}
+          <Block style={styles.footer}>
+            <CalendarButton
+              title="Continue"
+              onPress={() => this.handleUserSubmit(userEntries)}
             />
-
-            {this.props.navigation.state.params.isEditing ? (
-              <Text style={styles.displaySelection}>
-                Selected date:
-                {moment(insurance_stop).format('MMMM D, YYYY')}
-              </Text>
-            ) : (
-              <Text style={styles.displaySelection}>
-                Selected date:{' '}
-                {moment(this.state.insurEndDate).format('MMMM D, YYYY')}
-              </Text>
-            )}
-
-            <Text />
-            <Block style={styles.footer}>
-              <CalendarButton
-                title="Continue"
-                onPress={() => this.handleUserSubmit(userEntries)}
-              />
-            </Block>
-          </KeyboardAwareScrollView>
-        </Block>
+          </Block>
+        </View>
       </ScrollView>
     );
   }

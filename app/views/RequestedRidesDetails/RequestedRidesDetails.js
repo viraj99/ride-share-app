@@ -11,7 +11,7 @@ export default class RequestedRidesDetails extends Component<Props> {
     this.state = {
       textValue: 'Accept Ride',
       err: '',
-      isLoading: true
+      isLoading: true,
     };
   }
   componentDidMount = () => {
@@ -49,7 +49,6 @@ export default class RequestedRidesDetails extends Component<Props> {
       .catch(err => {
         console.log(err);
       });
-
   };
 
   acceptingRide = () => {
@@ -60,7 +59,7 @@ export default class RequestedRidesDetails extends Component<Props> {
       .then(result => {
         console.log('rideId from props', rideId);
         console.log('accept API call', result);
-        navigation.navigate('MainView');
+        navigation.navigate('MainView', { acceptedRide: true });
       })
       .catch(_err => {
         Alert.alert('Did not confirm ride');
@@ -77,8 +76,8 @@ export default class RequestedRidesDetails extends Component<Props> {
         text: 'Confirm',
         onPress: () => {
           this.acceptingRide();
-        }
-      }
+        },
+      },
     ]);
   };
 

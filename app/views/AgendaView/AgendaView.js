@@ -29,12 +29,18 @@ class AgendaView extends React.Component {
   getAvailability = async () => {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
-    // console.log('from API: ', avails);
+    console.log('from API: ', avails.json);
+
+    if (avails.json.length === 0) {
+      this.setState({ renderAvails: false });
+      return;
+    }
 
     const result = [];
     const others = [];
     const map = new Map();
     for (const item of avails.json) {
+      console.log('item of vail', item);
       if (!map.has(item.eventId)) {
         map.set(item.eventId, true);
         result.push({
@@ -44,7 +50,8 @@ class AgendaView extends React.Component {
           endTime: item.endTime,
           endDate: item.endDate,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd'),
+          day: item.startTime,
+          location: item.location,
         });
       } else {
         map.set(item.eventId, true);
@@ -55,12 +62,13 @@ class AgendaView extends React.Component {
           endTime: item.endTime,
           endDate: item.endDate,
           isRecurring: item.isRecurring,
-          day: moment(item.startTime).format('dddd'),
+          day: item.startTime,
         });
       }
       this.setState({
         response: result,
         others: others,
+        renderAvails: true,
       });
     }
   };
@@ -102,10 +110,12 @@ class AgendaView extends React.Component {
   };
 
   renderItem = item => {
+    console.log('item in avail', item);
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
-    let start = moment(item.startTime).format('h:mm A');
-    let end = moment(item.endTime).format('h:mm A');
+    let start = moment.utc(item.startTime).format('h:mm A');
+    console.log('start', start);
+    let end = moment.utc(item.endTime).format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
     //console.log('what happens now? ', endDate);
@@ -113,7 +123,10 @@ class AgendaView extends React.Component {
     //console.log('maybe? ', ending);
 
     return (
-      <View style={[styles.availListItem]}>
+      <View
+        style={[styles.availListItem]}
+        onStartShouldSetResponder={() => true}
+      >
         <View style={styles.leftList}>
           <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
             <Icon color={'#ff8262'} name="pencil" size={30} />
@@ -121,7 +134,9 @@ class AgendaView extends React.Component {
         </View>
 
         <View style={styles.centerList}>
-          {item.isRecurring && <Text style={styles.flatListText}>Every {day}</Text>}
+          {item.isRecurring && (
+            <Text style={styles.flatListText}>Every {day}</Text>
+          )}
           {!item.isRecurring && <Text style={styles.flatListText}>{date}</Text>}
           <Text style={styles.flatListText}>
             {start} to {end}
@@ -142,6 +157,7 @@ class AgendaView extends React.Component {
 
   redirectToAddAvail = item => {
     const { navigation } = this.props;
+    console.log('item being passed to form', item);
     navigation.navigate('AvailabilityView', { item });
   };
 
@@ -179,23 +195,18 @@ class AgendaView extends React.Component {
           </View>
         </View>
 
-        {this.state.response ? (
-          <View>
-            <FlatList
-              scrollEnabled
-              data={this.state.response}
-              renderItem={({ item }) => this.renderItem(item)}
-              keyExtractor={item => '' + item.id}
-            />
-          </View>
+        {this.state.renderAvails ? (
+          <FlatList
+            data={this.state.response}
+            renderItem={({ item }) => this.renderItem(item)}
+            keyExtractor={item => item.id}
+          />
         ) : (
-            <View styles={styles.flatlistContainer}>
-              <Text style={styles.noAvailText}>
-                There is no availability in your schedule, to add availability the
-                button below:
-            </Text>
-            </View>
-          )}
+          <Text style={styles.noAvailText}>
+            There is no availability in your schedule, to add availability click
+            the button below:
+          </Text>
+        )}
 
         <View style={styles.footer}>
           <TouchableOpacity
