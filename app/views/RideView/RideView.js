@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { Alert, Text, View, Linking,Modal, TouchableOpacity as TouchableOpacity2} from 'react-native';
-import { Avatar, Button,Badge } from 'react-native-elements';
+import {
+  Alert,
+  Text,
+  View,
+  Linking,
+  Modal,
+  TouchableOpacity as TouchableOpacity2,
+} from 'react-native';
+import { Avatar, Button, Badge } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
-import openMap from 'react-native-open-maps';
+import { createOpenLink } from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
-import CountDown from 'react-native-countdown-component';
-import { TextMask } from 'react-native-masked-text';
+// import CountDown from 'react-native-countdown-component';
+// import { TextMask } from 'react-native-masked-text';
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import Block from '../../components/Block';
@@ -24,8 +31,8 @@ export default class RideView extends Component {
       longitude: 0,
       isLoading: true,
       riderInfo: {},
-      visible:false,
-      showNote:false,
+      visible: false,
+      showNote: false,
     };
   }
   componentDidMount = () => {
@@ -51,35 +58,33 @@ export default class RideView extends Component {
     });
 
     const rideId = navigation.getParam('rideId');
-    API.getRide(token,rideId)
-      .then( response =>{
-        console.log("-------------------- rider info--------------");
-        console.log(response.ride.rider);
-        let rider = {
-          first_name : response.ride.rider.first_name,
-          last_name : response.ride.rider.last_name,
-          note : response.ride.rider.note,
-          phone : response.ride.rider.phone,
-          uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg'
-        }
-        this.setState({
-          riderInfo : rider
-        })
+    API.getRide(token, rideId).then(response => {
+      console.log('-------------------- rider info--------------');
+      console.log(response.ride.rider);
+      let rider = {
+        first_name: response.ride.rider.first_name,
+        last_name: response.ride.rider.last_name,
+        note: response.ride.rider.note,
+        phone: response.ride.rider.phone,
+        uri:
+          'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+      };
+      this.setState({
+        riderInfo: rider,
       });
-
+    });
   };
 
-  // handlePickUpDirections = address => {
-  //   // openMap({});
-  //   // this.setState({
-  //   //   isVisible: true,
-  //   // });
-  //   console.log('RideView PickUp after setState:', address);
-  // };
+  handlePickUpDirections = () => {
+    // openMap({});
+    this.setState({
+      isVisible: true,
+    });
+    // console.log('RideView PickUp after setState:');
+  };
 
   handleDropOffDirections = () => {
     // const { navigation } = this.props;
-
     this.setState({
       isVisible: true,
     });
@@ -116,7 +121,7 @@ export default class RideView extends Component {
         console.log('err pick up token', token);
         console.log(err, 'result', result);
       });
-    openMap({ latitude: this.latitude, longitude: this.longitude });
+    // openMap({ latitude: this.latitude, longitude: this.longitude });
   };
   onDropOffPress = () => {
     const { navigation } = this.props;
@@ -216,61 +221,61 @@ export default class RideView extends Component {
       });
   };
 
-  cancelRideAlert = () => {
-    Alert.alert(
-      'Cancel Ride',
-      'Are you sure?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => {
-            return;
-          },
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: this.onCancelPress },
-      ],
-      { cancelable: false }
-    );
-  };
+  // cancelRideAlert = () => {
+  //   Alert.alert(
+  //     'Cancel Ride',
+  //     'Are you sure?',
+  //     [
+  //       {
+  //         text: 'Cancel',
+  //         onPress: () => {
+  //           return;
+  //         },
+  //         style: 'cancel',
+  //       },
+  //       { text: 'OK', onPress: this.onCancelPress },
+  //     ],
+  //     { cancelable: false }
+  //   );
+  // };
 
-  onCancelPress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
-    API.cancelRide(rideId, token)
-      .then(result => {
-        Alert.alert('Ride Cancelled');
-        navigation.navigate('MainView', { stoppedRide: true });
-        console.log('rideId from cancel press', rideId);
-        console.log('accept API call', result);
-      })
-      .catch(err => {
-        Alert.alert('Did not Cancel');
-        console.log('Did not work');
-      });
-  };
+  // onCancelPress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
+  //   API.cancelRide(rideId, token)
+  //     .then(result => {
+  //       Alert.alert('Ride Cancelled');
+  //       navigation.navigate('MainView', { stoppedRide: true });
+  //       console.log('rideId from cancel press', rideId);
+  //       console.log('accept API call', result);
+  //     })
+  //     .catch(err => {
+  //       Alert.alert('Did not Cancel');
+  //       console.log('Did not work');
+  //     });
+  // };
 
-  onSkipPress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
-    console.log(
-      'navigationn, ',
-      navigation,
-      ' token: ',
-      token,
-      ' rideId: ',
-      rideId
-    );
-    API.completeRide(rideId, token)
-      .then(result => {
-        Alert.alert('Ride Complete');
-      })
-      .catch(err => {
-        Alert.alert('Could not Complete Ride');
-      });
-  };
+  // onSkipPress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
+  //   console.log(
+  //     'navigationn, ',
+  //     navigation,
+  //     ' token: ',
+  //     token,
+  //     ' rideId: ',
+  //     rideId
+  //   );
+  //   API.completeRide(rideId, token)
+  //     .then(result => {
+  //       Alert.alert('Ride Complete');
+  //     })
+  //     .catch(err => {
+  //       Alert.alert('Could not Complete Ride');
+  //     });
+  // };
 
   onPress = () => {
     const { textValue } = this.state;
@@ -339,12 +344,12 @@ export default class RideView extends Component {
     }
   };
 
-  gotoMaps = () => {
-    const { navigation } = this.props;
-    const startLoc = navigation.getParam('startLocation');
-    console.log('start :', startLoc);
-    openMap({ startLoc });
-  };
+  // gotoMaps = () => {
+  //   const { navigation } = this.props;
+  //   const startLoc = navigation.getParam('startLocation');
+  //   console.log('start :', startLoc);
+  //   openMap({ startLoc });
+  // };
 
   renderOverview = () => {
     const { textValue } = this.state;
@@ -370,7 +375,7 @@ export default class RideView extends Component {
         <RideOverviewCard
           title="Pick up"
           address={startLocation.join(', ')}
-          // onPress={this.onPickUpPress}
+          onPress={this.handlePickUpDirections(startLocation)}
         />
       );
     }
@@ -507,85 +512,98 @@ export default class RideView extends Component {
     );
   };
 
-    printBadgeNotes = () =>{
-      if(this.state.riderInfo.note){
-        return(
-          <Badge
-             value="1"
-             status="error"
-            containerStyle={{ position: 'absolute', top: 10, right: -4 }}
-          >
-          </Badge>
+  printBadgeNotes = () => {
+    if (this.state.riderInfo.note) {
+      return (
+        <Badge
+          value="1"
+          status="error"
+          containerStyle={{ position: 'absolute', top: 10, right: -4 }}
+        ></Badge>
       );
-      }
     }
-    printNote = () => {
-        if (this.state.riderInfo.note) {
-          return(
-            <Text style = {styles.note}>" {this.state.riderInfo.note} "</Text>
-          );
-        }
+  };
+  printNote = () => {
+    if (this.state.riderInfo.note) {
+      return <Text style={styles.note}>" {this.state.riderInfo.note} "</Text>;
     }
+  };
 
-    closeModal = () =>{
-      this.setState({
-        visible:false
-      });
-    }
+  closeModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
 
   render() {
-    const { textValue, isVisible, latitude, longitude } = this.state;
+    const {
+      textValue,
+      isVisible,
+      latitude,
+      longitude,
+      startLocation,
+    } = this.state;
     const { navigation } = this.props;
     console.log('trying to get location: ', latitude, '&', longitude);
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1}}>
-          <View style ={styles.userInfo}>
-          <View>
-          <TouchableOpacity2
-            onPress={() => {this.setState({showNote : true})}}>
-            <Avatar
-              size="large"
-              rounded
-              source={{
-              uri: this.state.riderInfo.uri
-              }}
-              containerStyle={styles.avatarContainer}
-            />
-            {this.printBadgeNotes()}
-            </TouchableOpacity2>
-          </View>
-
-            <View style = {styles.information}>
-              <Text style ={styles.nameText}>{this.state.riderInfo.first_name} {this.state.riderInfo.last_name}</Text>
-            </View>
-            <View style ={styles.grow}>
+        <View style={{ flex: 1 }}>
+          <View style={styles.userInfo}>
+            <View>
               <TouchableOpacity2
-                        onPress={() => {
-                        Linking.openURL(`tel:${this.state.riderInfo.phone}`);
-                        }}>
-                      <View style={styles.call}>
-                        <Icon
-                        name="telephone"
-                        size={22}
-                        color="#475c67"
-                        type="foundation"
-                        />
-                      </View>
+                onPress={() => {
+                  this.setState({ showNote: true });
+                }}
+              >
+                <Avatar
+                  size="large"
+                  rounded
+                  source={{
+                    uri: this.state.riderInfo.uri,
+                  }}
+                  containerStyle={styles.avatarContainer}
+                />
+                {this.printBadgeNotes()}
+              </TouchableOpacity2>
+            </View>
+
+            <View style={styles.information}>
+              <Text style={styles.nameText}>
+                {this.state.riderInfo.first_name}{' '}
+                {this.state.riderInfo.last_name}
+              </Text>
+            </View>
+            <View style={styles.grow}>
+              <TouchableOpacity2
+                onPress={() => {
+                  Linking.openURL(`tel:${this.state.riderInfo.phone}`);
+                }}
+              >
+                <View style={styles.call}>
+                  <Icon
+                    name="telephone"
+                    size={22}
+                    color="#475c67"
+                    type="foundation"
+                  />
+                </View>
               </TouchableOpacity2>
             </View>
             <View>
               <TouchableOpacity2
-                onPress={() => {this.setState({visible : true})}}>
-                  <View style={styles.arrow}>
-                    <Icon
-                      name="more-horizontal"
-                      size={30}
-                      color="#475c67"
-                      type="feather"
-                      />
-                  </View>
+                onPress={() => {
+                  this.setState({ visible: true });
+                }}
+              >
+                <View style={styles.arrow}>
+                  <Icon
+                    name="more-horizontal"
+                    size={30}
+                    color="#475c67"
+                    type="feather"
+                  />
+                </View>
               </TouchableOpacity2>
             </View>
           </View>
@@ -595,79 +613,82 @@ export default class RideView extends Component {
             animationType="slideInUp"
             visible={this.state.showNote}
             transparent
-            >
-
+          >
             <View style={styles.overlayNote}>
-              <View style ={styles.riderNote}>
-              <View style={{ position: 'absolute', top: 10, right: 10 }}>
-              <TouchableOpacity2
-                onPress={() => {this.setState({showNote : false})}}>
+              <View style={styles.riderNote}>
+                <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                  <TouchableOpacity2
+                    onPress={() => {
+                      this.setState({ showNote: false });
+                    }}
+                  >
                     <Icon
                       name="close"
                       size={30}
                       color="#475c67"
                       type="antDesign"
-                      />
-              </TouchableOpacity2>
-              </View>
+                    />
+                  </TouchableOpacity2>
+                </View>
                 <Avatar
                   size="large"
                   rounded
                   source={{
-                  uri: this.state.riderInfo.uri
+                    uri: this.state.riderInfo.uri,
                   }}
                   containerStyle={styles.avatarContainer}
                 />
-                <Text style ={styles.nameText}>{this.state.riderInfo.first_name} {this.state.riderInfo.last_name}</Text>
+                <Text style={styles.nameText}>
+                  {this.state.riderInfo.first_name}{' '}
+                  {this.state.riderInfo.last_name}
+                </Text>
                 {this.printNote()}
               </View>
             </View>
           </Modal>
-
 
           <Modal
             animated
             animationType="slideInUp"
             visible={this.state.visible}
             transparent
-            >
+          >
             <View style={styles.overlay}>
-              <View style = {styles.modalview}>
-              <View style ={styles.modalblock}>
-                <Icon
-                name="more-horizontal"
-                size={30}
-                color="#475c67"
-                type="feather"
-                />
-                <Button
-                title="Skip Ride"
-                containerStyle={styles.startRideContainer}
-                titleStyle={styles.modalTitle}
-                buttonStyle={styles.modalButton}
-                onPress={this.onCompletePress}
-                />
-                <Button
-                title="Cancel Ride"
-                containerStyle={styles.startRideContainer}
-                titleStyle={styles.modalTitle}
-                buttonStyle={styles.modalButton}
-                onPress={this.cancelRideAlert}
-                />
-              </View>
-              <View style ={styles.modalblock} >
-              <Button
-              title="Close"
-              containerStyle={styles.startRideContainer}
-              titleStyle={styles.modalTitle}
-              buttonStyle={styles.modalButton}
-              onPress={this.closeModal}
-              />
-              </View>
+              <View style={styles.modalview}>
+                <View style={styles.modalblock}>
+                  <Icon
+                    name="more-horizontal"
+                    size={30}
+                    color="#475c67"
+                    type="feather"
+                  />
+                  <Button
+                    title="Skip Ride"
+                    containerStyle={styles.startRideContainer}
+                    titleStyle={styles.modalTitle}
+                    buttonStyle={styles.modalButton}
+                    onPress={this.onCompletePress}
+                  />
+                  <Button
+                    title="Cancel Ride"
+                    containerStyle={styles.startRideContainer}
+                    titleStyle={styles.modalTitle}
+                    buttonStyle={styles.modalButton}
+                    onPress={this.cancelRideAlert}
+                  />
+                </View>
+                <View style={styles.modalblock}>
+                  <Button
+                    title="Close"
+                    containerStyle={styles.startRideContainer}
+                    titleStyle={styles.modalTitle}
+                    buttonStyle={styles.modalButton}
+                    onPress={this.closeModal}
+                  />
+                </View>
               </View>
             </View>
           </Modal>
-
         </View>
         <View style={{ flex: 3 }}>
           {/* <Popup
@@ -691,6 +712,35 @@ export default class RideView extends Component {
               longitude,
             }}
           /> */}
+          <Modal
+            animated
+            animationType="slideInUp"
+            visible={isVisible}
+            transparent
+          >
+            <View style={styles.overlay}>
+              <View style={styles.modalview}>
+                <View style={styles.modalblock}>
+                  {console.log('start:::', this.latitude, this.longitude)}
+                  <Button
+                    title="Open Map"
+                    containerStyle={styles.startRideContainer}
+                    titleStyle={styles.modalTitle}
+                    buttonStyle={styles.modalButton}
+                    onPress={createOpenLink({ startLocation })}
+                  />
+                  <Button
+                    title="Close"
+                    containerStyle={styles.startRideContainer}
+                    titleStyle={styles.modalTitle}
+                    buttonStyle={styles.modalButton}
+                    onPress={this.closeModal}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
+
           {this.renderOverview()}
         </View>
         <View style={styles.buttonsContainer}>
