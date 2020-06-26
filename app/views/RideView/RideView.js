@@ -8,18 +8,13 @@ import {
   TouchableOpacity as TouchableOpacity2,
 } from 'react-native';
 import { Avatar, Button, Badge } from 'react-native-elements';
-import { Popup } from 'react-native-map-link';
 import openMap from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
-// import CountDown from 'react-native-countdown-component';
-// import { TextMask } from 'react-native-masked-text';
 import { Icon } from 'react-native-elements';
-import moment from 'moment';
-import Block from '../../components/Block';
-import { SkipButton, CancelButton } from '../../components/Button';
+// import moment from 'moment';
 import styles from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class RideView extends Component {
   constructor(props) {
@@ -34,6 +29,7 @@ export default class RideView extends Component {
       visible: false,
       showNote: false,
       startLocation: [],
+      endLocation: [],
     };
   }
   componentDidMount = () => {
@@ -77,8 +73,6 @@ export default class RideView extends Component {
   };
 
   handlePickUpDirections = () => {
-    // openMap({});
-
     const { latitude, longitude, startLoc } = this.state;
     console.log('started local: ', startLoc);
     const pickupAddress = startLoc.street || '';
@@ -93,20 +87,12 @@ export default class RideView extends Component {
     });
     console.log('RideView PickUp after setState:', startLoc);
   };
-
-  handleDropOffDirections = () => {
-    // const { navigation } = this.props;
-    this.setState({
-      isVisible: true,
-    });
-  };
   onPickUpPress = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
     API.pickUpRide(rideId, token)
       .then(result => {
-        // Alert.alert('Picking Up');
         console.log('pick up rideId', rideId);
         console.log('pick up token', token);
         console.log(
@@ -133,105 +119,124 @@ export default class RideView extends Component {
         console.log('err pick up token', token);
         console.log(err, 'result', result);
       });
-    // openMap({ latitude: this.latitude, longitude: this.longitude });
+  };
+
+  handleDropOffDirections = () => {
+    const { latitude, longitude, endLoc } = this.state;
+    console.log('ended local: ', endLoc);
+    const dropOffAddress = endLoc.street || '';
+    console.log('pic add: ', dropOffAddress);
+    openMap({
+      latitude,
+      longitude,
+      query: dropOffAddress,
+    });
+    this.setState({
+      isVisible: true,
+    });
+    console.log('RideView dropoff after setState:', endLoc);
   };
   onDropOffPress = () => {
     const { navigation } = this.props;
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
-
     API.dropOffRide(rideId, token)
       .then(result => {
-        // Alert.alert('Dropping Off');
         console.log('drop off rideId', rideId);
         console.log('drop off token', token);
         console.log(
-          'result',
+          'result end lat:',
           result.ride.end_location.latitude,
-          '&',
+          '& long',
           result.ride.end_location.longitude
         );
         const latitude = result.ride.end_location.latitude;
         const longitude = result.ride.end_location.longitude;
+        const endLoc = result.ride.end_location;
+        console.log('endloc:', endLoc);
+        const pickup_to_dropoff = result.ride.pick_up_to_drop_off;
+        console.log('pickup2dropoff', pickup_to_dropoff);
         this.setState({
           latitude,
           longitude,
+          endLoc,
         });
       })
       .catch(err => {
-        // Alert.alert('Unable to Drop Off');
-        console.log('err drop off rideId', rideId);
-        console.log('err drop off token', token);
+        Alert.alert('Unable to Drop Off');
+        console.log('err Drop Off rideId', rideId);
+        console.log('err Drop Off token', token);
+        console.log(err, 'result', result);
       });
   };
 
-  onWaitingPress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
+  // onWaitingPress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
 
-    API.waitingForRide(rideId, token)
-      .then(result => {
-        console.log('WAITING', result.ride.expected_wait_time);
-      })
-      .catch(err => {
-        console.log('UNABLE TO WAIT');
-      });
-  };
+  //   API.waitingForRide(rideId, token)
+  //     .then(result => {
+  //       console.log('WAITING', result.ride.expected_wait_time);
+  //     })
+  //     .catch(err => {
+  //       console.log('UNABLE TO WAIT');
+  //     });
+  // };
 
-  onReturnPickingUpPress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
+  // onReturnPickingUpPress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
 
-    API.returnPickUp(rideId, token)
-      .then(result => {
-        console.log('PICKING UP: ', result);
-        const latitude = result.ride.end_location.latitude;
-        const longitude = result.ride.end_location.longitude;
-        this.setState({
-          latitude,
-          longitude,
-        });
-      })
-      .catch(err => {
-        console.log('UNABLE 2 PICK UP: ', err);
-      });
-  };
+  //   API.returnPickUp(rideId, token)
+  //     .then(result => {
+  //       console.log('PICKING UP: ', result);
+  //       const latitude = result.ride.end_location.latitude;
+  //       const longitude = result.ride.end_location.longitude;
+  //       this.setState({
+  //         latitude,
+  //         longitude,
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('UNABLE 2 PICK UP: ', err);
+  //     });
+  // };
 
-  onReturnDroppingOffPress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
+  // onReturnDroppingOffPress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
 
-    API.returnDropOff(rideId, token)
-      .then(result => {
-        console.log('DROPPING OFF: ', result);
-        const latitude = result.ride.end_location.latitude;
-        const longitude = result.ride.end_location.longitude;
-        this.setState({
-          latitude,
-          longitude,
-        });
-      })
-      .catch(err => {
-        console.log('UNABLE 2 DROP OFF: ', result);
-      });
-  };
+  //   API.returnDropOff(rideId, token)
+  //     .then(result => {
+  //       console.log('DROPPING OFF: ', result);
+  //       const latitude = result.ride.end_location.latitude;
+  //       const longitude = result.ride.end_location.longitude;
+  //       this.setState({
+  //         latitude,
+  //         longitude,
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('UNABLE 2 DROP OFF: ', result);
+  //     });
+  // };
 
-  onCompletePress = () => {
-    const { navigation } = this.props;
-    const token = navigation.getParam('token');
-    const rideId = navigation.getParam('rideId');
+  // onCompletePress = () => {
+  //   const { navigation } = this.props;
+  //   const token = navigation.getParam('token');
+  //   const rideId = navigation.getParam('rideId');
 
-    API.completeRide(rideId, token)
-      .then(result => {
-        Alert.alert('Ride Complete');
-      })
-      .catch(err => {
-        Alert.alert('Could not Complete Ride');
-      });
-  };
+  //   API.completeRide(rideId, token)
+  //     .then(result => {
+  //       Alert.alert('Ride Complete');
+  //     })
+  //     .catch(err => {
+  //       Alert.alert('Could not Complete Ride');
+  //     });
+  // };
 
   // cancelRideAlert = () => {
   //   Alert.alert(
@@ -391,24 +396,16 @@ export default class RideView extends Component {
         />
       );
     }
-    // if (textValue === 'Tap to arrive') {
-    //   return (
-    //     <RideOverviewCard
-    //       title="Pick up"
-    //       address={startLocation.join(', ')}
-    //       onPress={this.handlePickUpDirections}
-    //     />
-    //   );
-    // }
-    // if (textValue === 'Drop off') {
-    //   return (
-    //     <RideOverviewCard
-    //       title="Drop off"
-    //       address={endLocation.join(', ')}
-    //       onPress={this.handleDropOffDirections}
-    //     />
-    //   );
-    // }
+
+    if (textValue === 'Drop off') {
+      return (
+        <RideOverviewCard
+          title="Drop off"
+          address={endLocation.join(', ')}
+          onPress={this.handleDropOffDirections}
+        />
+      );
+    }
     // if (textValue === 'Waiting') {
     //   return (
     //     <View>
@@ -702,59 +699,7 @@ export default class RideView extends Component {
             </View>
           </Modal>
         </View>
-        <View style={{ flex: 3 }}>
-          {/* <Popup
-            isVisible={isVisible}
-            onCancelPressed={() => this.setState({ isVisible: false })}
-            onAppPressed={() => this.setState({ isVisible: false })}
-            onBackButtonPressed={() => this.setState({ isVisible: false })}
-            appsWhiteList={[
-              'apple-maps',
-              'google-maps',
-              'citymapper',
-              'transit',
-              'waze',
-              'yandex',
-              'moovit',
-              'yandex-maps',
-            ]}
-            modalProps={{ animationIn: 'slideInUp' }}
-            options={{
-              latitude,
-              longitude,
-            }}
-          /> */}
-          <Modal
-            animated
-            animationType="slideInUp"
-            visible={isVisible}
-            transparent
-          >
-            <View style={styles.overlay}>
-              <View style={styles.modalview}>
-                <View style={styles.modalblock}>
-                  {console.log('start:::', latitude, longitude)}
-                  {/* <Button
-                    title="Open Map"
-                    containerStyle={styles.startRideContainer}
-                    titleStyle={styles.modalTitle}
-                    buttonStyle={styles.modalButton}
-                    onPress={createOpenLink({ startLocation })}
-                  /> */}
-                  <Button
-                    title="Close"
-                    containerStyle={styles.startRideContainer}
-                    titleStyle={styles.modalTitle}
-                    buttonStyle={styles.modalButton}
-                    onPress={this.closeModal}
-                  />
-                </View>
-              </View>
-            </View>
-          </Modal>
-
-          {this.renderOverview()}
-        </View>
+        <View style={{ flex: 3 }}>{this.renderOverview()}</View>
         <View style={styles.buttonsContainer}>
           <Button
             title={textValue}
