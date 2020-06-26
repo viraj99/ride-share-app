@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Avatar, Button, Badge } from 'react-native-elements';
 import { Popup } from 'react-native-map-link';
-import { createOpenLink } from 'react-native-open-maps';
+import openMap from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
 // import CountDown from 'react-native-countdown-component';
@@ -33,6 +33,7 @@ export default class RideView extends Component {
       riderInfo: {},
       visible: false,
       showNote: false,
+      startLocation: [],
     };
   }
   componentDidMount = () => {
@@ -77,10 +78,20 @@ export default class RideView extends Component {
 
   handlePickUpDirections = () => {
     // openMap({});
+
+    const { latitude, longitude, startLoc } = this.state;
+    console.log('started local: ', startLoc);
+    const pickupAddress = startLoc.street || '';
+    console.log('pic add: ', pickupAddress);
+    openMap({
+      latitude,
+      longitude,
+      query: pickupAddress,
+    });
     this.setState({
       isVisible: true,
     });
-    // console.log('RideView PickUp after setState:');
+    console.log('RideView PickUp after setState:', startLoc);
   };
 
   handleDropOffDirections = () => {
@@ -106,13 +117,14 @@ export default class RideView extends Component {
         );
         const latitude = result.ride.start_location.latitude;
         const longitude = result.ride.start_location.longitude;
-        const startLocation = result.ride.start_location;
+        const startLoc = result.ride.start_location;
+        console.log('startloc:', startLoc);
         const pickup_to_dropoff = result.ride.pick_up_to_drop_off;
         console.log('pickup2dropoff', pickup_to_dropoff);
         this.setState({
           latitude,
           longitude,
-          startLocation,
+          startLoc,
         });
       })
       .catch(err => {
@@ -375,7 +387,7 @@ export default class RideView extends Component {
         <RideOverviewCard
           title="Pick up"
           address={startLocation.join(', ')}
-          onPress={this.handlePickUpDirections(startLocation)}
+          onPress={this.handlePickUpDirections}
         />
       );
     }
@@ -721,14 +733,14 @@ export default class RideView extends Component {
             <View style={styles.overlay}>
               <View style={styles.modalview}>
                 <View style={styles.modalblock}>
-                  {console.log('start:::', this.latitude, this.longitude)}
-                  <Button
+                  {console.log('start:::', latitude, longitude)}
+                  {/* <Button
                     title="Open Map"
                     containerStyle={styles.startRideContainer}
                     titleStyle={styles.modalTitle}
                     buttonStyle={styles.modalButton}
                     onPress={createOpenLink({ startLocation })}
-                  />
+                  /> */}
                   <Button
                     title="Close"
                     containerStyle={styles.startRideContainer}
