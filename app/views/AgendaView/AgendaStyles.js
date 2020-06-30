@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import variables from '../../utils/variables';
-// import {getBottomSpace} from '../Header/StatusBar';
+import {getBottomSpace} from '../../components/Header/StatusBar';
 
 const { height, width } = Dimensions.get('window');
 
