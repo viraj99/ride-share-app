@@ -225,7 +225,10 @@ class RegisterAvailabilityForm extends React.Component {
     } = this.state.availData;
     console.log('render', locationData);
     return (
-      <ScrollView>
+      <ScrollView
+       style = {styles.wrapper}
+       showsVerticalScrollIndicator={false}
+      >
         <View onStartShouldSetResponder={() => true}>
           <Block style={styles.scrollContainer}>
             <Text style={styles.titleAvail}>Availability Info</Text>
@@ -316,8 +319,8 @@ class RegisterAvailabilityForm extends React.Component {
             </View>
           )}
 
-          {/* {this.state.is_recurring === 'true' && 
-              <Sae 
+          {/* {this.state.is_recurring === 'true' &&
+              <Sae
                   label="End Recurring Schedule Date (YYYY-MM-DD)"
                   labelStyle={styles.labelStyle}
                   inputPadding={16}

@@ -257,7 +257,10 @@ export default class RideView extends Component {
     const { navigation } = this.props;
     const startLocation = navigation.getParam('startLocation');
     const endLocation = navigation.getParam('endLocation');
-    const date = navigation.getParam('date');
+    const date2 = navigation.getParam('date');
+    const date = new Date(date2);
+    date.toString();
+    console.log("------------epa-----------------------",date)
     const reason = navigation.getParam('reason');
     const expected_wait_time = navigation.state.params.expected_wait_time;
     const pickup_to_dropoff_distance =
@@ -441,25 +444,26 @@ export default class RideView extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <View style={styles.userInfo}>
-            <View>
-              <TouchableOpacity2
-                onPress={() => {
-                  this.setState({ showNote: true });
+      <ScrollView
+      scrollsToTop
+      showsVerticalScrollIndicator={false}
+      >
+        <View style={{ flex: 1}}>
+          <View style ={styles.userInfo}>
+          <View>
+            <TouchableOpacity2
+              onPress={() => {this.setState({showNote : true})}}>
+              <Avatar
+                size="large"
+                rounded
+                source={{
+                uri: this.state.riderInfo.uri
                 }}
-              >
-                <Avatar
-                  size="large"
-                  rounded
-                  source={{
-                    uri: this.state.riderInfo.uri,
-                  }}
-                  containerStyle={styles.avatarContainer}
-                />
-                {this.printBadgeNotes()}
-              </TouchableOpacity2>
-            </View>
+                containerStyle={styles.avatarContainer}
+              />
+              {this.printBadgeNotes()}
+            </TouchableOpacity2>
+          </View>
 
             <View style={styles.information}>
               <Text style={styles.nameText}>
@@ -583,7 +587,7 @@ export default class RideView extends Component {
             </View>
           </Modal>
         </View>
-        <View style={{ flex: 3 }}>{this.renderOverview()}</View>
+        </ScrollView>
         <View style={styles.buttonsContainer}>
           <Button
             title={textValue}

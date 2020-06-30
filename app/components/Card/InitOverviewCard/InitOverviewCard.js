@@ -4,6 +4,7 @@ import moment from 'moment';
 import Badge from '../../Badge';
 import Block from '../../Block';
 import styles from './styles';
+import { Icon } from 'react-native-elements';
 
 // vars below will be used to open maps to check direction but does not start navigation
 // const handlePickup = { latitude: pickupLat, longitude: pickupLong, query: 'Pickup Spot' };
@@ -21,12 +22,12 @@ const InitOverviewCard = ({
   <Block>
     <Block style={[styles.cardContainer, styles.shadow]}>
       <Block row space="between">
-        <Text style={styles.date}>{moment(date).format('MMM D')}</Text>
+        <Text style={styles.date}>{moment.parseZone(date).format('MMM D')}</Text>
         {console.log('data from date raw: ', date)}
-        {console.log('data from date MMM D: ', moment(date).format('MMM D'))}
+        {console.log('data from date MMM D: ', moment.parseZone(date).format('MMM D'))}
         <Text style={styles.date}>pick up by</Text>
-        {console.log('data from date hh:mm ', moment.utc(date).format('hh:mm'))}
-        <Text style={styles.date}>{moment.utc(date).format('hh:mm')}</Text>
+        {console.log('data from date hh:mm ', moment.parseZone(date).format('h:mm A'))}
+        <Text style={styles.date}>{moment.parseZone(date).format('h:mm A')}</Text>
       </Block>
       <Block row center>
         <Badge
@@ -63,42 +64,94 @@ const InitOverviewCard = ({
         {/* <ScrollView> */}
         <Block>
           <Text style={styles.title}>Reason For Ride</Text>
-          <Text style={styles.noteText}>{note}</Text>
-          {default_to_pickup_distance >= 0 ? (
-            <Text style={styles.noteText}>
-              Distance from default to pickup is approximately{' '}
-              {default_to_pickup_distance} mile(s)
-            </Text>
-          ) : (
-            <Text style={styles.noteText}>
-              {/* Approximate Distance will be displayed when you have accepted the
-              Ride */}
-            </Text>
-          )}
-          {pickup_to_dropoff_distance >= 0 ? (
-            <Text style={styles.noteText}>
-              Distance from pickup To dropoff is approximately{' '}
-              {pickup_to_dropoff_distance} mile(s)
-            </Text>
-          ) : (
-            <Text style={styles.noteText}>
-              {/* Approximate Distance will be displayed when you have accepted the
-              Ride */}
-            </Text>
-          )}
-          {pickup_to_dropoff_time >= 0 ? (
-            <Text style={styles.noteText}>
-              {/* Approximate time to arrive from pickup to dropoff{' '} */}
-              {pickup_to_dropoff_time} mins
-            </Text>
-          ) : (
-            <Text style={styles.noteText}>
-              {/* Approximate time it will take to be Determined */}
-            </Text>
-          )}
+          <Text style={styles.noteText}>{note}{}</Text>
+
         </Block>
       </Block>
     </View>
+
+
+
+        <View style={[styles.cardContainer, styles.noteContainer, styles.shadow]}>
+          <Block style={styles.noteCard}>
+            {/* <ScrollView> */}
+
+            {default_to_pickup_distance >= 0 ? (
+
+              <Block>
+                <Text style={styles.title}>Approximate distances between points</Text>
+                  <Block row center style={{ paddingVertical: 4 }}>
+                    <Icon
+                      name="directions-car"
+                      size={24}
+                      color="#475c67"
+                      type="materialIcons"
+                      />
+                  </Block>                  
+                  <Block row center style={{ paddingVertical: 4 }}>
+                    <Badge color="#475c67" size={4} style={{ marginLeft: 4.5 }} />
+                  </Block>
+                  <Block row center>
+                      <Badge color="#475c67" size={4}   style={{ marginLeft: 4.5 , marginRight: 15}} />
+                    <Text spacing={0.5} style={styles.location, styles.distance}>
+                        {default_to_pickup_distance} mile(s)
+                    </Text>
+                  </Block>
+                  <Block row center style={{ paddingVertical: 4 }}>
+                    <Badge color="#475c67" size={4} style={{ marginLeft: 4.5 }} />
+                  </Block>
+
+                  <Block row center>
+                    <Badge
+                      color="rgba(30,170,112,0.2)"
+                      size={14}
+                      style={{ marginRight: 8 }}
+                    >
+                      <Badge color="#1EAA70" size={8} />
+                    </Badge>
+                    <Text style={styles.location}>{pickupAddress}</Text>
+                  </Block>
+
+                  <Block row center style={{ paddingVertical: 4 }}>
+                    <Badge color="#475c67" size={4} style={{ marginLeft: 4.5 }} />
+                  </Block>
+                  <Block row center>
+                      <Badge color="#475c67" size={4}   style={{ marginLeft: 4.5 , marginRight: 15}} />
+                    <Text spacing={0.5} style={styles.location, styles.distance}>
+                      {pickup_to_dropoff_distance} mile(s)
+                    </Text>
+                  </Block>
+                  <Block row center style={{ paddingVertical: 4 }}>
+                    <Badge color="#475c67" size={4} style={{ marginLeft: 4.5 }} />
+                  </Block>
+
+                  <Block row center>
+                    <Badge
+                      color="rgba(255, 71, 87, 0.2)"
+                      size={14}
+                      style={{ marginRight: 8 }}
+                    >
+                      <Badge color="#FF4957" size={8} />
+                    </Badge>
+                    <Text spacing={0.5} style={styles.location}>
+                        {dropoffAddress}
+                    </Text>
+                  </Block>
+              </Block>
+            ) : (
+              <Text style={styles.noteText}>
+                Approximate Distances will be displayed when you have accepted the
+                Ride
+              </Text>
+            )}
+
+
+
+
+          </Block>
+        </View>
+
+
   </Block>
 );
 export default InitOverviewCard;
