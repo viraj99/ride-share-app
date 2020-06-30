@@ -538,9 +538,7 @@ export default class MainView extends Component<Props> {
     const { isLoading } = this.state;
     return (
       <View style={styles.container}>
-        {
-          //<NavigationEvents onDidFocus={() => this.handleToken()} />
-        }
+        <NavigationEvents onDidFocus={() => this.handleToken()} />
         <StatusBar barStyle="light-content" backgroundColor="#1EAA70" />
         <Header onPress={this.navigateToSettings} />
         {isLoading ? (

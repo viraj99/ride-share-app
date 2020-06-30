@@ -5,9 +5,11 @@ import {
   View,
   Linking,
   Modal,
+  ScrollView,
   TouchableOpacity as TouchableOpacity2,
 } from 'react-native';
-import { Avatar, Button, Badge } from 'react-native-elements';
+
+import { Avatar, Button, Badge} from 'react-native-elements';
 import openMap from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
@@ -586,6 +588,7 @@ export default class RideView extends Component {
               </View>
             </View>
           </Modal>
+          {this.renderOverview()}
         </View>
         </ScrollView>
         <View style={styles.buttonsContainer}>
