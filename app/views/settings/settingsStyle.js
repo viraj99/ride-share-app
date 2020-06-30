@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { getBottomSpace } from '../../components/Header/StatusBar';
 
 export default StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0.5,
     backgroundColor: '#fcfcf6',
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: { width: 0, height: 0 },
     shadowColor: '#d3d3d3',
     shadowOpacity: 0.5,
   },
@@ -84,5 +85,18 @@ export default StyleSheet.create({
   buttonTitle: {
     fontSize: 20,
     color: '#ffffff',
+  },
+  footer: {
+    paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 15 : 0,
+    backgroundColor: '#fcfcf6',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    alignItems: 'center',
   },
 });

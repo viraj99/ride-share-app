@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Container from '../../components/Container';
-import AddAvailability from '../../components/Forms/AddAvailability';
+
 import styles from '../AvailabilityView/styles';
 import RegisterAvailabilityForm from '../../components/Forms/RegisterAvailabilityForm';
 

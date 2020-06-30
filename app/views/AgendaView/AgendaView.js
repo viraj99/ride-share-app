@@ -182,13 +182,12 @@ class AgendaView extends React.Component {
         <View style={styles.mainContainer}>
           <View style={styles.backButtonContainer}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('MainView')}
+              onPress={() => this.props.navigation.navigate('Settings')}
             >
               <Icon name="chevron-left" size={36} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.componentsContainer}>
-
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerText}>Availability</Text>
             </View>
@@ -199,7 +198,7 @@ class AgendaView extends React.Component {
           <FlatList
             data={this.state.response}
             renderItem={({ item }) => this.renderItem(item)}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id.toString()}
           />
         ) : (
           <Text style={styles.noAvailText}>
