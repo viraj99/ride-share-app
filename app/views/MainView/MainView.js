@@ -95,9 +95,9 @@ export default class MainView extends Component<Props> {
             //grab all rides and sort by date then check for scheduled and approved rides and sort / save seperately
 
             const ridesReady = rides.filter(ride => {
-              return (new Date(ride.pick_up_time)).toString();
+              return new Date(ride.pick_up_time) >= new Date();
             });
-            console.log('befpre state', ridesReady);
+            console.log('before state', ridesReady);
 
             const myRides = ridesReady.filter(ride => ride.driver_id === id);
             console.log('just my rides: ', myRides);
