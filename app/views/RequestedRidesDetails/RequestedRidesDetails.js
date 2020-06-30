@@ -86,7 +86,9 @@ export default class RequestedRidesDetails extends Component<Props> {
     const { navigation } = this.props;
     const startLocation = navigation.getParam('startLocation');
     const endLocation = navigation.getParam('endLocation');
-    const date = navigation.getParam('date');
+    const date2 = navigation.getParam('date');
+    const date = new Date(date2);
+    date.toString();
     const reason = navigation.getParam('reason');
     console.log('in RequestRideDetails startLocat:', startLocation);
     console.log('in RequestRideDetails endLocat:', endLocation);

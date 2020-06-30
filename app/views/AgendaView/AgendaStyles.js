@@ -12,6 +12,18 @@ export default StyleSheet.create({
     fontSize: 26,
     color: '#475c67'
   },
+  footer: {
+    paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 15 : 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    alignItems: 'center',
+  },
   availListItem: {
     width: width - variables.sizes.padding * 2,
     marginHorizontal: variables.sizes.margin,
@@ -103,10 +115,7 @@ export default StyleSheet.create({
     marginTop: 20
   },
   buttonWrapper: {
-    // mainly used in calendar btn
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 100
+    marginHorizontal: variables.sizes.margin,
   },
   buttonText: {
     color: '#fff',

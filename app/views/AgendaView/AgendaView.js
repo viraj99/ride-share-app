@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
 import { NavigationEvents } from 'react-navigation';
+import { CalendarButton } from '../../components/Button';
 
 class AgendaView extends React.Component {
   constructor(props) {
@@ -201,22 +202,15 @@ class AgendaView extends React.Component {
             renderItem={({ item }) => this.renderItem(item)}
             keyExtractor={item => item.id}
           />
+
         ) : (
           <Text style={styles.noAvailText}>
             There is no availability in your schedule, to add availability click
             the button below:
           </Text>
         )}
-
         <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => this.redirectToAddAvail(noItem)}
-          >
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.buttonText}>Add Availability</Text>
-            </View>
-          </TouchableOpacity>
+          <CalendarButton onPress={this.redirectToAddAvail} title="Add Availability" />
         </View>
       </Container>
     );

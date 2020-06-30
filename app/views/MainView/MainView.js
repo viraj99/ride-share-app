@@ -95,7 +95,7 @@ export default class MainView extends Component<Props> {
             //grab all rides and sort by date then check for scheduled and approved rides and sort / save seperately
 
             const ridesReady = rides.filter(ride => {
-              return new Date(ride.pick_up_time) >= new Date();
+              return (new Date(ride.pick_up_time)).toString();
             });
             console.log('befpre state', ridesReady);
 
@@ -152,7 +152,8 @@ export default class MainView extends Component<Props> {
     const { navigation } = this.props;
     const riderId = item.rider_id;
     const rideId = item.id;
-    const date = item.pick_up_time;
+    const date = new Date(item.pick_up_time);
+    date.toString();
     const startLocation = [
       item.start_location.street,
       item.start_location.city,
@@ -202,7 +203,7 @@ export default class MainView extends Component<Props> {
             default_to_pickup_distance,
           });
         }}
-        date={item.pick_up_time}
+        date={date}
         pickupLocation={startLocation.join(', ')}
         dropoffLocation={endLocation.join(', ')}
       />
@@ -296,7 +297,8 @@ export default class MainView extends Component<Props> {
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
-    const date = item.pick_up_time;
+    const date = new Date(item.pick_up_time);
+    date.toString();
     const name = item.riderName;
     const reason = item.reason;
     return (
@@ -353,7 +355,8 @@ export default class MainView extends Component<Props> {
     ];
     const riderId = item.rider_id;
     const rideId = item.id;
-    const date = item.pick_up_time;
+    const date = new Date(item.pick_up_time);
+    date.toString();
     const name = item.riderName;
     const reason = item.reason;
     return (
@@ -381,6 +384,7 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
+
     return (
       <View>
         <View style={styles.titlesContainer}>
