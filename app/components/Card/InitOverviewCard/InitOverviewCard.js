@@ -71,8 +71,8 @@ const InitOverviewCard = ({
             </Text>
           ) : (
             <Text style={styles.noteText}>
-              Approximate Distance will be displayed when you have accepted the
-              Ride
+              {/* Approximate Distance will be displayed when you have accepted the
+              Ride */}
             </Text>
           )}
           {pickup_to_dropoff_distance >= 0 ? (
@@ -82,18 +82,18 @@ const InitOverviewCard = ({
             </Text>
           ) : (
             <Text style={styles.noteText}>
-              Approximate Distance will be displayed when you have accepted the
-              Ride
+              {/* Approximate Distance will be displayed when you have accepted the
+              Ride */}
             </Text>
           )}
           {pickup_to_dropoff_time >= 0 ? (
             <Text style={styles.noteText}>
-              Approximate time to arrive from pickup to dropoff{' '}
+              {/* Approximate time to arrive from pickup to dropoff{' '} */}
               {pickup_to_dropoff_time} mins
             </Text>
           ) : (
             <Text style={styles.noteText}>
-              Approximate time it will take to be Determined
+              {/* Approximate time it will take to be Determined */}
             </Text>
           )}
         </Block>
