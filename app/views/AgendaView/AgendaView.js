@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from '../../views/AgendaView/AgendaStyles';
 import Container from '../../components/Container';
 import { NavigationEvents } from 'react-navigation';
+import { CalendarButton } from '../../components/Button';
 
 class AgendaView extends React.Component {
   constructor(props) {
@@ -29,47 +30,47 @@ class AgendaView extends React.Component {
   getAvailability = async () => {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
-    console.log('from API: ', avails.json);
+    console.log('from API: ', avails);
 
     if (avails.json.length === 0) {
       this.setState({ renderAvails: false });
       return;
-    }
-
-    const result = [];
-    const others = [];
-    const map = new Map();
-    for (const item of avails.json) {
-      console.log('item of vail', item);
-      if (!map.has(item.eventId)) {
-        map.set(item.eventId, true);
-        result.push({
-          id: item.eventId,
-          startTime: item.startTime,
-          startDate: item.startDate,
-          endTime: item.endTime,
-          endDate: item.endDate,
-          isRecurring: item.isRecurring,
-          day: item.startTime,
-          location: item.location,
-        });
-      } else {
-        map.set(item.eventId, true);
-        others.push({
-          id: item.eventId,
-          startTime: item.startTime,
-          startDate: item.startDate,
-          endTime: item.endTime,
-          endDate: item.endDate,
-          isRecurring: item.isRecurring,
-          day: item.startTime,
+    } else {
+      const result = [];
+      const others = [];
+      const map = new Map();
+      for (const item of avails.json) {
+        console.log('item of vail', item);
+        if (!map.has(item.eventId)) {
+          map.set(item.eventId, true);
+          result.push({
+            id: item.eventId,
+            startTime: item.startTime,
+            startDate: item.startDate,
+            endTime: item.endTime,
+            endDate: item.endDate,
+            isRecurring: item.isRecurring,
+            day: item.startTime,
+            location: item.location,
+          });
+        } else {
+          map.set(item.eventId, true);
+          others.push({
+            id: item.eventId,
+            startTime: item.startTime,
+            startDate: item.startDate,
+            endTime: item.endTime,
+            endDate: item.endDate,
+            isRecurring: item.isRecurring,
+            day: item.startTime,
+          });
+        }
+        this.setState({
+          response: result,
+          others: others,
+          renderAvails: true,
         });
       }
-      this.setState({
-        response: result,
-        others: others,
-        renderAvails: true,
-      });
     }
   };
 
@@ -111,6 +112,7 @@ class AgendaView extends React.Component {
 
   renderItem = item => {
     console.log('item in avail', item);
+    const editItem = item;
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
     let start = moment.utc(item.startTime).format('h:mm A');
@@ -128,7 +130,7 @@ class AgendaView extends React.Component {
         onStartShouldSetResponder={() => true}
       >
         <View style={styles.leftList}>
-          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
+          <TouchableOpacity onPress={() => this.redirectToEditAvail(editItem)}>
             <Icon color={'#ff8262'} name="pencil" size={30} />
           </TouchableOpacity>
         </View>
@@ -155,15 +157,22 @@ class AgendaView extends React.Component {
     );
   };
 
-  redirectToAddAvail = item => {
+  redirectToAddAvail = () => {
     const { navigation } = this.props;
-    console.log('item being passed to form', item);
-    navigation.navigate('AvailabilityView', { item });
+    console.log('item being passed to form');
+    navigation.navigate('RegisterAvailabilityForm', { new: true });
   };
 
-  deleteAvail = eventId => {
+  redirectToEditAvail = item => {
+    const { navigation } = this.props;
+    console.log('item being passed to form', item);
+    navigation.navigate('RegisterAvailabilityForm', { new: false, item });
+  };
+
+  deleteAvail = async eventId => {
     let token = this.state.token;
-    api.deleteAvailability(token, eventId).then(this.getAvailability());
+    await api.deleteAvailability(token, eventId);
+    this.getAvailability();
   };
 
   backButton = () => {
@@ -206,16 +215,11 @@ class AgendaView extends React.Component {
             the button below:
           </Text>
         )}
-
         <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => this.redirectToAddAvail(noItem)}
-          >
-            <View style={styles.buttonWrapper}>
-              <Text style={styles.buttonText}>Add Availability</Text>
-            </View>
-          </TouchableOpacity>
+          <CalendarButton
+            onPress={this.redirectToAddAvail}
+            title="Add Availability"
+          />
         </View>
       </Container>
     );

@@ -15,12 +15,13 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: 'rgba(80, 69, 68, 0.28)',
     marginHorizontal: variables.sizes.margin,
+    marginBottom: variables.sizes.margin * 0.5,
     paddingVertical: 9,
   },
   call: {
     backgroundColor: 'rgba(83, 194, 127, 0.56)',
     alignItems: 'center',
-    width:80,
+    width:  width*0.15,
     padding:5,
     borderRadius: (width - 40) / 2,
   },
@@ -43,9 +44,7 @@ export default StyleSheet.create({
   arrow:{
     display: "flex",
     alignItems:"flex-end",
-    width:60,
-    marginStart:5,
-    paddingLeft:10,
+    paddingLeft: width*0.05,
   },
   grow:{
     alignItems: 'flex-end',

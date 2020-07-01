@@ -11,6 +11,7 @@ export default StyleSheet.create({
     marginHorizontal: variables.sizes.margin,
     paddingHorizontal: variables.sizes.padding,
     paddingVertical: variables.sizes.padding * 0.66,
+    marginBottom: 20,
   },
   shadow: {
     shadowColor: '#000',
@@ -28,6 +29,9 @@ export default StyleSheet.create({
     fontSize: 14,
     lineHeight: 28,
   },
+  distance:{
+      color: '#475c67',
+  },
   location: {
     color: '#2F2F2F',
     fontWeight: Platform.OS === 'ios' ? '500' : '400',
@@ -36,6 +40,7 @@ export default StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 25,
+
+
   },
 });

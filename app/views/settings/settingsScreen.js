@@ -446,6 +446,7 @@ class Settings extends Component {
         key={item.id}
         deleteVehicle={this.deleteVehicle}
         onPress={() => {
+          console.log('clicked');
           navigation.navigate('RegisterVehicle', {
             vehicle,
             isEditing: true,

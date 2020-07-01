@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import variables from '../../utils/variables';
-// import {getBottomSpace} from '../Header/StatusBar';
+import {getBottomSpace} from '../../components/Header/StatusBar';
 
 const { height, width } = Dimensions.get('window');
 
@@ -11,6 +11,18 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 26,
     color: '#475c67'
+  },
+  footer: {
+    paddingBottom: Platform.OS === 'ios' ? getBottomSpace() - 15 : 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    alignItems: 'center',
   },
   availListItem: {
     width: width - variables.sizes.padding * 2,
@@ -103,10 +115,7 @@ export default StyleSheet.create({
     marginTop: 20
   },
   buttonWrapper: {
-    // mainly used in calendar btn
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 100
+    marginHorizontal: variables.sizes.margin,
   },
   buttonText: {
     color: '#fff',

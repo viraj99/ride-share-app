@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ScrollView, View, Button } from 'react-native';
+import { Text, ScrollView, View, Button, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import Block from '../Block';
@@ -11,12 +11,13 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 import Container from '../Container';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class RegisterAvailabilityForm extends React.Component {
   constructor(props) {
     super(props);
-    const isNewItem = props.navigation.state.params.item.id === null;
-    console.log('isNewItem', isNewItem);
+    const isNewItem = this.props.navigation.state.params.new;
+    console.log('isNewItem', this.props.navigation);
     if (!isNewItem) {
       var { params } = props.navigation.state;
     }
@@ -257,7 +258,8 @@ class RegisterAvailabilityForm extends React.Component {
       endDate,
       locationData,
     } = this.state.availData;
-    console.log('render', locationData);
+    const { navigation } = this.props;
+    console.log('rendering registragino for', locationData);
     return (
       <Container>
         <View style={styles.mainContainer}>
@@ -272,8 +274,7 @@ class RegisterAvailabilityForm extends React.Component {
 
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerText}>
-                {navigation.state.params.item.id !== null ? 'Edit' : 'Add'}{' '}
-                Availability
+                {navigation.state.params.new ? 'Add' : 'Edit'} Availability
               </Text>
             </View>
           </View>

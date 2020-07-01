@@ -6,7 +6,6 @@ import {
   MainView,
   Login,
   AgendaView,
-  AvailabilityView,
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,
@@ -19,6 +18,7 @@ import {
   Welcome,
 } from '../views';
 import LocationForm from '../components/Forms/LocationForm';
+import RegisterAvailabilityForm from '../components/Forms/RegisterAvailabilityForm';
 // import VehicleSettings from '../views/settings/VehicleSettings'
 
 const MainViewStack = createStackNavigator(
@@ -35,8 +35,8 @@ const MainViewStack = createStackNavigator(
         header: () => null,
       },
     },
-    AvailabilityView: {
-      screen: AvailabilityView,
+    RegisterAvailabilityForm: {
+      screen: RegisterAvailabilityForm,
       navigationOptions: {
         header: () => null,
       },

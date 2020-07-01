@@ -30,7 +30,7 @@ export default {
       path: REGISTER,
       params: 'password_reset',
       body: { email },
-      method: 'POST'
+      method: 'POST',
     });
   },
   getRides(token) {
@@ -139,8 +139,6 @@ export default {
       params: eventID,
       method: 'DELETE',
       token,
-    }).then(res => {
-      alert('Your availability has been deleted'), res.json();
     });
   },
   editAvailability(token, eventID, userEntries, recurring, endDate) {
