@@ -121,6 +121,7 @@ export default class MainView extends Component<Props> {
               isLoading: false,
               driverApproved: true,
             });
+            console.log('driverApproved:', driverApproved);
           });
         } else {
           this.setState({
@@ -549,8 +550,14 @@ export default class MainView extends Component<Props> {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: variables.sizes.padding }}
           >
-            {this.renderUpcomingRides()}
-            {this.renderFilteredRides()}
+            {this.state.driverApproved ? (
+              <>
+                {this.renderUpcomingRides()}
+                {this.renderFilteredRides()}
+              </>
+            ) : (
+              console.log('NOthing')
+            )}
             <View style={styles.statusBar}>
               {!this.state.driverApproved ? (
                 <Text>Waiting to be approved by the administrators</Text>
