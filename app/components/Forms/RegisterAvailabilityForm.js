@@ -279,7 +279,7 @@ class RegisterAvailabilityForm extends React.Component {
             </View>
           </View>
         </View>
-        <ScrollView>
+        <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
           <View onStartShouldSetResponder={() => true}>
             <Block style={styles.scrollContainer}>
               <Text style={styles.titleAvail}>Availability Info</Text>
