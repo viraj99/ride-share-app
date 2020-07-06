@@ -165,6 +165,8 @@ class RegisterAvailabilityForm extends React.Component {
   handleUserSubmit = async () => {
     const { availData, isRecurring, selectedLocation } = this.state;
     console.log('in handlesubmit: ', isRecurring);
+    console.log('data in submit', availData);
+    console.log('data in locatino', selectedLocation);
 
     // alert(
     //   'Thank you for registering! You will receive an email regarding next steps within _ business days.'
@@ -178,29 +180,35 @@ class RegisterAvailabilityForm extends React.Component {
 
     function convertToUTC(date, time) {
       if (arguments.length > 1) {
-        const startTimeFormatted =
-          moment(date).format('ddd MMM DD YYYY') +
+        const startTime =
+          moment(date).format('YYYY-MM-DD') +
           ' ' +
-          moment(time).format('HH:mm Z');
+          moment.parseZone(time).format('h:mm');
 
-        var newDate = new Date(startTimeFormatted);
-
-        const dateToUTC = moment.utc(newDate).format('YYYY-MM-DD HH:mm Z');
-        return dateToUTC;
+        return moment(startTime).format();
       }
-      return moment.utc(date).format('YYYY-MM-DD Z');
+      return moment.utc(date).format();
     }
 
+    let userEntries = {};
     // Convert entries to UTC for backend handling.
-    const userEntries = {
-      start_time: convertToUTC(availData.startDate, availData.startTime),
-      end_time: convertToUTC(availData.startDate, availData.endTime),
-      is_recurring: isRecurring,
-      end_date: convertToUTC(endDate),
-      //below values need to be changed, place-holding for now
-      // Must pass a location from the driver.
-      location_id: selectedLocation,
-    };
+    if (isRecurring) {
+      userEntries = {
+        start_time: convertToUTC(availData.startDate, availData.startTime),
+        end_time: convertToUTC(endDate, availData.endTime),
+        is_recurring: isRecurring,
+        location_id: selectedLocation,
+        start_date: convertToUTC(availData.startDate, availData.startTime),
+        end_date: convertToUTC(endDate, availData.endTime),
+      };
+    } else {
+      userEntries = {
+        start_time: convertToUTC(availData.startDate, availData.startTime),
+        end_time: convertToUTC(availData.endDate, availData.endTime),
+        is_recurring: isRecurring,
+        location_id: selectedLocation,
+      };
+    }
 
     // //use API file, createAvailability fx to send user's availability to database; token required
     // API.createAvailability(userEntries, recurring, endDate, token.token).then(
@@ -223,7 +231,6 @@ class RegisterAvailabilityForm extends React.Component {
       const response = await API.createAvailability(
         userEntries,
         isRecurring,
-        endDate,
         token.token
       );
 

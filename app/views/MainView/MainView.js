@@ -385,7 +385,7 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
-
+    console.log('aprroved', approvedRides);
     return (
       <View>
         <View style={styles.titlesContainer}>
