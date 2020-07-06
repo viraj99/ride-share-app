@@ -30,47 +30,47 @@ class AgendaView extends React.Component {
   getAvailability = async () => {
     let token = this.state.token;
     let avails = await api.getAvailabilities(token);
-    console.log('from API: ', avails.json);
+    console.log('from API: ', avails);
 
     if (avails.json.length === 0) {
       this.setState({ renderAvails: false });
       return;
-    }
-
-    const result = [];
-    const others = [];
-    const map = new Map();
-    for (const item of avails.json) {
-      console.log('item of vail', item);
-      if (!map.has(item.eventId)) {
-        map.set(item.eventId, true);
-        result.push({
-          id: item.eventId,
-          startTime: item.startTime,
-          startDate: item.startDate,
-          endTime: item.endTime,
-          endDate: item.endDate,
-          isRecurring: item.isRecurring,
-          day: item.startTime,
-          location: item.location,
-        });
-      } else {
-        map.set(item.eventId, true);
-        others.push({
-          id: item.eventId,
-          startTime: item.startTime,
-          startDate: item.startDate,
-          endTime: item.endTime,
-          endDate: item.endDate,
-          isRecurring: item.isRecurring,
-          day: item.startTime,
+    } else {
+      const result = [];
+      const others = [];
+      const map = new Map();
+      for (const item of avails.json) {
+        console.log('item of vail', item);
+        if (!map.has(item.eventId)) {
+          map.set(item.eventId, true);
+          result.push({
+            id: item.eventId,
+            startTime: item.startTime,
+            startDate: item.startDate,
+            endTime: item.endTime,
+            endDate: item.endDate,
+            isRecurring: item.isRecurring,
+            day: item.startTime,
+            location: item.location,
+          });
+        } else {
+          map.set(item.eventId, true);
+          others.push({
+            id: item.eventId,
+            startTime: item.startTime,
+            startDate: item.startDate,
+            endTime: item.endTime,
+            endDate: item.endDate,
+            isRecurring: item.isRecurring,
+            day: item.startTime,
+          });
+        }
+        this.setState({
+          response: result,
+          others: others,
+          renderAvails: true,
         });
       }
-      this.setState({
-        response: result,
-        others: others,
-        renderAvails: true,
-      });
     }
   };
 
@@ -112,6 +112,7 @@ class AgendaView extends React.Component {
 
   renderItem = item => {
     console.log('item in avail', item);
+    const editItem = item;
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
     let start = moment.utc(item.startTime).format('h:mm A');
@@ -129,7 +130,7 @@ class AgendaView extends React.Component {
         onStartShouldSetResponder={() => true}
       >
         <View style={styles.leftList}>
-          <TouchableOpacity onPress={() => this.redirectToAddAvail(item)}>
+          <TouchableOpacity onPress={() => this.redirectToEditAvail(editItem)}>
             <Icon color={'#ff8262'} name="pencil" size={30} />
           </TouchableOpacity>
         </View>
@@ -156,15 +157,22 @@ class AgendaView extends React.Component {
     );
   };
 
-  redirectToAddAvail = item => {
+  redirectToAddAvail = () => {
     const { navigation } = this.props;
-    console.log('item being passed to form', item);
-    navigation.navigate('AvailabilityView', { item });
+    console.log('item being passed to form');
+    navigation.navigate('RegisterAvailabilityForm', { new: true });
   };
 
-  deleteAvail = eventId => {
+  redirectToEditAvail = item => {
+    const { navigation } = this.props;
+    console.log('item being passed to form', item);
+    navigation.navigate('RegisterAvailabilityForm', { new: false, item });
+  };
+
+  deleteAvail = async eventId => {
     let token = this.state.token;
-    api.deleteAvailability(token, eventId).then(this.getAvailability());
+    await api.deleteAvailability(token, eventId);
+    this.getAvailability();
   };
 
   backButton = () => {
@@ -183,13 +191,12 @@ class AgendaView extends React.Component {
         <View style={styles.mainContainer}>
           <View style={styles.backButtonContainer}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('MainView')}
+              onPress={() => this.props.navigation.navigate('Settings')}
             >
               <Icon name="chevron-left" size={36} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.componentsContainer}>
-
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerText}>Availability</Text>
             </View>
@@ -200,9 +207,8 @@ class AgendaView extends React.Component {
           <FlatList
             data={this.state.response}
             renderItem={({ item }) => this.renderItem(item)}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id.toString()}
           />
-
         ) : (
           <Text style={styles.noAvailText}>
             There is no availability in your schedule, to add availability click
@@ -210,7 +216,10 @@ class AgendaView extends React.Component {
           </Text>
         )}
         <View style={styles.footer}>
-          <CalendarButton onPress={this.redirectToAddAvail} title="Add Availability" />
+          <CalendarButton
+            onPress={this.redirectToAddAvail}
+            title="Add Availability"
+          />
         </View>
       </Container>
     );

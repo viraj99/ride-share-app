@@ -6,7 +6,7 @@ import RegisterAvailability from './Register/RegisterAvailability';
 import ForgotPassword from './ForgotPassword/ForgotPassword';
 import MainView from './MainView/MainView';
 import AgendaView from './AgendaView/AgendaView';
-import AvailabilityView from './AvailabilityView/AvailabilityView';
+
 import AuthLoadingScreen from './AuthLoadingScreen';
 import RideView from './RideView/RideView';
 import DriverScheduleView from './DriverScheduleView/DriverScheduleView';
@@ -22,7 +22,6 @@ export {
   RegisterAvailability,
   ForgotPassword,
   AgendaView,
-  AvailabilityView,
   AuthLoadingScreen,
   RideView,
   DriverScheduleView,

@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
 import { Header } from '../../components/Header';
 import { UpcomingRideCard, RequestedRideCard } from '../../components/Card';
-import { CalendarButton } from '../../components/Button';
+
 import styles from './styles';
 import moment from 'moment';
 import variables from '../../utils/variables';
@@ -53,7 +53,7 @@ export default class MainView extends Component<Props> {
   componentDidMount() {
     this.handleToken();
     this.state.isNewRegistered ? this.newRegistrationAlert() : null;
-    console.log('main view');
+    console.log('main view', this.state.isNewRegistered);
   }
 
   handleToken = async () => {
@@ -493,10 +493,7 @@ export default class MainView extends Component<Props> {
     const { navigation } = this.props;
     navigation.navigate('Settings');
   };
-  navigateToCalendar = () => {
-    const { navigation } = this.props;
-    navigation.navigate('AgendaView');
-  };
+
   navigateToDriverSchedule = () => {
     // takes me to ALL schedules rides
     const { scheduledRides } = this.state;
@@ -566,9 +563,6 @@ export default class MainView extends Component<Props> {
             {this.state.showAllRides && this.renderRequestedRides()}
           </ScrollView>
         )}
-        <View style={styles.footer}>
-          <CalendarButton onPress={this.navigateToCalendar} title="Agenda" />
-        </View>
       </View>
     );
   }

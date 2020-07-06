@@ -12,7 +12,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Email from 'react-native-vector-icons/MaterialCommunityIcons';
 import Radius from 'react-native-vector-icons/MaterialCommunityIcons';
 import Phone from 'react-native-vector-icons/AntDesign';
-import { AddButton } from '../../components/Button';
+import { AddButton, CalendarButton } from '../../components/Button';
+
 import User from 'react-native-vector-icons/SimpleLineIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SettingHeader from './header';
@@ -395,6 +396,10 @@ class Settings extends Component {
   //     />
   //   );
   // };
+  navigateToCalendar = () => {
+    const { navigation } = this.props;
+    navigation.navigate('AgendaView');
+  };
 
   deleteVehicle = id => {
     Alert.alert('Delete this Vehicle?', '', [
@@ -441,6 +446,7 @@ class Settings extends Component {
         key={item.id}
         deleteVehicle={this.deleteVehicle}
         onPress={() => {
+          console.log('clicked');
           navigation.navigate('RegisterVehicle', {
             vehicle,
             isEditing: true,
@@ -631,7 +637,7 @@ class Settings extends Component {
               {this.state.vehicles && <View>{this.renderVehicles()}</View>}
             </View>
 
-            <View style={[styles.section, { paddingBottom: 50 }]}>
+            <View style={[styles.section, { paddingBottom: 25 }]}>
               <View style={styles.sectionTitleContainer}>
                 <View
                   style={{
@@ -666,6 +672,12 @@ class Settings extends Component {
             </View>
           </View>
         </ScrollView>
+        <View style={styles.footer}>
+          <CalendarButton
+            onPress={this.navigateToCalendar}
+            title="Availability"
+          />
+        </View>
       </View>
     );
   }
