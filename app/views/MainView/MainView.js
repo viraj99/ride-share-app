@@ -61,6 +61,7 @@ export default class MainView extends Component<Props> {
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
+    console.log('token in main view', realToken);
     this.setState(
       {
         token: realToken,
@@ -72,15 +73,25 @@ export default class MainView extends Component<Props> {
     );
   };
 
-  ridesRequests = () => {
+  ridesRequests = async () => {
     const { token } = this.state;
     this.setState({ isLoading: true });
     API.getAvailabilities(token).then(result => {
-      this.setState({
-        availabilities: result.json,
-      });
-      console.log('in getAvail: ', result.json);
+      if (result.json === undefined) {
+        AsyncStorage.removeItem('token');
+        this.props.navigation.navigate('Auth');
+      } else {
+        this.setState({
+          availabilities: result.json,
+        });
+        console.log('in getAvail: ', result.json);
+        //set up to call getDriver
+         this.getDriver(token);
+      }
     });
+  };
+
+  getDriver = token => {
     API.getDriver(token)
       .then(result => {
         console.log('after GETDRIVER: ', result);
@@ -464,7 +475,8 @@ export default class MainView extends Component<Props> {
             renderItem={({ item }) => this.filteredRide(item)}
           />
           <TouchableOpacity
-            style={styles.buttonBar}Z
+            style={styles.buttonBar}
+            Z
             onPress={this.showAllRides}
           >
             <View style={styles.buttonWrapper}>

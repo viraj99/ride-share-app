@@ -219,7 +219,7 @@ class AddAvailability extends React.Component {
               </Text>
 
               <Button
-                title="Pick a Time"
+                title="Pick a Start Time"
                 onPress={this.showStTimePicker}
                 color="#475c67"
               />
@@ -240,7 +240,7 @@ class AddAvailability extends React.Component {
               <Text style={styles.labelStyleAvail}>Availability End Time:</Text>
 
               <Button
-                title="Pick a Time"
+                title="Pick an End Time"
                 onPress={this.showEndTimePicker}
                 color="#475c67"
               />
