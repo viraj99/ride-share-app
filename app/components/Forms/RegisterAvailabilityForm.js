@@ -138,6 +138,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setEndTime = time => {
+    console.log('end time', time);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -147,6 +148,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setEndDate = date => {
+    console.log('end date for picker', date);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -178,6 +180,8 @@ class RegisterAvailabilityForm extends React.Component {
 
     let endDate = availData.endDate;
 
+    console.log('end date', endDate);
+
     function convertToUTC(date, time) {
       if (arguments.length > 1) {
         const startTime =
@@ -187,6 +191,7 @@ class RegisterAvailabilityForm extends React.Component {
 
         return moment(startTime).format();
       }
+      console.log('time changed', moment.parseZone(date).format());
       return moment.utc(date).format();
     }
 
@@ -195,7 +200,7 @@ class RegisterAvailabilityForm extends React.Component {
     if (isRecurring) {
       userEntries = {
         start_time: convertToUTC(availData.startDate, availData.startTime),
-        end_time: convertToUTC(endDate, availData.endTime),
+        end_time: convertToUTC(availData.endDate, availData.endTime),
         is_recurring: isRecurring,
         location_id: selectedLocation,
         start_date: convertToUTC(availData.startDate, availData.startTime),
@@ -204,7 +209,7 @@ class RegisterAvailabilityForm extends React.Component {
     } else {
       userEntries = {
         start_time: convertToUTC(availData.startDate, availData.startTime),
-        end_time: convertToUTC(availData.endDate, availData.endTime),
+        end_time: convertToUTC(availData.startDate, availData.endTime),
         is_recurring: isRecurring,
         location_id: selectedLocation,
       };
@@ -266,7 +271,7 @@ class RegisterAvailabilityForm extends React.Component {
       locationData,
     } = this.state.availData;
     const { navigation } = this.props;
-    console.log('rendering registragino for', locationData);
+    console.log('render', this.state.availData.endTime);
     return (
       <Container>
         <View style={styles.mainContainer}>

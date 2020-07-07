@@ -338,7 +338,7 @@ export default {
       const availability = {
         start_time: availData.start_time,
         end_time: availData.end_time,
-        is_recurring: recurringParsed,
+        is_recurring: recurring,
         location_id: availData.location_id,
       };
       return apiWrapper({

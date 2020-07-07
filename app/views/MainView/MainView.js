@@ -273,9 +273,10 @@ export default class MainView extends Component<Props> {
             style={{ overflow: 'visible' }}
             data={scheduledRides.slice(0, 3)}
             keyExtractor={item => `${item.id}`} // id is not showing up in response
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
-            ])}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+              { useNativeDriver: false }
+            )}
             renderItem={({ item }) => this.upcomingScheduledRide(item)}
           />
           {this.renderDots()}
@@ -404,9 +405,10 @@ export default class MainView extends Component<Props> {
           style={{ overflow: 'visible' }}
           data={approvedRides}
           keyExtractor={item => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+            { useNativeDriver: false }
+          )}
           renderItem={({ item }) => this.requestedRide(item)}
         />
       </View>
@@ -454,14 +456,15 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={withinAvailRides}
-            keyExtractor={item => `${item.id}`} // id is not showing up in response
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
-            ])}
+            keyExtractor={(item, index) => index.toString()} // id is not showing up in response
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+              { useNativeDriver: false }
+            )}
             renderItem={({ item }) => this.filteredRide(item)}
           />
           <TouchableOpacity
-            style={styles.buttonBar}
+            style={styles.buttonBar}Z
             onPress={this.showAllRides}
           >
             <View style={styles.buttonWrapper}>
