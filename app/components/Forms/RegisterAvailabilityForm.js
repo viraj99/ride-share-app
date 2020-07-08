@@ -6,7 +6,7 @@ import Block from '../Block';
 import { CalendarButton } from '../Button';
 import API from '../../api/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import moment from 'moment';
+import moment, { months } from 'moment';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePickerView from '../../views/DatePickerView/DatePickerView';
 import { showMessage, hideMessage } from 'react-native-flash-message';
@@ -129,6 +129,7 @@ class RegisterAvailabilityForm extends React.Component {
 
   setStartTime = time => {
     console.log('time', time);
+    console.log('utc tuime', moment.utc(time).format);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -183,16 +184,9 @@ class RegisterAvailabilityForm extends React.Component {
     console.log('end date', endDate);
 
     function convertToUTC(date, time) {
-      if (arguments.length > 1) {
-        const startTime =
-          moment(date).format('YYYY-MM-DD') +
-          ' ' +
-          moment.parseZone(time).format('h:mm');
-
-        return moment(startTime).format();
-      }
-      console.log('time changed', moment.parseZone(date).format());
-      return moment.utc(date).format();
+      const newTime = moment(time).format('h:mm a');
+      const startTime = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
+      return moment.utc(startTime).format();
     }
 
     let userEntries = {};
@@ -200,11 +194,11 @@ class RegisterAvailabilityForm extends React.Component {
     if (isRecurring) {
       userEntries = {
         start_time: convertToUTC(availData.startDate, availData.startTime),
-        end_time: convertToUTC(availData.endDate, availData.endTime),
+        end_time: convertToUTC(availData.startDate, availData.endTime),
         is_recurring: isRecurring,
         location_id: selectedLocation,
-        start_date: convertToUTC(availData.startDate, availData.startTime),
-        end_date: convertToUTC(endDate, availData.endTime),
+        start_date: moment(availData.startDate).format('YYYY-MM-DD'),
+        end_date: moment(availData.endDate).format('YYYY-MM-DD'),
       };
     } else {
       userEntries = {
@@ -232,7 +226,7 @@ class RegisterAvailabilityForm extends React.Component {
     //use API file, createAvailability fx to send user's availability to database; token required
     // TODO: Use editAvailability api method here depending if user is editing entry.
     try {
-      console.log('uyser entries', userEntries);
+      console.log('user entries', userEntries);
       const response = await API.createAvailability(
         userEntries,
         isRecurring,

@@ -86,7 +86,7 @@ export default class MainView extends Component<Props> {
         });
         console.log('in getAvail: ', result.json);
         //set up to call getDriver
-         this.getDriver(token);
+        this.getDriver(token);
       }
     });
   };
@@ -132,7 +132,7 @@ export default class MainView extends Component<Props> {
               isLoading: false,
               driverApproved: true,
             });
-            console.log('driverApproved:', driverApproved);
+            console.log('driverApproved:', this.state.driverApproved);
           });
         } else {
           this.setState({

@@ -319,7 +319,7 @@ export default {
       let startDateArray = availData.start_time.split(' ');
       let startDate = startDateArray[0];
       const availability = {
-        start_date: startDate,
+        start_date: availData.start_date,
         end_date: availData.end_date,
         start_time: availData.start_time,
         end_time: availData.end_time,
@@ -341,6 +341,8 @@ export default {
         is_recurring: recurring,
         location_id: availData.location_id,
       };
+
+      console.log('api data', availability);
       return apiWrapper({
         path: AVAILABILITIES,
         token,
