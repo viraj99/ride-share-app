@@ -42,6 +42,7 @@ class AgendaView extends React.Component {
       for (const item of avails.json) {
         console.log('item of vail', item);
         if (!map.has(item.eventId)) {
+          console.log('inside if');
           map.set(item.eventId, true);
           result.push({
             id: item.eventId,
@@ -54,6 +55,7 @@ class AgendaView extends React.Component {
             location: item.location,
           });
         } else {
+          console.log('inside else');
           map.set(item.eventId, true);
           others.push({
             id: item.eventId,
@@ -65,11 +67,14 @@ class AgendaView extends React.Component {
             day: item.startTime,
           });
         }
-        this.setState({
-          response: result,
-          others: others,
-          renderAvails: true,
-        });
+        this.setState(
+          {
+            response: result,
+            others: others,
+            renderAvails: true,
+          },
+          () => console.log('state', this.state.others)
+        );
       }
     }
   };
@@ -115,9 +120,9 @@ class AgendaView extends React.Component {
     const editItem = item;
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
-    let start = moment.utc(item.startTime).format('h:mm A');
+    let start = moment.parseZone(item.startTime).format('h:mm A');
     console.log('start', start);
-    let end = moment.utc(item.endTime).format('h:mm A');
+    let end = moment.parseZone(item.endTime).format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
     //console.log('what happens now? ', endDate);

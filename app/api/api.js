@@ -312,21 +312,18 @@ export default {
       method: 'POST',
     });
   },
-  createAvailability(availData, recurring, endDate, token) {
-    console.log('before parsing: ', recurring);
-    console.log("before parsing it's a :", typeof recurring);
-    let recurringParsed = JSON.parse(recurring);
-    console.log('after parse: ', recurringParsed);
-    console.log("after parsing it's a: ", typeof recurringParsed);
-    if (recurring === 'true') {
+  createAvailability(availData, recurring, token) {
+    console.log('before parsing: ', availData);
+
+    if (recurring) {
       let startDateArray = availData.start_time.split(' ');
       let startDate = startDateArray[0];
       const availability = {
-        start_date: startDate,
-        end_date: endDate,
+        start_date: availData.start_date,
+        end_date: availData.end_date,
         start_time: availData.start_time,
         end_time: availData.end_time,
-        is_recurring: recurringParsed,
+        is_recurring: recurring,
         location_id: availData.location_id,
       };
       console.log('data to availReg API: ', availability);
@@ -341,9 +338,11 @@ export default {
       const availability = {
         start_time: availData.start_time,
         end_time: availData.end_time,
-        is_recurring: recurringParsed,
+        is_recurring: recurring,
         location_id: availData.location_id,
       };
+
+      console.log('api data', availability);
       return apiWrapper({
         path: AVAILABILITIES,
         token,
@@ -360,6 +359,8 @@ export default {
     });
   },
   createLocation(locationData, setDefault, token) {
+    console.log('lcoatino data', locationData);
+    console.log('default', setDefault);
     const location = {
       location: {
         street: locationData.location.street,
@@ -368,9 +369,7 @@ export default {
         zip: locationData.location.zip,
         notes: locationData.location.notes ? locationData.location.notes : null,
       },
-      default_location: {
-        default: setDefault,
-      },
+      default_location: setDefault,
     };
 
     return apiWrapper({
@@ -389,9 +388,7 @@ export default {
         zip: locationData.location.zip,
         notes: locationData.location.notes ? locationData.location.notes : null,
       },
-      default_location: {
-        default: setDefault,
-      },
+      default_location: setDefault,
     };
     return apiWrapper({
       path: LOCATIONS,

@@ -61,6 +61,7 @@ export default class MainView extends Component<Props> {
     const value = await AsyncStorage.getItem('token');
     const parsedValue = JSON.parse(value);
     const realToken = parsedValue.token;
+    console.log('token in main view', realToken);
     this.setState(
       {
         token: realToken,
@@ -72,15 +73,25 @@ export default class MainView extends Component<Props> {
     );
   };
 
-  ridesRequests = () => {
+  ridesRequests = async () => {
     const { token } = this.state;
     this.setState({ isLoading: true });
     API.getAvailabilities(token).then(result => {
-      this.setState({
-        availabilities: result.json,
-      });
-      console.log('in getAvail: ', result.json);
+      if (result.json === undefined) {
+        AsyncStorage.removeItem('token');
+        this.props.navigation.navigate('Auth');
+      } else {
+        this.setState({
+          availabilities: result.json,
+        });
+        console.log('in getAvail: ', result.json);
+        //set up to call getDriver
+        this.getDriver(token);
+      }
     });
+  };
+
+  getDriver = token => {
     API.getDriver(token)
       .then(result => {
         console.log('after GETDRIVER: ', result);
@@ -121,7 +132,7 @@ export default class MainView extends Component<Props> {
               isLoading: false,
               driverApproved: true,
             });
-            console.log('driverApproved:', driverApproved);
+            console.log('driverApproved:', this.state.driverApproved);
           });
         } else {
           this.setState({
@@ -273,9 +284,10 @@ export default class MainView extends Component<Props> {
             style={{ overflow: 'visible' }}
             data={scheduledRides.slice(0, 3)}
             keyExtractor={item => `${item.id}`} // id is not showing up in response
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
-            ])}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+              { useNativeDriver: false }
+            )}
             renderItem={({ item }) => this.upcomingScheduledRide(item)}
           />
           {this.renderDots()}
@@ -385,7 +397,7 @@ export default class MainView extends Component<Props> {
 
   renderRequestedRides = () => {
     const { approvedRides } = this.state;
-
+    console.log('aprroved', approvedRides);
     return (
       <View>
         <View style={styles.titlesContainer}>
@@ -404,9 +416,10 @@ export default class MainView extends Component<Props> {
           style={{ overflow: 'visible' }}
           data={approvedRides}
           keyExtractor={item => `${item.id}`} // id is not showing up in response
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { x: this.scrollX } } },
-          ])}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+            { useNativeDriver: false }
+          )}
           renderItem={({ item }) => this.requestedRide(item)}
         />
       </View>
@@ -454,14 +467,16 @@ export default class MainView extends Component<Props> {
             snapToAlignment="center"
             style={{ overflow: 'visible' }}
             data={withinAvailRides}
-            keyExtractor={item => `${item.id}`} // id is not showing up in response
-            onScroll={Animated.event([
-              { nativeEvent: { contentOffset: { x: this.scrollX } } },
-            ])}
+            keyExtractor={(item, index) => index.toString()} // id is not showing up in response
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: this.scrollX } } }],
+              { useNativeDriver: false }
+            )}
             renderItem={({ item }) => this.filteredRide(item)}
           />
           <TouchableOpacity
             style={styles.buttonBar}
+            Z
             onPress={this.showAllRides}
           >
             <View style={styles.buttonWrapper}>
