@@ -128,8 +128,6 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setStartTime = time => {
-    console.log('time', time);
-    console.log('utc tuime', moment.utc(time).format);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -139,7 +137,6 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setEndTime = time => {
-    console.log('end time', time);
     this.setState({
       availData: {
         ...this.state.availData,
