@@ -9,7 +9,7 @@ import {
   TouchableOpacity as TouchableOpacity2,
 } from 'react-native';
 
-import { Avatar, Button, Badge} from 'react-native-elements';
+import { Avatar, Button, Badge } from 'react-native-elements';
 import openMap from 'react-native-open-maps';
 import API from '../../api/api';
 import { InitOverviewCard, RideOverviewCard } from '../../components/Card';
@@ -171,13 +171,54 @@ export default class RideView extends Component {
     const token = navigation.getParam('token');
     const rideId = navigation.getParam('rideId');
 
+    console.log('user token on complete', token);
+    console.log('ride id on complete', rideId);
+
     API.completeRide(rideId, token)
       .then(result => {
-        Alert.alert('Ride Complete');
+        console.log('completed', result);
       })
       .catch(err => {
         Alert.alert('Could not Complete Ride');
       });
+  };
+
+  completeRideAlert = () => {
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+
+    console.log('user token in ride view', token);
+    console.log('ride id in ride view', rideId);
+
+    API.pickUpRide(rideId, token).then(result => {
+      console.log('picking up res', result);
+      API.dropOffRide(rideId, token).then(result => {
+        console.log('dropping off res', result);
+        API.completeRide(rideId, token).then(result => {
+          console.log('complete ride request', result);
+          this.setState({ visible: false }, () => {
+            navigation.navigate('MainView', { completed: true });
+          });
+        });
+      });
+    });
+  };
+
+  cancelRideAlert = () => {
+    const { navigation } = this.props;
+    const token = navigation.getParam('token');
+    const rideId = navigation.getParam('rideId');
+
+    console.log('user token in ride view', token);
+    console.log('ride id in ride view', rideId);
+
+    API.cancelRide(rideId, token).then(result => {
+      console.log('cancel ride request', result);
+      this.setState({ visible: false }, () => {
+        navigation.navigate('MainView', { cancel: true });
+      });
+    });
   };
 
   onPress = () => {
@@ -262,7 +303,7 @@ export default class RideView extends Component {
     const date2 = navigation.getParam('date');
     const date = new Date(date2);
     date.toString();
-    console.log("------------epa-----------------------",date)
+
     const reason = navigation.getParam('reason');
     const expected_wait_time = navigation.state.params.expected_wait_time;
     const pickup_to_dropoff_distance =
@@ -446,150 +487,150 @@ export default class RideView extends Component {
 
     return (
       <View style={styles.container}>
-      <ScrollView
-      scrollsToTop
-      showsVerticalScrollIndicator={false}
-      >
-        <View style={{ flex: 1}}>
-          <View style ={styles.userInfo}>
-          <View>
-            <TouchableOpacity2
-              onPress={() => {this.setState({showNote : true})}}>
-              <Avatar
-                size="large"
-                rounded
-                source={{
-                uri: this.state.riderInfo.uri
-                }}
-                containerStyle={styles.avatarContainer}
-              />
-              {this.printBadgeNotes()}
-            </TouchableOpacity2>
-          </View>
-
-            <View style={styles.information}>
-              <Text style={styles.nameText}>
-                {this.state.riderInfo.first_name}{' '}
-                {this.state.riderInfo.last_name}
-              </Text>
-            </View>
-            <View style={styles.grow}>
-              <TouchableOpacity2
-                onPress={() => {
-                  Linking.openURL(`tel:${this.state.riderInfo.phone}`);
-                }}
-              >
-                <View style={styles.call}>
-                  <Icon
-                    name="telephone"
-                    size={22}
-                    color="#475c67"
-                    type="foundation"
-                  />
-                </View>
-              </TouchableOpacity2>
-            </View>
-            <View>
-              <TouchableOpacity2
-                onPress={() => {
-                  this.setState({ visible: true });
-                }}
-              >
-                <View style={styles.arrow}>
-                  <Icon
-                    name="more-horizontal"
-                    size={30}
-                    color="#475c67"
-                    type="feather"
-                  />
-                </View>
-              </TouchableOpacity2>
-            </View>
-          </View>
-
-          <Modal
-            animated
-            animationType="slideInUp"
-            visible={this.state.showNote}
-            transparent
-          >
-            <View style={styles.overlayNote}>
-              <View style={styles.riderNote}>
-                <View style={{ position: 'absolute', top: 10, right: 10 }}>
-                  <TouchableOpacity2
-                    onPress={() => {
-                      this.setState({ showNote: false });
-                    }}
-                  >
-                    <Icon
-                      name="close"
-                      size={30}
-                      color="#475c67"
-                      type="antDesign"
-                    />
-                  </TouchableOpacity2>
-                </View>
-                <Avatar
-                  size="large"
-                  rounded
-                  source={{
-                    uri: this.state.riderInfo.uri,
+        <ScrollView scrollsToTop showsVerticalScrollIndicator={false}>
+          <View style={{ flex: 1 }}>
+            <View style={styles.userInfo}>
+              <View>
+                <TouchableOpacity2
+                  onPress={() => {
+                    this.setState({ showNote: true });
                   }}
-                  containerStyle={styles.avatarContainer}
-                />
+                >
+                  <Avatar
+                    size="large"
+                    rounded
+                    source={{
+                      uri: this.state.riderInfo.uri,
+                    }}
+                    containerStyle={styles.avatarContainer}
+                  />
+                  {this.printBadgeNotes()}
+                </TouchableOpacity2>
+              </View>
+
+              <View style={styles.information}>
                 <Text style={styles.nameText}>
                   {this.state.riderInfo.first_name}{' '}
                   {this.state.riderInfo.last_name}
                 </Text>
-                {this.printNote()}
+              </View>
+              <View style={styles.grow}>
+                <TouchableOpacity2
+                  onPress={() => {
+                    Linking.openURL(`tel:${this.state.riderInfo.phone}`);
+                  }}
+                >
+                  <View style={styles.call}>
+                    <Icon
+                      name="telephone"
+                      size={22}
+                      color="#475c67"
+                      type="foundation"
+                    />
+                  </View>
+                </TouchableOpacity2>
+              </View>
+              <View>
+                <TouchableOpacity2
+                  onPress={() => {
+                    this.setState({ visible: true });
+                  }}
+                >
+                  <View style={styles.arrow}>
+                    <Icon
+                      name="more-horizontal"
+                      size={30}
+                      color="#475c67"
+                      type="feather"
+                    />
+                  </View>
+                </TouchableOpacity2>
               </View>
             </View>
-          </Modal>
 
-          <Modal
-            animated
-            animationType="slideInUp"
-            visible={this.state.visible}
-            transparent
-          >
-            <View style={styles.overlay}>
-              <View style={styles.modalview}>
-                <View style={styles.modalblock}>
-                  <Icon
-                    name="more-horizontal"
-                    size={30}
-                    color="#475c67"
-                    type="feather"
+            <Modal
+              animated
+              animationType="slideInUp"
+              visible={this.state.showNote}
+              transparent
+            >
+              <View style={styles.overlayNote}>
+                <View style={styles.riderNote}>
+                  <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                    <TouchableOpacity2
+                      onPress={() => {
+                        this.setState({ showNote: false });
+                      }}
+                    >
+                      <Icon
+                        name="close"
+                        size={30}
+                        color="#475c67"
+                        type="antDesign"
+                      />
+                    </TouchableOpacity2>
+                  </View>
+                  <Avatar
+                    size="large"
+                    rounded
+                    source={{
+                      uri: this.state.riderInfo.uri,
+                    }}
+                    containerStyle={styles.avatarContainer}
                   />
-                  <Button
-                    title="Skip Ride"
-                    containerStyle={styles.startRideContainer}
-                    titleStyle={styles.modalTitle}
-                    buttonStyle={styles.modalButton}
-                    onPress={this.onCompletePress}
-                  />
-                  <Button
-                    title="Cancel Ride"
-                    containerStyle={styles.startRideContainer}
-                    titleStyle={styles.modalTitle}
-                    buttonStyle={styles.modalButton}
-                    onPress={this.cancelRideAlert}
-                  />
-                </View>
-                <View style={styles.modalblock}>
-                  <Button
-                    title="Close"
-                    containerStyle={styles.startRideContainer}
-                    titleStyle={styles.modalTitle}
-                    buttonStyle={styles.modalButton}
-                    onPress={this.closeModal}
-                  />
+                  <Text style={styles.nameText}>
+                    {this.state.riderInfo.first_name}{' '}
+                    {this.state.riderInfo.last_name}
+                  </Text>
+                  {this.printNote()}
                 </View>
               </View>
-            </View>
-          </Modal>
-          {this.renderOverview()}
-        </View>
+            </Modal>
+
+            <Modal
+              animated
+              animationType="slideInUp"
+              visible={this.state.visible}
+              transparent
+            >
+              <View style={styles.overlay}>
+                <View style={styles.modalview}>
+                  <View style={styles.modalblock}>
+                    <Icon
+                      name="more-horizontal"
+                      size={30}
+                      color="#475c67"
+                      type="feather"
+                    />
+                    <Button
+                      title="Complete Ride"
+                      containerStyle={styles.startRideContainer}
+                      titleStyle={styles.modalTitle}
+                      buttonStyle={styles.modalButton}
+                      onPress={() => this.completeRideAlert()}
+                    />
+                    <Button
+                      title="Cancel Ride"
+                      containerStyle={styles.startRideContainer}
+                      titleStyle={styles.modalTitle}
+                      buttonStyle={styles.modalButton}
+                      onPress={() => this.cancelRideAlert()}
+                    />
+                  </View>
+                  <View style={styles.modalblock}>
+                    <Button
+                      title="Close"
+                      containerStyle={styles.startRideContainer}
+                      titleStyle={styles.modalTitle}
+                      buttonStyle={styles.modalButton}
+                      onPress={this.closeModal}
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            {this.renderOverview()}
+          </View>
         </ScrollView>
         <View style={styles.buttonsContainer}>
           <Button

@@ -71,6 +71,8 @@ export default {
     });
   },
   completeRide(id, token) {
+    console.log('id', id);
+    console.log('token', token);
     return apiWrapper({
       path: RIDES,
       params: `${id}/complete`,
