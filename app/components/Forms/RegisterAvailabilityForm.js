@@ -37,6 +37,7 @@ class RegisterAvailabilityForm extends React.Component {
       locations: [],
       selectedLocation: {},
       errors: [],
+      defaultLocation: 'Select One',
     };
   }
 
@@ -64,6 +65,7 @@ class RegisterAvailabilityForm extends React.Component {
           let newVal = value.concat(' ', '(Default)');
           console.log('after adding default', newVal);
           locationData.push(newVal);
+          this.setState({ defaultLocation: newVal });
         } else {
           console.log('string put together', value);
           locationData.push(value);
@@ -181,8 +183,11 @@ class RegisterAvailabilityForm extends React.Component {
     console.log('end date', endDate);
 
     function convertToUTC(date, time) {
-      const newTime = moment(time).format('h:mm a');
+      const newTime = moment.utc(time).format('h:mm a');
       const startTime = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
+      console.log('this is time', newTime);
+      console.log('this is what is returned', moment.utc(startTime).format());
+
       return moment.utc(startTime).format();
     }
 
@@ -341,7 +346,7 @@ class RegisterAvailabilityForm extends React.Component {
               Is this a weekly recurring?{' '}
             </Text>
             <ModalDropdown
-              defaultValue="Select One"
+              defaultValue={'Select One'}
               defaultIndex={this.state.isRecurring ? 1 : 0}
               onSelect={(i, v) => {
                 const values = [false, true];
@@ -397,7 +402,7 @@ class RegisterAvailabilityForm extends React.Component {
                 <Text style={styles.labelStyleAvail}>Set Location</Text>
 
                 <ModalDropdown
-                  defaultValue="Select location"
+                  defaultValue={this.state.defaultLocation}
                   onSelect={(i, v) => {
                     this.handleLocationChange(v, i);
                   }}

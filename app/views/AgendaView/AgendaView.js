@@ -120,9 +120,15 @@ class AgendaView extends React.Component {
     const editItem = item;
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
-    let start = moment.parseZone(item.startTime).format('h:mm A');
+    let start = moment
+      .utc(item.startTime)
+      .local()
+      .format('h:mm A');
     console.log('start', start);
-    let end = moment.parseZone(item.endTime).format('h:mm A');
+    let end = moment
+      .utc(item.endTime)
+      .local()
+      .format('h:mm A');
     let day = moment(item.startTime).format('dddd');
     let endDate = this.testAMatch(item);
     //console.log('what happens now? ', endDate);
