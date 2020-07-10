@@ -64,8 +64,12 @@ class RegisterAvailabilityForm extends React.Component {
           console.log('default true');
           let newVal = value.concat(' ', '(Default)');
           console.log('after adding default', newVal);
+          console.log('selected location', location);
           locationData.push(newVal);
-          this.setState({ defaultLocation: newVal });
+          this.setState({
+            defaultLocation: newVal,
+            selectedLocation: location.id,
+          });
         } else {
           console.log('string put together', value);
           locationData.push(value);
