@@ -20,6 +20,7 @@ import moment from 'moment';
 import variables from '../../utils/variables';
 import API from '../../api/api';
 type Props = {};
+
 export default class MainView extends Component<Props> {
   scrollX = new Animated.Value(0);
   constructor(props) {

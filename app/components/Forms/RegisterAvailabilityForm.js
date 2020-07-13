@@ -455,3 +455,4 @@ class RegisterAvailabilityForm extends React.Component {
 }
 
 export default RegisterAvailabilityForm;
+
