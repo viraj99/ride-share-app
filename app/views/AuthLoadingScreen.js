@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import API from '../api/api';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,9 +24,20 @@ export default class AuthLoadingScreen extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   bootstrapAsync = async () => {
     const { navigation } = this.props;
+    let keepGoing;
     const userToken = await AsyncStorage.getItem('token');
     console.log('auth token', userToken);
-    userToken
+    const parsed = JSON.parse(userToken);
+    console.log('auth thoken parsed', parsed);
+
+    if (userToken === null) {
+      console.log('inside if');
+      keepGoing = false;
+    } else {
+      keepGoing = await this.validateToken(parsed.token);
+    }
+
+    keepGoing
       ? navigation.navigate({
           routeName: 'MainView',
           key: 'MainView',
@@ -34,6 +46,22 @@ export default class AuthLoadingScreen extends React.Component {
       : navigation.navigate('Auth');
     // This will switch to the MainView screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
+  };
+
+  validateToken = async token => {
+    let response = await API.getAvailabilities(token).then(result => {
+      console.log('result fomr auth', result);
+      if (result.error === 'Unauthorized') {
+        console.log('remove token and push to login else load main view');
+        AsyncStorage.removeItem('token');
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+    console.log('validating token', response);
+    return response;
   };
 
   // Render any loading content that you like here
