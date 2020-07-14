@@ -17,7 +17,7 @@ const DatePickerView = ({ setDate, mode, title, dateProp }) => {
 
   const handleConfirm = date => {
     console.log('date', date);
-    console.warn('A date has been picked: ', date);
+
     setDate(date);
     hideDatePicker();
   };

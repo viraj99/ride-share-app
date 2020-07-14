@@ -187,12 +187,19 @@ class RegisterAvailabilityForm extends React.Component {
     console.log('end date', endDate);
 
     function convertToUTC(date, time) {
-      const newTime = moment.utc(time).format('h:mm a');
-      const startTime = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
-      console.log('this is time', newTime);
-      console.log('this is what is returned', moment.utc(startTime).format());
+      const timeData = time.toString().split(' ');
 
-      return moment.utc(startTime).format();
+      console.log('time split', timeData[4]);
+      console.log('time split', timeData[5]);
+
+      const newTime = timeData[4] + ' ' + timeData[5];
+      console.log('new time', newTime);
+      const startDate = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
+
+      const conversion = moment.parseZone(startDate).format();
+      console.log('final conversion', moment.utc(conversion).format());
+
+      return moment.utc(conversion).format();
     }
 
     let userEntries = {};
@@ -271,7 +278,7 @@ class RegisterAvailabilityForm extends React.Component {
       locationData,
     } = this.state.availData;
     const { navigation } = this.props;
-    console.log('render', this.state.availData.endTime);
+    console.log('render', this.state.availData);
     return (
       <Container>
         <View style={styles.mainContainer}>
@@ -455,4 +462,3 @@ class RegisterAvailabilityForm extends React.Component {
 }
 
 export default RegisterAvailabilityForm;
-
