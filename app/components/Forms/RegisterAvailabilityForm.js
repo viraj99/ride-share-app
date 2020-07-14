@@ -196,10 +196,10 @@ class RegisterAvailabilityForm extends React.Component {
       console.log('new time', newTime);
       const startDate = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
 
-      const convertion = moment.parseZone(startDate).format();
-      console.log('final convertion', moment.utc(convertion).format());
+      const conversion = moment.parseZone(startDate).format();
+      console.log('final conversion', moment.utc(conversion).format());
 
-      return moment.utc(convertion).format();
+      return moment.utc(conversion).format();
     }
 
     let userEntries = {};
