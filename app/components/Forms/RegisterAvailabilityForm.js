@@ -134,6 +134,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setStartTime = time => {
+    console.warn('PICKER', time)
     this.setState({
       availData: {
         ...this.state.availData,
@@ -167,12 +168,20 @@ class RegisterAvailabilityForm extends React.Component {
     } else this.setState({ is_recurring: 'false' });
   };
 
+  convertToUTC = async (date, time) => {
+    // const timeData = time.toString().split(' ');
+    const startTime = moment.utc(time).format('HH:mm')
+    console.warn('time split', startTime);
+    const startDate = moment(date).format('YYYY-MM-DD') + ' ' + startTime;
+
+    console.warn('final time', startDate)
+    return startDate
+  }
+
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async () => {
     const { availData, isRecurring, selectedLocation } = this.state;
-    console.log('in handlesubmit: ', isRecurring);
-    console.log('data in submit', availData);
-    console.log('data in locatino', selectedLocation);
+ 
 
     // alert(
     //   'Thank you for registering! You will receive an email regarding next steps within _ business days.'
@@ -180,66 +189,35 @@ class RegisterAvailabilityForm extends React.Component {
     let token = await AsyncStorage.getItem('token');
     token = JSON.parse(token);
 
-    console.log('right before createAvail API: ', availData);
-
     let endDate = availData.endDate;
 
-    console.log('end date', endDate);
 
-    function convertToUTC(date, time) {
-      const timeData = time.toString().split(' ');
-
-      console.log('time split', timeData[4]);
-      console.log('time split', timeData[5]);
-
-      const newTime = timeData[4] + ' ' + timeData[5];
-      console.log('new time', newTime);
-      const startDate = moment(date).format('YYYY-MM-DD') + ' ' + newTime;
-
-      const conversion = moment.parseZone(startDate).format();
-      console.log('final conversion', moment.utc(conversion).format());
-
-      return moment.utc(conversion).format();
-    }
 
     let userEntries = {};
-    // Convert entries to UTC for backend handling.
+    const startTime = await this.convertToUTC(availData.startDate, availData.startTime);
+    const endTime = await this.convertToUTC(availData.startDate, availData.endTime);
+    const startDate = moment(availData.startDate).format('YYYY-MM-DD')
+    console.warn('time', startTime);
     if (isRecurring) {
       userEntries = {
-        start_time: convertToUTC(availData.startDate, availData.startTime),
-        end_time: convertToUTC(availData.startDate, availData.endTime),
+        start_time: startTime,
+        end_time: endTime,
         is_recurring: isRecurring,
         location_id: selectedLocation,
-        start_date: moment(availData.startDate).format('YYYY-MM-DD'),
-        end_date: moment(availData.endDate).format('YYYY-MM-DD'),
+        start_date: startDate,
+        end_date: endDate
       };
     } else {
       userEntries = {
-        start_time: convertToUTC(availData.startDate, availData.startTime),
-        end_time: convertToUTC(availData.startDate, availData.endTime),
+        start_time: startTime,
+        end_time: endTime,
         is_recurring: isRecurring,
         location_id: selectedLocation,
       };
     }
 
-    // //use API file, createAvailability fx to send user's availability to database; token required
-    // API.createAvailability(userEntries, recurring, endDate, token.token).then(
-    //   response => {
-    //     console.log('AVAILABILLITY RES: ', response);
-
-    //     if (response.error) {
-    //       this.setState({ error: response.error });
-    //       return;
-    //     }
-
-    //     this.props.navigation.navigate('AgendaView', { response: response });
-    //   }
-    // );
-
-    //use API file, createAvailability fx to send user's availability to database; token required
-    // TODO: Use editAvailability api method here depending if user is editing entry.
+ 
     try {
-      console.log('user entries', userEntries);
       const response = await API.createAvailability(
         userEntries,
         isRecurring,
