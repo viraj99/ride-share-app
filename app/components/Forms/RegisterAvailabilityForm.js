@@ -134,7 +134,7 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   setStartTime = time => {
-    console.warn('PICKER', time)
+    console.warn('PICKER', time);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -169,20 +169,19 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   convertToUTC = async (date, time) => {
-    const tzo = moment().utcOffset(time);
-    console.warn('tzo', tzo)
+    // const tzo = moment().utcOffset(time);
+    // console.warn('tzo', tzo);
     // const timeData = time.toString().split(' ');
-    const startTime = moment(time).format('HH:mm')
-    console.warn('startTime', startTime)
+    const startTime = moment(time).format('HH:mm');
+    console.warn('startTime', startTime);
     const dateConcat = moment(date).format('YYYY-MM-DD') + ' ' + startTime;
-    const utcConversion = moment(dateConcat)
-    return utcConversion
-  }
+    const utcConversion = moment(dateConcat);
+    return utcConversion;
+  };
 
   //async await needed for proper Promise handling during submit function
   handleUserSubmit = async () => {
     const { availData, isRecurring, selectedLocation } = this.state;
- 
 
     // alert(
     //   'Thank you for registering! You will receive an email regarding next steps within _ business days.'
@@ -192,12 +191,16 @@ class RegisterAvailabilityForm extends React.Component {
 
     let endDate = availData.endDate;
 
-
-
     let userEntries = {};
-    const startTime = await this.convertToUTC(availData.startDate, availData.startTime);
-    const endTime = await this.convertToUTC(availData.startDate, availData.endTime);
-    const startDate = moment(availData.startDate).format('YYYY-MM-DD')
+    const startTime = await this.convertToUTC(
+      availData.startDate,
+      availData.startTime
+    );
+    const endTime = await this.convertToUTC(
+      availData.startDate,
+      availData.endTime
+    );
+    const startDate = moment(availData.startDate).format('YYYY-MM-DD');
     console.warn('start time', startTime);
     console.warn('end time', endTime);
     if (isRecurring) {
@@ -207,7 +210,7 @@ class RegisterAvailabilityForm extends React.Component {
         is_recurring: isRecurring,
         location_id: selectedLocation,
         start_date: startDate,
-        end_date: endDate
+        end_date: endDate,
       };
     } else {
       userEntries = {
@@ -218,13 +221,16 @@ class RegisterAvailabilityForm extends React.Component {
       };
     }
 
- 
+    console.warn('user entries before api', userEntries);
+
     try {
       const response = await API.createAvailability(
         userEntries,
         isRecurring,
         token.token
       );
+
+      console.warn('response from create', response);
 
       if (response.error) {
         this.setState({ error: response.error });

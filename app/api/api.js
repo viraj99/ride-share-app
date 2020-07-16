@@ -146,8 +146,6 @@ export default {
   editAvailability(token, eventID, userEntries, recurring, endDate) {
     let recurringParsed = JSON.parse(recurring);
     if (recurring === 'true') {
-      let startDateArray = userEntries.start_time.split(' ');
-      let startDate = startDateArray[0];
       const availability = {
         start_date: startDate,
         end_date: endDate,
@@ -315,11 +313,7 @@ export default {
     });
   },
   createAvailability(availData, recurring, token) {
-    console.log('before parsing: ', availData);
-
     if (recurring) {
-      let startDateArray = availData.start_time.split(' ');
-      let startDate = startDateArray[0];
       const availability = {
         start_date: availData.start_date,
         end_date: availData.end_date,
