@@ -169,13 +169,14 @@ class RegisterAvailabilityForm extends React.Component {
   };
 
   convertToUTC = async (date, time) => {
+    const tzo = moment().utcOffset(time);
+    console.warn('tzo', tzo)
     // const timeData = time.toString().split(' ');
-    const startTime = moment.utc(time).format('HH:mm')
-    console.warn('time split', startTime);
-    const startDate = moment(date).format('YYYY-MM-DD') + ' ' + startTime;
-
-    console.warn('final time', startDate)
-    return startDate
+    const startTime = moment(time).format('HH:mm')
+    console.warn('startTime', startTime)
+    const dateConcat = moment(date).format('YYYY-MM-DD') + ' ' + startTime;
+    const utcConversion = moment(dateConcat)
+    return utcConversion
   }
 
   //async await needed for proper Promise handling during submit function
@@ -197,7 +198,8 @@ class RegisterAvailabilityForm extends React.Component {
     const startTime = await this.convertToUTC(availData.startDate, availData.startTime);
     const endTime = await this.convertToUTC(availData.startDate, availData.endTime);
     const startDate = moment(availData.startDate).format('YYYY-MM-DD')
-    console.warn('time', startTime);
+    console.warn('start time', startTime);
+    console.warn('end time', endTime);
     if (isRecurring) {
       userEntries = {
         start_time: startTime,
@@ -335,7 +337,7 @@ class RegisterAvailabilityForm extends React.Component {
               Is this a weekly recurring?{' '}
             </Text>
             <ModalDropdown
-              defaultValue={'Select One'}
+              defaultValue={'No'}
               defaultIndex={this.state.isRecurring ? 1 : 0}
               onSelect={(i, v) => {
                 const values = [false, true];
