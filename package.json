@@ -15,7 +15,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
     "@react-native-community/datetimepicker": "2.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
