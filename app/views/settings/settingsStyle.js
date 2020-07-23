@@ -24,6 +24,8 @@ export default StyleSheet.create({
     padding: 5,
     backgroundColor: '#ff8262',
     borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   sectionTitle: {
     padding: 5,
@@ -34,6 +36,10 @@ export default StyleSheet.create({
     padding: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  notSureYet: {
+    flexDirection: 'row',
+    paddingTop: 5,
   },
   inputTitle: {
     padding: 5,
@@ -47,6 +53,7 @@ export default StyleSheet.create({
   },
   switchStyle: {
     paddingTop: 15,
+    paddingLeft: 25,
   },
   input: {
     fontSize: 20,
@@ -76,10 +83,11 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   logoutButton: {
-    padding: 5,
+    paddingTop: 5,
     backgroundColor: '#475c67',
     borderRadius: 20,
     width: 100,
+    height: 40,
     alignItems: 'center',
   },
   buttonTitle: {

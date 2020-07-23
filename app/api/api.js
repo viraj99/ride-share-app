@@ -145,6 +145,7 @@ export default {
   },
   editAvailability(token, eventID, userEntries, recurring, endDate) {
     let recurringParsed = JSON.parse(recurring);
+    console.log('recurring parsed', recurringParsed);
     if (recurring === 'true') {
       const availability = {
         start_date: startDate,

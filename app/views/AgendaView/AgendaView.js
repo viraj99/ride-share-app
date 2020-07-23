@@ -40,9 +40,7 @@ class AgendaView extends React.Component {
       const others = [];
       const map = new Map();
       for (const item of avails.json) {
-        console.log('item of vail', item);
         if (!map.has(item.eventId)) {
-          console.log('inside if');
           map.set(item.eventId, true);
           result.push({
             id: item.eventId,
@@ -51,7 +49,7 @@ class AgendaView extends React.Component {
             endTime: item.endTime,
             endDate: item.endDate,
             isRecurring: item.isRecurring,
-            day: item.startTime,
+            day: item.startTime, //dont think we use this
             location: item.location,
           });
         } else {
@@ -64,7 +62,7 @@ class AgendaView extends React.Component {
             endTime: item.endTime,
             endDate: item.endDate,
             isRecurring: item.isRecurring,
-            day: item.startTime,
+            day: item.startTime, //same with this one
           });
         }
         this.setState(
@@ -73,44 +71,8 @@ class AgendaView extends React.Component {
             others: others,
             renderAvails: true,
           },
-          () => console.log('state', this.state.others)
+          () => console.log('state', this.state)
         );
-      }
-    }
-  };
-
-  testAMatch = item => {
-    if (item.isRecurring === true) {
-      // console.log('starting test a match');
-      let { response, others } = this.state;
-      //console.log('in test a match fx: ', response);
-      //console.log('in test a match fx: ', others);
-      let updatedRecur;
-
-      for (const each of response) {
-        const arrayOfMatchingDates = [];
-        const lastDate = [];
-        if (each.isRecurring === true) {
-          //console.log('testing a match');
-          const testItem = each.id;
-          //console.log('match is for item #: ', testItem);
-          others.map(eachItem => {
-            //console.log("eachItem I'm testing is: ", eachItem);
-            if (eachItem.id === testItem) {
-              // arrayOfMatchingDates.push(eachItem.startTime)
-              // console.log("new array of matching:", arrayOfMatchingDates)
-              // const last = arrayOfMatchingDates.length
-              // console.log("the array of matches length is: ", last)
-              // console.log("the last of matching dates is: ", arrayOfMatchingDates[last-1])
-              // let lastDay = arrayOfMatchingDates[last-1]
-              lastDate.push(eachItem.startTime);
-            }
-            // return endOfRecurrence
-          });
-          updatedRecur = lastDate[lastDate.length - 1];
-          //console.log('Good! ', lastDate[lastDate.length - 1]);
-          return updatedRecur;
-        }
       }
     }
   };
@@ -120,18 +82,16 @@ class AgendaView extends React.Component {
     const editItem = item;
     let id = item.id;
     let date = moment(item.startTime).format('MMMM D, YYYY');
-    let start = moment
-      .utc(item.startTime)
+    let start = moment(item.startTime)
       .local()
       .format('h:mm A');
     console.log('start', start);
-    let end = moment
-      .utc(item.endTime)
+    let end = moment(item.endTime)
       .local()
       .format('h:mm A');
     let day = moment(item.startTime).format('dddd');
-    let endDate = this.testAMatch(item);
-    //console.log('what happens now? ', endDate);
+    let endDate = item.endDate;
+    console.log('end date test match', endDate);
     let ending = moment(endDate).format('MMMM D, YYYY');
     //console.log('maybe? ', ending);
 

@@ -57,7 +57,7 @@ class Settings extends Component {
       state_initials: '',
       zip_code: '',
     };
-    this.handleEdit = this.handleEdit.bind(this);
+
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePhoneNumber = this.handlePhoneNumber.bind(this);
     this.handleRadius = this.handleRadius.bind(this);
@@ -170,47 +170,48 @@ class Settings extends Component {
     });
   }
 
-  handleEdit() {
+  saveEdit = () => {
+    console.log('called api');
+    const driverData = {
+      organization_id: this.state.organization_id,
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+      email: this.state.email,
+      phone: this.state.phoneNumber,
+      radius: this.state.radius,
+      is_active: this.state.active,
+      allowEmailNotification: this.state.allowEmailNotification,
+    };
+
+    let data = {
+      location: {
+        street: this.state.street,
+        city: this.state.city,
+        state: this.state.state_initials,
+        zip: this.state.zip_code,
+        notes: null,
+      },
+    };
+
+    AsyncStorage.getItem('token', (err, result) => {
+      const obj = JSON.parse(result);
+      const { token } = obj;
+
+      API.updateSettingsDriver(driverData, token)
+        .then(result => {
+          this.setState({ editable: !this.state.editable });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  };
+
+  toggleEdit = () => {
     this.setState({
       editable: !this.state.editable,
-      buttonTitle: !this.state.buttonTitle,
     });
-    if (this.state.editable) {
-      const driverData = {
-        organization_id: this.state.organization_id,
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        email: this.state.email,
-        phone: this.state.phoneNumber,
-        radius: this.state.radius,
-        is_active: this.state.active,
-        allowEmailNotification: this.state.allowEmailNotification,
-      };
-
-      let data = {
-        location: {
-          street: this.state.street,
-          city: this.state.city,
-          state: this.state.state_initials,
-          zip: this.state.zip_code,
-          notes: null,
-        },
-      };
-
-      AsyncStorage.getItem('token', (err, result) => {
-        const obj = JSON.parse(result);
-        const { token } = obj;
-
-        API.updateSettingsDriver(driverData, token)
-          .then(result => {})
-          .catch(err => {
-            console.log(err);
-          });
-      });
-    } else {
-      null;
-    }
-  }
+  };
 
   handleFirstName = text => {
     this.setState({
@@ -496,6 +497,14 @@ class Settings extends Component {
               <View style={styles.section}>
                 <View style={styles.sectionTitleContainer}>
                   <Text style={styles.sectionTitle}>Driver Information</Text>
+                  <View style={''}>
+                    <TouchableOpacity
+                      style={{ marginRight: 15, marginTop: 5 }}
+                      onPress={this.toggleEdit}
+                    >
+                      <Icon color="white" name="pencil" size={25}></Icon>
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <View style={styles.inputContainer}>
                   <User name="user" size={30} color="#475c67" />
@@ -570,68 +579,59 @@ class Settings extends Component {
                   </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitle}>Notifications</Text>
-              </View>
-              <View style={styles.inputContainer}>
-                <View>
-                  <Text style={styles.inputTitle}>Active </Text>
-                  <Text style={styles.notificationDescription}>
-                    Turn off/on Active Status
-                  </Text>
-                </View>
-                <View style={styles.switchStyle}>
-                  <Switch
-                    disabled={!this.state.editable}
-                    onValueChange={this.handleActive}
-                    value={this.state.active}
-                  />
-                </View>
-              </View>
-              <View style={styles.inputContainer}></View>
-            </View>
-            <View style={styles.buttonSection}>
-              <TouchableOpacity
-                style={styles.editButton}
-                onPress={this.handleEdit}
-              >
-                <Text style={styles.buttonTitle}>
-                  {this.state.buttonTitle ? 'Update' : 'Edit'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonSection}>
-              <TouchableOpacity
-                style={styles.logoutButton}
-                onPress={this.handleLogout}
-              >
-                <Text style={styles.buttonTitle}>Log out</Text>
-              </TouchableOpacity>
-            </View>
 
-            <View style={styles.section}>
-              <View style={styles.sectionTitleContainer}>
+              <View style={styles.section}>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Text style={styles.sectionTitle}>Vehicles</Text>
-                  <View style={{ justifyContent: 'center', marginRight: 15 }}>
-                    <AddButton
-                      onPress={() => {
-                        navigation.navigate('RegisterVehicle', {
-                          isAdding: true,
-                          isEditing: false,
-                          isCreating: false,
-                        });
-                      }}
-                      token={token}
-                    />
+                  <View style={styles.notSureYet}>
+                    <View>
+                      <Text style={styles.inputTitle}>Active </Text>
+                      <Text style={styles.notificationDescription}>
+                        Turn off/on Active Status
+                      </Text>
+                    </View>
+                    <View style={styles.switchStyle}>
+                      <Switch
+                        disabled={!this.state.editable}
+                        onValueChange={this.handleActive}
+                        value={this.state.active}
+                      />
+                    </View>
                   </View>
+                  <View style={[styles.notSureYet, { paddingTop: 15 }]}>
+                    <TouchableOpacity
+                      style={styles.logoutButton}
+                      onPress={
+                        this.state.editable ? this.saveEdit : this.handleLogout
+                      }
+                    >
+                      <Text style={styles.buttonTitle}>
+                        {this.state.editable ? 'Save' : 'Log out'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitle}>Vehicles</Text>
+                <View style={{ justifyContent: 'center', marginRight: 15 }}>
+                  <AddButton
+                    onPress={() => {
+                      navigation.navigate('RegisterVehicle', {
+                        isAdding: true,
+                        isEditing: false,
+                        isCreating: false,
+                      });
+                    }}
+                    token={token}
+                  />
                 </View>
               </View>
               {this.state.vehicles && <View>{this.renderVehicles()}</View>}
@@ -639,26 +639,19 @@ class Settings extends Component {
 
             <View style={[styles.section, { paddingBottom: 25 }]}>
               <View style={styles.sectionTitleContainer}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Text style={styles.sectionTitle}>Locations</Text>
-                  <View style={{ justifyContent: 'center', marginRight: 15 }}>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Icon color="#ffffff" name="map-marker" size={25} />
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate('LocationScreen', {
-                            edit: false,
-                          });
-                        }}
-                      >
-                        <Icon color="#ffffff" name="plus-circle" size={25} />
-                      </TouchableOpacity>
-                    </View>
+                <Text style={styles.sectionTitle}>Locations</Text>
+                <View style={{ justifyContent: 'center', marginRight: 15 }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Icon color="#ffffff" name="map-marker" size={25} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('LocationScreen', {
+                          edit: false,
+                        });
+                      }}
+                    >
+                      <Icon color="#ffffff" name="plus-circle" size={25} />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
