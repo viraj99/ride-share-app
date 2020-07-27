@@ -23,6 +23,7 @@ class RegisterAvailabilityForm extends React.Component {
     }
     this.state = {
       isRecurring: isNewItem ? false : params.item.isRecurring,
+
       availData: {
         startDate: isNewItem ? new Date() : params.item.startDate,
         endDate: isNewItem ? new Date() : params.item.endDate,
@@ -42,8 +43,10 @@ class RegisterAvailabilityForm extends React.Component {
   }
 
   componentDidMount = async () => {
+    //check for token
     const value = await AsyncStorage.getItem('token');
     const token = JSON.parse(value);
+
     API.getLocations(token.token).then(res => {
       const locations = res.locations;
       console.log('get locatins', locations);
@@ -135,6 +138,7 @@ class RegisterAvailabilityForm extends React.Component {
 
   setStartTime = time => {
     console.warn('PICKER', time);
+    console.log('startTime', time);
     this.setState({
       availData: {
         ...this.state.availData,
@@ -343,7 +347,7 @@ class RegisterAvailabilityForm extends React.Component {
               Is this a weekly recurring?{' '}
             </Text>
             <ModalDropdown
-              defaultValue={'No'}
+              defaultValue={this.state.isRecurring ? 'Yes' : 'No'}
               defaultIndex={this.state.isRecurring ? 1 : 0}
               onSelect={(i, v) => {
                 const values = [false, true];

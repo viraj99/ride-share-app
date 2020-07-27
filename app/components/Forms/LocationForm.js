@@ -97,7 +97,7 @@ class LocationForm extends Component {
           this.setState({ error: res.errors });
           return;
         }
-        navigation.navigate('Settings');
+        navigation.navigate('Settings', { locationChange: true });
       });
     } else {
       API.createLocation(data, default_location, token.token).then(res => {
